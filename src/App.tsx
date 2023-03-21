@@ -6,7 +6,7 @@ import './App.css'
 
 function App() {
   const dispatch = useDispatch()
-  const count = useSelector((state: RootState) => state.count)
+  const { count } = useSelector((state: RootState) => state)
 
   return (
     <div className="App">

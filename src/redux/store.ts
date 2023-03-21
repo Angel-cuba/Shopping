@@ -4,8 +4,8 @@ import counterReducer from './reducers/counter'
 
 export const store = configureStore({
   reducer: {
-    count: counterReducer,
-  },
+    count: counterReducer
+  }
 })
 
 // Infer the `RootState` and `AppDispatch` types from the store itself
