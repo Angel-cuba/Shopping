@@ -1,0 +1,100 @@
+.navbar {
+  display: none;
+  padding: 0.5rem 1rem;
+  &__links {
+    margin: 0 0.5rem;
+    text-decoration: none;
+    color: #262626;
+    font-size: 1rem;
+    font-weight: 500;
+    transition: all 0.3s ease-in-out;
+    &:hover {
+      color: #ffb300;
+    }
+    &--login {
+      color: #523900;
+      border: 1px solid #ffb300;
+      border-radius: 0.25rem;
+      padding: 0.15rem 0.51rem;
+      background-color: #ffb3003a;
+      transition: all 0.3s ease-in-out;
+      &:hover {
+        color: #262626;
+        background-color: #ffb300;
+      }
+    }
+  }
+  @media (min-width: 768px) {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
+.navbar_mobile {
+  display: block;
+  font-size: 1.5rem;
+  @media (min-width: 768px) {
+    display: none;
+  }
+  &__view {
+    position: absolute;
+    top: 60px;
+    right: 0;
+    z-index: 100;
+    width: 100%;
+    height: 100vh;
+    background-color: #bd8888;
+    &__user{
+      display: flex;
+      align-items: center;
+      flex-direction: column;
+      margin: 1rem 0;
+      width: 50%;
+      &--avatar {
+        width: 100%;
+        height: 100%;
+        img{
+          object-fit: cover;
+          border-radius: 12%;
+          margin-left: 10px;
+          border: 1px solid #1f17039a;
+        }
+      }
+      &--name {
+        font-size: 1.5rem;
+        font-weight: 500;
+        width: 250px;
+        height: 1.5rem;
+      }
+      &--email {
+        font-size: 1rem;
+        font-weight: 400;
+        margin: 0.15rem 0;
+        width: 200px;
+      }
+    }
+    &__links {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      &--item {
+        color: #262626;
+        font-size: 2rem;
+        margin: 1rem 0;
+        &--login {
+          color: #523900;
+          border: 1px solid #ffb300;
+          border-radius: 0.25rem;
+          padding: 0.15rem 0.51rem;
+          background-color: #ffb3003a;
+          transition: all 0.3s ease-in-out;
+          &:hover {
+            color: #6c6c6c;
+            background-color: #ffb300;
+          }
+        }
+      }
+    }
+  }
+}
