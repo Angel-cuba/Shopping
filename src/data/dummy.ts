@@ -1,6 +1,6 @@
-import { Product } from '../interfaces/Product'
+import { Product } from '../interfaces/ProductType'
 
-export const products: Product[] = [
+export const PRODUCTS: Product[] = [
   {
     id: 1,
     name: 'Global Blood Therapeutics, Inc.',
