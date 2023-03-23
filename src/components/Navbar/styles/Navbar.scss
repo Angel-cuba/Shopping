@@ -21,10 +21,31 @@
       &:hover {
         color: #262626;
         background-color: #ffb300;
+        cursor: pointer;
+      }
+    }
+    &--cart{
+      .navbar-cart {
+        position:relative;
+       &__icon{
+        font-size: 1.5rem;
+        color: #262626;
+        transition: all 0.3s ease-in-out;
+        &:hover {
+          cursor: pointer;
+        }
+       } 
+       &__amount{
+        position: absolute;
+        top: -4px;
+        right: -10px;
+        font-size: 1.2rem;
+       }
       }
     }
   }
   @media (min-width: 768px) {
+    width: 20%;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -45,6 +66,7 @@
     height: 100vh;
     background-color: #bd8888;
     &__user{
+      position:relative;
       display: flex;
       align-items: center;
       flex-direction: column;
@@ -72,6 +94,12 @@
         margin: 0.15rem 0;
         width: 200px;
       }
+      &--cart{
+        background-color: #ffb300;
+        position: absolute;
+        top: 0;
+        right: -180px;
+      }
     }
     &__links {
       display: flex;
@@ -92,6 +120,33 @@
           &:hover {
             color: #6c6c6c;
             background-color: #ffb300;
+          }
+        }
+        &--cart{
+          .navbar-cart {
+            position:relative;
+            background-color: red;
+           &__icon{
+            position: absolute;
+            top: 0;
+            right: 0;
+            font-size: 2rem;
+            color: #262626;
+            transition: all 0.3s ease-in-out;
+            &:hover {
+              cursor: pointer;
+            }
+           } 
+           &__amount{
+            position: absolute;
+            top: -4px;
+            right: -10px;
+            font-size: 1.2rem;
+            background-color: red;
+            @media screen and (max-width: 768px) {
+              color: red;
+            }
+           }
           }
         }
       }

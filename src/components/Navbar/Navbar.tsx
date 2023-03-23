@@ -1,8 +1,9 @@
 import React from 'react'
 import MenuIcon from '@mui/icons-material/Menu'
 import CloseIcon from '@mui/icons-material/Close'
-import './styles/Navbar.scss'
 import { Link } from 'react-router-dom'
+import { NavbarIcon } from '../Cart/Cart'
+import './styles/Navbar.scss'
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = React.useState(false)
@@ -20,6 +21,9 @@ const Navbar = () => {
             Login
           </Link>
           <div className="navbar__links--login">Login</div>
+          <div className="navbar__links--cart">
+            <NavbarIcon />
+          </div>
         </div>
         <div className="navbar_mobile">
           {isOpen ? (
@@ -45,6 +49,9 @@ const Navbar = () => {
                 </div>
                 <div className="email">
                   <p className="navbar_mobile__view__user--email">angel@gmail.com</p>
+                </div>
+                <div className="navbar_mobile__view__user--cart">
+                  <NavbarIcon />
                 </div>
               </div>
               <div className="navbar_mobile__view__links">
