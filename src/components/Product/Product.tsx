@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import { Product } from '../../interfaces/ProductType'
 import { CartIcon } from '../Cart/Cart'
 
@@ -31,7 +32,9 @@ const ProductItem = ({ product }: { product: Product }) => {
       </div>
       <div className="products__content__item--buttons">
         <div className="products__content__item--buttons--buy">Buy</div>
-        <div className="products__content__item--buttons--details">Details</div>
+        <div className="products__content__item--buttons--details">
+          <Link to={`/product/${product.id}`}>Details</Link>
+        </div>
       </div>
     </div>
   )
