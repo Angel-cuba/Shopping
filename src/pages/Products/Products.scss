@@ -15,12 +15,12 @@
     width: 100%;
     height: 80px;
     margin: 10px;
-    &--single{
+    &--single {
       display: flex;
       justify-content: flex-end;
       align-items: center;
       margin-right: 250px;
-      }
+    }
     &--visible {
       display: block;
       width: 70%;
@@ -36,17 +36,89 @@
     }
   }
   &__content {
-    background-color: red;
     width: 100%;
     height: 100%;
-    padding: 10px;
+    padding: 0px;
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-around;
+    justify-content: space-evenly;
     &__item {
-      background-color: white;
-      max-width: 200px;
+      position: relative;
+      width: 90%;
+      height: 350px;
+      margin: 1px;
+      padding: 2px;
+      border-radius: 4px;
+      box-shadow: 1px 1px 5px 1px #0000000d;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      &--name {
+        position: relative;
+        width: 100%;
+        height: 50px;
+        font-size: 1.2rem;
+        font-weight: 500;
+        border: 1px solid #00000015;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        &--icon {
+          position: absolute;
+          top: 0;
+          right: 6px;
+          font-size: 1.5rem;
+          color: #262626;
+          transition: all 0.3s ease-in-out;
+          &:hover {
+            cursor: pointer;
+          }
+        }
+      }
+      &--image {
+        position: relative;
+        width: 100%;
+        height: 250px;
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        margin-top: 10px;
+        &--price {
+          font-size: 1.5rem;
+          color: #262626;
+          padding-right: 10px;
+        }
+      }
+      &--buttons {
+        width: 90%;
+        height: 50px;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        padding: 10px;
+        &--buy {
+          @include customButton($bg_light, $components_dark, $letters_dark);
+        }
+        &--details {
+          @include customButton($bg_light, $components_dark, $letters_dark);
+        }
+      }
+      @media screen and (min-width: 356px) {
+        max-width: 46%;
+        margin: 5px;
+        padding: 0;
+      }
+      @media screen and (min-width: 768px) {
+        max-width: 300px;
+        margin: 5px;
+        padding: 0;
+      }
+    }
+    @media screen and (min-width: 768px) {
+      padding: 10px;
       margin: 10px;
+      justify-content: space-around;
     }
   }
 }
