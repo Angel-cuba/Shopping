@@ -10,7 +10,7 @@ export const PRODUCTS: Product[] = [
     image: 'https://picsum.photos/200/300',
     variant: 'Crimson',
     sizes: 'S',
-    price: 10.99
+    price: 102.56
   },
   {
     id: 2,
@@ -20,7 +20,7 @@ export const PRODUCTS: Product[] = [
     image: 'https://picsum.photos/200/300',
     variant: 'Goldenrod',
     sizes: 'L',
-    price: 10.99
+    price: 22.45
   },
   {
     id: 3,
@@ -31,7 +31,7 @@ export const PRODUCTS: Product[] = [
     image: 'https://picsum.photos/200/300',
     variant: 'Violet',
     sizes: 'L',
-    price: 10.99
+    price: 80.99
   },
   {
     id: 4,
@@ -41,7 +41,7 @@ export const PRODUCTS: Product[] = [
     image: 'https://picsum.photos/200/300',
     variant: 'Crimson',
     sizes: 'S',
-    price: 10.99
+    price: 60.95
   },
   {
     id: 5,
@@ -51,7 +51,7 @@ export const PRODUCTS: Product[] = [
     image: 'https://picsum.photos/200/300',
     variant: 'Teal',
     sizes: 'XL',
-    price: 10.99
+    price: 543.99
   },
   {
     id: 6,
@@ -61,7 +61,7 @@ export const PRODUCTS: Product[] = [
     image: 'https://picsum.photos/200/300',
     variant: 'Crimson',
     sizes: 'XL',
-    price: 10.99
+    price: 150.99
   },
   {
     id: 7,
@@ -71,7 +71,7 @@ export const PRODUCTS: Product[] = [
     image: 'https://picsum.photos/200/300',
     variant: 'Teal',
     sizes: '2XL',
-    price: 10.99
+    price: 610.99
   },
   {
     id: 8,
@@ -82,7 +82,7 @@ export const PRODUCTS: Product[] = [
 
     variant: 'Aquamarine',
     sizes: '2XL',
-    price: 10.99
+    price: 710.99
   },
   {
     id: 9,
@@ -93,7 +93,7 @@ export const PRODUCTS: Product[] = [
 
     variant: 'Maroon',
     sizes: '2XL',
-    price: 10.99
+    price: 810.99
   },
   {
     id: 10,
@@ -105,7 +105,7 @@ export const PRODUCTS: Product[] = [
 
     variant: 'Violet',
     sizes: '3XL',
-    price: 10.99
+    price: 910.99
   },
   {
     id: 11,
@@ -115,7 +115,7 @@ export const PRODUCTS: Product[] = [
     image: 'https://picsum.photos/200/300',
     variant: 'Fuscia',
     sizes: 'M',
-    price: 10.99
+    price: 100.99
   },
   {
     id: 12,
@@ -125,7 +125,7 @@ export const PRODUCTS: Product[] = [
     image: 'https://picsum.photos/200/300',
     variant: 'Teal',
     sizes: 'L',
-    price: 10.99
+    price: 109.79
   },
   {
     id: 13,
@@ -136,7 +136,7 @@ export const PRODUCTS: Product[] = [
     image: 'https://picsum.photos/200/300',
     variant: 'Maroon',
     sizes: 'S',
-    price: 10.99
+    price: 507.81
   },
   {
     id: 14,
@@ -148,7 +148,7 @@ export const PRODUCTS: Product[] = [
     categories: 'Casework',
     variant: 'Maroon',
     sizes: '3XL',
-    price: 10.99
+    price: 855.999
   },
   {
     id: 15,
@@ -158,7 +158,7 @@ export const PRODUCTS: Product[] = [
     image: 'https://picsum.photos/200/300',
     variant: 'Aquamarine',
     sizes: '2XL',
-    price: 10.99
+    price: 82185.14
   },
   {
     id: 16,
@@ -169,7 +169,7 @@ export const PRODUCTS: Product[] = [
     image: 'https://picsum.photos/200/300',
     variant: 'Pink',
     sizes: 'L',
-    price: 10.99
+    price: 84.5
   },
   {
     id: 17,
@@ -179,7 +179,7 @@ export const PRODUCTS: Product[] = [
     image: 'https://picsum.photos/200/300',
     variant: 'Violet',
     sizes: 'XL',
-    price: 10.99
+    price: 9898.99
   },
   {
     id: 18,
@@ -189,7 +189,7 @@ export const PRODUCTS: Product[] = [
     image: 'https://picsum.photos/200/300',
     variant: 'Violet',
     sizes: 'L',
-    price: 10.99
+    price: 5484
   },
   {
     id: 19,
@@ -199,7 +199,7 @@ export const PRODUCTS: Product[] = [
     image: 'https://picsum.photos/200/300',
     variant: 'Aquamarine',
     sizes: '2XL',
-    price: 10.99
+    price: 555.99
   },
   {
     id: 20,
@@ -209,7 +209,7 @@ export const PRODUCTS: Product[] = [
     image: 'https://picsum.photos/200/300',
     variant: 'Teal',
     sizes: 'XS',
-    price: 10.99
+    price: 999.99
   },
   {
     id: 21,
@@ -219,7 +219,7 @@ export const PRODUCTS: Product[] = [
     image: 'https://picsum.photos/200/300',
     variant: 'Teal',
     sizes: 'M',
-    price: 10.99
+    price: 222.99
   },
   {
     id: 22,
@@ -229,7 +229,7 @@ export const PRODUCTS: Product[] = [
     image: 'https://picsum.photos/200/300',
     variant: 'Maroon',
     sizes: 'L',
-    price: 10.99
+    price: 333.99
   },
   {
     id: 23,
@@ -240,7 +240,7 @@ export const PRODUCTS: Product[] = [
     variant: 'Fuscia',
     image: 'https://picsum.photos/200/300',
     sizes: 'S',
-    price: 10.99
+    price: 444.99
   },
   {
     id: 24,
@@ -250,7 +250,7 @@ export const PRODUCTS: Product[] = [
     image: 'https://picsum.photos/200/300',
     variant: 'Maroon',
     sizes: 'M',
-    price: 10.99
+    price: 568.99
   },
   {
     id: 25,
@@ -260,7 +260,7 @@ export const PRODUCTS: Product[] = [
     image: 'https://picsum.photos/200/300',
     variant: 'Crimson',
     sizes: 'L',
-    price: 10.99
+    price: 8745.99
   },
   {
     id: 26,
@@ -270,7 +270,7 @@ export const PRODUCTS: Product[] = [
     variant: 'Aquamarine',
     image: 'https://picsum.photos/200/300',
     sizes: '2XL',
-    price: 10.99
+    price: 98752.99
   },
   {
     id: 27,
@@ -280,7 +280,7 @@ export const PRODUCTS: Product[] = [
     image: 'https://picsum.photos/200/300',
     variant: 'Aquamarine',
     sizes: 'XS',
-    price: 10.99
+    price: 977.99
   },
   {
     id: 28,
@@ -290,7 +290,7 @@ export const PRODUCTS: Product[] = [
     image: 'https://picsum.photos/200/300',
     variant: 'Violet',
     sizes: 'M',
-    price: 10.99
+    price: 12354.99
   },
   {
     id: 29,
@@ -300,7 +300,7 @@ export const PRODUCTS: Product[] = [
     image: 'https://picsum.photos/200/300',
     variant: 'Maroon',
     sizes: 'L',
-    price: 10.99
+    price: 198745.99
   },
   {
     id: 30,
@@ -311,6 +311,6 @@ export const PRODUCTS: Product[] = [
     image: 'https://picsum.photos/200/300',
     variant: 'Maroon',
     sizes: 'L',
-    price: 10.99
+    price: 9874563.99
   }
 ]
