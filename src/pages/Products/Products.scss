@@ -1,0 +1,26 @@
+.products {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin: 0 -10px;
+  &__controlPanel{
+    position: absolute;
+    display: block;
+    top: 0;
+    right: 10px;
+    background-color: red;
+  }
+  &__panel{
+    width: 80%;
+    display: flex;
+    justify-content: space-around;
+    margin: 10px auto;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 1px 1px 5px 1px #0000000d;
+    &--hidden{
+      display: none;
+    }
+  }
+}
