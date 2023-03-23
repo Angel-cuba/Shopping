@@ -8,8 +8,10 @@ const Products = ({ productsData }: { productsData: Product[] }) => {
   const [size, setSize] = React.useState('')
   const [variant, setVariant] = React.useState('')
   const [category, setCategory] = React.useState('')
+  const [singleFilter, setSingleFilter] = React.useState('')
   const [openFilters, setOpenFilters] = React.useState(false)
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+
+  const handleChangeSize = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSize(event.target.value)
   }
   const handleCategoryChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -18,11 +20,12 @@ const Products = ({ productsData }: { productsData: Product[] }) => {
   const handleVariantChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setVariant(event.target.value)
   }
+  const handleChangeSingleFilter = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSingleFilter(event.target.value)
+  }
   const filterByVariant = () => {
     const filtered = productsData.filter((product: Product) => {
       return product.variant.toLocaleLowerCase().includes(variant.toLowerCase())
-      // ||
-      // product.categories.toLocaleLowerCase().includes(category.toLowerCase())
     })
     return filtered
   }
@@ -38,49 +41,120 @@ const Products = ({ productsData }: { productsData: Product[] }) => {
     })
     return filtered
   }
-  const filters = [filterByVariant(), filterByCategory(), filterBySizes()]
+  const filterByName = () => {
+    const filtered = productsData.filter((product: Product) => {
+      return product.name.toLocaleLowerCase().includes(singleFilter.toLowerCase())
+    })
+    return filtered
+  }
 
   const handleOpenFilters = () => {
     setOpenFilters(!openFilters)
   }
 
+  const filterByAll = () => {
+    const filtered = productsData.filter((product: Product) => {
+      return (
+        product.sizes.toLocaleLowerCase().includes(size.toLowerCase()) ||
+        product.categories.toLocaleLowerCase().includes(category.toLowerCase()) ||
+        product.variant.toLocaleLowerCase().includes(variant.toLowerCase())
+      )
+    })
+    return filtered
+  }
+
+  const showAllFitered = () => {
+    if (size && category && variant) {
+      return filterByAll().map((product: Product) => {
+        return <ProductItem key={product.id} product={product} />
+      })
+    } else if (size && category) {
+      return filterBySizes().map((product: Product) => {
+        return <ProductItem key={product.id} product={product} />
+      })
+    } else if (size && variant) {
+      return filterBySizes().map((product: Product) => {
+        return <ProductItem key={product.id} product={product} />
+      })
+    } else if (category && variant) {
+      return filterByCategory().map((product: Product) => {
+        return <ProductItem key={product.id} product={product} />
+      })
+    } else if (size) {
+      return filterBySizes().map((product: Product) => {
+        return <ProductItem key={product.id} product={product} />
+      })
+    } else if (category) {
+      return filterByCategory().map((product: Product) => {
+        return <ProductItem key={product.id} product={product} />
+      })
+    } else if (variant) {
+      return filterByVariant().map((product: Product) => {
+        return <ProductItem key={product.id} product={product} />
+      })
+    }
+  }
+  const filtersToDefaultValue = () => {
+    setSize('')
+    setCategory('')
+    setVariant('')
+  }
   return (
     <div className="products">
       <div className="products__controlPanel" onClick={handleOpenFilters}>
-        Filters
+        {openFilters ? <p onClick={filtersToDefaultValue}>Hide filters</p> : 'Show filters'}
       </div>
-      <div className={openFilters ? 'products__panel' : 'products__panel--hidden'}>
-        <Input
-          name="Size"
-          value={size}
-          placeholder=""
-          type="text"
-          onChange={handleChange}
-          style={styles}
-        />
-        <Input
-          name="Category"
-          value={category}
-          placeholder=""
-          type="text"
-          onChange={handleCategoryChange}
-          style={styles}
-        />
-        <Input
-          name="Variant"
-          value={variant}
-          placeholder=""
-          type="text"
-          onChange={handleVariantChange}
-          style={styles}
-        />
+      <div className="products__panel">
+        <div className={openFilters ? 'products__panel--visible' : 'products__panel--hidden'}>
+          <Input
+            name="Size"
+            value={size}
+            placeholder=""
+            type="text"
+            onChange={handleChangeSize}
+            style={styles}
+          />
+          <Input
+            name="Category"
+            value={category}
+            placeholder=""
+            type="text"
+            onChange={handleCategoryChange}
+            style={styles}
+          />
+          <Input
+            name="Variant"
+            value={variant}
+            placeholder=""
+            type="text"
+            onChange={handleVariantChange}
+            style={styles}
+          />
+        </div>
+        <div className={!openFilters ? 'products__panel--single' : 'products__panel--hidden'}>
+          <Input
+            name="Search by name"
+            value={singleFilter}
+            placeholder=""
+            type="text"
+            onChange={handleChangeSingleFilter}
+            style={styles}
+          />
+        </div>
       </div>
-
-      {filters.map((filter) => {
-        return filter.map((product: Product) => {
-          return <ProductItem key={product.id} product={product} />
-        })
-      })}
+      <div className="products__content">
+        {!singleFilter && !size && !category && !variant
+          ? productsData.map((product: Product) => {
+              return <ProductItem key={product.id} product={product} />
+            })
+          : null}
+        {singleFilter.length > 0
+          ? filterByName().map((product: Product) => {
+              return <ProductItem key={product.id} product={product} />
+            })
+          : null}
+        {showAllFitered()}
+      </div>
     </div>
   )
 }
