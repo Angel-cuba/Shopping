@@ -7,6 +7,7 @@ export const PRODUCTS: Product[] = [
     description:
       'Unspecified abortion, complicated by genital tract and pelvic infection, unspecified',
     categories: 'Granite Surfaces',
+    image: 'https://picsum.photos/200/300',
     variant: 'Crimson',
     sizes: 'S',
     price: 10.99
@@ -16,6 +17,7 @@ export const PRODUCTS: Product[] = [
     name: 'General Electric Company',
     description: 'Unspecified disease of pancreas',
     categories: 'Waterproofing & Caulking',
+    image: 'https://picsum.photos/200/300',
     variant: 'Goldenrod',
     sizes: 'L',
     price: 10.99
@@ -26,6 +28,7 @@ export const PRODUCTS: Product[] = [
     description:
       'Inguinal hernia, with obstruction, without mention of gangrene, bilateral, recurrent',
     categories: 'Marlite Panels (FED)',
+    image: 'https://picsum.photos/200/300',
     variant: 'Violet',
     sizes: 'L',
     price: 10.99
@@ -35,6 +38,7 @@ export const PRODUCTS: Product[] = [
     name: 'STRATS Trust',
     description: 'Incisional ventral hernia with obstruction',
     categories: 'Casework',
+    image: 'https://picsum.photos/200/300',
     variant: 'Crimson',
     sizes: 'S',
     price: 10.99
@@ -44,6 +48,7 @@ export const PRODUCTS: Product[] = [
     name: 'QuickLogic Corporation',
     description: 'Failed attempted abortion complicated by shock',
     categories: 'Electrical',
+    image: 'https://picsum.photos/200/300',
     variant: 'Teal',
     sizes: 'XL',
     price: 10.99
@@ -53,6 +58,7 @@ export const PRODUCTS: Product[] = [
     name: 'Yield10 Bioscience, Inc.',
     description: 'Benign neoplasm of other specified sites of nervous system',
     categories: 'Wall Protection',
+    image: 'https://picsum.photos/200/300',
     variant: 'Crimson',
     sizes: 'XL',
     price: 10.99
@@ -62,6 +68,7 @@ export const PRODUCTS: Product[] = [
     name: 'China Commercial CCrimsonit, Inc.',
     description: 'Open wound of penis, complicated',
     categories: 'Waterproofing & Caulking',
+    image: 'https://picsum.photos/200/300',
     variant: 'Teal',
     sizes: '2XL',
     price: 10.99
@@ -71,6 +78,8 @@ export const PRODUCTS: Product[] = [
     name: 'Nu Skin Enterprises, Inc.',
     description: 'Unspecified dermatitis due to sun',
     categories: 'Granite Surfaces',
+    image: 'https://picsum.photos/200/300',
+
     variant: 'Aquamarine',
     sizes: '2XL',
     price: 10.99
@@ -80,6 +89,8 @@ export const PRODUCTS: Product[] = [
     name: 'Ashford Hospitality Trust Inc',
     description: 'Other mechanical complication of cardiac device, implant, and graft',
     categories: 'Waterproofing & Caulking',
+    image: 'https://picsum.photos/200/300',
+
     variant: 'Maroon',
     sizes: '2XL',
     price: 10.99
@@ -90,6 +101,8 @@ export const PRODUCTS: Product[] = [
     description:
       'Maternal distress complicating labor and delivery, postpartum condition or complication',
     categories: 'Granite Surfaces',
+    image: 'https://picsum.photos/200/300',
+
     variant: 'Violet',
     sizes: '3XL',
     price: 10.99
@@ -99,6 +112,7 @@ export const PRODUCTS: Product[] = [
     name: 'Global Indemnity Limited',
     description: 'Other specified venereal diseases',
     categories: 'Casework',
+    image: 'https://picsum.photos/200/300',
     variant: 'Fuscia',
     sizes: 'M',
     price: 10.99
@@ -108,6 +122,7 @@ export const PRODUCTS: Product[] = [
     name: 'Western Union Company (The)',
     description: 'Acute bronchospasm',
     categories: 'Granite Surfaces',
+    image: 'https://picsum.photos/200/300',
     variant: 'Teal',
     sizes: 'L',
     price: 10.99
@@ -118,6 +133,7 @@ export const PRODUCTS: Product[] = [
     description:
       'Closed fracture of vault of skull with other and unspecified intracranial hemorrhage, unspecified state of consciousness',
     categories: 'Marlite Panels (FED)',
+    image: 'https://picsum.photos/200/300',
     variant: 'Maroon',
     sizes: 'S',
     price: 10.99
@@ -127,6 +143,8 @@ export const PRODUCTS: Product[] = [
     name: 'Lydall, Inc.',
     description:
       'Other closed skull fracture with subarachnoid, subdural, and extradural hemorrhage, with moderate [1-24 hours] loss of consciousness',
+    image: 'https://picsum.photos/200/300',
+
     categories: 'Casework',
     variant: 'Maroon',
     sizes: '3XL',
@@ -137,6 +155,7 @@ export const PRODUCTS: Product[] = [
     name: 'Hamilton Bancorp, Inc.',
     description: 'Glaucoma associated with pupillary block',
     categories: 'Casework',
+    image: 'https://picsum.photos/200/300',
     variant: 'Aquamarine',
     sizes: '2XL',
     price: 10.99
@@ -147,6 +166,7 @@ export const PRODUCTS: Product[] = [
     description:
       'Hypertonic, incoordinate, or prolonged uterine contractions, deliveCrimson, with or without mention of antepartum condition',
     categories: 'Casework',
+    image: 'https://picsum.photos/200/300',
     variant: 'Pink',
     sizes: 'L',
     price: 10.99
@@ -156,6 +176,7 @@ export const PRODUCTS: Product[] = [
     name: 'Regal Beloit Corporation',
     description: 'Bacteroides fragilis',
     categories: 'Casework',
+    image: 'https://picsum.photos/200/300',
     variant: 'Violet',
     sizes: 'XL',
     price: 10.99
@@ -165,6 +186,7 @@ export const PRODUCTS: Product[] = [
     name: 'Liberty Interactive Corporation',
     description: 'Observation and evaluation for suspected exposure to anthrax',
     categories: 'Waterproofing & Caulking',
+    image: 'https://picsum.photos/200/300',
     variant: 'Violet',
     sizes: 'L',
     price: 10.99
@@ -174,6 +196,7 @@ export const PRODUCTS: Product[] = [
     name: 'Violet Hills Bancorp, Inc.',
     description: 'Closed fracture of coracoid process of scapula',
     categories: 'Marlite Panels (FED)',
+    image: 'https://picsum.photos/200/300',
     variant: 'Aquamarine',
     sizes: '2XL',
     price: 10.99
@@ -183,6 +206,7 @@ export const PRODUCTS: Product[] = [
     name: 'FlexShares Disciplined Duration MBS Index Fund',
     description: 'Unspecified abortion, complicated by embolism, complete',
     categories: 'Waterproofing & Caulking',
+    image: 'https://picsum.photos/200/300',
     variant: 'Teal',
     sizes: 'XS',
     price: 10.99
@@ -192,6 +216,7 @@ export const PRODUCTS: Product[] = [
     name: 'Artisan Partners Asset Management Inc.',
     description: 'Lack of coordination',
     categories: 'Casework',
+    image: 'https://picsum.photos/200/300',
     variant: 'Teal',
     sizes: 'M',
     price: 10.99
@@ -201,6 +226,7 @@ export const PRODUCTS: Product[] = [
     name: 'Validus Holdings, Ltd.',
     description: 'Legally induced abortion, complicated by shock, incomplete',
     categories: 'Granite Surfaces',
+    image: 'https://picsum.photos/200/300',
     variant: 'Maroon',
     sizes: 'L',
     price: 10.99
@@ -212,6 +238,7 @@ export const PRODUCTS: Product[] = [
       'Motor vehicle traffic accident involving re-entrant collision with another motor vehicle injuring pedestrian',
     categories: 'Casework',
     variant: 'Fuscia',
+    image: 'https://picsum.photos/200/300',
     sizes: 'S',
     price: 10.99
   },
@@ -220,6 +247,7 @@ export const PRODUCTS: Product[] = [
     name: 'Greif Bros. Corporation',
     description: 'Other specified anomalies of respiratory system',
     categories: 'Wall Protection',
+    image: 'https://picsum.photos/200/300',
     variant: 'Maroon',
     sizes: 'M',
     price: 10.99
@@ -229,6 +257,7 @@ export const PRODUCTS: Product[] = [
     name: 'Fortress Transportation and Infrastructure Investors LLC',
     description: 'Preauricular sinus or fistula',
     categories: 'Marlite Panels (FED)',
+    image: 'https://picsum.photos/200/300',
     variant: 'Crimson',
     sizes: 'L',
     price: 10.99
@@ -239,6 +268,7 @@ export const PRODUCTS: Product[] = [
     description: 'Diverticulosis of colon (without mention of hemorrhage)',
     categories: 'Wall Protection',
     variant: 'Aquamarine',
+    image: 'https://picsum.photos/200/300',
     sizes: '2XL',
     price: 10.99
   },
@@ -247,6 +277,7 @@ export const PRODUCTS: Product[] = [
     name: 'ServiceNow, Inc.',
     description: 'Screening examination for yaws',
     categories: 'Casework',
+    image: 'https://picsum.photos/200/300',
     variant: 'Aquamarine',
     sizes: 'XS',
     price: 10.99
@@ -256,6 +287,7 @@ export const PRODUCTS: Product[] = [
     name: 'Foamix Pharmaceuticals Ltd.',
     description: 'Shigella boydii',
     categories: 'Marlite Panels (FED)',
+    image: 'https://picsum.photos/200/300',
     variant: 'Violet',
     sizes: 'M',
     price: 10.99
@@ -265,6 +297,7 @@ export const PRODUCTS: Product[] = [
     name: 'Sunrun Inc.',
     description: 'Carcinoma in situ of other and unspecified digestive organs',
     categories: 'Granite Surfaces',
+    image: 'https://picsum.photos/200/300',
     variant: 'Maroon',
     sizes: 'L',
     price: 10.99
@@ -275,6 +308,7 @@ export const PRODUCTS: Product[] = [
     description:
       'Persistent migraine aura with cerebral infarction, without mention of intractable migraine without mention of status migrainosus',
     categories: 'Wall Protection',
+    image: 'https://picsum.photos/200/300',
     variant: 'Maroon',
     sizes: 'L',
     price: 10.99
