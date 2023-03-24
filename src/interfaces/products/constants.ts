@@ -24,3 +24,9 @@ export type GetProductsAction = {
 }
 
 export type ProductActionTypes = GetProductsAction | LoadingAction | StopLoadingAction | ErrorAction
+
+export type ProductState = {
+  products: Product[]
+  loading: boolean
+  error: string | null
+}
