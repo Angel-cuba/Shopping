@@ -11,17 +11,13 @@ const ProductById = () => {
   const [recommended, setRecommended] = React.useState<Product[]>([])
   const params = useParams()
   const { id } = params
-  const items = useSelector((state: RootState) => state.items)
-  const product = items.products.find((product) => {
+  const { products } = useSelector((state: RootState) => state.products)
+  const product = products.find((product) => {
     return product.id.toString() === id
   })
 
-  const recommendedProducts = items.products.filter(
+  const recommendedProducts = products.filter(
     (p) => p.variant === product?.variant && p.id !== product?.id
-  )
-  console.log(
-    '🚀 ~ file: ProductById.tsx:20 ~ ProductById ~ recommendedProducts:',
-    recommendedProducts
   )
 
   React.useEffect(() => {

@@ -4,7 +4,7 @@ import ProductItem from '../../components/Product/Product'
 import { Product } from '../../interfaces/products/ProductType'
 import './Products.scss'
 
-const Products = ({ productsData }: { productsData: Product[] }) => {
+const Products = ({ products }: { products: Product[] }) => {
   const [size, setSize] = React.useState('')
   const [variant, setVariant] = React.useState('')
   const [category, setCategory] = React.useState('')
@@ -24,25 +24,25 @@ const Products = ({ productsData }: { productsData: Product[] }) => {
     setSingleFilter(event.target.value)
   }
   const filterByVariant = () => {
-    const filtered = productsData.filter((product: Product) => {
+    const filtered = products.filter((product: Product) => {
       return product.variant.toLocaleLowerCase().includes(variant.toLowerCase())
     })
     return filtered
   }
   const filterByCategory = () => {
-    const filtered = productsData.filter((product: Product) => {
+    const filtered = products.filter((product: Product) => {
       return product.categories.toLocaleLowerCase().includes(category.toLowerCase())
     })
     return filtered
   }
   const filterBySizes = () => {
-    const filtered = productsData.filter((product: Product) => {
+    const filtered = products.filter((product: Product) => {
       return product.sizes.toLocaleLowerCase().includes(size.toLowerCase())
     })
     return filtered
   }
   const filterByName = () => {
-    const filtered = productsData.filter((product: Product) => {
+    const filtered = products.filter((product: Product) => {
       return product.name.toLocaleLowerCase().includes(singleFilter.toLowerCase())
     })
     return filtered
@@ -53,7 +53,7 @@ const Products = ({ productsData }: { productsData: Product[] }) => {
   }
 
   const filterByAll = () => {
-    const filtered = productsData.filter((product: Product) => {
+    const filtered = products.filter((product: Product) => {
       return (
         product.sizes.toLocaleLowerCase().includes(size.toLowerCase()) ||
         product.categories.toLocaleLowerCase().includes(category.toLowerCase()) ||
@@ -144,7 +144,7 @@ const Products = ({ productsData }: { productsData: Product[] }) => {
       </div>
       <div className="products__content">
         {!singleFilter && !size && !category && !variant
-          ? productsData.map((product: Product) => {
+          ? products.map((product: Product) => {
               return <ProductItem key={product.id} product={product} />
             })
           : null}

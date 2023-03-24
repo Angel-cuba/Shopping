@@ -6,14 +6,14 @@ import { AppDispatch, RootState } from '../redux/store'
 
 const Home = () => {
   const dispatch = useDispatch<AppDispatch>()
-  const items = useSelector((state: RootState) => state.items)
+  const { products } = useSelector((state: RootState) => state)
   useEffect(() => {
     dispatch(fetchProducts())
   }, [dispatch])
 
   return (
     <div>
-      <Products productsData={items.products} />
+      <Products {...products} />
     </div>
   )
 }
