@@ -4,9 +4,14 @@ import RemoveShoppingCartIcon from '@mui/icons-material/RemoveShoppingCart'
 
 export const NavbarIcon = () => {
   const [itemsInCart, setItemsInCart] = React.useState(0)
+  const [openCart, setOpenCart] = React.useState(false)
+
+  const showCartItems = () => {
+    setOpenCart(!openCart)
+  }
   return (
     <div className="navbar-cart">
-      <div className="navbar-cart__icon">
+      <div className="navbar-cart__icon" onClick={showCartItems}>
         <AddShoppingCartIcon
           style={{
             fontSize: '2rem'
@@ -14,6 +19,7 @@ export const NavbarIcon = () => {
         />
       </div>
       <div className="navbar-cart__amount">{itemsInCart}</div>
+      <div className={openCart ? 'navbar-cart__cart' : 'navbar-cart__cart--show'}></div>
     </div>
   )
 }

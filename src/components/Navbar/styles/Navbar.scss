@@ -41,6 +41,34 @@
         right: -10px;
         font-size: 1.2rem;
        }
+       &__cart{
+        display: block;
+        position: absolute;
+        top: 60px;
+        right: 0px;
+        width: 400px;
+        min-height: 100px;
+        background-color: red;
+        border: 1px solid #262626;
+        border-radius: 10px;
+        z-index: 100;
+        transform: translateX(25px);
+        transition: all 0.3s ease-in-out;
+        &--show{
+           display: block;
+        position: absolute;
+        top: 60px;
+        right: -400px;
+        width: 400px;
+        min-height: 100px;
+        background-color: red;
+        border: 1px solid #262626;
+        border-radius: 10px;
+        z-index: 100;
+         transform: translateX(50px);
+         transition: all 0.6s ease-in-out;
+        }
+       }
       }
     }
   }
