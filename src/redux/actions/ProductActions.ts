@@ -1,6 +1,6 @@
 import { Dispatch } from 'redux'
 import { PRODUCTS } from '../../data/dummy'
-import { GET_PRODUCTS, LOADING, STOP_LOADING } from '../../interfaces/constants'
+import { GET_PRODUCTS, LOADING, STOP_LOADING } from '../../interfaces/products/constants'
 
 export const getProducts = () => {
   return {

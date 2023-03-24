@@ -4,8 +4,8 @@ import {
   LOADING,
   STOP_LOADING,
   ProductActionTypes
-} from '../../interfaces/constants'
-import { Product } from '../../interfaces/ProductType'
+} from '../../interfaces/products/constants'
+import { Product } from '../../interfaces/products/ProductType'
 
 type ProductState = {
   products: Product[]

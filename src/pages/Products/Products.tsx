@@ -1,7 +1,7 @@
 import React from 'react'
 import { Input } from '../../components/Input/Input'
 import ProductItem from '../../components/Product/Product'
-import { Product } from '../../interfaces/ProductType'
+import { Product } from '../../interfaces/products/ProductType'
 import './Products.scss'
 
 const Products = ({ productsData }: { productsData: Product[] }) => {

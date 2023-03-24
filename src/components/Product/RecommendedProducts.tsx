@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { Product } from '../../interfaces/ProductType'
+import { Product } from '../../interfaces/products/ProductType'
 
 const RecommendedProducts = ({ product }: { product: Product }) => {
   return (

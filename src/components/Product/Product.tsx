@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { Product } from '../../interfaces/ProductType'
+import { Product } from '../../interfaces/products/ProductType'
 import { CartIcon } from '../Cart/Cart'
 
 const ProductItem = ({ product }: { product: Product }) => {
