@@ -3,23 +3,17 @@ import {
   GET_PRODUCTS,
   LOADING,
   STOP_LOADING,
-  ProductActionTypes
+  ProductActionTypes,
+  ProductState
 } from '../../interfaces/products/constants'
-import { Product } from '../../interfaces/products/ProductType'
 
-type ProductState = {
-  products: Product[]
-  loading: boolean
-  error: string | null
-}
-
-const initialState: ProductState = {
+export const initialProductState: ProductState = {
   products: [],
   loading: false,
   error: null
 }
 
-export default function ProductReducer(state = initialState, action: ProductActionTypes) {
+export default function ProductReducer(state = initialProductState, action: ProductActionTypes) {
   switch (action.type) {
     case GET_PRODUCTS:
       return {
