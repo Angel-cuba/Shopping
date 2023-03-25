@@ -1,9 +1,9 @@
+import { AnyAction } from 'redux'
 import {
   ERROR,
   GET_PRODUCTS,
   LOADING,
   STOP_LOADING,
-  ProductActionTypes,
   ProductState
 } from '../../interfaces/products/constants'
 
@@ -13,7 +13,7 @@ export const initialProductState: ProductState = {
   error: null
 }
 
-export default function ProductReducer(state = initialProductState, action: ProductActionTypes) {
+export default function ProductReducer(state = initialProductState, action: AnyAction) {
   switch (action.type) {
     case GET_PRODUCTS:
       return {
