@@ -2,8 +2,10 @@ import React from 'react'
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart'
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
 import FavoriteIcon from '@mui/icons-material/Favorite'
-import { useSelector } from 'react-redux'
-import { RootState } from '../../redux/store'
+import { useDispatch, useSelector } from 'react-redux'
+import { AppDispatch, RootState } from '../../redux/store'
+import { addToCart, removeFromCart } from '../../redux/actions/CartActions'
+import { Product } from '../../interfaces/products/ProductType'
 
 export const NavbarIcon = () => {
   const [openCart, setOpenCart] = React.useState(false)
@@ -30,7 +32,18 @@ export const NavbarIcon = () => {
   )
 }
 
-export const CartIcon = ({ itemAddedToCart }: { itemAddedToCart: boolean }) => {
+export const CartIcon = ({ product }: { product: Product }) => {
+  const dispatch = useDispatch<AppDispatch>()
+  const { itemInCart } = useSelector((state: RootState) => state.cart)
+  const addItemToCart = () => {
+    dispatch(addToCart(product))
+  }
+  const removeItemFromCart = () => {
+    dispatch(removeFromCart(product))
+  }
+
+  const itemAddedToCart = itemInCart?.find((item) => item.id === product.id)
+
   return (
     <div className="icon">
       <div className="icon__cart">
@@ -38,11 +51,18 @@ export const CartIcon = ({ itemAddedToCart }: { itemAddedToCart: boolean }) => {
           {itemAddedToCart ? (
             <FavoriteIcon
               style={{
+                fontSize: '2rem',
                 color: 'red'
               }}
+              onClick={removeItemFromCart}
             />
           ) : (
-            <FavoriteBorderIcon />
+            <FavoriteBorderIcon
+              style={{
+                fontSize: '2rem'
+              }}
+              onClick={addItemToCart}
+            />
           )}
         </div>
       </div>

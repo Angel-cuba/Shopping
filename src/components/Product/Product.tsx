@@ -5,13 +5,8 @@ import { Product } from '../../interfaces/products/ProductType'
 import { CartIcon } from '../Cart/Cart'
 
 const ProductItem = ({ product }: { product: Product }) => {
-  const [itemAddedCart, setAddedCart] = React.useState<boolean>(false)
   const location = useLocation()
   const { pathname } = location
-
-  const handleAddToCart = () => {
-    setAddedCart(!itemAddedCart)
-  }
 
   return (
     <div key={product.id} className="products__content__item">
@@ -24,8 +19,8 @@ const ProductItem = ({ product }: { product: Product }) => {
         </div>
       )}
       <div className="products__content__item--add">
-        <div className="products__content__item--name--icon" onClick={handleAddToCart}>
-          <CartIcon itemAddedToCart={itemAddedCart} />
+        <div className="products__content__item--name--icon">
+          <CartIcon product={product} />
         </div>
       </div>
       <div className="products__content__item--image">
