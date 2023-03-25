@@ -1,10 +1,13 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
+import MoreVertIcon from '@mui/icons-material/MoreVert'
 import { Product } from '../../interfaces/products/ProductType'
 import { CartIcon } from '../Cart/Cart'
 
 const ProductItem = ({ product }: { product: Product }) => {
   const [itemAddedCart, setAddedCart] = React.useState<boolean>(false)
+  const location = useLocation()
+  const { pathname } = location
 
   const handleAddToCart = () => {
     setAddedCart(!itemAddedCart)
@@ -12,8 +15,15 @@ const ProductItem = ({ product }: { product: Product }) => {
 
   return (
     <div key={product.id} className="products__content__item">
-      <div className="products__content__item--name">
-        <h3>{product.name.slice(0, 12)}</h3>
+      {pathname !== `/product/${product.id}` && (
+        <div className="products__content__item--details">
+          <Link to={`/product/${product.id}`}>
+            <MoreVertIcon />
+            Details
+          </Link>
+        </div>
+      )}
+      <div className="products__content__item--add">
         <div className="products__content__item--name--icon" onClick={handleAddToCart}>
           <CartIcon itemAddedToCart={itemAddedCart} />
         </div>
@@ -23,18 +33,20 @@ const ProductItem = ({ product }: { product: Product }) => {
           src={product.image}
           alt={product.name}
           style={{
-            width: '90%',
+            width: '200px',
             height: '200px',
-            borderRadius: '5px'
+            borderRadius: '5px',
+            objectFit: 'cover',
+            transform: 'rotate(-20deg)'
           }}
         />
-        <p className="products__content__item--image--price">£{product.price}</p>
       </div>
-      <div className="products__content__item--buttons">
-        <div className="products__content__item--buttons--buy">Buy</div>
-        <div className="products__content__item--buttons--details">
-          <Link to={`/product/${product.id}`}>Details</Link>
-        </div>
+      <div className="products__content__item--info">
+        <h3 className="products__content__item--info--name">{product.name.slice(0, 12)}</h3>
+        <p className="products__content__item--info--description">
+          {product.description.slice(0, 20)}...
+        </p>
+        <p className="products__content__item--info--price">£{product.price}</p>
       </div>
     </div>
   )

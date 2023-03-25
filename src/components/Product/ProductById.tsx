@@ -12,12 +12,12 @@ const ProductById = () => {
   const params = useParams()
   const { id } = params
   const { products } = useSelector((state: RootState) => state.products)
-  const product = products.find((product) => {
+  const product = products.find((product: Product) => {
     return product.id.toString() === id
   })
 
   const recommendedProducts = products.filter(
-    (p) => p.variant === product?.variant && p.id !== product?.id
+    (p: Product) => p.variant === product?.variant && p.id !== product?.id
   )
 
   React.useEffect(() => {
@@ -31,10 +31,13 @@ const ProductById = () => {
           <div className="productId__item__info">
             <h3 className="productId__item__info__name">{product.name}</h3>
             <p className="productId__item__info__description">{product.description}</p>
-            <p>{product.sizes}</p>
-            <p className="productId__item__info__price">£ {product.price}</p>
-            <p>{product.categories}</p>
-            <p>{product.variant}</p>
+            <div className="productId__item__info__small-details">
+              <p className="productId__item__info__small-details--size">{product.sizes}</p>
+              <p className="productId__item__info__small-details--categories">
+                {product.categories}
+              </p>
+              <p className="productId__item__info__small-details--variant">{product.variant}</p>
+            </div>
           </div>
         </div>
       )}
