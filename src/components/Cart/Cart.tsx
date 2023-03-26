@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch, RootState } from '../../redux/store'
 import { addToCart, removeFromCart } from '../../redux/actions/CartActions'
 import { Product } from '../../interfaces/products/ProductType'
-import SingleProduct from './ProductInCart'
+import SingleProduct from './SingleProduct'
 
 export const NavbarIcon = () => {
   const [openCart, setOpenCart] = React.useState(false)
