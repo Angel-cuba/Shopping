@@ -28,3 +28,36 @@ type Variant =
   | 'Fuscia'
   | 'Pink'
   | 'Goldenrod'
+
+type VariantsColorsType = {
+  Crimson: string
+  Teal: string
+  Aquamarine: string
+  Maroon: string
+  Violet: string
+  Fuscia: string
+  Pink: string
+  Goldenrod: string
+}
+
+export const Sizes = ['S', 'M', 'L', 'XS', 'XL', '2XL', '3XL']
+export const Variants = [
+  'Crimson',
+  'Teal',
+  'Aquamarine',
+  'Maroon',
+  'Violet',
+  'Fuscia',
+  'Pink',
+  'Goldenrod'
+]
+export const VariantsColors: any = {
+  Crimson: '#dc143c',
+  Teal: '#008080',
+  Aquamarine: '#7fffd4',
+  Maroon: '#800000',
+  Violet: '#ee82ee',
+  Fuscia: '#ff00ff',
+  Pink: '#ffc0cb',
+  Goldenrod: '#daa520'
+}
