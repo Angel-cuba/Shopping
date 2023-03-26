@@ -27,6 +27,21 @@
     &--cart {
       .navbar-cart {
         position: relative;
+        width: 100%;
+        height: 100%;
+        &__total {
+          position: absolute;
+          top: 100px;
+          right: 380px;
+          font-size: 1.2rem;
+          font-weight: 500;
+          z-index: 100;
+          width: 110px;
+          text-align: center;
+          &--hidden{
+            display: none;
+          }
+        }
         &__icon {
           font-size: 1.5rem;
           color: #262626;
@@ -37,9 +52,17 @@
         }
         &__amount {
           position: absolute;
-          top: -4px;
+          top: -8px;
           right: -10px;
           font-size: 1.2rem;
+          font-weight: 500;
+          &--over {
+            position: absolute;
+            top: -8px;
+            right: -15px;
+            font-size: 1.2rem;
+            font-weight: 500;
+          }
         }
         &__cart {
           display: block;
@@ -48,16 +71,59 @@
           right: 0px;
           width: 400px;
           min-height: 100px;
+          max-height: 400px;
+          overflow-y: scroll;
           background-color: rgba(35, 48, 41, 0.98);
           border: 1px solid #b2b2b2;
-          border-radius: 10px;
+          border-radius: 5px;
           z-index: 100;
           transform: translateX(25px);
           transition: all 0.63s ease-in-out;
-          &--show {
-            display: block;
-            width: 0;
-            height: 0;
+          &--product {
+            position: relative;
+            display: flex;
+            padding: 0.5rem;
+            border-bottom: 1px solid #b2b2b2;
+            &--image {
+              min-width: 80px;
+              height: 80px;
+            }
+            &--buttons {
+              display: flex;
+              flex-direction: column;
+              justify-content: space-between;
+              width: 100%;
+              &--plus-minus {
+                margin-left: 1rem;
+                width: 35%;
+                display: flex;
+                justify-content: space-between;
+                &--quantity {
+                  font-size: 1.32rem;
+                  font-weight: 500;
+                }
+              }
+              &--price {
+                position: absolute;
+                top: 10px;
+                right: 20px;
+              }
+            }
+            &--name {
+              font-size: 1.2rem;
+              font-weight: 500;
+              width: 250px;
+              height: 1.5rem;
+            }
+            &--price {
+              font-size: 1rem;
+              font-weight: 400;
+              margin: 0.15rem 0;
+              width: 200px;
+            }
+          }
+          &--hidden {
+            display: none;
           }
         }
       }
