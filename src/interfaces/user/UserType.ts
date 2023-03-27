@@ -13,6 +13,10 @@ export type UserType = {
   name: string
   nbf: number
   sub: string
+  role?: Role
 }
 
-type Role = 'ADMIN' | 'USER'
+enum Role {
+  ADMIN = 'ADMIN',
+  USER = 'USER'
+}
