@@ -118,7 +118,7 @@ const ProductById = () => {
 
   return (
     <div className="productId">
-      {size !== product.sizes || variant !== product.variant ? (
+      {size !== product?.sizes || variant !== product?.variant ? (
         <div
           className="productId__set-product"
           onClick={setNewProductHandler}
