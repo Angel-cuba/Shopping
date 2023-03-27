@@ -12,6 +12,7 @@ const Login = () => {
   const handleResponse = (response: any) => {
     if (response.credential) {
       const token = `${response.credential}`
+      localStorage.setItem('token', response.credential)
       const userDecoded: UserType = jwtDecode(response.credential)
       dispatch(login(userDecoded))
     }
