@@ -25,7 +25,10 @@ const ProductById = () => {
   const product = products.products.find((product: Product) => {
     return product.id.toString() === id
   })
-  const [recommended, setRecommended] = React.useState<Product[]>([])
+  const recommendedProducts = products.products.filter(
+    (p: Product) => p.variant === product?.variant && p.id !== product?.id
+  )
+
   const [size, setSize] = React.useState<string>(product?.sizes)
   const [variant, setVariant] = React.useState<string>(product?.variant)
   const [openSizesBox, setOpenSizesBox] = React.useState<boolean>(false)
@@ -33,13 +36,6 @@ const ProductById = () => {
   const [newProduct, setNewProduct] = React.useState<NewProduct>()
 
   const dispatch = useDispatch<AppDispatch>()
-  React.useEffect(() => {
-    setRecommended(recommendedProducts)
-  }, [])
-
-  const recommendedProducts = products.products.filter(
-    (p: Product) => p.variant === product?.variant && p.id !== product?.id
-  )
 
   const SizeBlocks = Sizes.map((item) => (
     <div
@@ -264,7 +260,7 @@ const ProductById = () => {
       <div className="productId__recommended">
         <h3>Recommended</h3>
         <div className="productId__recommended__items">
-          {recommended.map((product) => (
+          {recommendedProducts.map((product: Product) => (
             <RecommendedProducts key={product.id} product={product} />
           ))}
         </div>

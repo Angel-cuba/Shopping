@@ -16,29 +16,31 @@ export default function CartReducer(state = initialCartState, action: AnyAction)
       }
       const product = state.itemInCart.find((item) => item.id === action.payload.id)
       const time = new Date().getTime()
+      const hasSameVariant = product?.variant === action.payload.variant
+      const hasSameSize = product?.sizes === action.payload.sizes
       if (product) {
-        if (product.variant !== action.payload.variant && product.sizes === action.payload.sizes) {
+        if (!hasSameVariant && hasSameSize) {
           const newItem = { ...action.payload, id: action.payload.id + time, quantity: 1 }
           return {
             ...state,
             itemInCart: [...state.itemInCart, newItem]
           }
         }
-        if (product.variant === action.payload.variant && product.sizes !== action.payload.sizes) {
+        if (hasSameVariant && !hasSameSize) {
           const newItem = { ...action.payload, id: action.payload.id + time, quantity: 1 }
           return {
             ...state,
             itemInCart: [...state.itemInCart, newItem]
           }
         }
-        if (product.variant !== action.payload.variant && product.sizes !== action.payload.sizes) {
+        if (!hasSameSize && !hasSameVariant) {
           const newItem = { ...action.payload, id: action.payload.id + time, quantity: 1 }
           return {
             ...state,
             itemInCart: [...state.itemInCart, newItem]
           }
         }
-        if (product.variant === action.payload.variant && product.sizes === action.payload.sizes) {
+        if (hasSameVariant && hasSameSize) {
           return {
             ...state,
             itemInCart: state.itemInCart.map((item) => {
