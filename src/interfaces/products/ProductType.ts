@@ -9,6 +9,17 @@ export type Product = {
   sizes: Sizes
 }
 
+export type NewProduct = {
+  id: number
+  name: string
+  price: number
+  description: string
+  image: string
+  categories: string
+  variant: string
+  sizes: string
+}
+
 type Category =
   | 'Granite Surfaces'
   | 'Waterproofing & Caulking'
