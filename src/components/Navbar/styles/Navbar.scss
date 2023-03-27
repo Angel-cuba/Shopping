@@ -1,6 +1,7 @@
 .navbar {
   display: none;
   padding: 0.5rem auto;
+  min-width: 350px;
   &__links {
     margin: 0 0.5rem;
     text-decoration: none;
@@ -38,7 +39,7 @@
           z-index: 100;
           width: 110px;
           text-align: center;
-          &--hidden{
+          &--hidden {
             display: none;
           }
         }
