@@ -1,33 +1,43 @@
 import React from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp'
 import StarsIcon from '@mui/icons-material/Stars'
-import { RootState } from '../../redux/store'
-import { Product, Sizes, Variants, VariantsColors } from '../../interfaces/products/ProductType'
+import { AppDispatch, RootState } from '../../redux/store'
+import {
+  NewProduct,
+  Product,
+  Sizes,
+  Variants,
+  VariantsColors
+} from '../../interfaces/products/ProductType'
 import ProductItem from './Product'
 import RecommendedProducts from './RecommendedProducts'
 import './ProductById.scss'
+import { addToCart } from '../../redux/actions/CartActions'
 
 const ProductById = () => {
   const params = useParams()
   const { id } = params
-  const { products } = useSelector((state: RootState) => state.products)
-  const product = products.find((product: Product) => {
+  const { products } = useSelector((state: RootState) => state)
+
+  const product = products.products.find((product: Product) => {
     return product.id.toString() === id
   })
   const [recommended, setRecommended] = React.useState<Product[]>([])
-  const [size, setSize] = React.useState<string>('')
+  const [size, setSize] = React.useState<string>(product?.sizes)
   const [variant, setVariant] = React.useState<string>(product?.variant)
   const [openSizesBox, setOpenSizesBox] = React.useState<boolean>(false)
   const [openVariantsBox, setOpenVariantsBox] = React.useState<boolean>(false)
+  const [newProduct, setNewProduct] = React.useState<NewProduct>()
 
+  const dispatch = useDispatch<AppDispatch>()
   React.useEffect(() => {
     setRecommended(recommendedProducts)
   }, [])
 
-  const recommendedProducts = products.filter(
+  const recommendedProducts = products.products.filter(
     (p: Product) => p.variant === product?.variant && p.id !== product?.id
   )
 
@@ -86,8 +96,96 @@ const ProductById = () => {
     setOpenVariantsBox(!openVariantsBox)
   }
 
+  const setNewProductHandler = () => {
+    setNewProduct({
+      id: product.id,
+      name: product.name,
+      description: product.description,
+      price: product.price,
+      sizes: size,
+      variant: variant,
+      categories: product.categories,
+      image: product.image
+    })
+  }
+  const newProductHandler = () => {
+    if (newProduct) {
+      dispatch(addToCart(newProduct))
+    }
+    setNewProduct(undefined)
+  }
+  const newProductCancelHandler = () => {
+    setNewProduct(undefined)
+    setSize(product.sizes)
+    setVariant(product.variant)
+  }
+
   return (
     <div className="productId">
+      {size !== product.sizes || variant !== product.variant ? (
+        <div
+          className="productId__set-product"
+          onClick={setNewProductHandler}
+          style={{
+            backgroundColor: '#5D8A68'
+          }}>
+          <h3>Check what you have choosen</h3>
+        </div>
+      ) : (
+        <p className="productId__change-product-notice">
+          Choose size
+          <br /> or <br /> pick a colour
+        </p>
+      )}
+      {newProduct && (
+        <div className="productId__new-product">
+          <div className="productId__new-product__info">
+            <div className="productId__new-product__info__image">
+              <img
+                src={newProduct.image}
+                alt=""
+                style={{
+                  width: '200px',
+                  height: '200px',
+                  objectFit: 'cover'
+                }}
+              />
+            </div>
+            <div className="productId__new-product__info__content">
+              <p>{newProduct.name}</p>
+              <p>{newProduct.description}</p>
+              <p>{newProduct.price}</p>
+              <p>{newProduct.sizes}</p>
+              <p>{newProduct.variant}</p>
+              <p>{newProduct.categories}</p>
+            </div>
+          </div>
+          <div className="productId__new-product__buttons">
+            <div
+              className="productId__new-product__buttons--send"
+              style={{
+                backgroundColor: 'green',
+                padding: '10px',
+                borderRadius: '5px',
+                width: '100px'
+              }}
+              onClick={newProductHandler}>
+              Send
+            </div>
+            <div
+              className="productId__new-product__buttons--cancel"
+              style={{
+                backgroundColor: 'red',
+                padding: '10px',
+                borderRadius: '5px',
+                width: '100px'
+              }}
+              onClick={newProductCancelHandler}>
+              Cancel
+            </div>
+          </div>
+        </div>
+      )}
       {product && (
         <div className="productId__item">
           <ProductItem product={product} />
