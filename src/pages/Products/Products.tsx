@@ -106,21 +106,13 @@ const Products = ({ products }: { products: Product[] }) => {
       </div>
       <div className="products__panel">
         <div className={openFilters ? 'products__panel--visible' : 'products__panel--hidden'}>
-          <Input
-            name="Size"
-            value={size}
-            placeholder=""
-            type="text"
-            onChange={handleChangeSize}
-            style={styles}
-          />
+          <Input name="Size" value={size} placeholder="" type="text" onChange={handleChangeSize} />
           <Input
             name="Category"
             value={category}
             placeholder=""
             type="text"
             onChange={handleCategoryChange}
-            style={styles}
           />
           <Input
             name="Variant"
@@ -128,7 +120,6 @@ const Products = ({ products }: { products: Product[] }) => {
             placeholder=""
             type="text"
             onChange={handleVariantChange}
-            style={styles}
           />
         </div>
         <div className={!openFilters ? 'products__panel--single' : 'products__panel--hidden'}>
