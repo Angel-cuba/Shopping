@@ -19,18 +19,14 @@ const Navigation = () => {
   ]
 
   const homeRoutes = [
+    { path: '', element: <Home /> },
     { path: '/', element: <Home /> },
     { path: '/home', element: <Home /> },
     { path: '/product/:id', element: <ProductById /> },
     { path: '/profile', element: <Profile /> }
   ]
 
-  const adminRoutes = [
-    { path: '/admin/dashboard', element: <AdminDashboard /> },
-    { path: '/home', element: <Home /> },
-    { path: '/product/:id', element: <ProductById /> },
-    { path: '/profile', element: <Profile /> }
-  ]
+  const adminRoutes = [{ path: '/admin/dashboard', element: <AdminDashboard /> }]
 
   if (!user) {
     return (
@@ -44,6 +40,9 @@ const Navigation = () => {
     return (
       <Routes>
         {adminRoutes.map((route) => (
+          <Route key={route.path} path={route.path} element={route.element} />
+        ))}
+        {homeRoutes.map((route) => (
           <Route key={route.path} path={route.path} element={route.element} />
         ))}
       </Routes>
