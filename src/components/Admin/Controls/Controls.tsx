@@ -5,7 +5,12 @@ import GetAppIcon from '@mui/icons-material/GetApp'
 import './Controls.scss'
 import { Input } from '../../Input/Input'
 
-export const Controls = ({ search, setSearch }: any): JSX.Element => {
+type SearchProps = {
+  search: string
+  setSearch: (value: string) => void
+}
+
+export const Controls = ({ search, setSearch }: SearchProps): JSX.Element => {
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value)
   }
