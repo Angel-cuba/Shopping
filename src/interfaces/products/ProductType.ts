@@ -40,17 +40,6 @@ type Variant =
   | 'Pink'
   | 'Goldenrod'
 
-type VariantsColorsType = {
-  Crimson: string
-  Teal: string
-  Aquamarine: string
-  Maroon: string
-  Violet: string
-  Fuscia: string
-  Pink: string
-  Goldenrod: string
-}
-
 export const Sizes = ['S', 'M', 'L', 'XS', 'XL', '2XL', '3XL']
 export const Variants = [
   'Crimson',
@@ -62,7 +51,10 @@ export const Variants = [
   'Pink',
   'Goldenrod'
 ]
-export const VariantsColors: any = {
+type VariantColorsType = {
+  [key: string]: string
+}
+export const VariantsColors: VariantColorsType = {
   Crimson: '#dc143c',
   Teal: '#008080',
   Aquamarine: '#7fffd4',
