@@ -19,7 +19,7 @@ export const PRODUCTS: Product[] = [
     description: 'Unspecified disease of pancreas',
     categories: 'Waterproofing & Caulking',
     image:
-      'https://res.cloudinary.com/dqaerysgb/image/upload/v1679761938/air-max-270-mens-shoes-KkLcGR_o7h0wd.png',
+      'https://res.cloudinary.com/dqaerysgb/image/upload/v1679993566/shoes/images_6_hqvorc.png',
     variant: 'Goldenrod',
     sizes: 'L',
     price: 22.45
@@ -31,7 +31,7 @@ export const PRODUCTS: Product[] = [
       'Inguinal hernia, with obstruction, without mention of gangrene, bilateral, recurrent',
     categories: 'Marlite Panels (FED)',
     image:
-      'https://res.cloudinary.com/dqaerysgb/image/upload/v1679761938/air-max-270-mens-shoes-KkLcGR_o7h0wd.png',
+      'https://res.cloudinary.com/dqaerysgb/image/upload/v1679993566/shoes/precision-6-basketball-shoes-l7zDFB_rlezav.png',
     variant: 'Violet',
     sizes: 'L',
     price: 80.99
@@ -41,8 +41,7 @@ export const PRODUCTS: Product[] = [
     name: 'STRATS Trust',
     description: 'Incisional ventral hernia with obstruction',
     categories: 'Casework',
-    image:
-      'https://res.cloudinary.com/dqaerysgb/image/upload/v1679761938/air-max-270-mens-shoes-KkLcGR_o7h0wd.png',
+    image: 'https://res.cloudinary.com/dqaerysgb/image/upload/v1679993565/shoes/images_o04fcw.png',
     variant: 'Crimson',
     sizes: 'S',
     price: 60.95
@@ -53,7 +52,7 @@ export const PRODUCTS: Product[] = [
     description: 'Failed attempted abortion complicated by shock',
     categories: 'Electrical',
     image:
-      'https://res.cloudinary.com/dqaerysgb/image/upload/v1679761938/air-max-270-mens-shoes-KkLcGR_o7h0wd.png',
+      'https://res.cloudinary.com/dqaerysgb/image/upload/v1679993565/shoes/images_8_spmfby.png',
     variant: 'Teal',
     sizes: 'XL',
     price: 543.99
@@ -86,7 +85,7 @@ export const PRODUCTS: Product[] = [
     description: 'Unspecified dermatitis due to sun',
     categories: 'Granite Surfaces',
     image:
-      'https://res.cloudinary.com/dqaerysgb/image/upload/v1679761938/air-max-270-mens-shoes-KkLcGR_o7h0wd.png',
+      'https://res.cloudinary.com/dqaerysgb/image/upload/v1679993566/shoes/images_6_hqvorc.png',
 
     variant: 'Aquamarine',
     sizes: '2XL',
@@ -98,7 +97,7 @@ export const PRODUCTS: Product[] = [
     description: 'Other mechanical complication of cardiac device, implant, and graft',
     categories: 'Waterproofing & Caulking',
     image:
-      'https://res.cloudinary.com/dqaerysgb/image/upload/v1679761938/air-max-270-mens-shoes-KkLcGR_o7h0wd.png',
+      'https://res.cloudinary.com/dqaerysgb/image/upload/v1679995206/shoes/images_4_bcb5tl.png',
 
     variant: 'Maroon',
     sizes: '2XL',
@@ -111,8 +110,7 @@ export const PRODUCTS: Product[] = [
       'Maternal distress complicating labor and delivery, postpartum condition or complication',
     categories: 'Granite Surfaces',
     image:
-      'https://res.cloudinary.com/dqaerysgb/image/upload/v1679761938/air-max-270-mens-shoes-KkLcGR_o7h0wd.png',
-
+      'https://res.cloudinary.com/dqaerysgb/image/upload/v1679993565/shoes/images_1_gnczxb.png',
     variant: 'Violet',
     sizes: '3XL',
     price: 910.99
@@ -123,7 +121,7 @@ export const PRODUCTS: Product[] = [
     description: 'Other specified venereal diseases',
     categories: 'Casework',
     image:
-      'https://res.cloudinary.com/dqaerysgb/image/upload/v1679761938/air-max-270-mens-shoes-KkLcGR_o7h0wd.png',
+      'https://res.cloudinary.com/dqaerysgb/image/upload/v1679993565/shoes/images_7_nor1an.png',
     variant: 'Fuscia',
     sizes: 'M',
     price: 100.99
@@ -134,8 +132,8 @@ export const PRODUCTS: Product[] = [
     description: 'Acute bronchospasm',
     categories: 'Granite Surfaces',
     image:
-      'https://res.cloudinary.com/dqaerysgb/image/upload/v1679761938/air-max-270-mens-shoes-KkLcGR_o7h0wd.png',
-    variant: 'Teal',
+      'https://res.cloudinary.com/dqaerysgb/image/upload/v1679993565/shoes/images_4_svmpdu.png',
+    variant: 'Goldenrod',
     sizes: 'L',
     price: 109.79
   },
@@ -146,7 +144,7 @@ export const PRODUCTS: Product[] = [
       'Closed fracture of vault of skull with other and unspecified intracranial hemorrhage, unspecified state of consciousness',
     categories: 'Marlite Panels (FED)',
     image:
-      'https://res.cloudinary.com/dqaerysgb/image/upload/v1679761938/air-max-270-mens-shoes-KkLcGR_o7h0wd.png',
+      'https://res.cloudinary.com/dqaerysgb/image/upload/v1679993565/shoes/images_1_gnczxb.png',
     variant: 'Maroon',
     sizes: 'S',
     price: 507.81
@@ -157,7 +155,7 @@ export const PRODUCTS: Product[] = [
     description:
       'Other closed skull fracture with subarachnoid, subdural, and extradural hemorrhage, with moderate [1-24 hours] loss of consciousness',
     image:
-      'https://res.cloudinary.com/dqaerysgb/image/upload/v1679761938/air-max-270-mens-shoes-KkLcGR_o7h0wd.png',
+      'https://res.cloudinary.com/dqaerysgb/image/upload/v1679993565/shoes/1FM00139_423_01_e_gi4ga1.png',
 
     categories: 'Casework',
     variant: 'Maroon',
@@ -170,7 +168,7 @@ export const PRODUCTS: Product[] = [
     description: 'Glaucoma associated with pupillary block',
     categories: 'Casework',
     image:
-      'https://res.cloudinary.com/dqaerysgb/image/upload/v1679761938/air-max-270-mens-shoes-KkLcGR_o7h0wd.png',
+      'https://res.cloudinary.com/dqaerysgb/image/upload/v1679993564/shoes/images_2_p2wpfo.png',
     variant: 'Aquamarine',
     sizes: '2XL',
     price: 82185.14
@@ -182,7 +180,7 @@ export const PRODUCTS: Product[] = [
       'Hypertonic, incoordinate, or prolonged uterine contractions, deliveCrimson, with or without mention of antepartum condition',
     categories: 'Casework',
     image:
-      'https://res.cloudinary.com/dqaerysgb/image/upload/v1679761938/air-max-270-mens-shoes-KkLcGR_o7h0wd.png',
+      'https://res.cloudinary.com/dqaerysgb/image/upload/v1679995209/shoes/Varion-Indoor-Sports-Shoes_wdipwa.png',
     variant: 'Pink',
     sizes: 'L',
     price: 84.5
@@ -193,7 +191,7 @@ export const PRODUCTS: Product[] = [
     description: 'Bacteroides fragilis',
     categories: 'Casework',
     image:
-      'https://res.cloudinary.com/dqaerysgb/image/upload/v1679761938/air-max-270-mens-shoes-KkLcGR_o7h0wd.png',
+      'https://res.cloudinary.com/dqaerysgb/image/upload/v1679995208/shoes/images_9_vg9wgg.png',
     variant: 'Violet',
     sizes: 'XL',
     price: 9898.99
@@ -204,7 +202,7 @@ export const PRODUCTS: Product[] = [
     description: 'Observation and evaluation for suspected exposure to anthrax',
     categories: 'Waterproofing & Caulking',
     image:
-      'https://res.cloudinary.com/dqaerysgb/image/upload/v1679761938/air-max-270-mens-shoes-KkLcGR_o7h0wd.png',
+      'https://res.cloudinary.com/dqaerysgb/image/upload/v1679993566/shoes/images_6_hqvorc.png',
     variant: 'Violet',
     sizes: 'L',
     price: 5484
@@ -214,8 +212,7 @@ export const PRODUCTS: Product[] = [
     name: 'Violet Hills Bancorp, Inc.',
     description: 'Closed fracture of coracoid process of scapula',
     categories: 'Marlite Panels (FED)',
-    image:
-      'https://res.cloudinary.com/dqaerysgb/image/upload/v1679761938/air-max-270-mens-shoes-KkLcGR_o7h0wd.png',
+    image: 'https://res.cloudinary.com/dqaerysgb/image/upload/v1679995207/shoes/1_j2n1rx.png',
     variant: 'Aquamarine',
     sizes: '2XL',
     price: 555.99
@@ -226,7 +223,7 @@ export const PRODUCTS: Product[] = [
     description: 'Unspecified abortion, complicated by embolism, complete',
     categories: 'Waterproofing & Caulking',
     image:
-      'https://res.cloudinary.com/dqaerysgb/image/upload/v1679761938/air-max-270-mens-shoes-KkLcGR_o7h0wd.png',
+      'https://res.cloudinary.com/dqaerysgb/image/upload/v1679993566/shoes/precision-6-basketball-shoes-l7zDFB_rlezav.png',
     variant: 'Teal',
     sizes: 'XS',
     price: 999.99
@@ -237,7 +234,7 @@ export const PRODUCTS: Product[] = [
     description: 'Lack of coordination',
     categories: 'Casework',
     image:
-      'https://res.cloudinary.com/dqaerysgb/image/upload/v1679761938/air-max-270-mens-shoes-KkLcGR_o7h0wd.png',
+      'https://res.cloudinary.com/dqaerysgb/image/upload/v1679995207/shoes/ecco-biom-2-1368501_tppmla.png',
     variant: 'Teal',
     sizes: 'M',
     price: 222.99
@@ -248,7 +245,7 @@ export const PRODUCTS: Product[] = [
     description: 'Legally induced abortion, complicated by shock, incomplete',
     categories: 'Granite Surfaces',
     image:
-      'https://res.cloudinary.com/dqaerysgb/image/upload/v1679761938/air-max-270-mens-shoes-KkLcGR_o7h0wd.png',
+      'https://res.cloudinary.com/dqaerysgb/image/upload/v1679995207/shoes/images_5_mgdkor.png',
     variant: 'Maroon',
     sizes: 'L',
     price: 333.99
@@ -261,7 +258,7 @@ export const PRODUCTS: Product[] = [
     categories: 'Casework',
     variant: 'Fuscia',
     image:
-      'https://res.cloudinary.com/dqaerysgb/image/upload/v1679761938/air-max-270-mens-shoes-KkLcGR_o7h0wd.png',
+      'https://res.cloudinary.com/dqaerysgb/image/upload/v1679995207/shoes/images_8_drvkcn.png',
     sizes: 'S',
     price: 444.99
   },
@@ -271,7 +268,7 @@ export const PRODUCTS: Product[] = [
     description: 'Other specified anomalies of respiratory system',
     categories: 'Wall Protection',
     image:
-      'https://res.cloudinary.com/dqaerysgb/image/upload/v1679761938/air-max-270-mens-shoes-KkLcGR_o7h0wd.png',
+      'https://res.cloudinary.com/dqaerysgb/image/upload/v1679995207/shoes/images_6_t13ydu.png',
     variant: 'Maroon',
     sizes: 'M',
     price: 568.99
@@ -282,7 +279,7 @@ export const PRODUCTS: Product[] = [
     description: 'Preauricular sinus or fistula',
     categories: 'Marlite Panels (FED)',
     image:
-      'https://res.cloudinary.com/dqaerysgb/image/upload/v1679761938/air-max-270-mens-shoes-KkLcGR_o7h0wd.png',
+      'https://res.cloudinary.com/dqaerysgb/image/upload/v1679995206/shoes/images_2_fcu3ei.png',
     variant: 'Crimson',
     sizes: 'L',
     price: 8745.99
@@ -294,7 +291,7 @@ export const PRODUCTS: Product[] = [
     categories: 'Wall Protection',
     variant: 'Aquamarine',
     image:
-      'https://res.cloudinary.com/dqaerysgb/image/upload/v1679761938/air-max-270-mens-shoes-KkLcGR_o7h0wd.png',
+      'https://res.cloudinary.com/dqaerysgb/image/upload/v1679993565/shoes/images_1_gnczxb.png',
     sizes: '2XL',
     price: 98752.99
   },
@@ -304,7 +301,7 @@ export const PRODUCTS: Product[] = [
     description: 'Screening examination for yaws',
     categories: 'Casework',
     image:
-      'https://res.cloudinary.com/dqaerysgb/image/upload/v1679761938/air-max-270-mens-shoes-KkLcGR_o7h0wd.png',
+      'https://res.cloudinary.com/dqaerysgb/image/upload/v1679995206/shoes/images_4_bcb5tl.png',
     variant: 'Aquamarine',
     sizes: 'XS',
     price: 977.99
@@ -315,7 +312,7 @@ export const PRODUCTS: Product[] = [
     description: 'Shigella boydii',
     categories: 'Marlite Panels (FED)',
     image:
-      'https://res.cloudinary.com/dqaerysgb/image/upload/v1679761938/air-max-270-mens-shoes-KkLcGR_o7h0wd.png',
+      'https://res.cloudinary.com/dqaerysgb/image/upload/v1679995206/shoes/images_3_sgzz2d.png',
     variant: 'Violet',
     sizes: 'M',
     price: 12354.99
@@ -326,7 +323,7 @@ export const PRODUCTS: Product[] = [
     description: 'Carcinoma in situ of other and unspecified digestive organs',
     categories: 'Granite Surfaces',
     image:
-      'https://res.cloudinary.com/dqaerysgb/image/upload/v1679761938/air-max-270-mens-shoes-KkLcGR_o7h0wd.png',
+      'https://res.cloudinary.com/dqaerysgb/image/upload/v1679993564/shoes/descarga_iqjs7w.png',
     variant: 'Maroon',
     sizes: 'L',
     price: 198745.99
@@ -338,7 +335,7 @@ export const PRODUCTS: Product[] = [
       'Persistent migraine aura with cerebral infarction, without mention of intractable migraine without mention of status migrainosus',
     categories: 'Wall Protection',
     image:
-      'https://res.cloudinary.com/dqaerysgb/image/upload/v1679761938/air-max-270-mens-shoes-KkLcGR_o7h0wd.png',
+      'https://res.cloudinary.com/dqaerysgb/image/upload/v1679993564/shoes/descarga_1_yntgd3.png',
     variant: 'Maroon',
     sizes: 'L',
     price: 9874563.99
