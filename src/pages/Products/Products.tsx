@@ -162,7 +162,7 @@ const Products = ({ products }: { products: Product[] }) => {
 export default Products
 
 const styles = {
-  width: '100px',
+  width: '170px',
   height: '40px',
   fontSize: '18px',
   border: '1px solid #ccc',
