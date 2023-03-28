@@ -9,7 +9,6 @@ import './Customers.scss'
 const Customers = (): JSX.Element => {
   const [filteredUsers, setFilteredUsers] = React.useState(users)
   const [search, setSearch] = React.useState('')
-  console.log('🚀 ~ file: Customers.tsx:12 ~ Customers ~ search:', search)
 
   const handleSearch = () => {
     const filtered = users.filter((user) => {
