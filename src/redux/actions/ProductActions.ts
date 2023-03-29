@@ -1,6 +1,13 @@
 import { Dispatch } from 'redux'
 import { PRODUCTS } from '../../data/dummy'
-import { GET_PRODUCTS, LOADING, STOP_LOADING } from '../../interfaces/products/constants'
+import {
+  ADD_PRODUCT,
+  GET_PRODUCTS,
+  LOADING,
+  STOP_LOADING,
+  UPDATE_PRODUCT
+} from '../../interfaces/products/constants'
+import { NewProductToStock } from '../../interfaces/products/ProductType'
 
 export const getProducts = () => {
   return {
@@ -9,11 +16,50 @@ export const getProducts = () => {
   } as const
 }
 
+export const addProduct = (product: NewProductToStock) => {
+  return {
+    type: ADD_PRODUCT,
+    payload: product
+  } as const
+}
+
+export const updateProduct = (product: NewProductToStock) => {
+  return {
+    type: UPDATE_PRODUCT,
+    payload: product
+  } as const
+}
+
 export const fetchProducts = () => {
   return async (dispatch: Dispatch) => {
     try {
       dispatch({ type: LOADING })
       dispatch(getProducts())
+    } catch (error) {
+      dispatch({ type: 'ERROR', payload: error })
+    }
+    dispatch({ type: STOP_LOADING })
+  }
+}
+
+export const addProductToStock = (product: NewProductToStock) => {
+  return async (dispatch: Dispatch) => {
+    try {
+      dispatch({ type: LOADING })
+      console.log('addProductToStock', product)
+      dispatch(addProduct(product))
+    } catch (error) {
+      dispatch({ type: 'ERROR', payload: error })
+    }
+    dispatch({ type: STOP_LOADING })
+  }
+}
+
+export const updateProductInStock = (product: NewProductToStock) => {
+  return async (dispatch: Dispatch) => {
+    try {
+      dispatch({ type: LOADING })
+      dispatch(updateProduct(product))
     } catch (error) {
       dispatch({ type: 'ERROR', payload: error })
     }

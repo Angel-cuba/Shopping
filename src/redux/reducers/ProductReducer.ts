@@ -4,7 +4,8 @@ import {
   GET_PRODUCTS,
   LOADING,
   STOP_LOADING,
-  ProductState
+  ProductState,
+  ADD_PRODUCT
 } from '../../interfaces/products/constants'
 
 export const initialProductState: ProductState = {
@@ -20,6 +21,13 @@ export default function ProductReducer(state = initialProductState, action: AnyA
         ...state,
         products: action.payload
       }
+    case ADD_PRODUCT: {
+      console.log('ADD_PRODUCT', action.payload)
+      return {
+        ...state,
+        products: [action.payload, ...state.products]
+      }
+    }
     case LOADING:
       return {
         ...state,

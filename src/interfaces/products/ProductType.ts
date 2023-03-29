@@ -21,6 +21,7 @@ export type NewProduct = {
 }
 
 export type NewProductToStock = {
+  id?: number
   name: string
   description: string
   image: string
