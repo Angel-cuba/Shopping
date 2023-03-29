@@ -3,13 +3,36 @@ import { Link, useLocation } from 'react-router-dom'
 import MoreVertIcon from '@mui/icons-material/MoreVert'
 import { Product } from '../../interfaces/products/ProductType'
 import { CartIcon } from '../Cart/Cart'
+import { DeleteForever, ModeEdit } from '@mui/icons-material'
+import { useSelector } from 'react-redux'
+import { RootState } from '../../redux/store'
 
 const ProductItem = ({ product }: { product: Product }) => {
   const location = useLocation()
   const { pathname } = location
 
+  const { user } = useSelector((state: RootState) => state.userLogged)
+
   return (
     <div key={product.id} className="products__content__item">
+      {user?.role === 'ADMIN' && (
+        <div className="products__content__item--admin-icons">
+          <Link to={`/admin/createandcheck/edit/${product.id}`}>
+            <ModeEdit
+              className="products__content__item--admin-icons--icon"
+              fontSize="large"
+              color="success"
+            />
+          </Link>
+          <Link to={`/admin/delete/${product.id}`}>
+            <DeleteForever
+              className="products__content__item--admin-icons--icon"
+              fontSize="large"
+              color="error"
+            />
+          </Link>
+        </div>
+      )}
       {pathname !== `/product/${product.id}` && (
         <div className="products__content__item--details">
           <Link to={`/product/${product.id}`}>
