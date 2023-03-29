@@ -24,12 +24,18 @@ const Navigation = () => {
     { path: '/', element: <Home /> },
     { path: '/home', element: <Home /> },
     { path: '/product/:id', element: <ProductById /> },
-    { path: '/profile', element: <Profile /> }
+    { path: '/profile', element: <Profile /> },
+    { path: '/*', element: <Home /> }
   ]
 
   const adminRoutes = [
     { path: '/admin/dashboard', element: <AdminDashboard /> },
-    { path: '/admin/createandcheck', element: <CreateAndCheck /> }
+    { path: '/admin/createandcheck', element: <CreateAndCheck /> },
+    { path: '/admin/createandcheck/create', element: <CreateAndCheck /> },
+    { path: '/admin/createandcheck/edit/:id', element: <CreateAndCheck /> },
+    { path: '/admin/delete/:id', element: <Home /> },
+    { path: '/admin/createandcheck/check', element: <CreateAndCheck /> },
+    { path: '/admin/*', element: <AdminDashboard /> }
   ]
 
   if (!user) {
