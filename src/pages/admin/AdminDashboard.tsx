@@ -6,6 +6,7 @@ import { useSelector } from 'react-redux'
 import { RootState } from '../../redux/store'
 import Products from '../Products/Products'
 import Customers from '../../components/Admin/Customers/Customers'
+import { StorageRounded } from '@mui/icons-material'
 import './AdminDashboard.scss'
 
 const AdminDashboard = () => {
@@ -34,10 +35,8 @@ const AdminDashboard = () => {
           <p>Products</p>
         </div>
         <div className="admin-dashboard__buttons">
-          <Link to="/admin/create-product">Orders</Link>
-        </div>
-        <div className="admin-dashborad__buttons">
-          <button>Filter</button>
+          <StorageRounded />
+          <Link to="/admin/createandcheck">In stock</Link>
         </div>
       </div>
       {openCustomers && <Customers />}

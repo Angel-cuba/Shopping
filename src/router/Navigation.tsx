@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux'
 import { Route, Routes } from 'react-router'
 import ProductById from '../components/Product/ProductById'
 import AdminDashboard from '../pages/Admin/AdminDashboard'
+import CreateAndCheck from '../pages/Admin/CreateAndCheck'
 import Profile from '../pages/User/Profile'
 import { RootState } from '../redux/store'
 import Home from './Home'
@@ -26,7 +27,10 @@ const Navigation = () => {
     { path: '/profile', element: <Profile /> }
   ]
 
-  const adminRoutes = [{ path: '/admin/dashboard', element: <AdminDashboard /> }]
+  const adminRoutes = [
+    { path: '/admin/dashboard', element: <AdminDashboard /> },
+    { path: '/admin/createandcheck', element: <CreateAndCheck /> }
+  ]
 
   if (!user) {
     return (
