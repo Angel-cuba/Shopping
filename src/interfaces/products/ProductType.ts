@@ -20,6 +20,16 @@ export type NewProduct = {
   sizes: string
 }
 
+export type NewProductToStock = {
+  name: string
+  description: string
+  image: string
+  categories: string
+  variant: string
+  sizes: string
+  price: number
+}
+
 type Category =
   | 'Granite Surfaces'
   | 'Waterproofing & Caulking'

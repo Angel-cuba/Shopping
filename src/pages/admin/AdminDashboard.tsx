@@ -7,7 +7,7 @@ import { RootState } from '../../redux/store'
 import Products from '../Products/Products'
 import Customers from '../../components/Admin/Customers/Customers'
 import { StorageRounded } from '@mui/icons-material'
-import './AdminDashboard.scss'
+import './styles/AdminDashboard.scss'
 
 const AdminDashboard = () => {
   const [openCustomers, setOpenCustomers] = React.useState(false)
