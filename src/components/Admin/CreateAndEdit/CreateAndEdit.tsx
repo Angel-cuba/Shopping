@@ -1,32 +1,26 @@
 import React, { FormEvent } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { useParams } from 'react-router-dom'
-import { NewProductToStock } from '../../../interfaces/products/ProductType'
-import { addProductToStock } from '../../../redux/actions/ProductActions'
+import { NewProductToStock, Product } from '../../../interfaces/products/ProductType'
 import { AppDispatch, RootState } from '../../../redux/store'
+import { addProductToStock, updateProductInStock } from '../../../redux/actions/ProductActions'
 import { Input } from '../../Input/Input'
 
-const CreateAndEdit = () => {
-  const params = useParams()
+const CreateAndEdit = ({ productId }: { productId: string | undefined }) => {
   const { products } = useSelector((state: RootState) => state)
-  console.log('🚀 ~ file: CreateAndEdit.tsx:12 ~ CreateAndEdit ~ products:', products)
 
-  // const product = products.products?.find((product: Product) => {
-  //   return product.id.toString() === params.id
-  // })
+  const product = products.products?.find((product: Product) => {
+    return product.id.toString() === productId
+  })
   const time = new Date().getTime()
-  // const [id, setId] = React.useState<number>(params.id ? product?.id : 0)
-  const [id, setId] = React.useState<number>(time)
+  const [id, setId] = React.useState<number>(!product ? time : product.id)
 
-  const [name, setName] = React.useState<string>('')
-  const [description, setDescription] = React.useState<string>('')
-  const [categories, setCategories] = React.useState<string>('')
-  const [image, setImage] = React.useState<string>('')
-  const [variant, setVariant] = React.useState<string>('')
-  const [sizes, setSizes] = React.useState<string>('')
-  const [price, setPrice] = React.useState<number>(0)
-  const [newProduct, setNewProduct] = React.useState<any>()
-  console.log('🚀 ~ file: CreateAndEdit.tsx:26 ~ CreateAndEdit ~ newProduct:', newProduct)
+  const [name, setName] = React.useState<string>(!product ? '' : product.name)
+  const [description, setDescription] = React.useState<string>(!product ? '' : product.description)
+  const [categories, setCategories] = React.useState<string>(!product ? '' : product.categories)
+  const [image, setImage] = React.useState<string>(!product ? '' : product.image)
+  const [variant, setVariant] = React.useState<string>(!product ? '' : product.variant)
+  const [sizes, setSizes] = React.useState<string>(!product ? '' : product.sizes)
+  const [price, setPrice] = React.useState<number>(!product ? 0 : product.price)
   const dispatch = useDispatch<AppDispatch>()
 
   const handlerInput = (e: FormEvent) => {
@@ -61,7 +55,9 @@ const CreateAndEdit = () => {
         break
     }
   }
-  const handlerNewProduct = () => {
+
+  const handlerSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
     const newProduct: NewProductToStock = {
       id,
       name,
@@ -72,26 +68,17 @@ const CreateAndEdit = () => {
       sizes,
       price
     }
-    setNewProduct(newProduct)
-  }
-
-  const handlerSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    handlerNewProduct()
-    // if (params.id) {
-    //   console.log('🚀 ~ file: CreateAndEdit.tsx:9 ~ CreateAndEdit ~ editing:', params.id)
-    // } else {
-    console.log('🚀 ~ file: CreateAndEdit.tsx:9 ~ CreateAndEdit ~ creating:', newProduct)
-    if (newProduct) {
+    if (!productId) {
       dispatch(addProductToStock(newProduct))
+    } else {
+      dispatch(updateProductInStock(newProduct))
     }
-    // }
   }
 
   return (
     <div className="admin-createandcheck__views__create-and-edit">
       <h1 className="admin-createandcheck__views__create-and-edit--label">
-        {!params.id ? 'Create product' : 'Edit product'}
+        {!productId ? 'Create product' : 'Edit product'}
       </h1>
       <form onSubmit={handlerSubmit} className="admin-createandcheck__views__create-and-edit__form">
         <Input
@@ -155,13 +142,13 @@ const CreateAndEdit = () => {
           placeholder="Give a product price"
           value={price}
           onChange={handlerInput}
-          type="number"
+          type="text"
           admin
         />
         <button
           type="submit"
           className="admin-createandcheck__views__create-and-edit__form__submit">
-          {!params.id ? 'Add' : 'Edit'}
+          {!productId ? 'Add' : 'Edit'}
         </button>
       </form>
     </div>

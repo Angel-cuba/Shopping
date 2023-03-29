@@ -17,7 +17,7 @@ const ProductItem = ({ product }: { product: Product }) => {
     <div key={product.id} className="products__content__item">
       {user?.role === 'ADMIN' && (
         <div className="products__content__item--admin-icons">
-          <Link to={`/admin/createandcheck/edit/${product.id}`}>
+          <Link to={`/admin/dashboard/edit/${product.id}`}>
             <ModeEdit
               className="products__content__item--admin-icons--icon"
               fontSize="large"
