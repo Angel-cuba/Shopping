@@ -68,7 +68,7 @@ const Navbar = () => {
             <div className="navbar__links--login" onClick={handleLogout}>
               Logout
             </div>
-            <div className="navbar__links--cart">
+            <div className="navbar__links__cart">
               <NavbarIcon />
             </div>
           </>
@@ -116,7 +116,7 @@ const Navbar = () => {
                   width: '100%'
                 }}>
                 <div className="navbar_mobile__view__user--avatar">
-                  <img src="https://picsum.photos/200" alt="user" className="w-20 h-20" />
+                  <img src={user.picture} alt="user" className="w-20 h-20" />
                 </div>
                 <p className="navbar_mobile__view__user--name">
                   <span className="text-gray-800">{user.given_name}</span>
