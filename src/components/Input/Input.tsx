@@ -11,20 +11,22 @@ type InputProps = {
   // error: string,
   // touched: boolean,
   message?: string
+  admin?: boolean
 }
 
-export const Input = ({ type, name, placeholder, value, onChange, style }: InputProps) => {
+export const Input = ({ type, name, placeholder, value, onChange, style, admin }: InputProps) => {
   return (
     <div
       style={{
         display: 'flex',
-        flexDirection: 'column',
+        flexDirection: !admin ? 'column' : 'row',
         alignItems: 'center',
         justifyContent: 'center',
-        width: '200px',
-        marginLeft: '20px'
+        width: admin ? '100%' : '200px',
+        marginLeft: admin ? '0' : '20px',
+        padding: admin ? '10px' : '0'
       }}>
-      <label style={{ color: 'silver', width: '80%', fontSize: '18px' }} htmlFor={name}>
+      <label style={{ color: '#313131', width: '80%', fontSize: '18px' }} htmlFor={name}>
         {name[0].toLocaleUpperCase() + name.slice(1)}
       </label>
       <input
@@ -34,6 +36,7 @@ export const Input = ({ type, name, placeholder, value, onChange, style }: Input
         value={value}
         style={style}
         onChange={onChange}
+        autoComplete="off"
       />
     </div>
   )
