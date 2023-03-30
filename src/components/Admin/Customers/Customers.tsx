@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward'
-import { ICustomer } from '../../../interfaces/customer/Customer'
+import { CustomerType } from '../../../interfaces/customer/Customer'
 import { users } from '../../../data/users'
 import Customer from './Customer/Customer'
 import { Controls } from '../Controls/Controls'
@@ -53,7 +53,7 @@ const Customers = (): JSX.Element => {
               <td colSpan={7}>No customers found</td>
             </tr>
           ) : (
-            filteredUsers.map((customer: ICustomer) => (
+            filteredUsers.map((customer: CustomerType) => (
               <Customer key={customer.id} customer={customer} />
             ))
           )}

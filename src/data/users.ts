@@ -1,6 +1,6 @@
-import { ICustomer } from '../interfaces/customer/Customer'
+import { CustomerType } from '../interfaces/customer/Customer'
 
-export const users: ICustomer[] = [
+export const users: CustomerType[] = [
   {
     id: 1,
     name: 'John Doe',

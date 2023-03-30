@@ -1,9 +1,9 @@
 import React from 'react'
 import CloseIcon from '@mui/icons-material/Close'
 import CheckIcon from '@mui/icons-material/Check'
-import { ICustomer } from '../../../../interfaces/customer/Customer'
+import { CustomerType } from '../../../../interfaces/customer/Customer'
 
-export default function Customer({ customer }: { customer: ICustomer }): JSX.Element {
+export default function Customer({ customer }: { customer: CustomerType }): JSX.Element {
   return (
     <tr className="customers__body">
       <td className="customers__body--item customers__body--item--img ">

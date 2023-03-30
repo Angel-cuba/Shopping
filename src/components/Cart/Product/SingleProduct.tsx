@@ -47,13 +47,13 @@ const SingleProduct = ({ item }: { item: CartProduct }) => {
           <p className="">{item.name}</p>
           <p
             style={{
-              width: '40px',
-              height: '30px',
+              width: '25px',
+              height: '25px',
               backgroundColor: `${item.variant}`,
               position: 'absolute',
-              bottom: '3px',
-              left: '50%',
-              borderRadius: '5px'
+              top: '3px',
+              left: '2%',
+              borderRadius: '25px'
             }}></p>
         </div>
         <p className="cart-product__buttons--price">
