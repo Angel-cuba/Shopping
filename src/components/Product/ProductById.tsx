@@ -258,7 +258,7 @@ const ProductById = () => {
       )}
 
       <div className="productId__recommended">
-        <h3>Recommended</h3>
+        <h3 className="productId__recommended--text">You might also like...</h3>
         <div className="productId__recommended__items">
           {recommendedProducts.map((product: Product) => (
             <RecommendedProducts key={product.id} product={product} />

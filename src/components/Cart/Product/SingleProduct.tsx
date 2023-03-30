@@ -6,6 +6,7 @@ import { AppDispatch } from '../../../redux/store'
 import { addToCart, removeFromCart } from '../../../redux/actions/CartActions'
 import { CartProduct } from '../../../interfaces/cart/CartType'
 import './SingleProduct.scss'
+import { Link } from 'react-router-dom'
 
 const SingleProduct = ({ item }: { item: CartProduct }) => {
   const dispatch = useDispatch<AppDispatch>()
@@ -20,15 +21,17 @@ const SingleProduct = ({ item }: { item: CartProduct }) => {
   return (
     <div className="cart-product" key={item.id}>
       <div className="cart-product__image">
-        <img
-          src={item.image}
-          alt={item.name}
-          style={{
-            width: '80px',
-            height: '80px',
-            objectFit: 'cover'
-          }}
-        />
+        <Link to={`/checkout/product/${item.id}`}>
+          <img
+            src={item.image}
+            alt={item.name}
+            style={{
+              width: '80px',
+              height: '80px',
+              objectFit: 'cover'
+            }}
+          />
+        </Link>
       </div>
 
       <div className="cart-product__buttons">

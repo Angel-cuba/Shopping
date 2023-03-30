@@ -51,14 +51,15 @@ const ProductItem = ({ product }: { product: Product }) => {
             </div>
           </div>
         )}
-        {pathname !== `/product/${product.id}` && (
-          <div className="products__content__item--details">
-            <Link to={`/product/${product.id}`}>
-              <MoreVertIcon />
-              Details
-            </Link>
-          </div>
-        )}
+        {pathname !== `/product/${product.id}` &&
+          pathname !== `/checkout/product/${product.id}` && (
+            <div className="products__content__item--details">
+              <Link to={`/product/${product.id}`}>
+                <MoreVertIcon />
+                Details
+              </Link>
+            </div>
+          )}
         <div className="products__content__item--add">
           <div className="products__content__item--name--icon">
             <CartIcon product={product} />
