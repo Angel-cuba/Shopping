@@ -2,6 +2,8 @@ import { Dispatch } from 'redux'
 import { PRODUCTS } from '../../data/dummy'
 import {
   ADD_PRODUCT,
+  DELETE_PRODUCT,
+  ERROR,
   GET_PRODUCTS,
   LOADING,
   STOP_LOADING,
@@ -30,13 +32,20 @@ export const updateProduct = (product: NewProductToStock) => {
   } as const
 }
 
+export const deleteProduct = (id: string) => {
+  return {
+    type: DELETE_PRODUCT,
+    payload: id
+  } as const
+}
+
 export const fetchProducts = () => {
   return async (dispatch: Dispatch) => {
     try {
       dispatch({ type: LOADING })
       dispatch(getProducts())
     } catch (error) {
-      dispatch({ type: 'ERROR', payload: error })
+      dispatch({ type: ERROR, payload: error })
     }
     dispatch({ type: STOP_LOADING })
   }
@@ -49,7 +58,7 @@ export const addProductToStock = (product: NewProductToStock) => {
       console.log('addProductToStock', product)
       dispatch(addProduct(product))
     } catch (error) {
-      dispatch({ type: 'ERROR', payload: error })
+      dispatch({ type: ERROR, payload: error })
     }
     dispatch({ type: STOP_LOADING })
   }
@@ -61,7 +70,19 @@ export const updateProductInStock = (product: NewProductToStock) => {
       dispatch({ type: LOADING })
       dispatch(updateProduct(product))
     } catch (error) {
-      dispatch({ type: 'ERROR', payload: error })
+      dispatch({ type: ERROR, payload: error })
+    }
+    dispatch({ type: STOP_LOADING })
+  }
+}
+
+export const deleteProductFromStock = (id: string) => {
+  return async (dispatch: Dispatch) => {
+    try {
+      dispatch({ type: LOADING })
+      dispatch(deleteProduct(id))
+    } catch (error) {
+      dispatch({ type: ERROR, payload: error })
     }
     dispatch({ type: STOP_LOADING })
   }

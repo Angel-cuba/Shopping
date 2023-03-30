@@ -6,7 +6,8 @@ import {
   STOP_LOADING,
   ProductState,
   ADD_PRODUCT,
-  UPDATE_PRODUCT
+  UPDATE_PRODUCT,
+  DELETE_PRODUCT
 } from '../../interfaces/products/constants'
 
 export const initialProductState: ProductState = {
@@ -23,14 +24,12 @@ export default function ProductReducer(state = initialProductState, action: AnyA
         products: action.payload
       }
     case ADD_PRODUCT: {
-      console.log('ADD_PRODUCT', action.payload)
       return {
         ...state,
         products: [action.payload, ...state.products]
       }
     }
     case UPDATE_PRODUCT: {
-      console.log('UPDATE_PRODUCT', action.payload)
       return {
         ...state,
         products: state.products.map((product) => {
@@ -39,6 +38,17 @@ export default function ProductReducer(state = initialProductState, action: AnyA
           }
           return product
         })
+      }
+    }
+    case DELETE_PRODUCT: {
+      const removedProduct = state.products.filter((product) => {
+        if (product.id !== action.payload) {
+          return product
+        }
+      })
+      return {
+        ...state,
+        products: removedProduct
       }
     }
     case LOADING:
