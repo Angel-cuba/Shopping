@@ -2,21 +2,26 @@ import React from 'react'
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart'
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
 import FavoriteIcon from '@mui/icons-material/Favorite'
+import AccountBalanceIcon from '@mui/icons-material/AccountBalance'
 import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch, RootState } from '../../redux/store'
 import { addToCart, removeFromCart } from '../../redux/actions/CartActions'
 import { Product } from '../../interfaces/products/ProductType'
-import SingleProduct from './SingleProduct'
+import SingleProduct from './Product/SingleProduct'
+import { Link, useLocation } from 'react-router-dom'
 
 export const NavbarIcon = () => {
   const [openCart, setOpenCart] = React.useState(false)
+  const location = useLocation()
 
   const emptyCart = 0
   const { itemInCart } = useSelector((state: RootState) => state.cart)
-  console.log('🚀 ~ file: Cart.tsx:11 ~ NavbarIcon ~ cart:', itemInCart)
 
   const showCartItems = () => {
     setOpenCart(!openCart)
+  }
+  const closeCart = () => {
+    setOpenCart(false)
   }
 
   const toPay = () => {
@@ -31,7 +36,12 @@ export const NavbarIcon = () => {
     <div className="navbar-cart">
       <div className={openCart ? 'navbar-cart__total' : 'navbar-cart__total--hidden'}>
         <p className="navbar-cart__total--text">Total to pay:</p>
-        <p className="navbar-cart__total--price">${toPay()}</p>
+        <p className="navbar-cart__total--price">$ {toPay()}</p>
+        {location.pathname !== '/checkout' && (
+          <Link to="/checkout" className="navbar-cart__total--link" onClick={closeCart}>
+            <AccountBalanceIcon style={{ fontSize: '2rem' }} />
+          </Link>
+        )}
       </div>
       <div className="navbar-cart__icon" onClick={showCartItems}>
         <AddShoppingCartIcon

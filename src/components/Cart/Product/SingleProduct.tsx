@@ -2,9 +2,10 @@ import React from 'react'
 import AddBoxIcon from '@mui/icons-material/AddBox'
 import IndeterminateCheckBoxIcon from '@mui/icons-material/IndeterminateCheckBox'
 import { useDispatch } from 'react-redux'
-import { AppDispatch } from '../../redux/store'
-import { addToCart, removeFromCart } from '../../redux/actions/CartActions'
-import { CartProduct } from '../../interfaces/cart/CartType'
+import { AppDispatch } from '../../../redux/store'
+import { addToCart, removeFromCart } from '../../../redux/actions/CartActions'
+import { CartProduct } from '../../../interfaces/cart/CartType'
+import './SingleProduct.scss'
 
 const SingleProduct = ({ item }: { item: CartProduct }) => {
   const dispatch = useDispatch<AppDispatch>()
@@ -17,8 +18,8 @@ const SingleProduct = ({ item }: { item: CartProduct }) => {
   }
 
   return (
-    <div className="navbar-cart__cart--product" key={item.id}>
-      <div className="navbar-cart__cart--product--image">
+    <div className="cart-product" key={item.id}>
+      <div className="cart-product__image">
         <img
           src={item.image}
           alt={item.name}
@@ -30,21 +31,29 @@ const SingleProduct = ({ item }: { item: CartProduct }) => {
         />
       </div>
 
-      <div className="navbar-cart__cart--product--buttons">
-        <div className="navbar-cart__cart--product--buttons--plus-minus">
+      <div className="cart-product__buttons">
+        <div className="cart-product__buttons__plus-minus">
           <AddBoxIcon style={{ fontSize: '2rem', color: '#146D00' }} onClick={addItemToCart} />
-          <p className="navbar-cart__cart--product--buttons--plus-minus--quantity">
-            {item.quantity}
-          </p>
+          <p className="cart-product__buttons__plus-minus--quantity">{item.quantity}</p>
           <IndeterminateCheckBoxIcon
             style={{ fontSize: '2rem', color: '#9D0000' }}
             onClick={removeItemFromCart}
           />
         </div>
-        <div className="navbar-cart__cart--product--data">
+        <div className="cart-product__buttons--data">
           <p className="">{item.name}</p>
+          <p
+            style={{
+              width: '40px',
+              height: '30px',
+              backgroundColor: `${item.variant}`,
+              position: 'absolute',
+              bottom: '3px',
+              left: '50%',
+              borderRadius: '5px'
+            }}></p>
         </div>
-        <p className="navbar-cart__cart--product--buttons--price">
+        <p className="cart-product__buttons--price">
           ${item.quantity ? (item?.quantity * item?.price).toFixed(2) : item?.price}
         </p>
       </div>
