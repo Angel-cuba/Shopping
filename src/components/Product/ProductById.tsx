@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom'
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp'
 import StarsIcon from '@mui/icons-material/Stars'
+
 import { AppDispatch, RootState } from '../../redux/store'
 import {
   NewProduct,
@@ -14,8 +15,8 @@ import {
 } from '../../interfaces/products/ProductType'
 import ProductItem from './Product'
 import RecommendedProducts from './RecommendedProducts'
-import './ProductById.scss'
 import { addToCart } from '../../redux/actions/CartActions'
+import './ProductById.scss'
 
 const ProductById = () => {
   const params = useParams()

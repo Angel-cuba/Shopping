@@ -1,15 +1,16 @@
 import React, { useEffect } from 'react'
 import { Link, useParams } from 'react-router-dom'
+import { AddBoxSharp, StorageRounded } from '@mui/icons-material'
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt'
 import StoreMallDirectoryRounded from '@mui/icons-material/StoreMallDirectoryRounded'
 import { useDispatch, useSelector } from 'react-redux'
+
 import { AppDispatch, RootState } from '../../redux/store'
-import Products from '../Products/Products'
 import Customers from '../../components/Admin/Customers/Customers'
-import { AddBoxSharp, StorageRounded } from '@mui/icons-material'
-import './styles/AdminDashboard.scss'
 import { fetchProducts } from '../../redux/actions/ProductActions'
 import CreateAndEdit from '../../components/Admin/CreateAndEdit/CreateAndEdit'
+import './styles/AdminDashboard.scss'
+import Products from '../Products/Products'
 
 const AdminDashboard = () => {
   const dispatch = useDispatch<AppDispatch>()

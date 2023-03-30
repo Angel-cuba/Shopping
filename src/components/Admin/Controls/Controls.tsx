@@ -2,8 +2,8 @@ import React from 'react'
 import FilterListIcon from '@mui/icons-material/FilterList'
 import AddIcon from '@mui/icons-material/Add'
 import GetAppIcon from '@mui/icons-material/GetApp'
-import './Controls.scss'
 import { Input } from '../../Input/Input'
+import './Controls.scss'
 
 type SearchProps = {
   search: string

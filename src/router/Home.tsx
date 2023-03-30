@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
+
+import Products from '../Pages/Products/Products'
 import { useDispatch, useSelector } from 'react-redux'
-import Products from '../pages/Products/Products'
 import { fetchProducts } from '../redux/actions/ProductActions'
 import { AppDispatch, RootState } from '../redux/store'
 

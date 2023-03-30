@@ -4,7 +4,7 @@ import { RootState } from '../../redux/store'
 
 const Profile = () => {
   const { user } = useSelector((state: RootState) => state.userLogged)
-  console.log('🚀 ~ file: Profile.tsx:7 ~ Profile ~ user:', user)
+
   return (
     <div className="profile">
       <div className="profile__container">

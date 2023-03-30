@@ -1,14 +1,15 @@
 import React from 'react'
+import { Link, useLocation } from 'react-router-dom'
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart'
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
 import FavoriteIcon from '@mui/icons-material/Favorite'
 import AccountBalanceIcon from '@mui/icons-material/AccountBalance'
 import { useDispatch, useSelector } from 'react-redux'
+
 import { AppDispatch, RootState } from '../../redux/store'
 import { addToCart, removeFromCart } from '../../redux/actions/CartActions'
 import { Product } from '../../interfaces/products/ProductType'
 import SingleProduct from './Product/SingleProduct'
-import { Link, useLocation } from 'react-router-dom'
 
 export const NavbarIcon = () => {
   const [openCart, setOpenCart] = React.useState(false)

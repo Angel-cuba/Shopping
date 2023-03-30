@@ -2,11 +2,12 @@ import React from 'react'
 import AddBoxIcon from '@mui/icons-material/AddBox'
 import IndeterminateCheckBoxIcon from '@mui/icons-material/IndeterminateCheckBox'
 import { useDispatch } from 'react-redux'
+
 import { AppDispatch } from '../../../redux/store'
 import { addToCart, removeFromCart } from '../../../redux/actions/CartActions'
 import { CartProduct } from '../../../interfaces/cart/CartType'
-import './SingleProduct.scss'
 import { Link } from 'react-router-dom'
+import './SingleProduct.scss'
 
 const SingleProduct = ({ item }: { item: CartProduct }) => {
   const dispatch = useDispatch<AppDispatch>()
