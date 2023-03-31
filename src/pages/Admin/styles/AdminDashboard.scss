@@ -18,9 +18,7 @@
     cursor: pointer;
     transition: all 0.2s ease-in-out;
     opacity: 0.8;
-    a{
-      background-color: red;
-    }
+    color: #040e20;
     &:hover {
       background-color: #00000070;
       color: #e9e9e9;
@@ -36,6 +34,7 @@
      padding: 1px 4px;
       &--text {
         display: inline-block;
+        color: #000;
       }
     }
     @media screen and (min-width: 420px) {
