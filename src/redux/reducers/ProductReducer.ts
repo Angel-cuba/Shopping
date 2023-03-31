@@ -16,7 +16,7 @@ export const initialProductState: ProductState = {
   error: null
 }
 
-export default function ProductReducer(state = initialProductState, action: AnyAction) {
+export default function productReducer(state = initialProductState, action: AnyAction) {
   switch (action.type) {
     case GET_PRODUCTS:
       return {
@@ -30,22 +30,21 @@ export default function ProductReducer(state = initialProductState, action: AnyA
       }
     }
     case UPDATE_PRODUCT: {
+      const product = state.products.find((product) => product.id === action.payload.id)
       return {
         ...state,
-        products: state.products.map((product) => {
-          if (product.id === action.payload.id) {
-            return action.payload
-          }
-          return product
-        })
+        products: product
+          ? [
+              action.payload,
+              ...state.products.filter((product) => product.id !== action.payload.id)
+            ]
+          : state.products
       }
     }
     case DELETE_PRODUCT: {
-      const removedProduct = state.products.filter((product) => {
-        if (product.id !== action.payload) {
-          return product
-        }
-      })
+      console.log('DELETE_PRODUCT', action.payload)
+      console.log('DELETE_PRODUCT', state.products)
+      const removedProduct = state.products.filter((product) => product.id !== action.payload)
       return {
         ...state,
         products: removedProduct

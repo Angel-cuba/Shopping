@@ -5,7 +5,7 @@ export const initialCartState: CartState = {
   itemInCart: null
 }
 
-export default function CartReducer(state = initialCartState, action: AnyAction) {
+export default function cartReducer(state = initialCartState, action: AnyAction) {
   switch (action.type) {
     case ADD_TO_CART: {
       if (state.itemInCart === null) {
@@ -44,12 +44,13 @@ export default function CartReducer(state = initialCartState, action: AnyAction)
           return {
             ...state,
             itemInCart: state.itemInCart.map((item) => {
+              const { id, variant, sizes, quantity } = item
               if (
-                item.id === product.id &&
-                item.variant === action.payload.variant &&
-                item.sizes === action.payload.sizes
+                id === product.id &&
+                variant === action.payload.variant &&
+                sizes === action.payload.sizes
               ) {
-                return { ...item, quantity: item.quantity ? item.quantity + 1 : 1 }
+                return { ...item, quantity: quantity ? quantity + 1 : 1 }
               }
               return item
             })
@@ -77,8 +78,9 @@ export default function CartReducer(state = initialCartState, action: AnyAction)
         return {
           ...state,
           itemInCart: state.itemInCart.map((item) => {
-            if (item.id === product.id) {
-              return { ...item, quantity: item.quantity ? item.quantity - 1 : 1 }
+            const { id, quantity } = item
+            if (id === product.id) {
+              return { ...item, quantity: quantity ? quantity - 1 : 1 }
             }
             return item
           })

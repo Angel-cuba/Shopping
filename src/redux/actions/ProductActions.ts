@@ -87,3 +87,9 @@ export const deleteProductFromStock = (id: string) => {
     dispatch({ type: STOP_LOADING })
   }
 }
+
+export type ProductActions =
+  | ReturnType<typeof getProducts>
+  | ReturnType<typeof addProduct>
+  | ReturnType<typeof updateProduct>
+  | ReturnType<typeof deleteProduct>

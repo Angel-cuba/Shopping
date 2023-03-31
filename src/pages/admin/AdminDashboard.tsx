@@ -9,8 +9,8 @@ import { AppDispatch, RootState } from '../../redux/store'
 import Customers from '../../components/Admin/Customers/Customers'
 import { fetchProducts } from '../../redux/actions/ProductActions'
 import CreateAndEdit from '../../components/Admin/CreateAndEdit/CreateAndEdit'
-import './styles/AdminDashboard.scss'
 import Products from '../Products/Products'
+import './styles/AdminDashboard.scss'
 
 const AdminDashboard = () => {
   const dispatch = useDispatch<AppDispatch>()
