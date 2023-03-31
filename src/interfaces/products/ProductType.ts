@@ -6,7 +6,7 @@ export type Product = {
   image: string
   categories: Category
   variant: Variant
-  sizes: Sizes
+  sizes: Size
 }
 
 export type NewProduct = {
@@ -33,7 +33,7 @@ export type NewProductToStock = {
 
 type Category = 'Summer' | 'Winter' | 'Spring' | 'Autumn'
 
-type Sizes = 'S' | 'M' | 'L' | 'XS' | 'XL' | '2XL' | '3XL'
+type Size = 'S' | 'M' | 'L' | 'XS' | 'XL' | '2XL' | '3XL'
 
 type Variant =
   | 'Crimson'
