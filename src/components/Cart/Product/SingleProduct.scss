@@ -1,0 +1,41 @@
+.cart-product {
+  position: relative;
+  display: flex;
+  padding: 0.8rem .2rem;
+  width: 500px;
+  border-bottom: 1px solid rgba(35, 35, 35, 0.1);
+  &__image {
+    min-width: 80px;
+    height: 80px;
+  }
+  &__buttons {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    &__plus-minus {
+      margin: auto;
+      width: 25%;
+      display: flex;
+      justify-content: space-between;
+      &--quantity {
+        font-size: 1.32rem;
+        font-weight: 500;
+      }
+    }
+    &--price {
+      position: absolute;
+      bottom: 0;
+      right: 20px;
+      font-size: 1.3rem;
+      font-weight: 800;
+      margin: 0.15rem 0;
+      color: rgba(35, 35, 35, 0.8);
+    }
+    &--data {
+      font-size: 1.2rem;
+      font-weight: 500;
+      width: 250px;
+      height: 1.5rem;
+    }
+  }
+}
