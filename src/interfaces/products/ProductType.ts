@@ -31,13 +31,7 @@ export type NewProductToStock = {
   price: number
 }
 
-type Category =
-  | 'Granite Surfaces'
-  | 'Waterproofing & Caulking'
-  | 'Marlite Panels (FED)'
-  | 'Casework'
-  | 'Electrical'
-  | 'Wall Protection'
+type Category = 'Summer' | 'Winter' | 'Spring' | 'Autumn'
 
 type Sizes = 'S' | 'M' | 'L' | 'XS' | 'XL' | '2XL' | '3XL'
 
