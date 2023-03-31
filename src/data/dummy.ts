@@ -5,8 +5,8 @@ export const PRODUCTS: Product[] = [
     id: 1,
     name: 'Global Blood Therapeutics, Inc.',
     description:
-      'Unspecified abortion, complicated by genital tract and pelvic infection, unspecified',
-    categories: 'Granite Surfaces',
+      'Nike, Inc., formerly (1964–78) Blue Ribbon Sports, American sportswear company headquartered in Beaverton, Oregon.',
+    categories: 'Summer',
     image:
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679761938/air-max-270-mens-shoes-KkLcGR_o7h0wd.png',
     variant: 'Crimson',
@@ -16,8 +16,9 @@ export const PRODUCTS: Product[] = [
   {
     id: 2,
     name: 'General Electric Company',
-    description: 'Unspecified disease of pancreas',
-    categories: 'Waterproofing & Caulking',
+    description:
+      'It was founded in 1964 as Blue Ribbon Sports by Bill Bowerman, a track-and-field coach at the University of Oregon',
+    categories: 'Winter',
     image:
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679993566/shoes/images_6_hqvorc.png',
     variant: 'Goldenrod',
@@ -28,8 +29,8 @@ export const PRODUCTS: Product[] = [
     id: 3,
     name: 'China TechFaith Wireless Communication Technology Limited',
     description:
-      'Inguinal hernia, with obstruction, without mention of gangrene, bilateral, recurrent',
-    categories: 'Marlite Panels (FED)',
+      'They opened their first retail outlet in 1966 and launched the Nike brand shoe in 1972.',
+    categories: 'Spring',
     image:
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679993566/shoes/precision-6-basketball-shoes-l7zDFB_rlezav.png',
     variant: 'Violet',
@@ -39,8 +40,9 @@ export const PRODUCTS: Product[] = [
   {
     id: 4,
     name: 'STRATS Trust',
-    description: 'Incisional ventral hernia with obstruction',
-    categories: 'Casework',
+    description:
+      'The company was renamed Nike, Inc., in 1978 and went public two years later. By the early 21st century',
+    categories: 'Autumn',
     image: 'https://res.cloudinary.com/dqaerysgb/image/upload/v1679993565/shoes/images_o04fcw.png',
     variant: 'Crimson',
     sizes: 'S',
@@ -49,8 +51,9 @@ export const PRODUCTS: Product[] = [
   {
     id: 5,
     name: 'QuickLogic Corporation',
-    description: 'Failed attempted abortion complicated by shock',
-    categories: 'Electrical',
+    description:
+      'From the late 1980s Nike steadily expanded its business and diversified its product line through numerous acquisitions',
+    categories: 'Summer',
     image:
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679993565/shoes/images_8_spmfby.png',
     variant: 'Teal',
@@ -60,8 +63,9 @@ export const PRODUCTS: Product[] = [
   {
     id: 6,
     name: 'Yield10 Bioscience, Inc.',
-    description: 'Benign neoplasm of other specified sites of nervous system',
-    categories: 'Wall Protection',
+    description:
+      'On December 19, 2013, Nikes quarterly profit rose due to a 13 percent increase in global orders for merchandise since April of that year. Future orders of shoes or clothes for delivery between December and April, rose to $10.4 billion. ',
+    categories: 'Winter',
     image:
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679761938/air-max-270-mens-shoes-KkLcGR_o7h0wd.png',
     variant: 'Crimson',
@@ -71,8 +75,9 @@ export const PRODUCTS: Product[] = [
   {
     id: 7,
     name: 'China Commercial CCrimsonit, Inc.',
-    description: 'Open world to all of the best products, brands, and stores',
-    categories: 'Waterproofing & Caulking',
+    description:
+      'Nike produces a wide range of sports equipment and apparel. Their first products were track running shoes.',
+    categories: 'Winter',
     image:
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679761938/air-max-270-mens-shoes-KkLcGR_o7h0wd.png',
     variant: 'Teal',
@@ -82,8 +87,9 @@ export const PRODUCTS: Product[] = [
   {
     id: 8,
     name: 'Nu Skin Enterprises, Inc.',
-    description: 'Unspecified dermatitis due to sun',
-    categories: 'Granite Surfaces',
+    description:
+      'From the late 1980s Nike steadily expanded its business and diversified its product line through numerous acquisitions',
+    categories: 'Spring',
     image:
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679993566/shoes/images_6_hqvorc.png',
 
@@ -94,8 +100,8 @@ export const PRODUCTS: Product[] = [
   {
     id: 9,
     name: 'Ashford Hospitality Trust Inc',
-    description: 'Other mechanical complication of cardiac device, implant, and graft',
-    categories: 'Waterproofing & Caulking',
+    description: 'In the early 21st century Nike began selling sports-technology accessories.',
+    categories: 'Winter',
     image:
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679995206/shoes/images_4_bcb5tl.png',
 
@@ -107,8 +113,8 @@ export const PRODUCTS: Product[] = [
     id: 10,
     name: 'Calithera Biosciences, Inc.',
     description:
-      'Maternal distress complicating labor and delivery, postpartum condition or complication',
-    categories: 'Granite Surfaces',
+      'Nike produces a wide range of sports equipment and apparel. Their first products were track running shoes.',
+    categories: 'Spring',
     image:
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679993565/shoes/images_1_gnczxb.png',
     variant: 'Violet',
@@ -118,8 +124,9 @@ export const PRODUCTS: Product[] = [
   {
     id: 11,
     name: 'Global Indemnity Limited',
-    description: 'Other specified venereal diseases',
-    categories: 'Casework',
+    description:
+      'In 2008, Nike introduced the Air Jordan XX3, a high-performance basketball shoe designed with the environment in mind.',
+    categories: 'Spring',
     image:
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679993565/shoes/images_7_nor1an.png',
     variant: 'Fuscia',
@@ -130,7 +137,7 @@ export const PRODUCTS: Product[] = [
     id: 12,
     name: 'Western Union Company (The)',
     description: 'Acute bronchospasm',
-    categories: 'Granite Surfaces',
+    categories: 'Summer',
     image:
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679993565/shoes/images_4_svmpdu.png',
     variant: 'Goldenrod',
@@ -141,8 +148,8 @@ export const PRODUCTS: Product[] = [
     id: 13,
     name: 'Shineco, Inc.',
     description:
-      'Closed fracture of vault of skull with other and unspecified intracranial hemorrhage, unspecified state of consciousness',
-    categories: 'Marlite Panels (FED)',
+      'From the late 1980s Nike steadily expanded its business and diversified its product line through numerous acquisitions',
+    categories: 'Spring',
     image:
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679993565/shoes/images_1_gnczxb.png',
     variant: 'Maroon',
@@ -153,11 +160,11 @@ export const PRODUCTS: Product[] = [
     id: 14,
     name: 'Lydall, Inc.',
     description:
-      'Other closed skull fracture with subarachnoid, subdural, and extradural hemorrhage, with moderate [1-24 hours] loss of consciousness',
+      'Part of Nike’s success is owed to endorsements by such athletes as Michael Jordan, Mia Hamm, Roger Federer, and Tiger Woods.',
     image:
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679993565/shoes/1FM00139_423_01_e_gi4ga1.png',
 
-    categories: 'Casework',
+    categories: 'Autumn',
     variant: 'Maroon',
     sizes: '3XL',
     price: 855.999
@@ -165,8 +172,9 @@ export const PRODUCTS: Product[] = [
   {
     id: 15,
     name: 'Hamilton Bancorp, Inc.',
-    description: 'Glaucoma associated with pupillary block',
-    categories: 'Casework',
+    description:
+      'Platinum certification and will be highlighted by natural daylight, and a gray water treatment center.',
+    categories: 'Autumn',
     image:
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679993564/shoes/images_2_p2wpfo.png',
     variant: 'Aquamarine',
@@ -176,9 +184,8 @@ export const PRODUCTS: Product[] = [
   {
     id: 16,
     name: 'Citigroup Inc.',
-    description:
-      'Hypertonic, incoordinate, or prolonged uterine contractions, deliveCrimson, with or without mention of antepartum condition',
-    categories: 'Casework',
+    description: 'In the early 21st century Nike began selling sports-technology accessories.',
+    categories: 'Winter',
     image:
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679995209/shoes/Varion-Indoor-Sports-Shoes_wdipwa.png',
     variant: 'Pink',
@@ -188,8 +195,9 @@ export const PRODUCTS: Product[] = [
   {
     id: 17,
     name: 'Regal Beloit Corporation',
-    description: 'Bacteroides fragilis',
-    categories: 'Casework',
+    description:
+      'Part of Nike’s success is owed to endorsements by such athletes as Michael Jordan, Mia Hamm, Roger Federer, and Tiger Woods.',
+    categories: 'Summer',
     image:
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679995208/shoes/images_9_vg9wgg.png',
     variant: 'Violet',
@@ -199,8 +207,9 @@ export const PRODUCTS: Product[] = [
   {
     id: 18,
     name: 'Liberty Interactive Corporation',
-    description: 'Observation and evaluation for suspected exposure to anthrax',
-    categories: 'Waterproofing & Caulking',
+    description:
+      'On December 19, 2013, Nikes quarterly profit rose due to a 13 percent increase in global orders for merchandise since April of that year. Future orders of shoes or clothes for delivery between December and April, rose to $10.4 billion. ',
+    categories: 'Winter',
     image:
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679993566/shoes/images_6_hqvorc.png',
     variant: 'Violet',
@@ -210,8 +219,9 @@ export const PRODUCTS: Product[] = [
   {
     id: 19,
     name: 'Violet Hills Bancorp, Inc.',
-    description: 'Closed fracture of coracoid process of scapula',
-    categories: 'Marlite Panels (FED)',
+    description:
+      'Cole Haan (1988; sold in 2012) and Converse, Inc. (2003), the sports-equipment producer Canstar Sports, Inc. ',
+    categories: 'Winter',
     image: 'https://res.cloudinary.com/dqaerysgb/image/upload/v1679995207/shoes/1_j2n1rx.png',
     variant: 'Aquamarine',
     sizes: '2XL',
@@ -220,8 +230,9 @@ export const PRODUCTS: Product[] = [
   {
     id: 20,
     name: 'FlexShares Disciplined Duration MBS Index Fund',
-    description: 'Unspecified abortion, complicated by embolism, complete',
-    categories: 'Waterproofing & Caulking',
+    description:
+      'Wieden+Kennedy, Nikes primary ad agency, has worked with Nike to create many print and television advertisements, and Wieden+Kennedy remains Nikes primary ad agency.',
+    categories: 'Winter',
     image:
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679993566/shoes/precision-6-basketball-shoes-l7zDFB_rlezav.png',
     variant: 'Teal',
@@ -231,8 +242,9 @@ export const PRODUCTS: Product[] = [
   {
     id: 21,
     name: 'Artisan Partners Asset Management Inc.',
-    description: 'Lack of coordination',
-    categories: 'Casework',
+    description:
+      'On December 19, 2013, Nikes quarterly profit rose due to a 13 percent increase in global orders for merchandise since April of that year. Future orders of shoes or clothes for delivery between December and April, rose to $10.4 billion. ',
+    categories: 'Winter',
     image:
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679995207/shoes/ecco-biom-2-1368501_tppmla.png',
     variant: 'Teal',
@@ -242,8 +254,9 @@ export const PRODUCTS: Product[] = [
   {
     id: 22,
     name: 'Validus Holdings, Ltd.',
-    description: 'Legally induced abortion, complicated by shock, incomplete',
-    categories: 'Granite Surfaces',
+    description:
+      'Beaverton, city, Washington county, northwestern Oregon, U.S., in the Tualatin Valley, immediately west of Portland. ',
+    categories: 'Spring',
     image:
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679995207/shoes/images_5_mgdkor.png',
     variant: 'Maroon',
@@ -254,8 +267,8 @@ export const PRODUCTS: Product[] = [
     id: 23,
     name: 'Voya Infrastructure, Industrials and Materials Fund',
     description:
-      'Motor vehicle traffic accident involving re-entrant collision with another motor vehicle injuring pedestrian',
-    categories: 'Casework',
+      'Wieden+Kennedy, Nikes primary ad agency, has worked with Nike to create many print and television advertisements, and Wieden+Kennedy remains Nikes primary ad agency.',
+    categories: 'Autumn',
     variant: 'Fuscia',
     image:
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679995207/shoes/images_8_drvkcn.png',
@@ -265,8 +278,9 @@ export const PRODUCTS: Product[] = [
   {
     id: 24,
     name: 'Greif Bros. Corporation',
-    description: 'Other specified anomalies of respiratory system',
-    categories: 'Wall Protection',
+    description:
+      'Part of Nike’s success is owed to endorsements by such athletes as Michael Jordan, Mia Hamm, Roger Federer, and Tiger Woods.',
+    categories: 'Summer',
     image:
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679995207/shoes/images_6_t13ydu.png',
     variant: 'Maroon',
@@ -276,8 +290,9 @@ export const PRODUCTS: Product[] = [
   {
     id: 25,
     name: 'Fortress Transportation and Infrastructure Investors LLC',
-    description: 'Preauricular sinus or fistula',
-    categories: 'Marlite Panels (FED)',
+    description:
+      'Cole Haan (1988; sold in 2012) and Converse, Inc. (2003), the sports-equipment producer Canstar Sports, Inc. ',
+    categories: 'Spring',
     image:
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679995206/shoes/images_2_fcu3ei.png',
     variant: 'Crimson',
@@ -287,8 +302,9 @@ export const PRODUCTS: Product[] = [
   {
     id: 26,
     name: 'Atlanticus Holdings Corporation',
-    description: 'Diverticulosis of colon (without mention of hemorrhage)',
-    categories: 'Wall Protection',
+    description:
+      'From the late 1980s Nike steadily expanded its business and diversified its product line through numerous acquisitions',
+    categories: 'Spring',
     variant: 'Aquamarine',
     image:
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679993565/shoes/images_1_gnczxb.png',
@@ -298,8 +314,9 @@ export const PRODUCTS: Product[] = [
   {
     id: 27,
     name: 'ServiceNow, Inc.',
-    description: 'Screening examination for yaws',
-    categories: 'Casework',
+    description:
+      'In 2008, Nike introduced the Air Jordan XX3, a high-performance basketball shoe designed with the environment in mind.',
+    categories: 'Summer',
     image:
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679995206/shoes/images_4_bcb5tl.png',
     variant: 'Aquamarine',
@@ -309,8 +326,9 @@ export const PRODUCTS: Product[] = [
   {
     id: 28,
     name: 'Foamix Pharmaceuticals Ltd.',
-    description: 'Shigella boydii',
-    categories: 'Marlite Panels (FED)',
+    description:
+      'Beaverton, city, Washington county, northwestern Oregon, U.S., in the Tualatin Valley, immediately west of Portland. ',
+    categories: 'Winter',
     image:
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679995206/shoes/images_3_sgzz2d.png',
     variant: 'Violet',
@@ -320,8 +338,8 @@ export const PRODUCTS: Product[] = [
   {
     id: 29,
     name: 'Sunrun Inc.',
-    description: 'Carcinoma in situ of other and unspecified digestive organs',
-    categories: 'Granite Surfaces',
+    description: 'In the early 21st century Nike began selling sports-technology accessories.',
+    categories: 'Spring',
     image:
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679993564/shoes/descarga_iqjs7w.png',
     variant: 'Maroon',
@@ -332,8 +350,8 @@ export const PRODUCTS: Product[] = [
     id: 30,
     name: 'PowerShares Optimum Yield Diversified Commodity Strategy No K-',
     description:
-      'Persistent migraine aura with cerebral infarction, without mention of intractable migraine without mention of status migrainosus',
-    categories: 'Wall Protection',
+      'Cole Haan (1988; sold in 2012) and Converse, Inc. (2003), the sports-equipment producer Canstar Sports, Inc. ',
+    categories: 'Autumn',
     image:
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679993564/shoes/descarga_1_yntgd3.png',
     variant: 'Maroon',
