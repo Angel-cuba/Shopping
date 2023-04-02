@@ -34,8 +34,6 @@ export default function productReducer(state = initialProductState, action: AnyA
       }
     }
     case DELETE_PRODUCT: {
-      console.log('DELETE_PRODUCT', action.payload)
-      console.log('DELETE_PRODUCT', state.products)
       const removedProduct = state.products.filter((product) => product.id !== action.payload)
       return {
         ...state,
