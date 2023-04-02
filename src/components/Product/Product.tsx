@@ -22,7 +22,7 @@ const ProductItem = ({ product }: { product: Product }) => {
     dispatch(updateProductInStock(product))
   }
 
-  const handleDelete = (id: string) => {
+  const handleDelete = (id: number) => {
     dispatch(deleteProductFromStock(id))
   }
 
@@ -42,7 +42,7 @@ const ProductItem = ({ product }: { product: Product }) => {
                 color="success"
               />
             </div>
-            <div onClick={() => handleDelete(`${product.id}`)}>
+            <div onClick={() => handleDelete(product.id)}>
               <DeleteForever
                 className="products__content__item--admin-icons--icon products__content__item--admin-icons--icon--delete "
                 fontSize="large"

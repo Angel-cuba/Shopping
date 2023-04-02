@@ -32,7 +32,7 @@ export const updateProduct = (product: NewProductToStock) => {
   } as const
 }
 
-export const deleteProduct = (id: string) => {
+export const deleteProduct = (id: number) => {
   return {
     type: DELETE_PRODUCT,
     payload: id
@@ -76,7 +76,7 @@ export const updateProductInStock = (product: NewProductToStock) => {
   }
 }
 
-export const deleteProductFromStock = (id: string) => {
+export const deleteProductFromStock = (id: number) => {
   return async (dispatch: Dispatch) => {
     try {
       dispatch({ type: LOADING })
