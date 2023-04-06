@@ -1,7 +1,7 @@
-import React from 'react'
-import CloseIcon from '@mui/icons-material/Close'
-import CheckIcon from '@mui/icons-material/Check'
-import { CustomerType } from '../../../../interfaces/customer/Customer'
+import React from 'react';
+import CloseIcon from '@mui/icons-material/Close';
+import CheckIcon from '@mui/icons-material/Check';
+import { CustomerType } from '../../../../interfaces/customer/Customer';
 
 export default function Customer({ customer }: { customer: CustomerType }): JSX.Element {
   return (
@@ -15,15 +15,16 @@ export default function Customer({ customer }: { customer: CustomerType }): JSX.
             height: '60px',
             borderRadius: '50%',
             objectFit: 'cover',
-            marginRight: '10px'
+            marginRight: '10px',
           }}
         />
         <p
           style={{
             color: '#3F29C8',
             fontWeight: 'bold',
-            fontSize: '20px'
-          }}>
+            fontSize: '20px',
+          }}
+        >
           {customer.name}
         </p>
       </td>
@@ -32,15 +33,17 @@ export default function Customer({ customer }: { customer: CustomerType }): JSX.
       <td
         className="customers__body--item"
         style={{
-          color: Number(customer.total_spents) > 500 ? '#E72300' : '#5c5c5c'
-        }}>
+          color: Number(customer.total_spents) > 500 ? '#E72300' : '#5c5c5c',
+        }}
+      >
         US${customer.total_spents}
       </td>
       <td
         className="customers__body--item"
         style={{
-          color: '#595959'
-        }}>
+          color: '#595959',
+        }}
+      >
         {customer.last_purchase.date && customer.last_purchase.date
           ? customer.last_purchase.date + ', ' + customer.last_purchase.time
           : null}
@@ -52,5 +55,5 @@ export default function Customer({ customer }: { customer: CustomerType }): JSX.
         </p>
       </td>
     </tr>
-  )
+  );
 }

@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 
 const CheckStock = () => {
   return (
@@ -12,7 +12,7 @@ const CheckStock = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default CheckStock
+export default CheckStock;

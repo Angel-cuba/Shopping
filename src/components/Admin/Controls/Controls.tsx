@@ -1,19 +1,19 @@
-import React from 'react'
-import FilterListIcon from '@mui/icons-material/FilterList'
-import AddIcon from '@mui/icons-material/Add'
-import GetAppIcon from '@mui/icons-material/GetApp'
-import { Input } from '../../Input/Input'
-import './Controls.scss'
+import React from 'react';
+import FilterListIcon from '@mui/icons-material/FilterList';
+import AddIcon from '@mui/icons-material/Add';
+import GetAppIcon from '@mui/icons-material/GetApp';
+import { Input } from '../../Input/Input';
+import './Controls.scss';
 
 type SearchProps = {
-  search: string
-  setSearch: (value: string) => void
-}
+  search: string;
+  setSearch: (value: string) => void;
+};
 
 export const Controls = ({ search, setSearch }: SearchProps): JSX.Element => {
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearch(e.target.value)
-  }
+    setSearch(e.target.value);
+  };
 
   return (
     <div className="controls">
@@ -31,7 +31,7 @@ export const Controls = ({ search, setSearch }: SearchProps): JSX.Element => {
           margin: '0 10px',
           padding: '0 10px',
           borderRadius: '5px',
-          border: '1px solid #d3d3d3'
+          border: '1px solid #d3d3d3',
         }}
       />
       <div className="controls__panel">
@@ -40,8 +40,8 @@ export const Controls = ({ search, setSearch }: SearchProps): JSX.Element => {
         <Export />
       </div>
     </div>
-  )
-}
+  );
+};
 
 const Filter = () => {
   return (
@@ -49,21 +49,21 @@ const Filter = () => {
       <FilterListIcon />
       <p className="controls__panel__button--text">Filter</p>
     </div>
-  )
-}
+  );
+};
 const Create = () => {
   return (
     <div className="controls__panel__button">
       <AddIcon />
       <p className="controls__panel__button--text">Create</p>
     </div>
-  )
-}
+  );
+};
 const Export = () => {
   return (
     <div className="controls__panel__button">
       <GetAppIcon />
       <p className="controls__panel__button--text">Export</p>
     </div>
-  )
-}
+  );
+};

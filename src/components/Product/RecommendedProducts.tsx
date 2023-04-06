@@ -1,6 +1,6 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
-import { Product } from '../../interfaces/products/ProductType'
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { Product } from '../../interfaces/products/ProductType';
 
 const RecommendedProducts = ({ product }: { product: Product }) => {
   return (
@@ -13,14 +13,14 @@ const RecommendedProducts = ({ product }: { product: Product }) => {
             style={{
               width: '120px',
               height: '120px',
-              borderRadius: '5px'
+              borderRadius: '5px',
             }}
           />
         </Link>
         <p className="productId__recommended__items__content--price">£{product.price}</p>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default RecommendedProducts
+export default RecommendedProducts;

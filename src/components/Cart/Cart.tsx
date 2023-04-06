@@ -1,37 +1,37 @@
-import React from 'react'
-import { Link, useLocation } from 'react-router-dom'
-import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart'
-import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
-import FavoriteIcon from '@mui/icons-material/Favorite'
-import AccountBalanceIcon from '@mui/icons-material/AccountBalance'
-import { useDispatch, useSelector } from 'react-redux'
+import React from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
+import { useDispatch, useSelector } from 'react-redux';
 
-import { AppDispatch, RootState } from '../../redux/store'
-import { addToCart, removeFromCart } from '../../redux/actions/CartActions'
-import { Product } from '../../interfaces/products/ProductType'
-import SingleProduct from './Product/SingleProduct'
+import { AppDispatch, RootState } from '../../redux/store';
+import { addToCart, removeFromCart } from '../../redux/actions/CartActions';
+import { Product } from '../../interfaces/products/ProductType';
+import SingleProduct from './Product/SingleProduct';
 
 export const NavbarIcon = () => {
-  const [openCart, setOpenCart] = React.useState(false)
-  const location = useLocation()
+  const [openCart, setOpenCart] = React.useState(false);
+  const location = useLocation();
 
-  const emptyCart = 0
-  const { itemInCart } = useSelector((state: RootState) => state.cart)
+  const emptyCart = 0;
+  const { itemInCart } = useSelector((state: RootState) => state.cart);
 
   const showCartItems = () => {
-    setOpenCart(!openCart)
-  }
+    setOpenCart(!openCart);
+  };
   const closeCart = () => {
-    setOpenCart(false)
-  }
+    setOpenCart(false);
+  };
 
   const toPay = () => {
-    let total = 0
+    let total = 0;
     itemInCart?.forEach((item) => {
-      total += item.price * item.quantity
-    })
-    return total.toFixed(2)
-  }
+      total += item.price * item.quantity;
+    });
+    return total.toFixed(2);
+  };
 
   return (
     <div className="navbar-cart">
@@ -47,7 +47,7 @@ export const NavbarIcon = () => {
       <div className="navbar-cart__icon" onClick={showCartItems}>
         <AddShoppingCartIcon
           style={{
-            fontSize: '2rem'
+            fontSize: '2rem',
           }}
         />
       </div>
@@ -58,7 +58,8 @@ export const NavbarIcon = () => {
             : itemInCart && itemInCart?.length > 9
             ? 'navbar-cart__amount--over'
             : 'navbar-cart__amount'
-        }>
+        }
+      >
         {!itemInCart ? emptyCart : itemInCart.length}
       </div>
       <div className={openCart ? 'navbar-cart__cart' : 'navbar-cart__cart--hidden'}>
@@ -67,20 +68,20 @@ export const NavbarIcon = () => {
         ))}
       </div>
     </div>
-  )
-}
+  );
+};
 
 export const CartIcon = ({ product }: { product: Product }) => {
-  const dispatch = useDispatch<AppDispatch>()
-  const { itemInCart } = useSelector((state: RootState) => state.cart)
+  const dispatch = useDispatch<AppDispatch>();
+  const { itemInCart } = useSelector((state: RootState) => state.cart);
   const addItemToCart = () => {
-    dispatch(addToCart(product))
-  }
+    dispatch(addToCart(product));
+  };
   const removeItemFromCart = () => {
-    dispatch(removeFromCart(product))
-  }
+    dispatch(removeFromCart(product));
+  };
 
-  const itemAddedToCart = itemInCart?.find((item) => item.id === product.id)
+  const itemAddedToCart = itemInCart?.find((item) => item.id === product.id);
 
   return (
     <div className="icon">
@@ -90,14 +91,14 @@ export const CartIcon = ({ product }: { product: Product }) => {
             <FavoriteIcon
               style={{
                 fontSize: '2rem',
-                color: 'red'
+                color: 'red',
               }}
               onClick={removeItemFromCart}
             />
           ) : (
             <FavoriteBorderIcon
               style={{
-                fontSize: '2rem'
+                fontSize: '2rem',
               }}
               onClick={addItemToCart}
             />
@@ -105,5 +106,5 @@ export const CartIcon = ({ product }: { product: Product }) => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};

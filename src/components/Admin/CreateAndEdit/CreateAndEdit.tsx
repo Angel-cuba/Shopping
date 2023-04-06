@@ -1,65 +1,64 @@
-import React, { FormEvent } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import React, { FormEvent } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
-
-import { AppDispatch, RootState } from '../../../redux/store'
-import { addProductToStock, updateProductInStock } from '../../../redux/actions/ProductActions'
-import { Input } from '../../Input/Input'
-import { NewProductToStock, Product } from '../../../interfaces/products/ProductType'
+import { AppDispatch, RootState } from '../../../redux/store';
+import { addProductToStock, updateProductInStock } from '../../../redux/actions/ProductActions';
+import { Input } from '../../Input/Input';
+import { NewProductToStock, Product } from '../../../interfaces/products/ProductType';
 
 const CreateAndEdit = ({ productId }: { productId: string | undefined }) => {
-  const { products } = useSelector((state: RootState) => state)
+  const { products } = useSelector((state: RootState) => state);
 
   const product = products.products?.find((product: Product) => {
-    return product.id.toString() === productId
-  })
-  const time = new Date().getTime()
-  const [id, setId] = React.useState<number>(!product ? time : product.id)
+    return product.id.toString() === productId;
+  });
+  const time = new Date().getTime();
+  const [id, setId] = React.useState<number>(!product ? time : product.id);
 
-  const [name, setName] = React.useState<string>(!product ? '' : product.name)
-  const [description, setDescription] = React.useState<string>(!product ? '' : product.description)
-  const [categories, setCategories] = React.useState<string>(!product ? '' : product.categories)
-  const [image, setImage] = React.useState<string>(!product ? '' : product.image)
-  const [variant, setVariant] = React.useState<string>(!product ? '' : product.variant)
-  const [sizes, setSizes] = React.useState<string>(!product ? '' : product.sizes)
-  const [price, setPrice] = React.useState<number>(!product ? 0 : product.price)
-  const dispatch = useDispatch<AppDispatch>()
+  const [name, setName] = React.useState<string>(!product ? '' : product.name);
+  const [description, setDescription] = React.useState<string>(!product ? '' : product.description);
+  const [categories, setCategories] = React.useState<string>(!product ? '' : product.categories);
+  const [image, setImage] = React.useState<string>(!product ? '' : product.image);
+  const [variant, setVariant] = React.useState<string>(!product ? '' : product.variant);
+  const [sizes, setSizes] = React.useState<string>(!product ? '' : product.sizes);
+  const [price, setPrice] = React.useState<number>(!product ? 0 : product.price);
+  const dispatch = useDispatch<AppDispatch>();
 
   const handlerInput = (e: FormEvent) => {
-    e.preventDefault()
-    const { name, value } = e.target as HTMLInputElement
+    e.preventDefault();
+    const { name, value } = e.target as HTMLInputElement;
     switch (name) {
       case 'id':
-        setId(Number(value))
-        break
+        setId(Number(value));
+        break;
       case 'name':
-        setName(value)
-        break
+        setName(value);
+        break;
       case 'description':
-        setDescription(value)
-        break
+        setDescription(value);
+        break;
       case 'categories':
-        setCategories(value)
-        break
+        setCategories(value);
+        break;
       case 'image':
-        setImage(value)
-        break
+        setImage(value);
+        break;
       case 'variant':
-        setVariant(value)
-        break
+        setVariant(value);
+        break;
       case 'sizes':
-        setSizes(value)
-        break
+        setSizes(value);
+        break;
       case 'price':
-        setPrice(Number(value))
-        break
+        setPrice(Number(value));
+        break;
       default:
-        break
+        break;
     }
-  }
+  };
 
   const handlerSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
+    e.preventDefault();
     const newProduct: NewProductToStock = {
       id,
       name,
@@ -68,14 +67,14 @@ const CreateAndEdit = ({ productId }: { productId: string | undefined }) => {
       image,
       variant,
       sizes,
-      price
-    }
+      price,
+    };
     if (!productId) {
-      dispatch(addProductToStock(newProduct))
+      dispatch(addProductToStock(newProduct));
     } else {
-      dispatch(updateProductInStock(newProduct))
+      dispatch(updateProductInStock(newProduct));
     }
-  }
+  };
 
   return (
     <div className="admin-createandcheck__views__create-and-edit">
@@ -149,12 +148,13 @@ const CreateAndEdit = ({ productId }: { productId: string | undefined }) => {
         />
         <button
           type="submit"
-          className="admin-createandcheck__views__create-and-edit__form__submit">
+          className="admin-createandcheck__views__create-and-edit__form__submit"
+        >
           {!productId ? 'Add' : 'Edit'}
         </button>
       </form>
     </div>
-  )
-}
+  );
+};
 
-export default CreateAndEdit
+export default CreateAndEdit;

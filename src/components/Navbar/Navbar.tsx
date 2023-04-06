@@ -1,30 +1,30 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
-import { useDispatch, useSelector } from 'react-redux'
-import MenuIcon from '@mui/icons-material/Menu'
-import CloseIcon from '@mui/icons-material/Close'
-import StoreMallDirectoryIcon from '@mui/icons-material/StoreMallDirectory'
-import LightModeIcon from '@mui/icons-material/LightMode'
-import Brightness4Icon from '@mui/icons-material/Brightness4'
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import MenuIcon from '@mui/icons-material/Menu';
+import CloseIcon from '@mui/icons-material/Close';
+import StoreMallDirectoryIcon from '@mui/icons-material/StoreMallDirectory';
+import LightModeIcon from '@mui/icons-material/LightMode';
+import Brightness4Icon from '@mui/icons-material/Brightness4';
 
-import { NavbarIcon } from '../Cart/Cart'
-import { AppDispatch, RootState } from '../../redux/store'
-import { logout } from '../../redux/actions/UserAction'
-import './Navbar.scss'
+import { NavbarIcon } from '../Cart/Cart';
+import { AppDispatch, RootState } from '../../redux/store';
+import { logout } from '../../redux/actions/UserAction';
+import './Navbar.scss';
 
 const Navbar = () => {
-  const [isOpen, setIsOpen] = React.useState(false)
-  const [isDark, setIsDark] = React.useState(false)
-  const { user } = useSelector((state: RootState) => state.userLogged)
-  const dispatch = useDispatch<AppDispatch>()
+  const [isOpen, setIsOpen] = React.useState(false);
+  const [isDark, setIsDark] = React.useState(false);
+  const { user } = useSelector((state: RootState) => state.userLogged);
+  const dispatch = useDispatch<AppDispatch>();
 
   const handleLogout = () => {
-    localStorage.removeItem('user')
-    dispatch(logout())
-  }
+    localStorage.removeItem('user');
+    dispatch(logout());
+  };
   const handleDarkMode = () => {
-    setIsDark(!isDark)
-  }
+    setIsDark(!isDark);
+  };
   return (
     <div className="navbar">
       <div className="navbar__navbar-left">
@@ -37,7 +37,7 @@ const Navbar = () => {
                 width: '50px',
                 height: '50px',
                 marginRight: '10px',
-                borderRadius: '40%'
+                borderRadius: '40%',
               }}
             />
             <h1>{user?.name}</h1>
@@ -46,7 +46,7 @@ const Navbar = () => {
           <StoreMallDirectoryIcon
             style={{
               width: '50px',
-              height: '50px'
+              height: '50px',
             }}
             color="primary"
           />
@@ -84,7 +84,7 @@ const Navbar = () => {
                   onClick={handleDarkMode}
                   style={{
                     width: '35px',
-                    height: '35px'
+                    height: '35px',
                   }}
                 />
               ) : (
@@ -93,7 +93,7 @@ const Navbar = () => {
                   color="warning"
                   style={{
                     width: '35px',
-                    height: '35px'
+                    height: '35px',
                   }}
                 />
               )}
@@ -103,13 +103,19 @@ const Navbar = () => {
       </div>
       <div className="navbar__navbar_mobile">
         {isOpen ? (
-          <CloseIcon style={{
-            color: '#000'
-          }} onClick={() => setIsOpen(!isOpen)} />
+          <CloseIcon
+            style={{
+              color: '#000',
+            }}
+            onClick={() => setIsOpen(!isOpen)}
+          />
         ) : (
-          <MenuIcon style={{
-            color: '#000'
-          }} onClick={() => setIsOpen(!isOpen)} />
+          <MenuIcon
+            style={{
+              color: '#000',
+            }}
+            onClick={() => setIsOpen(!isOpen)}
+          />
         )}
         {isOpen && (
           <div className="navbar__navbar_mobile__view">
@@ -118,13 +124,16 @@ const Navbar = () => {
                 style={{
                   display: 'flex',
                   justifyContent: 'space-between',
-                  width: '100%'
-                }}>
+                  width: '100%',
+                }}
+              >
                 <div className="navbar__navbar_mobile__view__user--avatar">
                   <img src={user.picture} alt="user" className="w-20 h-20" />
                 </div>
                 <p className="navbar__navbar_mobile__view__user--name">
-                  <span className="navbar__navbar_mobile__view__user--name--text">{user.given_name}</span>
+                  <span className="navbar__navbar_mobile__view__user--name--text">
+                    {user.given_name}
+                  </span>
                 </p>
               </div>
               <div className="email">
@@ -147,7 +156,7 @@ const Navbar = () => {
         )}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Navbar
+export default Navbar;

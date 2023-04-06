@@ -1,30 +1,30 @@
-import React from 'react'
-import { Link, useLocation } from 'react-router-dom'
-import MoreVertIcon from '@mui/icons-material/MoreVert'
-import { Product } from '../../interfaces/products/ProductType'
-import { CartIcon } from '../Cart/Cart'
-import { DeleteForever, ModeEdit } from '@mui/icons-material'
-import { useDispatch, useSelector } from 'react-redux'
-import { AppDispatch, RootState } from '../../redux/store'
-import { deleteProductFromStock, updateProductInStock } from '../../redux/actions/ProductActions'
-import CreateAndEdit from '../Admin/CreateAndEdit/CreateAndEdit'
+import React from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import { Product } from '../../interfaces/products/ProductType';
+import { CartIcon } from '../Cart/Cart';
+import { DeleteForever, ModeEdit } from '@mui/icons-material';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '../../redux/store';
+import { deleteProductFromStock, updateProductInStock } from '../../redux/actions/ProductActions';
+import CreateAndEdit from '../Admin/CreateAndEdit/CreateAndEdit';
 
 const ProductItem = ({ product }: { product: Product }) => {
-  const [openEdit, setOpenEdit] = React.useState(false)
-  const location = useLocation()
-  const { pathname } = location
-  const dispatch = useDispatch<AppDispatch>()
+  const [openEdit, setOpenEdit] = React.useState(false);
+  const location = useLocation();
+  const { pathname } = location;
+  const dispatch = useDispatch<AppDispatch>();
 
-  const { user } = useSelector((state: RootState) => state.userLogged)
+  const { user } = useSelector((state: RootState) => state.userLogged);
 
   const handleEdit = (product: Product) => {
-    setOpenEdit(!openEdit)
-    dispatch(updateProductInStock(product))
-  }
+    setOpenEdit(!openEdit);
+    dispatch(updateProductInStock(product));
+  };
 
   const handleDelete = (id: number) => {
-    dispatch(deleteProductFromStock(id))
-  }
+    dispatch(deleteProductFromStock(id));
+  };
 
   return (
     <>
@@ -34,8 +34,9 @@ const ProductItem = ({ product }: { product: Product }) => {
             <div
               onClick={() => handleEdit(product)}
               style={{
-                backgroundColor: openEdit ? 'rgba(23, 108, 0, 0.295)' : 'transparent'
-              }}>
+                backgroundColor: openEdit ? 'rgba(23, 108, 0, 0.295)' : 'transparent',
+              }}
+            >
               <ModeEdit
                 className="products__content__item--admin-icons--icon"
                 fontSize="large"
@@ -54,11 +55,14 @@ const ProductItem = ({ product }: { product: Product }) => {
         {pathname !== `/product/${product.id}` &&
           pathname !== `/checkout/product/${product.id}` && (
             <div className="products__content__item--details">
-              <Link to={`/product/${product.id}`} style={{
-                textDecoration: 'none',
-                color: '#4c4c4c',
-                display: 'flex'
-              }}>
+              <Link
+                to={`/product/${product.id}`}
+                style={{
+                  textDecoration: 'none',
+                  color: '#4c4c4c',
+                  display: 'flex',
+                }}
+              >
                 <MoreVertIcon />
                 Details
               </Link>
@@ -78,7 +82,7 @@ const ProductItem = ({ product }: { product: Product }) => {
               height: '200px',
               borderRadius: '5px',
               objectFit: 'cover',
-              transform: 'rotate(-20deg)'
+              transform: 'rotate(-20deg)',
             }}
           />
         </div>
@@ -96,7 +100,7 @@ const ProductItem = ({ product }: { product: Product }) => {
         )}
       </div>
     </>
-  )
-}
+  );
+};
 
-export default ProductItem
+export default ProductItem;

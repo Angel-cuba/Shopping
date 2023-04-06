@@ -7,7 +7,7 @@
   align-items: center;
   margin: auto;
   padding: 20px 2%;
-  &__navbar-left{
+  &__navbar-left {
     display: flex;
     justify-content: space-around;
     align-items: center;
@@ -106,7 +106,7 @@
       }
     }
     @media (min-width: 768px) {
-       width: 35%;
+      width: 35%;
       display: flex;
       justify-content: space-between;
       align-items: center;

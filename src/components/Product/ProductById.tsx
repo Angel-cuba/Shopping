@@ -1,42 +1,42 @@
-import React from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { useParams } from 'react-router-dom'
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
-import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp'
-import StarsIcon from '@mui/icons-material/Stars'
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
+import StarsIcon from '@mui/icons-material/Stars';
 
-import { AppDispatch, RootState } from '../../redux/store'
+import { AppDispatch, RootState } from '../../redux/store';
 import {
   NewProduct,
   Product,
   Sizes,
   Variants,
-  VariantsColors
-} from '../../interfaces/products/ProductType'
-import ProductItem from './ProductItem'
-import RecommendedProducts from './RecommendedProducts'
-import { addToCart } from '../../redux/actions/CartActions'
-import './ProductById.scss'
+  VariantsColors,
+} from '../../interfaces/products/ProductType';
+import ProductItem from './ProductItem';
+import RecommendedProducts from './RecommendedProducts';
+import { addToCart } from '../../redux/actions/CartActions';
+import './ProductById.scss';
 
 const ProductById = () => {
-  const params = useParams()
-  const { id } = params
-  const { products } = useSelector((state: RootState) => state)
+  const params = useParams();
+  const { id } = params;
+  const { products } = useSelector((state: RootState) => state);
 
   const product = products.products.find((product: Product) => {
-    return product.id.toString() === id
-  })
+    return product.id.toString() === id;
+  });
   const recommendedProducts = products.products.filter(
     (p: Product) => p.variant === product?.variant && p.id !== product?.id
-  )
+  );
 
-  const [size, setSize] = React.useState<string>(product?.sizes)
-  const [variant, setVariant] = React.useState<string>(product?.variant)
-  const [openSizesBox, setOpenSizesBox] = React.useState<boolean>(false)
-  const [openVariantsBox, setOpenVariantsBox] = React.useState<boolean>(false)
-  const [newProduct, setNewProduct] = React.useState<NewProduct>()
+  const [size, setSize] = React.useState<string>(product?.sizes);
+  const [variant, setVariant] = React.useState<string>(product?.variant);
+  const [openSizesBox, setOpenSizesBox] = React.useState<boolean>(false);
+  const [openVariantsBox, setOpenVariantsBox] = React.useState<boolean>(false);
+  const [newProduct, setNewProduct] = React.useState<NewProduct>();
 
-  const dispatch = useDispatch<AppDispatch>()
+  const dispatch = useDispatch<AppDispatch>();
 
   const SizeBlocks = Sizes.map((item) => (
     <div
@@ -49,12 +49,13 @@ const ProductById = () => {
         border: '1px solid #F7F7F7',
         textAlign: 'center',
         cursor: 'pointer',
-        padding: '5px 10px'
+        padding: '5px 10px',
       }}
-      onClick={() => setSize(item)}>
+      onClick={() => setSize(item)}
+    >
       {item}
     </div>
-  ))
+  ));
 
   const VariantBlocks = Variants.map((item) => (
     <div
@@ -68,9 +69,10 @@ const ProductById = () => {
         textAlign: 'center',
         cursor: 'pointer',
         width: '40px',
-        height: '40px'
+        height: '40px',
       }}
-      onClick={() => setVariant(item)}>
+      onClick={() => setVariant(item)}
+    >
       {variant === item && (
         <StarsIcon
           style={{
@@ -78,20 +80,20 @@ const ProductById = () => {
             fontSize: '30px',
             marginTop: '5px',
             backgroundColor: 'rgba(0, 0, 0, 0.75)',
-            borderRadius: '50%'
+            borderRadius: '50%',
           }}
         />
       )}
     </div>
-  ))
+  ));
 
   const openSizes = () => {
-    setOpenSizesBox(!openSizesBox)
-  }
+    setOpenSizesBox(!openSizesBox);
+  };
 
   const openVariants = () => {
-    setOpenVariantsBox(!openVariantsBox)
-  }
+    setOpenVariantsBox(!openVariantsBox);
+  };
 
   const setNewProductHandler = () => {
     setNewProduct({
@@ -102,20 +104,20 @@ const ProductById = () => {
       sizes: size,
       variant: variant,
       categories: product.categories,
-      image: product.image
-    })
-  }
+      image: product.image,
+    });
+  };
   const newProductHandler = () => {
     if (newProduct) {
-      dispatch(addToCart(newProduct))
+      dispatch(addToCart(newProduct));
     }
-    setNewProduct(undefined)
-  }
+    setNewProduct(undefined);
+  };
   const newProductCancelHandler = () => {
-    setNewProduct(undefined)
-    setSize(product.sizes)
-    setVariant(product.variant)
-  }
+    setNewProduct(undefined);
+    setSize(product.sizes);
+    setVariant(product.variant);
+  };
 
   return (
     <div className="productId">
@@ -124,8 +126,9 @@ const ProductById = () => {
           className="productId__set-product"
           onClick={setNewProductHandler}
           style={{
-            backgroundColor: '#5D8A68'
-          }}>
+            backgroundColor: '#5D8A68',
+          }}
+        >
           <h3>Check what you have choosen</h3>
         </div>
       ) : (
@@ -144,7 +147,7 @@ const ProductById = () => {
                 style={{
                   width: '200px',
                   height: '200px',
-                  objectFit: 'cover'
+                  objectFit: 'cover',
                 }}
               />
             </div>
@@ -164,9 +167,10 @@ const ProductById = () => {
                 backgroundColor: 'green',
                 padding: '10px',
                 borderRadius: '5px',
-                width: '100px'
+                width: '100px',
               }}
-              onClick={newProductHandler}>
+              onClick={newProductHandler}
+            >
               Send
             </div>
             <div
@@ -175,9 +179,10 @@ const ProductById = () => {
                 backgroundColor: 'red',
                 padding: '10px',
                 borderRadius: '5px',
-                width: '100px'
+                width: '100px',
               }}
-              onClick={newProductCancelHandler}>
+              onClick={newProductCancelHandler}
+            >
               Cancel
             </div>
           </div>
@@ -203,8 +208,9 @@ const ProductById = () => {
                         boxShadow: '0 0 5px 0 lightgray',
                         border: '1px solid #F7F7F7',
                         padding: '3px 5px',
-                        textAlign: 'center'
-                      }}>
+                        textAlign: 'center',
+                      }}
+                    >
                       {size ? size : product.sizes}
                     </span>
                     {openSizesBox ? (
@@ -231,9 +237,10 @@ const ProductById = () => {
                       borderRadius: '5px',
                       display: 'inline-block',
                       boxShadow: `0 0 5px 0 ${VariantsColors[variant]}`,
-                      border: '1px solid #F7F7F7'
+                      border: '1px solid #F7F7F7',
                     }}
-                    className="productId__item__info__small-details--variant--color">
+                    className="productId__item__info__small-details--variant--color"
+                  >
                     {/* {variant} */}
                   </span>
                 )}
@@ -267,7 +274,7 @@ const ProductById = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default ProductById
+export default ProductById;

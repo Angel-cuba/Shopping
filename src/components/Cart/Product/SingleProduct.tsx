@@ -1,23 +1,23 @@
-import React from 'react'
-import AddBoxIcon from '@mui/icons-material/AddBox'
-import IndeterminateCheckBoxIcon from '@mui/icons-material/IndeterminateCheckBox'
-import { useDispatch } from 'react-redux'
+import React from 'react';
+import AddBoxIcon from '@mui/icons-material/AddBox';
+import IndeterminateCheckBoxIcon from '@mui/icons-material/IndeterminateCheckBox';
+import { useDispatch } from 'react-redux';
 
-import { AppDispatch } from '../../../redux/store'
-import { addToCart, removeFromCart } from '../../../redux/actions/CartActions'
-import { CartProduct } from '../../../interfaces/cart/CartType'
-import { Link } from 'react-router-dom'
-import './SingleProduct.scss'
+import { AppDispatch } from '../../../redux/store';
+import { addToCart, removeFromCart } from '../../../redux/actions/CartActions';
+import { CartProduct } from '../../../interfaces/cart/CartType';
+import { Link } from 'react-router-dom';
+import './SingleProduct.scss';
 
 const SingleProduct = ({ item }: { item: CartProduct }) => {
-  const dispatch = useDispatch<AppDispatch>()
+  const dispatch = useDispatch<AppDispatch>();
 
   const addItemToCart = () => {
-    dispatch(addToCart(item))
-  }
+    dispatch(addToCart(item));
+  };
   const removeItemFromCart = () => {
-    dispatch(removeFromCart(item))
-  }
+    dispatch(removeFromCart(item));
+  };
 
   return (
     <div className="cart-product" key={item.id}>
@@ -29,7 +29,7 @@ const SingleProduct = ({ item }: { item: CartProduct }) => {
             style={{
               width: '80px',
               height: '80px',
-              objectFit: 'cover'
+              objectFit: 'cover',
             }}
           />
         </Link>
@@ -54,15 +54,16 @@ const SingleProduct = ({ item }: { item: CartProduct }) => {
               position: 'absolute',
               top: '3px',
               left: '2%',
-              borderRadius: '25px'
-            }}></p>
+              borderRadius: '25px',
+            }}
+          ></p>
         </div>
         <p className="cart-product__buttons--price">
           ${item.quantity ? (item?.quantity * item?.price).toFixed(2) : item?.price}
         </p>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default SingleProduct
+export default SingleProduct;
