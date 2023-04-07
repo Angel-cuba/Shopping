@@ -1,46 +1,75 @@
-# Getting Started with Create React App
+# Online Shoes Store
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+**Table of Content**
+- Desciption
+- Features
+- UI
+  * Common UI
+  * Admin
+- Stack
 
-## Available Scripts
+## Description
+"Online Shoes Store" is an eCommerce project built with React that allows users to browse a selection of fashion products and make purchases online. The website is designed to be user-friendly and accessible from any device, from desktop computers to mobile phones.
 
-In the project directory, you can run:
+The store features a catalog of products organized by categories, making it easy for users to find what they're looking for. Each product has a detailed page with images, description, price, and size and color options. Users can also add products to their shopping cart and adjust quantities before finalizing their purchase.
+Additionally, users can view their order history and update their shipping and billing information in their user profile.
 
-### `npm start`
+The website also has an administration area that allows site owners to add new products, update existing product information, and view pending and completed orders.
+### Features
+- The integrated inventory management system ensures that users can only purchase products that are in stock.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+In summary, "Online Shoes Store" is a React-based eCommerce project that provides an easy and secure online shopping experience for users and an efficient store management tool for site owners.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## Characteristic
+- User-friendly interface and intuitive navigation
+- Product catalog organized by categories
+- Detailed product pages with images, description, price, and recommendations
+- Shopping cart with adjustable quantities
+- Admin area for adding/updating products and managing orders
+- Fast page loading and optimized performance
+- Easy customization with React components and flexible styling options
+  ### Ongoing
+- Responsive design optimized for all devices
+- User profile with order history and shipping/billing information management(UI)
+  ### Features
+- Secure payment integration with, e.g: **Stripe, PaYPal**, etc...
+- Inventory management system to ensure product availability
+- Multi-language support for reaching a global audience
 
-### `npm test`
+# UI
+  ### Login 
+  
+<img width="725" alt="Captura de pantalla 2023-04-02 a las 19 39 27" src="https://user-images.githubusercontent.com/69958243/229366583-3886225d-96e5-450e-b87a-a978a3a7fa91.png">
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+  ### All store's products
+  
+<img width="1496" alt="Captura de pantalla 2023-04-02 a las 19 44 10" src="https://user-images.githubusercontent.com/69958243/229366829-f9767e92-8f9e-4013-8985-d7c08ebbedc3.png">
 
-### `npm run build`
+#### User likes some from here, with just a click this product goes to cart 
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+<img width="284" alt="Captura de pantalla 2023-04-02 a las 19 51 10" src="https://user-images.githubusercontent.com/69958243/229367201-3210fbd1-adab-4f3c-9e16-ea4ca8cb8459.png">
+<img width="481" alt="Captura de pantalla 2023-04-02 a las 19 51 30" src="https://user-images.githubusercontent.com/69958243/229367209-e3d52f3a-4dda-4c81-84df-25c2dc91ba05.png">
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+###### If wants to know more about a specific product, is avaible a view for this, also, from here could be sure of what has choosen by selecting the size and colour of preference. 
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+<img width="1500" alt="Captura de pantalla 2023-04-02 a las 20 03 09" src="https://user-images.githubusercontent.com/69958243/229367882-a27f4968-626e-4653-94b5-8e28ece082ce.png">
 
-### `npm run eject`
+Once is ready to pay, click the `bank icon` in the left side of cart <img width="101" alt="Captura de pantalla 2023-04-02 a las 20 10 43" src="https://user-images.githubusercontent.com/69958243/229369186-7007ebf3-1b21-41b9-be4f-385b1267726d.png">.
+After this, user goes to the payment side(**ongoing work**)
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+<img width="1346" alt="Captura de pantalla 2023-04-02 a las 20 09 29" src="https://user-images.githubusercontent.com/69958243/229368502-2fac489a-0b84-44c2-a562-704e64745759.png">
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+#### Admin has an extra navbar link, that goes to admin panel.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+<img width="1019" alt="Captura de pantalla 2023-04-02 a las 19 59 36" src="https://user-images.githubusercontent.com/69958243/229369417-48864278-6e1e-4718-8bd4-8ed86eacaf9a.png">
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+`From admin panel, once the product catalog is open, each product item has an extra feature that allows to update or delete the product`
 
-## Learn More
+<img width="264" alt="Captura de pantalla 2023-04-02 a las 20 39 26" src="https://user-images.githubusercontent.com/69958243/229369519-1b46f10d-d138-46ba-858e-02d9ce32818a.png">
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+# Stack
+  - React
+  - Redux
+  - Sass
+  - Json file as data.
+  
