@@ -1,39 +1,54 @@
 export type Product = {
-  id: number
-  name: string
-  price: number
-  description: string
-  image: string
-  categories: Category
-  variant: Variant
-  sizes: Size
-}
+  id: number;
+  name: string;
+  price: number;
+  description: string;
+  image: string;
+  categories: Category;
+  variant: Variant;
+  sizes: Size;
+};
 
 export type NewProduct = {
-  id: number
-  name: string
-  price: number
-  description: string
-  image: string
-  categories: string
-  variant: string
-  sizes: string
-}
+  id: number;
+  name: string;
+  price: number;
+  description: string;
+  image: string;
+  categories: string;
+  variant: string;
+  sizes: string;
+};
 
 export type NewProductToStock = {
-  id?: number
-  name: string
-  description: string
-  image: string
-  categories: string
-  variant: string
-  sizes: string
-  price: number
-}
+  id?: number;
+  name: string;
+  description: string;
+  image: string;
+  categories: string;
+  variant: string;
+  sizes: string;
+  price: number;
+};
 
-type Category = 'Summer' | 'Winter' | 'Spring' | 'Autumn'
+type Category = 'Summer' | 'Winter' | 'Spring' | 'Autumn';
 
-type Size = '5' | '5.5' | '6' | '6.5' | '7' | '7.5' | '8' | '8.5' | '9' | '9.5' | '10' | '10.5' | '11' | '11.5' | '12'
+type Size =
+  | '5'
+  | '5.5'
+  | '6'
+  | '6.5'
+  | '7'
+  | '7.5'
+  | '8'
+  | '8.5'
+  | '9'
+  | '9.5'
+  | '10'
+  | '10.5'
+  | '11'
+  | '11.5'
+  | '12';
 
 type Variant =
   | 'Crimson'
@@ -43,9 +58,25 @@ type Variant =
   | 'Violet'
   | 'Fuscia'
   | 'Pink'
-  | 'Goldenrod'
+  | 'Goldenrod';
 
-export const Sizes = ['5', '5.5', '6', '6.5', '7', '7.5', '8', '8.5', '9', '9.5', '10', '10.5', '11', '11.5', '12']
+export const Sizes = [
+  '5',
+  '5.5',
+  '6',
+  '6.5',
+  '7',
+  '7.5',
+  '8',
+  '8.5',
+  '9',
+  '9.5',
+  '10',
+  '10.5',
+  '11',
+  '11.5',
+  '12',
+];
 export const Variants = [
   'Crimson',
   'Teal',
@@ -54,11 +85,11 @@ export const Variants = [
   'Violet',
   'Fuscia',
   'Pink',
-  'Goldenrod'
-]
+  'Goldenrod',
+];
 type VariantColorsType = {
-  [key: string]: string
-}
+  [key: string]: string;
+};
 export const VariantsColors: VariantColorsType = {
   Crimson: '#dc143c',
   Teal: '#008080',
@@ -67,5 +98,5 @@ export const VariantsColors: VariantColorsType = {
   Violet: '#ee82ee',
   Fuscia: '#ff00ff',
   Pink: '#ffc0cb',
-  Goldenrod: '#daa520'
-}
+  Goldenrod: '#daa520',
+};
