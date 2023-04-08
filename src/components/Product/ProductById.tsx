@@ -111,12 +111,18 @@ const ProductById = () => {
       categories: product.categories,
       image: product.image,
     });
+    if (openSizesBox) {
+      setOpenSizesBox(false);
+    }
+    if (openVariantsBox) {
+      setOpenVariantsBox(false);
+    }
   };
   const newProductHandler = () => {
     if (newProduct) {
-      dispatch(addToCart(newProduct));
+      dispatch(addToCart(newProduct)); 
+      newProductCancelHandler();
     }
-    setNewProduct(undefined);
   };
   const newProductCancelHandler = () => {
     setNewProduct(undefined);
@@ -245,8 +251,7 @@ const ProductById = () => {
                       border: '1px solid #F7F7F7',
                     }}
                     className="productId__item__info__small-details--variant--color"
-                  >
-                  </span>
+                  ></span>
                 )}
                 {product.variant && (
                   <>
