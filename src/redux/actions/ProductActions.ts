@@ -55,7 +55,6 @@ export const addProductToStock = (product: NewProductToStock) => {
   return async (dispatch: Dispatch) => {
     try {
       dispatch({ type: LOADING })
-      console.log('addProductToStock', product)
       dispatch(addProduct(product))
     } catch (error) {
       dispatch({ type: ERROR, payload: error })
