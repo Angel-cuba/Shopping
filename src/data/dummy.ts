@@ -1,4 +1,4 @@
-import { Product } from '../interfaces/products/ProductType'
+import { Product } from '../interfaces/products/ProductType';
 
 export const PRODUCTS: Product[] = [
   {
@@ -11,7 +11,7 @@ export const PRODUCTS: Product[] = [
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679761938/air-max-270-mens-shoes-KkLcGR_o7h0wd.png',
     variant: 'Crimson',
     sizes: '6',
-    price: 102.56
+    price: 102.56,
   },
   {
     id: 2,
@@ -23,7 +23,7 @@ export const PRODUCTS: Product[] = [
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679993566/shoes/images_6_hqvorc.png',
     variant: 'Goldenrod',
     sizes: '7.5',
-    price: 22.45
+    price: 22.45,
   },
   {
     id: 3,
@@ -35,7 +35,7 @@ export const PRODUCTS: Product[] = [
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679993566/shoes/precision-6-basketball-shoes-l7zDFB_rlezav.png',
     variant: 'Violet',
     sizes: '7.5',
-    price: 80.99
+    price: 80.99,
   },
   {
     id: 4,
@@ -46,7 +46,7 @@ export const PRODUCTS: Product[] = [
     image: 'https://res.cloudinary.com/dqaerysgb/image/upload/v1679993565/shoes/images_o04fcw.png',
     variant: 'Crimson',
     sizes: '6',
-    price: 60.95
+    price: 60.95,
   },
   {
     id: 5,
@@ -58,7 +58,7 @@ export const PRODUCTS: Product[] = [
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679993565/shoes/images_8_spmfby.png',
     variant: 'Teal',
     sizes: '9.5',
-    price: 543.99
+    price: 543.99,
   },
   {
     id: 6,
@@ -70,7 +70,7 @@ export const PRODUCTS: Product[] = [
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679761938/air-max-270-mens-shoes-KkLcGR_o7h0wd.png',
     variant: 'Crimson',
     sizes: '9.5',
-    price: 150.99
+    price: 150.99,
   },
   {
     id: 7,
@@ -82,7 +82,7 @@ export const PRODUCTS: Product[] = [
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679761938/air-max-270-mens-shoes-KkLcGR_o7h0wd.png',
     variant: 'Teal',
     sizes: '11.5',
-    price: 610.99
+    price: 610.99,
   },
   {
     id: 8,
@@ -95,7 +95,7 @@ export const PRODUCTS: Product[] = [
 
     variant: 'Aquamarine',
     sizes: '11.5',
-    price: 710.99
+    price: 710.99,
   },
   {
     id: 9,
@@ -106,8 +106,8 @@ export const PRODUCTS: Product[] = [
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679995206/shoes/images_4_bcb5tl.png',
 
     variant: 'Maroon',
-    sizes: '11.5',
-    price: 810.99
+    sizes: '10.5',
+    price: 810.99,
   },
   {
     id: 10,
@@ -119,7 +119,7 @@ export const PRODUCTS: Product[] = [
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679993565/shoes/images_1_gnczxb.png',
     variant: 'Violet',
     sizes: '12',
-    price: 910.99
+    price: 910.99,
   },
   {
     id: 11,
@@ -131,7 +131,7 @@ export const PRODUCTS: Product[] = [
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679993565/shoes/images_7_nor1an.png',
     variant: 'Fuscia',
     sizes: '9.5',
-    price: 100.99
+    price: 100.99,
   },
   {
     id: 12,
@@ -142,7 +142,7 @@ export const PRODUCTS: Product[] = [
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679993565/shoes/images_4_svmpdu.png',
     variant: 'Goldenrod',
     sizes: '7.5',
-    price: 109.79
+    price: 109.79,
   },
   {
     id: 13,
@@ -154,7 +154,7 @@ export const PRODUCTS: Product[] = [
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679993565/shoes/images_1_gnczxb.png',
     variant: 'Maroon',
     sizes: '6',
-    price: 507.81
+    price: 507.81,
   },
   {
     id: 14,
@@ -167,7 +167,7 @@ export const PRODUCTS: Product[] = [
     categories: 'Autumn',
     variant: 'Maroon',
     sizes: '12',
-    price: 855.999
+    price: 855.999,
   },
   {
     id: 15,
@@ -179,7 +179,7 @@ export const PRODUCTS: Product[] = [
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679993564/shoes/images_2_p2wpfo.png',
     variant: 'Aquamarine',
     sizes: '11.5',
-    price: 82185.14
+    price: 82185.14,
   },
   {
     id: 16,
@@ -190,7 +190,7 @@ export const PRODUCTS: Product[] = [
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679995209/shoes/Varion-Indoor-Sports-Shoes_wdipwa.png',
     variant: 'Pink',
     sizes: '7.5',
-    price: 84.5
+    price: 84.5,
   },
   {
     id: 17,
@@ -202,7 +202,7 @@ export const PRODUCTS: Product[] = [
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679995208/shoes/images_9_vg9wgg.png',
     variant: 'Violet',
     sizes: '9.5',
-    price: 9898.99
+    price: 9898.99,
   },
   {
     id: 18,
@@ -214,7 +214,7 @@ export const PRODUCTS: Product[] = [
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679993566/shoes/images_6_hqvorc.png',
     variant: 'Violet',
     sizes: '7.5',
-    price: 5484
+    price: 5484,
   },
   {
     id: 19,
@@ -225,7 +225,7 @@ export const PRODUCTS: Product[] = [
     image: 'https://res.cloudinary.com/dqaerysgb/image/upload/v1679995207/shoes/1_j2n1rx.png',
     variant: 'Aquamarine',
     sizes: '11.5',
-    price: 555.99
+    price: 555.99,
   },
   {
     id: 20,
@@ -237,7 +237,7 @@ export const PRODUCTS: Product[] = [
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679993566/shoes/precision-6-basketball-shoes-l7zDFB_rlezav.png',
     variant: 'Teal',
     sizes: '8',
-    price: 999.99
+    price: 999.99,
   },
   {
     id: 21,
@@ -249,7 +249,7 @@ export const PRODUCTS: Product[] = [
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679995207/shoes/ecco-biom-2-1368501_tppmla.png',
     variant: 'Teal',
     sizes: '9.5',
-    price: 222.99
+    price: 222.99,
   },
   {
     id: 22,
@@ -261,7 +261,7 @@ export const PRODUCTS: Product[] = [
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679995207/shoes/images_5_mgdkor.png',
     variant: 'Maroon',
     sizes: '7.5',
-    price: 333.99
+    price: 333.99,
   },
   {
     id: 23,
@@ -273,7 +273,7 @@ export const PRODUCTS: Product[] = [
     image:
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679995207/shoes/images_8_drvkcn.png',
     sizes: '6',
-    price: 444.99
+    price: 444.99,
   },
   {
     id: 24,
@@ -285,7 +285,7 @@ export const PRODUCTS: Product[] = [
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679995207/shoes/images_6_t13ydu.png',
     variant: 'Maroon',
     sizes: '9.5',
-    price: 568.99
+    price: 568.99,
   },
   {
     id: 25,
@@ -297,7 +297,7 @@ export const PRODUCTS: Product[] = [
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679995206/shoes/images_2_fcu3ei.png',
     variant: 'Crimson',
     sizes: '7.5',
-    price: 8745.99
+    price: 8745.99,
   },
   {
     id: 26,
@@ -309,7 +309,7 @@ export const PRODUCTS: Product[] = [
     image:
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679993565/shoes/images_1_gnczxb.png',
     sizes: '11.5',
-    price: 98752.99
+    price: 98752.99,
   },
   {
     id: 27,
@@ -321,7 +321,7 @@ export const PRODUCTS: Product[] = [
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679995206/shoes/images_4_bcb5tl.png',
     variant: 'Aquamarine',
     sizes: '8',
-    price: 977.99
+    price: 977.99,
   },
   {
     id: 28,
@@ -333,7 +333,7 @@ export const PRODUCTS: Product[] = [
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679995206/shoes/images_3_sgzz2d.png',
     variant: 'Violet',
     sizes: '9.5',
-    price: 12354.99
+    price: 12354.99,
   },
   {
     id: 29,
@@ -344,7 +344,7 @@ export const PRODUCTS: Product[] = [
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679993564/shoes/descarga_iqjs7w.png',
     variant: 'Maroon',
     sizes: '7.5',
-    price: 198745.99
+    price: 198745.99,
   },
   {
     id: 30,
@@ -356,6 +356,196 @@ export const PRODUCTS: Product[] = [
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679993564/shoes/descarga_1_yntgd3.png',
     variant: 'Maroon',
     sizes: '7.5',
-    price: 9874563.99
-  }
-]
+    price: 9874563.99,
+  },
+  {
+    id: 31,
+    name: 'Ashford Hospitality Trust Inc',
+    description: 'In the early 21st century Nike began selling sports-technology accessories.',
+    categories: 'Summer',
+    image:
+      'https://res.cloudinary.com/dqaerysgb/image/upload/v1679993566/shoes/precision-6-basketball-shoes-l7zDFB_rlezav.png',
+
+    variant: 'Maroon',
+    sizes: '10.5',
+    price: 810.99,
+  },
+  {
+    id: 32,
+    name: 'Ashford Hospitality Trust Inc',
+    description: 'In the early 21st century Nike began selling sports-technology accessories.',
+    categories: 'Autumn',
+    image:
+      'https://res.cloudinary.com/dqaerysgb/image/upload/v1679995206/shoes/images_4_bcb5tl.png',
+
+    variant: 'Maroon',
+    sizes: '10.5',
+    price: 810.99,
+  },
+  {
+    id: 33,
+    name: 'Ashford Hospitality Trust Inc',
+    description: 'In the early 21st century Nike began selling sports-technology accessories.',
+    categories: 'Spring',
+    image:
+      'https://res.cloudinary.com/dqaerysgb/image/upload/v1679995207/shoes/images_6_t13ydu.png',
+
+    variant: 'Teal',
+    sizes: '10.5',
+    price: 810.99,
+  },
+  {
+    id: 34,
+    name: 'Hamilton Bancorp, Inc.',
+    description:
+      'Platinum certification and will be highlighted by natural daylight, and a gray water treatment center.',
+    categories: 'Autumn',
+    image:
+      'https://res.cloudinary.com/dqaerysgb/image/upload/v1679993564/shoes/images_2_p2wpfo.png',
+    variant: 'Aquamarine',
+    sizes: '11.5',
+    price: 82185.14,
+  },
+  {
+    id: 35,
+    name: 'Citigroup Inc.',
+    description: 'In the early 21st century Nike began selling sports-technology accessories.',
+    categories: 'Winter',
+    image:
+      'https://res.cloudinary.com/dqaerysgb/image/upload/v1679995209/shoes/Varion-Indoor-Sports-Shoes_wdipwa.png',
+    variant: 'Pink',
+    sizes: '7.5',
+    price: 84.5,
+  },
+  {
+    id: 36,
+    name: 'Regal Beloit Corporation',
+    description:
+      'Part of Nike’s success is owed to endorsements by such athletes as Michael Jordan, Mia Hamm, Roger Federer, and Tiger Woods.',
+    categories: 'Summer',
+    image:
+      'https://res.cloudinary.com/dqaerysgb/image/upload/v1679995208/shoes/images_9_vg9wgg.png',
+    variant: 'Violet',
+    sizes: '9.5',
+    price: 9898.99,
+  },
+  {
+    id: 37,
+    name: 'Liberty Interactive Corporation',
+    description:
+      'On December 19, 2013, Nikes quarterly profit rose due to a 13 percent increase in global orders for merchandise since April of that year. Future orders of shoes or clothes for delivery between December and April, rose to $10.4 billion. ',
+    categories: 'Winter',
+    image:
+      'https://res.cloudinary.com/dqaerysgb/image/upload/v1679993566/shoes/images_6_hqvorc.png',
+    variant: 'Violet',
+    sizes: '7.5',
+    price: 5484,
+  },
+  {
+    id: 38,
+    name: 'Violet Hills Bancorp, Inc.',
+    description:
+      'Cole Haan (1988; sold in 2012) and Converse, Inc. (2003), the sports-equipment producer Canstar Sports, Inc. ',
+    categories: 'Winter',
+    image: 'https://res.cloudinary.com/dqaerysgb/image/upload/v1679995207/shoes/1_j2n1rx.png',
+    variant: 'Aquamarine',
+    sizes: '11.5',
+    price: 555.99,
+  },
+  {
+    id: 39,
+    name: 'FlexShares Disciplined Duration MBS Index Fund',
+    description:
+      'Wieden+Kennedy, Nikes primary ad agency, has worked with Nike to create many print and television advertisements, and Wieden+Kennedy remains Nikes primary ad agency.',
+    categories: 'Winter',
+    image:
+      'https://res.cloudinary.com/dqaerysgb/image/upload/v1679993566/shoes/precision-6-basketball-shoes-l7zDFB_rlezav.png',
+    variant: 'Teal',
+    sizes: '8',
+    price: 999.99,
+  },
+  {
+    id: 40,
+    name: 'Artisan Partners Asset Management Inc.',
+    description:
+      'On December 19, 2013, Nikes quarterly profit rose due to a 13 percent increase in global orders for merchandise since April of that year. Future orders of shoes or clothes for delivery between December and April, rose to $10.4 billion. ',
+    categories: 'Winter',
+    image:
+      'https://res.cloudinary.com/dqaerysgb/image/upload/v1679995207/shoes/ecco-biom-2-1368501_tppmla.png',
+    variant: 'Teal',
+    sizes: '9.5',
+    price: 222.99,
+  },
+  {
+    id: 41,
+    name: 'Validus Holdings, Ltd.',
+    description:
+      'Beaverton, city, Washington county, northwestern Oregon, U.S., in the Tualatin Valley, immediately west of Portland. ',
+    categories: 'Spring',
+    image:
+      'https://res.cloudinary.com/dqaerysgb/image/upload/v1679995207/shoes/images_5_mgdkor.png',
+    variant: 'Maroon',
+    sizes: '7.5',
+    price: 333.99,
+  },
+  {
+    id: 42,
+    name: 'Voya Infrastructure, Industrials and Materials Fund',
+    description:
+      'Wieden+Kennedy, Nikes primary ad agency, has worked with Nike to create many print and television advertisements, and Wieden+Kennedy remains Nikes primary ad agency.',
+    categories: 'Autumn',
+    variant: 'Fuscia',
+    image:
+      'https://res.cloudinary.com/dqaerysgb/image/upload/v1679995207/shoes/images_8_drvkcn.png',
+    sizes: '6',
+    price: 444.99,
+  },
+  {
+    id: 43,
+    name: 'Greif Bros. Corporation',
+    description:
+      'Part of Nike’s success is owed to endorsements by such athletes as Michael Jordan, Mia Hamm, Roger Federer, and Tiger Woods.',
+    categories: 'Summer',
+    image:
+      'https://res.cloudinary.com/dqaerysgb/image/upload/v1679995207/shoes/images_6_t13ydu.png',
+    variant: 'Maroon',
+    sizes: '9.5',
+    price: 568.99,
+  },
+  {
+    id: 44,
+    name: 'Fortress Transportation and Infrastructure Investors LLC',
+    description:
+      'Cole Haan (1988; sold in 2012) and Converse, Inc. (2003), the sports-equipment producer Canstar Sports, Inc. ',
+    categories: 'Spring',
+    image:
+      'https://res.cloudinary.com/dqaerysgb/image/upload/v1679995206/shoes/images_2_fcu3ei.png',
+    variant: 'Crimson',
+    sizes: '7.5',
+    price: 8745.99,
+  },
+  {
+    id: 45,
+    name: 'Atlanticus Holdings Corporation',
+    description:
+      'From the late 1980s Nike steadily expanded its business and diversified its product line through numerous acquisitions',
+    categories: 'Spring',
+    variant: 'Aquamarine',
+    image:
+      'https://res.cloudinary.com/dqaerysgb/image/upload/v1679993565/shoes/images_1_gnczxb.png',
+    sizes: '11.5',
+    price: 98752.99,
+  },
+  {
+    id: 46,
+    name: 'ServiceNow, Inc.',
+    description:
+      'In 2008, Nike introduced the Air Jordan XX3, a high-performance basketball shoe designed with the environment in mind.',
+    categories: 'Summer',
+    image:
+      'https://res.cloudinary.com/dqaerysgb/image/upload/v1679995206/shoes/images_4_bcb5tl.png',
+    variant: 'Aquamarine',
+    sizes: '8',
+    price: 977.99,
+  },
+];
