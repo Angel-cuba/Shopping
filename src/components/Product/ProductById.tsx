@@ -42,14 +42,19 @@ const ProductById = () => {
     <div
       key={item}
       style={{
-        backgroundColor: item === size ? '#5D8A68' : '#f0f0f0',
+        backgroundColor: item === size ? '#5D8A68' : '#F7F7F7',
+        color: item === size ? '#f0f0f0' : 'black',
         borderRadius: '5px',
-        marginRight: '10px',
+        margin: '10px',
         boxShadow: '0 0 5px 0 lightgray',
-        border: '1px solid #F7F7F7',
+        border: item === size ? '1px solid #f0f0f0' : '',
         textAlign: 'center',
         cursor: 'pointer',
-        padding: '5px 10px',
+        minWidth: '50px',
+        height: '40px',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
       }}
       onClick={() => setSize(item)}
     >
@@ -241,7 +246,6 @@ const ProductById = () => {
                     }}
                     className="productId__item__info__small-details--variant--color"
                   >
-                    {/* {variant} */}
                   </span>
                 )}
                 {product.variant && (
