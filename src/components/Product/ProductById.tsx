@@ -13,9 +13,9 @@ import {
   Variants,
   VariantsColors
 } from '../../interfaces/products/ProductType'
-import ProductItem from './Product'
 import RecommendedProducts from './RecommendedProducts'
 import { addToCart } from '../../redux/actions/CartActions'
+import ProductItem from './Product'
 import './ProductById.scss'
 
 const ProductById = () => {
@@ -42,14 +42,19 @@ const ProductById = () => {
     <div
       key={item}
       style={{
-        backgroundColor: item === size ? '#5D8A68' : '#f0f0f0',
+        backgroundColor: item === size ? '#5D8A68' : '#F7F7F7',
+        color: item === size ? '#f0f0f0' : 'black',
         borderRadius: '5px',
-        marginRight: '10px',
+        margin: '10px',
         boxShadow: '0 0 5px 0 lightgray',
-        border: '1px solid #F7F7F7',
+        border: item === size ? '1px solid #f0f0f0' : '',
         textAlign: 'center',
         cursor: 'pointer',
-        padding: '5px 10px'
+        minWidth: '50px',
+        height: '40px',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center'
       }}
       onClick={() => setSize(item)}>
       {item}
@@ -104,12 +109,18 @@ const ProductById = () => {
       categories: product.categories,
       image: product.image
     })
+    if (openSizesBox) {
+      setOpenSizesBox(false)
+    }
+    if (openVariantsBox) {
+      setOpenVariantsBox(false)
+    }
   }
   const newProductHandler = () => {
     if (newProduct) {
       dispatch(addToCart(newProduct))
+      newProductCancelHandler()
     }
-    setNewProduct(undefined)
   }
   const newProductCancelHandler = () => {
     setNewProduct(undefined)
@@ -233,9 +244,7 @@ const ProductById = () => {
                       boxShadow: `0 0 5px 0 ${VariantsColors[variant]}`,
                       border: '1px solid #F7F7F7'
                     }}
-                    className="productId__item__info__small-details--variant--color">
-                    {/* {variant} */}
-                  </span>
+                    className="productId__item__info__small-details--variant--color"></span>
                 )}
                 {product.variant && (
                   <>
