@@ -50,9 +50,13 @@ In summary, "Online Shoes Store" is a React-based eCommerce project that provide
 <img width="284" alt="Captura de pantalla 2023-04-02 a las 19 51 10" src="https://user-images.githubusercontent.com/69958243/229367201-3210fbd1-adab-4f3c-9e16-ea4ca8cb8459.png">
 <img width="481" alt="Captura de pantalla 2023-04-02 a las 19 51 30" src="https://user-images.githubusercontent.com/69958243/229367209-e3d52f3a-4dda-4c81-84df-25c2dc91ba05.png">
 
-###### If wants to know more about a specific product, is avaible a view for this, also, from here could be sure of what has choosen by selecting the size and colour of preference. 
+###### If wants to know more about a specific product is avaible a view for this.
 
-<img width="1500" alt="Captura de pantalla 2023-04-02 a las 20 03 09" src="https://user-images.githubusercontent.com/69958243/229367882-a27f4968-626e-4653-94b5-8e28ece082ce.png">
+<img width="1209" alt="Captura de pantalla 2023-04-08 a las 14 00 12" src="https://user-images.githubusercontent.com/69958243/230718045-a1ada9fe-3c6b-413c-b48b-b61302c93024.png">
+
+###### Also, from here could be sure of what has choosen by selecting the size and colour of preference. 
+
+<img width="1209" alt="Captura de pantalla 2023-04-08 a las 14 01 20" src="https://user-images.githubusercontent.com/69958243/230717977-3ab0cc29-1ded-4fe1-b217-74b4592db3ea.png">
 
 Once is ready to pay, click the `bank icon` in the left side of cart <img width="101" alt="Captura de pantalla 2023-04-02 a las 20 10 43" src="https://user-images.githubusercontent.com/69958243/229369186-7007ebf3-1b21-41b9-be4f-385b1267726d.png">.
 After this, user goes to the payment side(**ongoing work**)
