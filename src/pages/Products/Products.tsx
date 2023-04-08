@@ -1,8 +1,8 @@
 import React from 'react'
 import { Input } from '../../components/Input/Input'
-import ProductItem from '../../components/Product/Product'
 import { Product } from '../../interfaces/products/ProductType'
 import './Products.scss'
+import ProductItem from '../../components/Product/Product'
 
 const Products = ({ products }: { products: Product[] }) => {
   const [size, setSize] = React.useState('')
@@ -14,9 +14,7 @@ const Products = ({ products }: { products: Product[] }) => {
   const handleChangeSize = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSize(event.target.value)
   }
-  const handleCategoryChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setCategory(event.target.value)
-  }
+
   const handleVariantChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setVariant(event.target.value)
   }
@@ -99,6 +97,18 @@ const Products = ({ products }: { products: Product[] }) => {
     setCategory('')
     setVariant('')
   }
+  const setCategoryValue = (event: React.MouseEvent<HTMLParagraphElement, MouseEvent>) => {
+    if (event.currentTarget.textContent === 'Summer') {
+      setCategory('Summer')
+    } else if (event.currentTarget.textContent === 'Winter') {
+      setCategory('Winter')
+    } else if (event.currentTarget.textContent === 'Autumn') {
+      setCategory('Autumn')
+    } else if (event.currentTarget.textContent === 'Spring') {
+      setCategory('Spring')
+    }
+  }
+  const seasson: string[] = ['Summer', 'Winter', 'Autumn', 'Spring']
   return (
     <div className="products">
       <div className="products__controlPanel" onClick={handleOpenFilters}>
@@ -107,13 +117,18 @@ const Products = ({ products }: { products: Product[] }) => {
       <div className="products__panel">
         <div className={openFilters ? 'products__panel--visible' : 'products__panel--hidden'}>
           <Input name="Size" value={size} placeholder="" type="text" onChange={handleChangeSize} />
-          <Input
-            name="Category"
-            value={category}
-            placeholder=""
-            type="text"
-            onChange={handleCategoryChange}
-          />
+          <div className="products__panel--visible__seasson">
+            {seasson.map((seasson: string) => {
+              return (
+                <p
+                  key={seasson}
+                  className="products__panel--visible__seasson__item"
+                  onClick={setCategoryValue}>
+                  {seasson}
+                </p>
+              )
+            })}
+          </div>
           <Input
             name="Variant"
             value={variant}
