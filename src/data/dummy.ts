@@ -106,7 +106,7 @@ export const PRODUCTS: Product[] = [
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679995206/shoes/images_4_bcb5tl.png',
 
     variant: 'Maroon',
-    sizes: '11.5',
+    sizes: '10.5',
     price: 810.99
   },
   {
@@ -357,5 +357,195 @@ export const PRODUCTS: Product[] = [
     variant: 'Maroon',
     sizes: '7.5',
     price: 9874563.99
+  },
+  {
+    id: 31,
+    name: 'Ashford Hospitality Trust Inc',
+    description: 'In the early 21st century Nike began selling sports-technology accessories.',
+    categories: 'Summer',
+    image:
+      'https://res.cloudinary.com/dqaerysgb/image/upload/v1679993566/shoes/precision-6-basketball-shoes-l7zDFB_rlezav.png',
+
+    variant: 'Maroon',
+    sizes: '10.5',
+    price: 810.99
+  },
+  {
+    id: 32,
+    name: 'Ashford Hospitality Trust Inc',
+    description: 'In the early 21st century Nike began selling sports-technology accessories.',
+    categories: 'Autumn',
+    image:
+      'https://res.cloudinary.com/dqaerysgb/image/upload/v1679995206/shoes/images_4_bcb5tl.png',
+
+    variant: 'Maroon',
+    sizes: '10.5',
+    price: 810.99
+  },
+  {
+    id: 33,
+    name: 'Ashford Hospitality Trust Inc',
+    description: 'In the early 21st century Nike began selling sports-technology accessories.',
+    categories: 'Spring',
+    image:
+      'https://res.cloudinary.com/dqaerysgb/image/upload/v1679995207/shoes/images_6_t13ydu.png',
+
+    variant: 'Teal',
+    sizes: '10.5',
+    price: 810.99
+  },
+  {
+    id: 34,
+    name: 'Hamilton Bancorp, Inc.',
+    description:
+      'Platinum certification and will be highlighted by natural daylight, and a gray water treatment center.',
+    categories: 'Autumn',
+    image:
+      'https://res.cloudinary.com/dqaerysgb/image/upload/v1679993564/shoes/images_2_p2wpfo.png',
+    variant: 'Aquamarine',
+    sizes: '11.5',
+    price: 82185.14
+  },
+  {
+    id: 35,
+    name: 'Citigroup Inc.',
+    description: 'In the early 21st century Nike began selling sports-technology accessories.',
+    categories: 'Winter',
+    image:
+      'https://res.cloudinary.com/dqaerysgb/image/upload/v1679995209/shoes/Varion-Indoor-Sports-Shoes_wdipwa.png',
+    variant: 'Pink',
+    sizes: '7.5',
+    price: 84.5
+  },
+  {
+    id: 36,
+    name: 'Regal Beloit Corporation',
+    description:
+      'Part of Nike’s success is owed to endorsements by such athletes as Michael Jordan, Mia Hamm, Roger Federer, and Tiger Woods.',
+    categories: 'Summer',
+    image:
+      'https://res.cloudinary.com/dqaerysgb/image/upload/v1679995208/shoes/images_9_vg9wgg.png',
+    variant: 'Violet',
+    sizes: '9.5',
+    price: 9898.99
+  },
+  {
+    id: 37,
+    name: 'Liberty Interactive Corporation',
+    description:
+      'On December 19, 2013, Nikes quarterly profit rose due to a 13 percent increase in global orders for merchandise since April of that year. Future orders of shoes or clothes for delivery between December and April, rose to $10.4 billion. ',
+    categories: 'Winter',
+    image:
+      'https://res.cloudinary.com/dqaerysgb/image/upload/v1679993566/shoes/images_6_hqvorc.png',
+    variant: 'Violet',
+    sizes: '7.5',
+    price: 5484
+  },
+  {
+    id: 38,
+    name: 'Violet Hills Bancorp, Inc.',
+    description:
+      'Cole Haan (1988; sold in 2012) and Converse, Inc. (2003), the sports-equipment producer Canstar Sports, Inc. ',
+    categories: 'Winter',
+    image: 'https://res.cloudinary.com/dqaerysgb/image/upload/v1679995207/shoes/1_j2n1rx.png',
+    variant: 'Aquamarine',
+    sizes: '11.5',
+    price: 555.99
+  },
+  {
+    id: 39,
+    name: 'FlexShares Disciplined Duration MBS Index Fund',
+    description:
+      'Wieden+Kennedy, Nikes primary ad agency, has worked with Nike to create many print and television advertisements, and Wieden+Kennedy remains Nikes primary ad agency.',
+    categories: 'Winter',
+    image:
+      'https://res.cloudinary.com/dqaerysgb/image/upload/v1679993566/shoes/precision-6-basketball-shoes-l7zDFB_rlezav.png',
+    variant: 'Teal',
+    sizes: '8',
+    price: 999.99
+  },
+  {
+    id: 40,
+    name: 'Artisan Partners Asset Management Inc.',
+    description:
+      'On December 19, 2013, Nikes quarterly profit rose due to a 13 percent increase in global orders for merchandise since April of that year. Future orders of shoes or clothes for delivery between December and April, rose to $10.4 billion. ',
+    categories: 'Winter',
+    image:
+      'https://res.cloudinary.com/dqaerysgb/image/upload/v1679995207/shoes/ecco-biom-2-1368501_tppmla.png',
+    variant: 'Teal',
+    sizes: '9.5',
+    price: 222.99
+  },
+  {
+    id: 41,
+    name: 'Validus Holdings, Ltd.',
+    description:
+      'Beaverton, city, Washington county, northwestern Oregon, U.S., in the Tualatin Valley, immediately west of Portland. ',
+    categories: 'Spring',
+    image:
+      'https://res.cloudinary.com/dqaerysgb/image/upload/v1679995207/shoes/images_5_mgdkor.png',
+    variant: 'Maroon',
+    sizes: '7.5',
+    price: 333.99
+  },
+  {
+    id: 42,
+    name: 'Voya Infrastructure, Industrials and Materials Fund',
+    description:
+      'Wieden+Kennedy, Nikes primary ad agency, has worked with Nike to create many print and television advertisements, and Wieden+Kennedy remains Nikes primary ad agency.',
+    categories: 'Autumn',
+    variant: 'Fuscia',
+    image:
+      'https://res.cloudinary.com/dqaerysgb/image/upload/v1679995207/shoes/images_8_drvkcn.png',
+    sizes: '6',
+    price: 444.99
+  },
+  {
+    id: 43,
+    name: 'Greif Bros. Corporation',
+    description:
+      'Part of Nike’s success is owed to endorsements by such athletes as Michael Jordan, Mia Hamm, Roger Federer, and Tiger Woods.',
+    categories: 'Summer',
+    image:
+      'https://res.cloudinary.com/dqaerysgb/image/upload/v1679995207/shoes/images_6_t13ydu.png',
+    variant: 'Maroon',
+    sizes: '9.5',
+    price: 568.99
+  },
+  {
+    id: 44,
+    name: 'Fortress Transportation and Infrastructure Investors LLC',
+    description:
+      'Cole Haan (1988; sold in 2012) and Converse, Inc. (2003), the sports-equipment producer Canstar Sports, Inc. ',
+    categories: 'Spring',
+    image:
+      'https://res.cloudinary.com/dqaerysgb/image/upload/v1679995206/shoes/images_2_fcu3ei.png',
+    variant: 'Crimson',
+    sizes: '7.5',
+    price: 8745.99
+  },
+  {
+    id: 45,
+    name: 'Atlanticus Holdings Corporation',
+    description:
+      'From the late 1980s Nike steadily expanded its business and diversified its product line through numerous acquisitions',
+    categories: 'Spring',
+    variant: 'Aquamarine',
+    image:
+      'https://res.cloudinary.com/dqaerysgb/image/upload/v1679993565/shoes/images_1_gnczxb.png',
+    sizes: '11.5',
+    price: 98752.99
+  },
+  {
+    id: 46,
+    name: 'ServiceNow, Inc.',
+    description:
+      'In 2008, Nike introduced the Air Jordan XX3, a high-performance basketball shoe designed with the environment in mind.',
+    categories: 'Summer',
+    image:
+      'https://res.cloudinary.com/dqaerysgb/image/upload/v1679995206/shoes/images_4_bcb5tl.png',
+    variant: 'Aquamarine',
+    sizes: '8',
+    price: 977.99
   }
 ]
