@@ -1,8 +1,9 @@
 import React from 'react'
 import { Input } from '../../components/Input/Input'
 import { Product } from '../../interfaces/products/ProductType'
-import './Products.scss'
 import ProductItem from '../../components/Product/Product'
+import ProductNotFound from '../../components/Product/ProductNotFound'
+import './Products.scss'
 
 const Products = ({ products }: { products: Product[] }) => {
   const [size, setSize] = React.useState('')
@@ -43,7 +44,12 @@ const Products = ({ products }: { products: Product[] }) => {
     const filtered = products.filter((product: Product) => {
       return product.name.toLocaleLowerCase().includes(singleFilter.toLowerCase())
     })
-    return filtered
+    if (filtered.length === 0) {
+      return <ProductNotFound valueNotFound={singleFilter} />
+    }
+    return filtered.map((product: Product) => {
+      return <ProductItem key={product.id} product={product} />
+    })
   }
 
   const handleOpenFilters = () => {
@@ -96,23 +102,28 @@ const Products = ({ products }: { products: Product[] }) => {
     setSize('')
     setCategory('')
     setVariant('')
+    setSingleFilter('')
+  }
+  const singleFilterToDefaultValue = () => {
+    setSingleFilter('')
   }
   const setCategoryValue = (event: React.MouseEvent<HTMLParagraphElement, MouseEvent>) => {
-    if (event.currentTarget.textContent === 'Summer') {
-      setCategory('Summer')
-    } else if (event.currentTarget.textContent === 'Winter') {
-      setCategory('Winter')
-    } else if (event.currentTarget.textContent === 'Autumn') {
-      setCategory('Autumn')
-    } else if (event.currentTarget.textContent === 'Spring') {
-      setCategory('Spring')
-    }
+    const value = event.currentTarget.textContent ?? ''
+    setCategory(value)
   }
   const seasson: string[] = ['Summer', 'Winter', 'Autumn', 'Spring']
   return (
     <div className="products">
       <div className="products__controlPanel" onClick={handleOpenFilters}>
-        {openFilters ? <p onClick={filtersToDefaultValue}>Hide filters</p> : 'Show filters'}
+        {openFilters ? (
+          <p className="products__controlPanel--button" onClick={filtersToDefaultValue}>
+            Hide filters
+          </p>
+        ) : (
+          <p className="products__controlPanel--button" onClick={singleFilterToDefaultValue}>
+            Open filters
+          </p>
+        )}
       </div>
       <div className="products__panel">
         <div className={openFilters ? 'products__panel--visible' : 'products__panel--hidden'}>
@@ -154,11 +165,7 @@ const Products = ({ products }: { products: Product[] }) => {
               return <ProductItem key={product.id} product={product} />
             })
           : null}
-        {singleFilter.length > 0
-          ? filterByName().map((product: Product) => {
-              return <ProductItem key={product.id} product={product} />
-            })
-          : null}
+        {singleFilter.length ? filterByName() : null}
         {showAllFitered()}
       </div>
     </div>
