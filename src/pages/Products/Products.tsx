@@ -45,12 +45,12 @@ const Products = ({ products }: { products: Product[] }) => {
       return product.name.toLocaleLowerCase().includes(singleFilter.toLowerCase());
     });
     if (filtered.length === 0) {
-      return <ProductNotFound />;
+      return <ProductNotFound valueNotFound={singleFilter}/>;
     }
     return filtered.map((product: Product) => {
       return <ProductItem key={product.id} product={product} />;
     });
-     };
+  };
 
   const handleOpenFilters = () => {
     setOpenFilters(!openFilters);
@@ -73,62 +73,38 @@ const Products = ({ products }: { products: Product[] }) => {
         return <ProductItem key={product.id} product={product} />;
       });
     } else if (size && category) {
-      const filtered = filterBySizes().map((product: Product) => {
+      return filterBySizes().map((product: Product) => {
         return <ProductItem key={product.id} product={product} />;
       });
-      if (filtered.length === 0) {
-        return <ProductNotFound />;
-      } else {
-        return filtered;
-      }
     } else if (size && variant) {
-      const filtered = filterBySizes().map((product: Product) => {
+      return filterBySizes().map((product: Product) => {
         return <ProductItem key={product.id} product={product} />;
       });
-      if (filtered.length === 0) {
-        return <ProductNotFound />;
-      } else {
-        return filtered;
-      }
     } else if (category && variant) {
-      const filtered = filterByCategory().map((product: Product) => {
+      return filterByCategory().map((product: Product) => {
         return <ProductItem key={product.id} product={product} />;
       });
-      if (filtered.length === 0) {
-        return <ProductNotFound />;
-      } else {
-        return filtered;
-      }
     } else if (size) {
-      const filtered = filterBySizes().map((product: Product) => {
+      return filterBySizes().map((product: Product) => {
         return <ProductItem key={product.id} product={product} />;
       });
-      if (filtered.length === 0) {
-        return <ProductNotFound />;
-      }
-      return filtered;
     } else if (category) {
-      const filtered = filterByCategory().map((product: Product) => {
+      return filterByCategory().map((product: Product) => {
         return <ProductItem key={product.id} product={product} />;
       });
-      if (filtered.length === 0) {
-        return <ProductNotFound />;
-      }
-      return filtered;
     } else if (variant) {
-      const filtered = filterByVariant().map((product: Product) => {
+      return filterByVariant().map((product: Product) => {
         return <ProductItem key={product.id} product={product} />;
       });
-      if (filtered.length === 0) {
-        return <ProductNotFound />;
-      }
-      return filtered;
     }
   };
   const filtersToDefaultValue = () => {
     setSize('');
     setCategory('');
     setVariant('');
+    setSingleFilter('');
+  };
+  const singleFilterToDefaultValue = () => {
     setSingleFilter('');
   };
   const setCategoryValue = (event: React.MouseEvent<HTMLParagraphElement, MouseEvent>) => {
@@ -139,7 +115,15 @@ const Products = ({ products }: { products: Product[] }) => {
   return (
     <div className="products">
       <div className="products__controlPanel" onClick={handleOpenFilters}>
-        {openFilters ? <p onClick={filtersToDefaultValue}>Hide filters</p> : 'Show filters'}
+        {openFilters ? (
+          <p className="products__controlPanel--button" onClick={filtersToDefaultValue}>
+            Hide filters
+          </p>
+        ) : (
+          <p className="products__controlPanel--button" onClick={singleFilterToDefaultValue}>
+            Open filters
+          </p>
+        )}
       </div>
       <div className="products__panel">
         <div className={openFilters ? 'products__panel--visible' : 'products__panel--hidden'}>
@@ -182,9 +166,7 @@ const Products = ({ products }: { products: Product[] }) => {
               return <ProductItem key={product.id} product={product} />;
             })
           : null}
-        {singleFilter.length 
-          ? filterByName()
-          : null}
+        {singleFilter.length ? filterByName() : null}
         {showAllFitered()}
       </div>
     </div>

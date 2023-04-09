@@ -120,7 +120,7 @@ const ProductById = () => {
   };
   const newProductHandler = () => {
     if (newProduct) {
-      dispatch(addToCart(newProduct)); 
+      dispatch(addToCart(newProduct));
       newProductCancelHandler();
     }
   };
@@ -222,7 +222,7 @@ const ProductById = () => {
                         textAlign: 'center',
                       }}
                     >
-                      {size ? size : product.sizes}
+                      {size}
                     </span>
                     {openSizesBox ? (
                       <ArrowDropUpIcon onClick={openSizes} />
