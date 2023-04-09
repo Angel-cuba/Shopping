@@ -2,6 +2,7 @@ import React from 'react';
 import { Input } from '../../components/Input/Input';
 import ProductItem from '../../components/Product/ProductItem';
 import { Product } from '../../interfaces/products/ProductType';
+import ProductNotFound from '../../components/Product/ProductNotFound';
 import './Products.scss';
 
 const Products = ({ products }: { products: Product[] }) => {
@@ -43,8 +44,13 @@ const Products = ({ products }: { products: Product[] }) => {
     const filtered = products.filter((product: Product) => {
       return product.name.toLocaleLowerCase().includes(singleFilter.toLowerCase());
     });
-    return filtered;
-  };
+    if (filtered.length === 0) {
+      return <ProductNotFound />;
+    }
+    return filtered.map((product: Product) => {
+      return <ProductItem key={product.id} product={product} />;
+    });
+     };
 
   const handleOpenFilters = () => {
     setOpenFilters(!openFilters);
@@ -67,46 +73,67 @@ const Products = ({ products }: { products: Product[] }) => {
         return <ProductItem key={product.id} product={product} />;
       });
     } else if (size && category) {
-      return filterBySizes().map((product: Product) => {
+      const filtered = filterBySizes().map((product: Product) => {
         return <ProductItem key={product.id} product={product} />;
       });
+      if (filtered.length === 0) {
+        return <ProductNotFound />;
+      } else {
+        return filtered;
+      }
     } else if (size && variant) {
-      return filterBySizes().map((product: Product) => {
+      const filtered = filterBySizes().map((product: Product) => {
         return <ProductItem key={product.id} product={product} />;
       });
+      if (filtered.length === 0) {
+        return <ProductNotFound />;
+      } else {
+        return filtered;
+      }
     } else if (category && variant) {
-      return filterByCategory().map((product: Product) => {
+      const filtered = filterByCategory().map((product: Product) => {
         return <ProductItem key={product.id} product={product} />;
       });
+      if (filtered.length === 0) {
+        return <ProductNotFound />;
+      } else {
+        return filtered;
+      }
     } else if (size) {
-      return filterBySizes().map((product: Product) => {
+      const filtered = filterBySizes().map((product: Product) => {
         return <ProductItem key={product.id} product={product} />;
       });
+      if (filtered.length === 0) {
+        return <ProductNotFound />;
+      }
+      return filtered;
     } else if (category) {
-      return filterByCategory().map((product: Product) => {
+      const filtered = filterByCategory().map((product: Product) => {
         return <ProductItem key={product.id} product={product} />;
       });
+      if (filtered.length === 0) {
+        return <ProductNotFound />;
+      }
+      return filtered;
     } else if (variant) {
-      return filterByVariant().map((product: Product) => {
+      const filtered = filterByVariant().map((product: Product) => {
         return <ProductItem key={product.id} product={product} />;
       });
+      if (filtered.length === 0) {
+        return <ProductNotFound />;
+      }
+      return filtered;
     }
   };
   const filtersToDefaultValue = () => {
     setSize('');
     setCategory('');
     setVariant('');
+    setSingleFilter('');
   };
   const setCategoryValue = (event: React.MouseEvent<HTMLParagraphElement, MouseEvent>) => {
-    if (event.currentTarget.textContent === 'Summer') {
-      setCategory('Summer');
-    } else if (event.currentTarget.textContent === 'Winter') {
-      setCategory('Winter');
-    } else if (event.currentTarget.textContent === 'Autumn') {
-      setCategory('Autumn');
-    } else if (event.currentTarget.textContent === 'Spring') {
-      setCategory('Spring');
-    }
+    const value = event.currentTarget.textContent ?? '';
+    setCategory(value);
   };
   const seasson: string[] = ['Summer', 'Winter', 'Autumn', 'Spring'];
   return (
@@ -155,10 +182,8 @@ const Products = ({ products }: { products: Product[] }) => {
               return <ProductItem key={product.id} product={product} />;
             })
           : null}
-        {singleFilter.length > 0
-          ? filterByName().map((product: Product) => {
-              return <ProductItem key={product.id} product={product} />;
-            })
+        {singleFilter.length 
+          ? filterByName()
           : null}
         {showAllFitered()}
       </div>
