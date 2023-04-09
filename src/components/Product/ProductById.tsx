@@ -216,7 +216,7 @@ const ProductById = () => {
                         padding: '3px 5px',
                         textAlign: 'center'
                       }}>
-                      {size ? size : product.sizes}
+                      {size}
                     </span>
                     {openSizesBox ? (
                       <ArrowDropUpIcon onClick={openSizes} />
