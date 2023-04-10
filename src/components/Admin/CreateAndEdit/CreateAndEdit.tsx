@@ -13,15 +13,15 @@ const CreateAndEdit = ({ productId }: { productId: string | undefined }) => {
     return product.id.toString() === productId;
   });
   const time = new Date().getTime();
-  const [id, setId] = React.useState<number>(!product ? time : product.id);
+  const [id, setId] = React.useState<number>(product?.id ?? time);
 
-  const [name, setName] = React.useState<string>(!product ? '' : product.name);
-  const [description, setDescription] = React.useState<string>(!product ? '' : product.description);
-  const [categories, setCategories] = React.useState<string>(!product ? '' : product.categories);
-  const [image, setImage] = React.useState<string>(!product ? '' : product.image);
-  const [variant, setVariant] = React.useState<string>(!product ? '' : product.variant);
-  const [sizes, setSizes] = React.useState<string>(!product ? '' : product.sizes);
-  const [price, setPrice] = React.useState<number>(!product ? 0 : product.price);
+  const [name, setName] = React.useState<string>(product?.name ?? '');
+  const [description, setDescription] = React.useState<string>(product?.description ?? '');
+  const [categories, setCategories] = React.useState<string>(product?.categories ?? '');
+  const [image, setImage] = React.useState<string>(product?.image ?? '');
+  const [variant, setVariant] = React.useState<string>(product?.variant ?? '');
+  const [sizes, setSizes] = React.useState<string>(product?.sizes ?? '');
+  const [price, setPrice] = React.useState<number>(product?.price ?? 0);
   const dispatch = useDispatch<AppDispatch>();
 
   const handlerInput = (e: FormEvent) => {
