@@ -6,25 +6,34 @@ import { AppDispatch } from '../redux/store'
 import { login } from '../redux/actions/UserAction'
 import { UserType } from '../interfaces/user/UserType'
 import { Input } from '../components/Input/Input'
-import './Login.scss'
+import { useNavigate } from 'react-router-dom'
+import './styles/Login.scss'
 
 const Login = () => {
-  const [userLogin, setUserLogin] = React.useState({
-    email: '',
-    password: ''
-  })
+  const [email, setEmail] = React.useState('')
+  const [password, setPassword] = React.useState('')
+
   const dispatch = useDispatch<AppDispatch>()
+  const navigate = useNavigate()
 
   const handleResponse = (response: any) => {
     if (response.credential) {
       localStorage.setItem('token', response.credential)
       const userDecoded: UserType = jwtDecode(response.credential)
       dispatch(login(userDecoded))
+      navigate('/')
     }
   }
   const handlerChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target
-    setUserLogin({ ...userLogin, [name]: value })
+    if (e.target.name === 'Email') {
+      setEmail(e.target.value)
+    } else {
+      setPassword(e.target.value)
+    }
+  }
+  const handlerSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    console.log('submit', email, password)
   }
   return (
     <div className="login-view">
@@ -32,19 +41,21 @@ const Login = () => {
         <Input
           name="Email"
           onChange={handlerChange}
-          value={userLogin.email}
+          value={email}
           placeholder="youremail@gmail.com"
           style={inputStyle}
         />
         <Input
           name="Password"
           onChange={handlerChange}
-          value={userLogin.password}
+          value={password}
           placeholder="**********"
           style={inputStyle}
         />
-        <div className="login-view__container__button">Login</div>
-        <GoogleLogin onSuccess={handleResponse} />
+        <button className="login-view__container__button" onClick={handlerSubmit}>
+          Login
+        </button>
+        <GoogleLogin onSuccess={handleResponse} onError={() => console.log('Failed')} />
       </div>
     </div>
   )
