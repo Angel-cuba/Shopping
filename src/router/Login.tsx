@@ -7,7 +7,7 @@ import { login } from '../redux/actions/UserAction'
 import { UserType } from '../interfaces/user/UserType'
 import { Input } from '../components/Input/Input'
 import { useNavigate } from 'react-router-dom'
-import './styles/Login.scss'
+import './Login.scss'
 
 const Login = () => {
   const [email, setEmail] = React.useState('')
@@ -17,6 +17,7 @@ const Login = () => {
   const navigate = useNavigate()
 
   const handleResponse = (response: any) => {
+    console.log('🚀 ~ file: Login.tsx:20 ~ handleResponse ~ response:', response)
     if (response.credential) {
       localStorage.setItem('token', response.credential)
       const userDecoded: UserType = jwtDecode(response.credential)
