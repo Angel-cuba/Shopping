@@ -18,7 +18,7 @@ export function login(user: UserType) {
     paymentType: '',
     provider: '',
     accountNumber: '',
-    expiryDate: '',
+    expirationDate: '',
   };
   const userToStorage = {
     ...newUser,
