@@ -5,12 +5,15 @@ type InputProps = {
   name: string;
   placeholder: string;
   value: string | number;
-  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   style?: { [key: string]: string };
   className?: string;
   message?: string;
   admin?: boolean;
   profile?: boolean;
+  small?: boolean;
+  min?: string;
+  max?: string;
 };
 
 export const Input = ({
@@ -22,6 +25,7 @@ export const Input = ({
   style,
   admin,
   profile,
+  small,
 }: InputProps) => {
   return (
     <div
@@ -30,7 +34,7 @@ export const Input = ({
         flexDirection: !admin ? 'column' : 'row',
         alignItems: 'center',
         justifyContent: 'center',
-        width: admin ? '100%' : '200px',
+        width: admin ? '100%' : small ? '100px' : '200px',
         marginLeft: admin ? '0' : '20px',
         padding: admin ? '10px' : '0',
         borderRadius: '5px',
@@ -38,8 +42,8 @@ export const Input = ({
     >
       <label
         style={{
-          color: '#313131',
-          width: profile ? '40%' : '80%',
+          color: '#7e7e7e',
+          width: profile ? '40%' : small ? '100px' : '80%',
           fontSize: '18px',
           fontWeight: 'bold',
         }}
