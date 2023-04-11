@@ -14,7 +14,7 @@ export type UserType = {
   paymentType: string | null
   provider: string | null
   accountNumber: string | null
-  expiryDate: string | null
+  expirationDate: string | null
   role?: Role
 }
 
