@@ -6,7 +6,7 @@
   height: 100%;
   &__edit-button {
     position: absolute;
-    top: 0;
+    top: 1%;
     right: 2%;
     @include customButton($bg_light, $components_dark, $letters_dark);
   }
@@ -68,7 +68,6 @@
     margin: 30px auto 10px auto;
     box-shadow: 0 0 10px 0 #0000000d;
     border-radius: 15px;
-    background-color: red;
     @media screen and (max-width: 768px) {
       flex-direction: column;
       width: 100%;
