@@ -17,7 +17,6 @@ const Login = () => {
   const navigate = useNavigate()
 
   const handleResponse = (response: any) => {
-    console.log('🚀 ~ file: Login.tsx:20 ~ handleResponse ~ response:', response)
     if (response.credential) {
       localStorage.setItem('token', response.credential)
       const userDecoded: UserType = jwtDecode(response.credential)
