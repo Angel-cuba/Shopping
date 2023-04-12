@@ -24,6 +24,7 @@ const Profile = () => {
   const { user }: { user: UserType } = useSelector((state: RootState) => state.userLogged);
   const [edit, setEdit] = React.useState(false);
   const [editPayment, setEditPayment] = React.useState(false);
+  const [openHistory, setOpenHistory] = React.useState(false);
   const [userEdited, setUserEdited] = React.useState<UserType>(user);
 
   const handleOpenProfile = () => {
@@ -34,6 +35,11 @@ const Profile = () => {
     setEditPayment(!editPayment);
     setEdit(false);
   };
+
+  const handleOpenHistory = () => {
+    setOpenHistory(!openHistory);
+  };
+
   const iconStyles = {
     width: '60%',
     height: '100%',
@@ -45,21 +51,35 @@ const Profile = () => {
       <div className="profile__edit-button" onClick={handleOpenProfile}>
         {edit ? 'Close editing view' : 'Edit profile'}
       </div>
+      <div
+        className={!edit ? 'profile__history-button' : 'profile__history-button-editing-open'}
+        onClick={handleOpenHistory}
+      >
+        History
+      </div>
       {edit && (
         <div className="profile__edit-form">
-          <ProfileForm userEdited={userEdited} setUserEdited={setUserEdited} setEdit={setEdit} />
+          <ProfileForm
+            user={user}
+            userEdited={userEdited}
+            setUserEdited={setUserEdited}
+            setEdit={setEdit}
+          />
         </div>
       )}
       {editPayment && (
         <div className="profile__edit-form">
           <ProfilePayment
+            user={user}
             userEdited={userEdited}
             setUserEdited={setUserEdited}
             setEditPayment={setEditPayment}
           />
         </div>
       )}
-      <h1>Welcome {user.role === 'ADMIN' ? 'administrator' : ''}</h1>
+      <h1>
+        Welcome {user.role === 'ADMIN' ? `administrator ${user.given_name}` : `${user.given_name}`}
+      </h1>
       <div className="profile__data">
         <div className="profile__data__image-and-info">
           <img
@@ -75,45 +95,53 @@ const Profile = () => {
           </div>
           <div className="profile__data__image-and-info__item">
             <div className="profile__data__image-and-info__item--icon">
-              <PasswordSharp style={iconStyles} />
-            </div>
-            ***********************
-          </div>
-          <div className="profile__data__image-and-info__item">
-            <div className="profile__data__image-and-info__item--icon">
               <Email style={iconStyles} />
             </div>
             {user.email}
           </div>
           <div className="profile__data__image-and-info__item">
             <div className="profile__data__image-and-info__item--icon">
+              <PasswordSharp style={iconStyles} />
+            </div>
+            {!user.password
+              ? userEdited.password
+                ? userEdited.password
+                : '********'
+              : user.password}
+          </div>
+          <div className="profile__data__image-and-info__item">
+            <div className="profile__data__image-and-info__item--icon">
               <Phone style={iconStyles} />
             </div>
-            +1234566778
+            {!user.phone ? (userEdited.phone ? userEdited.phone : 'Phone') : user.phone}
           </div>
           <div className="profile__data__image-and-info__item">
             <div className="profile__data__image-and-info__item--icon">
               <StreetviewTwoTone style={iconStyles} />
             </div>
-            Pääskynlento 99 Z1
+            {!user.address ? (userEdited.address ? userEdited.address : 'Address') : user.address}
           </div>
           <div className="profile__data__image-and-info__item">
             <div className="profile__data__image-and-info__item--icon">
               <Apartment style={iconStyles} />
             </div>
-            Turku
+            {!user.city ? (userEdited.city ? userEdited.city : 'City') : user.city}
           </div>
           <div className="profile__data__image-and-info__item">
             <div className="profile__data__image-and-info__item--icon">
               <PostAdd style={iconStyles} />
             </div>
-            00100
+            {!user.postalCode
+              ? userEdited.postalCode
+                ? userEdited.postalCode
+                : 'Postal Code'
+              : user.postalCode}
           </div>
           <div className="profile__data__image-and-info__item">
             <div className="profile__data__image-and-info__item--icon">
               <PublicRounded style={iconStyles} />
             </div>
-            Finland
+            {!user.country ? (userEdited.country ? userEdited.country : 'Country') : user.country}
           </div>
         </div>
         <div className="profile__data__payment-info">
@@ -124,36 +152,53 @@ const Profile = () => {
             <div className="profile__data__payment-info__item--icon">
               <Person style={iconStyles} />
             </div>
-            John Doe
+            {!user.cardHolder
+              ? userEdited.cardHolder
+                ? userEdited.cardHolder
+                : 'Card holder'
+              : user.cardHolder}
           </div>
           <div className="profile__data__payment-info__item">
             <div className="profile__data__payment-info__item--icon">
               <CardTravelTwoTone style={iconStyles} />
             </div>
-            VISA
+            {!user.paymentType
+              ? userEdited.paymentType
+                ? userEdited.paymentType
+                : 'VISA'
+              : user.paymentType}
           </div>
           <div className="profile__data__payment-info__item">
             <div className="profile__data__payment-info__item--icon">
               <CardMembershipTwoTone style={iconStyles} />
             </div>
-            Provider
+            {!user.provider
+              ? userEdited.provider
+                ? userEdited.provider
+                : 'Provider'
+              : user.provider}
           </div>
           <div className="profile__data__payment-info__item">
             <div className="profile__data__payment-info__item--icon">
               <Numbers style={iconStyles} />
             </div>
-            1234 5678 9012 3456
+            {!user.accountNumber
+              ? userEdited.accountNumber
+                ? userEdited.accountNumber
+                : '1234 5678 9012 3456'
+              : user.accountNumber}
           </div>
           <div className="profile__data__payment-info__item">
             <div className="profile__data__payment-info__item--icon">
               <DateRange style={iconStyles} />
             </div>
-            12/22
+            {!user.expirationDate
+              ? userEdited.expirationDate
+                ? userEdited.expirationDate
+                : 'MM/YY'
+              : user.expirationDate}
           </div>
         </div>
-      </div>
-      <div className="profile__history">
-        <h2>History</h2>
       </div>
     </div>
   );

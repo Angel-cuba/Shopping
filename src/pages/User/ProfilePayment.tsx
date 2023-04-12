@@ -1,47 +1,66 @@
-import React, { FormEvent } from 'react';
-import { UserType } from '../../interfaces/user/UserType';
-import { Input } from '../../components/Input/Input';
+import React, { FormEvent } from 'react'
+import { UserType } from '../../interfaces/user/UserType'
+import { Input } from '../../components/Input/Input'
 
 type ProfilePaymentProps = {
-  userEdited: UserType;
-  setUserEdited: (userEdited: UserType) => void;
-  setEditPayment: (editPayment: boolean) => void;
-};
-const ProfilePayment = ({ userEdited, setUserEdited, setEditPayment }: ProfilePaymentProps) => {
-  const today = new Date();
-  const currentMonth = (today.getMonth() + 1).toString().padStart(2, '0');
-  const currentYear = today.getFullYear().toString();
+  user: UserType
+  userEdited: UserType
+  setUserEdited: (userEdited: UserType) => void
+  setEditPayment: (editPayment: boolean) => void
+}
+const ProfilePayment = ({
+  user,
+  userEdited,
+  setUserEdited,
+  setEditPayment
+}: ProfilePaymentProps) => {
+  const today = new Date()
+  const currentMonth = (today.getMonth() + 1).toString().padStart(2, '0')
+  const currentYear = today.getFullYear().toString()
 
-  const closeForm = () => {
-    setEditPayment(false);
+  const cancellForm = () => {
+    setEditPayment(false)
     setUserEdited({
       ...userEdited,
       cardHolder: '',
       paymentType: '',
       provider: '',
       accountNumber: '',
-      expirationDate: '',
-    });
-  };
+      expirationDate: ''
+    })
+  }
   const handlerSubmit = (e: FormEvent) => {
-    e.preventDefault();
-    console.log('handlerSubmit', userEdited);
-  };
+    e.preventDefault()
+    setUserEdited(userEdited)
+    // setEditPayment(false)
+  }
   return (
     <div className="profile__edit-form__container">
-      <h1>ProfilePayment</h1>
+      <h1>Payment method</h1>
       <form onClick={handlerSubmit}>
         <Input
           type="text"
           name="card name"
-          value={userEdited.cardHolder ?? ''}
+          value={
+            !user.cardHolder
+              ? userEdited.cardHolder
+                ? userEdited.cardHolder
+                : ''
+              : user.cardHolder
+          }
           onChange={(e) =>
             setUserEdited({
               ...userEdited,
-              cardHolder: e.target.value,
+              cardHolder: e.target.value
             })
           }
-          placeholder={!userEdited.cardHolder ? 'Full card name' : userEdited.cardHolder}
+          placeholder={
+            !user.cardHolder
+              ? userEdited.cardHolder
+                ? userEdited.cardHolder
+                : 'Full card name'
+              : user.cardHolder
+          }
           style={styles}
           admin
           profile
@@ -50,28 +69,48 @@ const ProfilePayment = ({ userEdited, setUserEdited, setEditPayment }: ProfilePa
           <Input
             type="text"
             name="Type"
-            value={userEdited.paymentType ?? ''}
+            value={
+              !user.paymentType
+                ? userEdited.paymentType
+                  ? userEdited.paymentType
+                  : ''
+                : user.paymentType
+            }
             onChange={(e) =>
               setUserEdited({
                 ...userEdited,
-                paymentType: e.target.value,
+                paymentType: e.target.value
               })
             }
-            placeholder={!userEdited.paymentType ? 'Type' : userEdited.paymentType}
+            placeholder={
+              !user.paymentType
+                ? userEdited.paymentType
+                  ? userEdited.paymentType
+                  : 'Type'
+                : user.paymentType
+            }
             style={styleSmall}
             small
           />
           <Input
             type="text"
             name="Provider"
-            value={userEdited.provider ?? ''}
+            value={
+              !user.provider ? (userEdited.provider ? userEdited.provider : '') : user.provider
+            }
             onChange={(e) =>
               setUserEdited({
                 ...userEdited,
-                provider: e.target.value,
+                provider: e.target.value
               })
             }
-            placeholder={!userEdited.provider ? 'Provider' : userEdited.provider}
+            placeholder={
+              !user.provider
+                ? userEdited.provider
+                  ? userEdited.provider
+                  : 'Provider'
+                : user.provider
+            }
             style={styleSmall}
             small
           />
@@ -79,14 +118,26 @@ const ProfilePayment = ({ userEdited, setUserEdited, setEditPayment }: ProfilePa
         <Input
           type="text"
           name="card number"
-          value={userEdited.accountNumber ?? ''}
+          value={
+            !user.accountNumber
+              ? userEdited.accountNumber
+                ? userEdited.accountNumber
+                : ''
+              : user.accountNumber
+          }
           onChange={(e) =>
             setUserEdited({
               ...userEdited,
-              accountNumber: e.target.value,
+              accountNumber: e.target.value
             })
           }
-          placeholder={!userEdited.accountNumber ? 'Full card number' : userEdited.accountNumber}
+          placeholder={
+            !user.accountNumber
+              ? userEdited.accountNumber
+                ? userEdited.accountNumber
+                : 'Card number'
+              : user.accountNumber
+          }
           style={styles}
           admin
           profile
@@ -100,26 +151,32 @@ const ProfilePayment = ({ userEdited, setUserEdited, setEditPayment }: ProfilePa
           onChange={(e) =>
             setUserEdited({
               ...userEdited,
-              expirationDate: e.target.value,
+              expirationDate: e.target.value
             })
           }
-          placeholder={!userEdited.expirationDate ? 'Expiration date' : userEdited.expirationDate}
+          placeholder={
+            !user.expirationDate
+              ? userEdited.expirationDate
+                ? userEdited.expirationDate
+                : 'Expiration date'
+              : user.expirationDate
+          }
           style={styles}
           admin
           profile
         />
         <button type="submit" className="profile__edit-form__container__button">
-          Edit
+          Save
         </button>
       </form>
-      <div className="profile__edit-form__container--cancel" onClick={closeForm}>
+      <div className="profile__edit-form__container--cancel" onClick={cancellForm}>
         Cancel
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default ProfilePayment;
+export default ProfilePayment
 
 const styles = {
   width: '280px',
@@ -127,8 +184,8 @@ const styles = {
   fontSize: '18px',
   border: 'none',
   borderRadius: '5px',
-  paddingLeft: '15px',
-};
+  paddingLeft: '15px'
+}
 
 const styleSmall = {
   width: '100px',
@@ -136,5 +193,5 @@ const styleSmall = {
   fontSize: '18px',
   border: 'none',
   borderRadius: '5px',
-  paddingLeft: '15px',
-};
+  paddingLeft: '15px'
+}
