@@ -85,7 +85,7 @@ const CreateAndEdit = ({ productId }: { productId: string | undefined }) => {
         <Input
           name="id"
           placeholder="Give a product id"
-          value={id}
+          value={`${id}`}
           onChange={handlerInput}
           type="number"
           admin
@@ -141,7 +141,7 @@ const CreateAndEdit = ({ productId }: { productId: string | undefined }) => {
         <Input
           name="price"
           placeholder="Give a product price"
-          value={price}
+          value={`${price}`}
           onChange={handlerInput}
           type="text"
           admin
