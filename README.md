@@ -72,5 +72,5 @@ After this, user goes to the payment side(**ongoing work**)
   - React
   - Redux
   - Sass
-  - Json file as data.
+  - Json file as data simulating a backend response.
   
