@@ -29,7 +29,7 @@ In summary, "Online Shoes Store" is a React-based eCommerce project that provide
 - Admin area for adding/updating products and managing orders
 - Fast page loading and optimized performance
 - Easy customization with React components and flexible styling options
-  ### Ongoing
+  ### Ongoing feature
 - Responsive design optimized for all devices
 - User profile with order history and shipping/billing information management(UI)
   ### Features
