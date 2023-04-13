@@ -99,6 +99,9 @@
     padding: 0px;
     display: flex;
     flex-wrap: wrap;
+    @media screen and (min-width: 768px) {
+      justify-content: space-around;
+    }
     &__item {
       position: relative;
       width: calc(100% / 2 - 10px);
@@ -242,7 +245,6 @@
         display: flex;
         justify-content: center;
         align-items: center;
-
         &--text {
           font-size: 1.5rem;
           font-weight: 600;
@@ -302,8 +304,84 @@
         }
       }
     }
-    @media screen and (min-width: 768px) {
-      justify-content: space-around;
+    &__not-found-recommended {
+      position: relative;
+      width: 90%;
+      background-color: #f7f7f721;
+      border-radius: 10px;
+      margin: 10px auto;
+      box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.04);
+      transition: all 0.3s ease-in-out;
+      &:hover {
+        cursor: pointer;
+        background-color: #f7f7f768;
+        box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.12);
+      }
+      &__title {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: #4b4b4b;
+        margin: 10px;
+        text-align: center;
+      }
+      &__slider-button-back {
+        position: absolute;
+        top: 40%;
+        left: -5px;
+        background-color: #4c4b167a;
+        color: #f7f7f7;
+        border: none;
+        outline: none;
+        padding: 8px 20px;
+        border-radius: 10px;
+        transform: scale(0.8);
+        transition: all 0.3s ease-in-out;
+        z-index: 1;
+        &:hover {
+          cursor: pointer;
+          background-color: #4c4b16;
+          box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.12);
+          left: 0;
+          transform: scale(1);
+        }
+        &--disabled {
+          display: none;
+        }
+      }
+      &__slider-button-next {
+        position: absolute;
+        top: 40%;
+        right: -5px;
+        background-color: #4c4b167a;
+        color: #f7f7f7;
+        border: none;
+        outline: none;
+        padding: 8px 20px;
+        border-radius: 10px;
+        transform: scale(0.8);
+        transition: all 0.3s ease-in-out;
+        z-index: 1;
+        &:hover {
+          cursor: pointer;
+          background-color: #4c4b16;
+          box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.12);
+          right: 0;
+          transform: scale(1);
+        }
+        &--icon {
+          font-size: 1.5rem;
+          color: #4b4b4b;
+        }
+        &--disabled {
+          display: none;
+        }
+      }
+      &__content {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+        overflow: hidden;
+      }
     }
   }
 }
