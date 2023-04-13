@@ -21,17 +21,25 @@ import './ProductById.scss';
 const ProductById = () => {
   const params = useParams();
   const { id } = params;
-  const { products } = useSelector((state: RootState) => state);
+  const { products } = useSelector((state: RootState) => state.products);
 
-  const product = products.products.find((product: Product) => {
+  const product = products.find((product: Product) => {
     return product.id.toString() === id;
   });
-  const recommendedProducts = products.products.filter(
+
+  React.useEffect(() => {
+    if(product) {
+      setVariant(product.variant);
+      setSize(product.sizes);
+    }
+  }, [id, product]);
+
+  const recommendedProducts = products.filter(
     (p: Product) => p.variant === product?.variant && p.id !== product?.id
   );
 
-  const [size, setSize] = React.useState<string>(product?.sizes);
-  const [variant, setVariant] = React.useState<string>(product?.variant);
+  const [size, setSize] = React.useState<string>();
+  const [variant, setVariant] = React.useState<string>();
   const [openSizesBox, setOpenSizesBox] = React.useState<boolean>(false);
   const [openVariantsBox, setOpenVariantsBox] = React.useState<boolean>(false);
   const [newProduct, setNewProduct] = React.useState<NewProduct>();
@@ -103,11 +111,11 @@ const ProductById = () => {
   const setNewProductHandler = () => {
     setNewProduct({
       id: product.id,
-      name: product.name,
+      name:  product.name,
       description: product.description,
       price: product.price,
-      sizes: size,
-      variant: variant,
+      sizes: !size ? '' : size,
+      variant: !variant ? '' : variant,
       categories: product.categories,
       image: product.image,
     });
@@ -126,13 +134,13 @@ const ProductById = () => {
   };
   const newProductCancelHandler = () => {
     setNewProduct(undefined);
-    setSize(product.sizes);
+     setSize(product.sizes);
     setVariant(product.variant);
   };
 
   return (
     <div className="productId">
-      {size !== product?.sizes || variant !== product?.variant ? (
+      {size !== product?.sizes || variant !== product?.variant  ? (
         <div
           className="productId__set-product"
           onClick={setNewProductHandler}
