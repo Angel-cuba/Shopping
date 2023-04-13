@@ -6,7 +6,12 @@ import { addProductToStock, updateProductInStock } from '../../../redux/actions/
 import { Input } from '../../Input/Input';
 import { NewProductToStock, Product } from '../../../interfaces/products/ProductType';
 
-const CreateAndEdit = ({ productId }: { productId: string | undefined }) => {
+type Props = {
+  productId?: string;
+  setOpenCreateAndEdit: (openCreateAndEdit: boolean) => void;
+};
+
+const CreateAndEdit = ({ productId, setOpenCreateAndEdit }: Props) => {
   const { products } = useSelector((state: RootState) => state);
 
   const product = products.products?.find((product: Product) => {
@@ -74,6 +79,7 @@ const CreateAndEdit = ({ productId }: { productId: string | undefined }) => {
     } else {
       dispatch(updateProductInStock(newProduct));
     }
+    setOpenCreateAndEdit(false);
   };
 
   return (

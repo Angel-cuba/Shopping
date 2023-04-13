@@ -16,7 +16,7 @@ const AdminDashboard = () => {
   const dispatch = useDispatch<AppDispatch>();
   const [openCustomers, setOpenCustomers] = React.useState(false);
   const [openProducts, setOpenProducts] = React.useState(false);
-  const [openCreate, setOpenCreate] = React.useState(false);
+  const [openCreateAndEdit, setOpenCreateAndEdit] = React.useState(false);
   const { products } = useSelector((state: RootState) => state);
   const { id } = useParams();
 
@@ -35,7 +35,7 @@ const AdminDashboard = () => {
   };
 
   const handleOpenCreate = () => {
-    setOpenCreate(!openCreate);
+    setOpenCreateAndEdit(!openCreateAndEdit);
   };
   return (
     <>
@@ -65,9 +65,9 @@ const AdminDashboard = () => {
       </div>
       {openCustomers && <Customers />}
       {openProducts && <Products {...products} />}
-      {openCreate && (
+      {openCreateAndEdit && (
         <div className="admin-dashboard-create-product">
-          <CreateAndEdit productId={id} />
+          <CreateAndEdit productId={id} setOpenCreateAndEdit={setOpenCreateAndEdit}/>
         </div>
       )}
     </>

@@ -10,7 +10,7 @@ import { deleteProductFromStock, updateProductInStock } from '../../redux/action
 import CreateAndEdit from '../Admin/CreateAndEdit/CreateAndEdit';
 
 const ProductItem = ({ product }: { product: Product }) => {
-  const [openEdit, setOpenEdit] = React.useState(false);
+   const [openCreateAndEdit, setOpenCreateAndEdit] = React.useState(false);
   const location = useLocation();
   const { pathname } = location;
   const dispatch = useDispatch<AppDispatch>();
@@ -18,7 +18,7 @@ const ProductItem = ({ product }: { product: Product }) => {
   const { user } = useSelector((state: RootState) => state.userLogged);
 
   const handleEdit = (product: Product) => {
-    setOpenEdit(!openEdit);
+    setOpenCreateAndEdit(!openCreateAndEdit);
     dispatch(updateProductInStock(product));
   };
 
@@ -34,7 +34,7 @@ const ProductItem = ({ product }: { product: Product }) => {
             <div
               onClick={() => handleEdit(product)}
               style={{
-                backgroundColor: openEdit ? 'rgba(23, 108, 0, 0.295)' : 'transparent',
+                backgroundColor: openCreateAndEdit? 'rgba(23, 108, 0, 0.295)' : 'transparent',
               }}
             >
               <ModeEdit
@@ -93,9 +93,9 @@ const ProductItem = ({ product }: { product: Product }) => {
           </p>
           <p className="products__content__item--info--price">£{product.price}</p>
         </div>
-        {openEdit && (
+        {openCreateAndEdit && (
           <div className="products__content__item--editing-view">
-            <CreateAndEdit productId={`${product.id}`} />
+            <CreateAndEdit productId={`${product.id}`} setOpenCreateAndEdit={setOpenCreateAndEdit}/>
           </div>
         )}
       </div>
