@@ -1,7 +1,7 @@
 import React from 'react'
 import { Input } from '../../components/Input/Input'
 import { Product } from '../../interfaces/products/ProductType'
-import ProductItem from '../../components/Product/Product'
+import ProductItem from '../../components/Product/ProductItem'
 import ProductNotFound from './ProductNotFound'
 import './Products.scss'
 

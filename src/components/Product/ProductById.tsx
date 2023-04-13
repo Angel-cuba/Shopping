@@ -15,7 +15,7 @@ import {
 } from '../../interfaces/products/ProductType'
 import RecommendedProducts from './RecommendedProducts'
 import { addToCart } from '../../redux/actions/CartActions'
-import ProductItem from './Product'
+import ProductItem from './ProductItem'
 import './ProductById.scss'
 
 const ProductById = () => {

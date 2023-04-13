@@ -16,7 +16,7 @@ const AdminDashboard = () => {
   const dispatch = useDispatch<AppDispatch>()
   const [openCustomers, setOpenCustomers] = React.useState(false)
   const [openProducts, setOpenProducts] = React.useState(false)
-  const [openCreate, setOpenCreate] = React.useState(false)
+  const [openCreateAndEdit, setOpenCreateAndEdit] = React.useState(false)
   const { products } = useSelector((state: RootState) => state)
   const { id } = useParams()
 
@@ -35,33 +35,38 @@ const AdminDashboard = () => {
   }
 
   const handleOpenCreate = () => {
-    setOpenCreate(!openCreate)
+    setOpenCreateAndEdit(!openCreateAndEdit)
   }
   return (
     <>
       <div className="admin-dashboard">
         <div className="admin-dashboard__buttons" onClick={handleOpenCustomers}>
-          <PeopleAltIcon />
+          <PeopleAltIcon fontSize="large" />
           <p className="admin-dashboard__buttons--text">Customers</p>
         </div>
         <div className="admin-dashboard__buttons" onClick={handleOpenProducts}>
-          <StoreMallDirectoryRounded />
+          <StoreMallDirectoryRounded fontSize="large" />
           <p className="admin-dashboard__buttons--text">Products</p>
         </div>
-        <Link to="/admin/createandcheck" className="admin-dashboard__buttons">
-          <StorageRounded />
+        <Link
+          to="/admin/createandcheck"
+          className="admin-dashboard__buttons"
+          style={{
+            textDecoration: 'none'
+          }}>
+          <StorageRounded fontSize="large" />
           <p className="admin-dashboard__buttons--text">In stock</p>
         </Link>
         <div className="admin-dashboard__buttons" onClick={handleOpenCreate}>
-          <AddBoxSharp />
+          <AddBoxSharp fontSize="large" />
           <p className="admin-dashboard__buttons--text">Add product</p>
         </div>
       </div>
       {openCustomers && <Customers />}
       {openProducts && <Products {...products} />}
-      {openCreate && (
+      {openCreateAndEdit && (
         <div className="admin-dashboard-create-product">
-          <CreateAndEdit productId={id} />
+          <CreateAndEdit productId={id} setOpenCreateAndEdit={setOpenCreateAndEdit} />
         </div>
       )}
     </>
