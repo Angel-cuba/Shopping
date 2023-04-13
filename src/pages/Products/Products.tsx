@@ -1,7 +1,7 @@
 import React from 'react';
 import { Input } from '../../components/Input/Input';
 import ProductItem from '../../components/Product/ProductItem';
-import { Product } from '../../interfaces/products/ProductType';
+import { Product, Sizes } from '../../interfaces/products/ProductType';
 import ProductNotFound from './ProductNotFound';
 import './Products.scss';
 
@@ -12,7 +12,7 @@ const Products = ({ products }: { products: Product[] }) => {
   const [singleFilter, setSingleFilter] = React.useState('');
   const [openFilters, setOpenFilters] = React.useState(false);
 
-  const handleChangeSize = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSizeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSize(event.target.value);
   };
 
@@ -45,7 +45,7 @@ const Products = ({ products }: { products: Product[] }) => {
       return product.name.toLocaleLowerCase().includes(singleFilter.toLowerCase());
     });
     if (filtered.length === 0) {
-      return <ProductNotFound valueNotFound={singleFilter}/>;
+      return <ProductNotFound valueNotFound={singleFilter} />;
     }
     return filtered.map((product: Product) => {
       return <ProductItem key={product.id} product={product} />;
@@ -127,7 +127,22 @@ const Products = ({ products }: { products: Product[] }) => {
       </div>
       <div className="products__panel">
         <div className={openFilters ? 'products__panel--visible' : 'products__panel--hidden'}>
-          <Input name="Size" value={size} placeholder="" type="text" onChange={handleChangeSize} />
+          <div className="products__panel--visible__size">
+            <select
+              value={size}
+              onChange={handleSizeChange}
+              className="products__panel--visible__size__item"
+            >
+              <option value="" disabled>
+                Select size
+              </option>
+              {Sizes.map((size) => (
+                <option key={size} value={size}>
+                  {size}
+                </option>
+              ))}
+            </select>
+          </div>
           <div className="products__panel--visible__seasson">
             {seasson.map((seasson: string) => {
               return (
