@@ -71,40 +71,48 @@ export const NavbarIcon = () => {
   );
 };
 
-export const CartIcon = ({ product }: { product: Product }) => {
+type CartIconProps = {
+  product: Product;
+  handleLike: () => void;
+  handleTrash: () => void;
+};
+
+export const CartIcon = ({
+  product,
+  handleLike,
+  handleTrash
+}: CartIconProps) => {
   const dispatch = useDispatch<AppDispatch>();
   const { itemInCart } = useSelector((state: RootState) => state.cart);
   const addItemToCart = () => {
     dispatch(addToCart(product));
+    handleLike();
   };
   const removeItemFromCart = () => {
     dispatch(removeFromCart(product));
+    handleTrash();
   };
 
   const itemAddedToCart = itemInCart?.find((item) => item.id === product.id);
 
   return (
-    <div className="icon">
-      <div className="icon__cart">
-        <div className="icon__cart--icon">
-          {itemAddedToCart ? (
-            <FavoriteIcon
-              style={{
-                fontSize: '2rem',
-                color: 'red',
-              }}
-              onClick={removeItemFromCart}
-            />
-          ) : (
-            <FavoriteBorderIcon
-              style={{
-                fontSize: '2rem',
-              }}
-              onClick={addItemToCart}
-            />
-          )}
-        </div>
+      <div className="products__content__item--add--icon__view">
+        {itemAddedToCart ? (
+          <FavoriteIcon
+            style={{
+              fontSize: '2.1rem',
+              color: 'red',
+            }}
+            onClick={removeItemFromCart}
+          />
+        ) : (
+          <FavoriteBorderIcon
+            style={{
+              fontSize: '2.1rem',
+            }}
+            onClick={addItemToCart}
+          />
+        )}
       </div>
-    </div>
   );
 };
