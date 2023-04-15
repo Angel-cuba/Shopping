@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { AddBoxSharp, StorageRounded } from '@mui/icons-material';
+import { AddBoxSharp, ClosedCaptionDisabledOutlined, StorageRounded } from '@mui/icons-material';
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 import StoreMallDirectoryRounded from '@mui/icons-material/StoreMallDirectoryRounded';
 import { useDispatch, useSelector } from 'react-redux';
@@ -59,8 +59,17 @@ const AdminDashboard = () => {
           <p className="admin-dashboard__buttons--text">In stock</p>
         </Link>
         <div className="admin-dashboard__buttons" onClick={handleOpenCreate}>
-          <AddBoxSharp fontSize="large" />
-          <p className="admin-dashboard__buttons--text">Add product</p>
+          {
+            !openCreateAndEdit ? (
+              <AddBoxSharp fontSize="large" />
+            ) : (
+              <ClosedCaptionDisabledOutlined fontSize="large" />
+            )
+          }
+
+          <p className="admin-dashboard__buttons--text">{
+            openCreateAndEdit ? 'Close' : 'Create'
+          }</p>
         </div>
       </div>
       {openCustomers && <Customers />}

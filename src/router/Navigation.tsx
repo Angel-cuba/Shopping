@@ -8,7 +8,7 @@ import Home from './Home'
 import Login from './Login'
 import Profile from '../pages/User/Profile'
 import Checkout from '../pages/Checkout/Checkout'
-import AdminDashboard from '../pages/Admin/AdminDashboar'
+import AdminDashboard from '../pages/Admin/AdminDashboard'
 import CreateAndCheck from '../pages/Admin/CreateAndCheck'
 
 const Navigation = () => {
