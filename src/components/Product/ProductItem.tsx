@@ -9,8 +9,14 @@ import { AppDispatch, RootState } from '../../redux/store';
 import { deleteProductFromStock, updateProductInStock } from '../../redux/actions/ProductActions';
 import CreateAndEdit from '../Admin/CreateAndEdit/CreateAndEdit';
 
+import LikeItem from './component/LikeItem';
+import TrashItem from './component/TrashItem';
+
 const ProductItem = ({ product }: { product: Product }) => {
-   const [openCreateAndEdit, setOpenCreateAndEdit] = React.useState(false);
+  const [openCreateAndEdit, setOpenCreateAndEdit] = React.useState(false);
+  const [showLikeAnimation, setShowLikeAnimation] = React.useState(false);
+  const [showTrashAnimation, setShowTrashAnimation] = React.useState(false);
+
   const location = useLocation();
   const { pathname } = location;
   const dispatch = useDispatch<AppDispatch>();
@@ -25,6 +31,28 @@ const ProductItem = ({ product }: { product: Product }) => {
   const handleDelete = (id: number) => {
     dispatch(deleteProductFromStock(id));
   };
+  const handleLike = () => {
+    setShowTrashAnimation(false);
+    setShowLikeAnimation(true);
+    setTimeout(() => {
+      setShowLikeAnimation(false);
+    }, 2000);
+  };
+  const handleTrash = () => {
+    setShowLikeAnimation(false);
+    setShowTrashAnimation(true);
+    setTimeout(() => {
+      setShowTrashAnimation(false);
+    }, 2000);
+  };
+  const Animation = () => {
+    return (
+      <>
+        {showLikeAnimation && <LikeItem />}
+        {showTrashAnimation && <TrashItem />}
+      </>
+    );
+  };
 
   return (
     <>
@@ -34,7 +62,7 @@ const ProductItem = ({ product }: { product: Product }) => {
             <div
               onClick={() => handleEdit(product)}
               style={{
-                backgroundColor: openCreateAndEdit? 'rgba(23, 108, 0, 0.295)' : 'transparent',
+                backgroundColor: openCreateAndEdit ? 'rgba(23, 108, 0, 0.295)' : 'transparent',
               }}
             >
               <ModeEdit
@@ -68,9 +96,10 @@ const ProductItem = ({ product }: { product: Product }) => {
               </Link>
             </div>
           )}
+        {Animation()}
         <div className="products__content__item--add">
-          <div className="products__content__item--name--icon">
-            <CartIcon product={product} />
+          <div className="products__content__item--add--icon">
+            <CartIcon product={product} handleLike={handleLike} handleTrash={handleTrash} />
           </div>
         </div>
         <div className="products__content__item--image">
@@ -95,7 +124,10 @@ const ProductItem = ({ product }: { product: Product }) => {
         </div>
         {openCreateAndEdit && (
           <div className="products__content__item--editing-view">
-            <CreateAndEdit productId={`${product.id}`} setOpenCreateAndEdit={setOpenCreateAndEdit}/>
+            <CreateAndEdit
+              productId={`${product.id}`}
+              setOpenCreateAndEdit={setOpenCreateAndEdit}
+            />
           </div>
         )}
       </div>
