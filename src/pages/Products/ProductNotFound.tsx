@@ -5,11 +5,12 @@ import { RootState } from '../../redux/store';
 import RecommendedProducts from '../../components/Product/RecommendedProducts';
 import { Product } from '../../interfaces/products/ProductType';
 import { ArrowBack, ArrowForward } from '@mui/icons-material';
+import LottieItem from '../../assets/9844-loading-40-paperplane.json'
 
 const ProductNotFound = ({ valueNotFound }: { valueNotFound: string }) => {
   const [startIndex, setStartIndex] = React.useState(0);
   const options = {
-    animationData: require('../../assets/9844-loading-40-paperplane.json'),
+    animationData: LottieItem,
     loop: true,
     autoplay: true,
   };
