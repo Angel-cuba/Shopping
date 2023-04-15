@@ -139,7 +139,8 @@
       flex-direction: column;
       justify-content: space-between;
       align-items: center;
-      background-color: #f7f7f7b5;
+      background-color: #dbdbdb23;
+      
       &--admin-icons {
         position: absolute;
         display: flex;
@@ -183,25 +184,47 @@
         }
         height: 80px;
       }
+      &--animation-add{
+        position: absolute;
+        top: -67px;
+        right: -40px;
+        width: 90px;
+        height: 90px;
+        z-index: 2;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      &--animation-remove{
+        position: absolute;
+        top: -40px;
+        right: -15px;
+        width: 70px;
+        height: 70px;
+        z-index: 2;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
       &--add {
         position: absolute;
         top: 10px;
-        right: -3px;
+        right: -2px;
         background-color: #ffffff;
-        padding: 5px 7px;
-        border-top-left-radius: 3px;
-        border-bottom-left-radius: 3px;
+        width: 40px;
+        height: 50px;
+        border-radius: 3px;
         z-index: 1;
         &--icon {
-          position: absolute;
-          top: 0;
-          right: 6px;
-          font-size: 1.5rem;
+          margin-top: 8px;
+          margin-left: 3px;
           color: #262626;
           transition: all 0.3s ease-in-out;
-          z-index: 1;
           &:hover {
             cursor: pointer;
+          }
+          &__view {
+            border-radius: 3px;
           }
         }
       }
