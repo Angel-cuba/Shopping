@@ -32,7 +32,7 @@ const ProfilePayment = ({
   const handlerSubmit = (e: FormEvent) => {
     e.preventDefault()
     setUserEdited(userEdited)
-    // setEditPayment(false)
+    setEditPayment(false)
   }
   return (
     <div className="profile__edit-form__container">
