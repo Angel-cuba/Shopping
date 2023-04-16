@@ -10,7 +10,7 @@ export const PRODUCTS: Product[] = [
     image:
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679761938/air-max-270-mens-shoes-KkLcGR_o7h0wd.png',
     variant: 'Crimson',
-    sizes: '6',
+    sizes: ['6', '7', '8', '9', '10', '11', '12'],
     price: 102.56,
   },
   {
@@ -22,7 +22,7 @@ export const PRODUCTS: Product[] = [
     image:
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679993566/shoes/images_6_hqvorc.png',
     variant: 'Goldenrod',
-    sizes: '7.5',
+    sizes: ['6.5', '7', '8', '9.5', '10', '11'],
     price: 22.45,
   },
   {
@@ -34,7 +34,7 @@ export const PRODUCTS: Product[] = [
     image:
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679993566/shoes/precision-6-basketball-shoes-l7zDFB_rlezav.png',
     variant: 'Violet',
-    sizes: '7.5',
+    sizes: ['5.5', '7.5', '8'],
     price: 80.99,
   },
   {
@@ -45,7 +45,7 @@ export const PRODUCTS: Product[] = [
     categories: 'Autumn',
     image: 'https://res.cloudinary.com/dqaerysgb/image/upload/v1679993565/shoes/images_o04fcw.png',
     variant: 'Crimson',
-    sizes: '6',
+    sizes: ['5.5', '6.5', '7.5', '8.5', '9.5', '11.5', '12'],
     price: 60.95,
   },
   {
@@ -57,7 +57,8 @@ export const PRODUCTS: Product[] = [
     image:
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679993565/shoes/images_8_spmfby.png',
     variant: 'Teal',
-    sizes: '9.5',
+    sizes: ['5.5', '6.5', '7.5', '8.5', '9.5', '11.5', '12'],
+
     price: 543.99,
   },
   {
@@ -69,7 +70,8 @@ export const PRODUCTS: Product[] = [
     image:
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679761938/air-max-270-mens-shoes-KkLcGR_o7h0wd.png',
     variant: 'Crimson',
-    sizes: '9.5',
+        sizes: ['5.5', '6', '6.5', '7', '10', '10.5', '11.5', '12'],
+
     price: 150.99,
   },
   {
@@ -81,7 +83,7 @@ export const PRODUCTS: Product[] = [
     image:
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679761938/air-max-270-mens-shoes-KkLcGR_o7h0wd.png',
     variant: 'Teal',
-    sizes: '11.5',
+    sizes: ['10.5', '11.5', '12'],
     price: 610.99,
   },
   {
@@ -94,7 +96,7 @@ export const PRODUCTS: Product[] = [
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679993566/shoes/images_6_hqvorc.png',
 
     variant: 'Aquamarine',
-    sizes: '11.5',
+    sizes: ['5.5', '6', '6.5', '7', '7.5', '8', '8.5', '9', '9.5', '10', '10.5', '11.5', '12'],
     price: 710.99,
   },
   {
@@ -106,7 +108,8 @@ export const PRODUCTS: Product[] = [
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679995206/shoes/images_4_bcb5tl.png',
 
     variant: 'Maroon',
-    sizes: '10.5',
+        sizes: [ '9.5', '10', '12'],
+
     price: 810.99,
   },
   {
@@ -118,7 +121,7 @@ export const PRODUCTS: Product[] = [
     image:
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679993565/shoes/images_1_gnczxb.png',
     variant: 'Violet',
-    sizes: '12',
+        sizes: ['5.5', '6', '6.5', '7', '7.5', '8', '8.5', '9', '9.5', '10', '10.5', '11.5', '12'],
     price: 910.99,
   },
   {
@@ -130,7 +133,8 @@ export const PRODUCTS: Product[] = [
     image:
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679993565/shoes/images_7_nor1an.png',
     variant: 'Fuscia',
-    sizes: '9.5',
+    sizes: [ '6', '7.5', '8', '9', '9.5', '10', '11.5', '12'],
+
     price: 100.99,
   },
   {
@@ -141,7 +145,8 @@ export const PRODUCTS: Product[] = [
     image:
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679993565/shoes/images_4_svmpdu.png',
     variant: 'Goldenrod',
-    sizes: '7.5',
+    sizes: ['5', '6', '7.5', '10', '11.5', '12'],
+
     price: 109.79,
   },
   {
@@ -153,7 +158,7 @@ export const PRODUCTS: Product[] = [
     image:
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679993565/shoes/images_1_gnczxb.png',
     variant: 'Maroon',
-    sizes: '6',
+    sizes: ['5', '6', '7.5', '8', '11.5', '12'],
     price: 507.81,
   },
   {
@@ -166,7 +171,8 @@ export const PRODUCTS: Product[] = [
 
     categories: 'Autumn',
     variant: 'Maroon',
-    sizes: '12',
+        sizes: [ '5.5', '6', '6.5', '7', '7.5', '8', '8.5', '9', '9.5', '10', '10.5', '11.5', '12'],
+
     price: 855.999,
   },
   {
@@ -178,7 +184,7 @@ export const PRODUCTS: Product[] = [
     image:
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679993564/shoes/images_2_p2wpfo.png',
     variant: 'Aquamarine',
-    sizes: '11.5',
+    sizes: ['5', '6', '7.5'],
     price: 82185.14,
   },
   {
@@ -189,7 +195,7 @@ export const PRODUCTS: Product[] = [
     image:
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679995209/shoes/Varion-Indoor-Sports-Shoes_wdipwa.png',
     variant: 'Pink',
-    sizes: '7.5',
+    sizes: ['5.5', '7.5', '9.5'],
     price: 84.5,
   },
   {
@@ -201,7 +207,7 @@ export const PRODUCTS: Product[] = [
     image:
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679995208/shoes/images_9_vg9wgg.png',
     variant: 'Violet',
-    sizes: '9.5',
+    sizes: [ '8', '9.5', '10', '11.5', '12'],
     price: 9898.99,
   },
   {
@@ -213,7 +219,7 @@ export const PRODUCTS: Product[] = [
     image:
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679993566/shoes/images_6_hqvorc.png',
     variant: 'Violet',
-    sizes: '7.5',
+    sizes: ['7', '7.5', '9', '9.5'],
     price: 5484,
   },
   {
@@ -224,7 +230,7 @@ export const PRODUCTS: Product[] = [
     categories: 'Winter',
     image: 'https://res.cloudinary.com/dqaerysgb/image/upload/v1679995207/shoes/1_j2n1rx.png',
     variant: 'Aquamarine',
-    sizes: '11.5',
+    sizes: ['5', '7', '9', '9.5'],
     price: 555.99,
   },
   {
@@ -236,8 +242,8 @@ export const PRODUCTS: Product[] = [
     image:
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679993566/shoes/precision-6-basketball-shoes-l7zDFB_rlezav.png',
     variant: 'Teal',
-    sizes: '8',
-    price: 999.99,
+    sizes: ['8', '8.5', '10', '11.5', '12'],
+    price: 999.00,
   },
   {
     id: 21,
@@ -248,8 +254,8 @@ export const PRODUCTS: Product[] = [
     image:
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679995207/shoes/ecco-biom-2-1368501_tppmla.png',
     variant: 'Teal',
-    sizes: '9.5',
-    price: 222.99,
+    sizes: ['6', '7.5', '8', '9', '9.5', '10', '11.5', '12'],
+    price: 222.15,
   },
   {
     id: 22,
@@ -260,7 +266,8 @@ export const PRODUCTS: Product[] = [
     image:
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679995207/shoes/images_5_mgdkor.png',
     variant: 'Maroon',
-    sizes: '7.5',
+    sizes: [ '5.5', '9', '9.5', '10', '10.5', '11.5', '12'],
+
     price: 333.99,
   },
   {
@@ -272,7 +279,7 @@ export const PRODUCTS: Product[] = [
     variant: 'Fuscia',
     image:
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679995207/shoes/images_8_drvkcn.png',
-    sizes: '6',
+    sizes: [ '5.5', '6', '6.5', '7', '7.5', '8', '8.5', '9', '9.5', '10', '10.5', '11.5', '12'],
     price: 444.99,
   },
   {
@@ -284,7 +291,7 @@ export const PRODUCTS: Product[] = [
     image:
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679995207/shoes/images_6_t13ydu.png',
     variant: 'Maroon',
-    sizes: '9.5',
+    sizes: ['7.5', '9.5', '10'],
     price: 568.99,
   },
   {
@@ -296,7 +303,7 @@ export const PRODUCTS: Product[] = [
     image:
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679995206/shoes/images_2_fcu3ei.png',
     variant: 'Crimson',
-    sizes: '7.5',
+    sizes: ['6', '7.5', '8', '9', '9.5', '12'],
     price: 8745.99,
   },
   {
@@ -308,7 +315,7 @@ export const PRODUCTS: Product[] = [
     variant: 'Aquamarine',
     image:
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679993565/shoes/images_1_gnczxb.png',
-    sizes: '11.5',
+    sizes: [ '6', '7.5', '8', '10', '11.5', '12'],
     price: 98752.99,
   },
   {
@@ -320,7 +327,8 @@ export const PRODUCTS: Product[] = [
     image:
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679995206/shoes/images_4_bcb5tl.png',
     variant: 'Aquamarine',
-    sizes: '8',
+        sizes: [ '8', '8.5', '9', '9.5', '10', '10.5'],
+
     price: 977.99,
   },
   {
@@ -332,7 +340,7 @@ export const PRODUCTS: Product[] = [
     image:
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679995206/shoes/images_3_sgzz2d.png',
     variant: 'Violet',
-    sizes: '9.5',
+        sizes: ['5', '5.5', '6'],
     price: 12354.99,
   },
   {
@@ -343,8 +351,8 @@ export const PRODUCTS: Product[] = [
     image:
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679993564/shoes/descarga_iqjs7w.png',
     variant: 'Maroon',
-    sizes: '7.5',
-    price: 198745.99,
+        sizes: ['5.5', '6','10.5', '11.5', '12'],
+    price: 198745.10,
   },
   {
     id: 30,
@@ -355,8 +363,8 @@ export const PRODUCTS: Product[] = [
     image:
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679993564/shoes/descarga_1_yntgd3.png',
     variant: 'Maroon',
-    sizes: '7.5',
-    price: 9874563.99,
+        sizes: ['5', '5.5', '6', '6.5', '7', '7.5', '8', '8.5', '9', '9.5', '10', '10.5', '11.5', '12'],
+    price: 163.25,
   },
   {
     id: 31,
@@ -367,7 +375,8 @@ export const PRODUCTS: Product[] = [
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679993566/shoes/precision-6-basketball-shoes-l7zDFB_rlezav.png',
 
     variant: 'Maroon',
-    sizes: '10.5',
+        sizes: ['5.5', '6', '6.5', '7', '7.5', '12'],
+
     price: 810.99,
   },
   {
@@ -379,7 +388,7 @@ export const PRODUCTS: Product[] = [
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679995206/shoes/images_4_bcb5tl.png',
 
     variant: 'Maroon',
-    sizes: '10.5',
+        sizes: [ '10', '10.5'],
     price: 810.99,
   },
   {
@@ -391,7 +400,7 @@ export const PRODUCTS: Product[] = [
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679995207/shoes/images_6_t13ydu.png',
 
     variant: 'Teal',
-    sizes: '10.5',
+    sizes: [ '7.5', '8', '8.5', '9', '9.5', '10', '10.5', '11.5', '12'],
     price: 810.99,
   },
   {
@@ -403,7 +412,7 @@ export const PRODUCTS: Product[] = [
     image:
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679993564/shoes/images_2_p2wpfo.png',
     variant: 'Aquamarine',
-    sizes: '11.5',
+    sizes: ['5', '5.5', '6', '6.5', '7', '7.5', '8', '8.5', '9', '9.5', '10'],
     price: 82185.14,
   },
   {
@@ -414,7 +423,7 @@ export const PRODUCTS: Product[] = [
     image:
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679995209/shoes/Varion-Indoor-Sports-Shoes_wdipwa.png',
     variant: 'Pink',
-    sizes: '7.5',
+        sizes: ['6', '6.5', '7', '7.5', '8', '8.5', '9','11.5', '12'],
     price: 84.5,
   },
   {
@@ -426,7 +435,8 @@ export const PRODUCTS: Product[] = [
     image:
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679995208/shoes/images_9_vg9wgg.png',
     variant: 'Violet',
-    sizes: '9.5',
+        sizes: ['10.5', '11.5'],
+
     price: 9898.99,
   },
   {
@@ -438,7 +448,7 @@ export const PRODUCTS: Product[] = [
     image:
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679993566/shoes/images_6_hqvorc.png',
     variant: 'Violet',
-    sizes: '7.5',
+        sizes: ['5.5', '6', '6.5', '7', '7.5', '8', '8.5', '9', '9.5', '10', '10.5', '11.5', '12'],
     price: 5484,
   },
   {
@@ -449,7 +459,7 @@ export const PRODUCTS: Product[] = [
     categories: 'Winter',
     image: 'https://res.cloudinary.com/dqaerysgb/image/upload/v1679995207/shoes/1_j2n1rx.png',
     variant: 'Aquamarine',
-    sizes: '11.5',
+        sizes: ['5.5', '6', '6.5', '7', '7.5', '8','12'],
     price: 555.99,
   },
   {
@@ -461,7 +471,7 @@ export const PRODUCTS: Product[] = [
     image:
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679993566/shoes/precision-6-basketball-shoes-l7zDFB_rlezav.png',
     variant: 'Teal',
-    sizes: '8',
+        sizes: ['6.5', '7', '8', '8.5', '9', '9.5', '10', '12'],
     price: 999.99,
   },
   {
@@ -473,7 +483,7 @@ export const PRODUCTS: Product[] = [
     image:
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679995207/shoes/ecco-biom-2-1368501_tppmla.png',
     variant: 'Teal',
-    sizes: '9.5',
+    sizes: ['6', '7.5', '8', '9', '9.5', '10', '11.5', '12'],
     price: 222.99,
   },
   {
@@ -485,8 +495,8 @@ export const PRODUCTS: Product[] = [
     image:
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679995207/shoes/images_5_mgdkor.png',
     variant: 'Maroon',
-    sizes: '7.5',
-    price: 333.99,
+ sizes: ['6.5', '7', '7.5', '8', '8.5', '9', '9.5',  '12'],
+price: 333.99,
   },
   {
     id: 42,
@@ -497,7 +507,8 @@ export const PRODUCTS: Product[] = [
     variant: 'Fuscia',
     image:
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679995207/shoes/images_8_drvkcn.png',
-    sizes: '6',
+        sizes: ['5.5', '6', '6.5', '7', '7.5'],
+
     price: 444.99,
   },
   {
@@ -509,7 +520,8 @@ export const PRODUCTS: Product[] = [
     image:
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679995207/shoes/images_6_t13ydu.png',
     variant: 'Maroon',
-    sizes: '9.5',
+    sizes: [ '5.5', '6', '12'],
+   
     price: 568.99,
   },
   {
@@ -521,7 +533,7 @@ export const PRODUCTS: Product[] = [
     image:
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679995206/shoes/images_2_fcu3ei.png',
     variant: 'Crimson',
-    sizes: '7.5',
+        sizes: ['5', '5.5'],
     price: 8745.99,
   },
   {
@@ -533,7 +545,7 @@ export const PRODUCTS: Product[] = [
     variant: 'Aquamarine',
     image:
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679993565/shoes/images_1_gnczxb.png',
-    sizes: '11.5',
+    sizes: [ '8', '10', '11.5', '12'],
     price: 98752.99,
   },
   {
@@ -545,7 +557,8 @@ export const PRODUCTS: Product[] = [
     image:
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679995206/shoes/images_4_bcb5tl.png',
     variant: 'Aquamarine',
-    sizes: '8',
+    sizes: ['5.5', '6.5', '7.5', '8.5', '9.5', '11.5', '12'],
+
     price: 977.99,
   },
 ];
