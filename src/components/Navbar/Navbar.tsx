@@ -7,7 +7,7 @@ import StoreMallDirectoryIcon from '@mui/icons-material/StoreMallDirectory';
 import LightModeIcon from '@mui/icons-material/LightMode';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 
-import { NavbarIcon } from '../Cart/Cart';
+import { NavbarIcon, WishListIcon } from '../Cart/Cart';
 import { AppDispatch, RootState } from '../../redux/store';
 import { logout } from '../../redux/actions/UserAction';
 import './Navbar.scss';
@@ -70,6 +70,7 @@ const Navbar = () => {
               Logout
             </div>
             <div className="navbar__navbar-right__links__cart">
+              <WishListIcon />
               <NavbarIcon />
             </div>
           </>

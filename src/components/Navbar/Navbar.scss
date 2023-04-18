@@ -1,12 +1,12 @@
 .navbar {
   position: relative;
-  width: 96%;
+  width: 94%;
   height: 60px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin: auto;
-  padding: 20px 2%;
+  padding: 20px 1%;
   &__navbar-left {
     display: flex;
     justify-content: space-around;
@@ -41,10 +41,13 @@
       }
       &__cart {
         position: relative;
+        width: 80px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
         .navbar-cart {
-          width: 100%;
-          height: 100%;
           position: relative;
+
           &__total {
             position: absolute;
             top: 60px;
@@ -76,6 +79,16 @@
             right: -10px;
             font-size: 1.2rem;
             font-weight: 500;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50%;
+            color: #d5d5d5;
+            background-color: #ff0000ec;
+            border: 1px solid #ff0000;
+            box-shadow: 0 0 4px 0 #ff0000;
             &--over {
               position: absolute;
               top: -8px;
@@ -101,6 +114,54 @@
             &--hidden {
               display: none;
             }
+          }
+        }
+        .navbar-wishes {
+          position: relative;
+          cursor: pointer;
+          &__cart {
+            display: block;
+            position: absolute;
+            top: 86px;
+            right: -84px;
+            width: 98vw;
+            height: 78vh;
+            z-index: 100;
+            &--hidden {
+              display: none;
+            }
+            &__empty-wishlist {
+              background-color: red;
+              width: 200px;
+              padding: 20px 50px;
+              border-radius: 6px;
+              color: white;
+              font-size: 1.2rem;
+              font-weight: 500;
+              text-align: center;
+              position: absolute;
+              right: 2px;
+              top: -100px;
+              right: 5%;
+              animation: mover 4s ease forwards;
+            }
+          }
+          &__amount {
+            position: absolute;
+            top: -6px;
+            right: -11px;
+            font-size: 1.2rem;
+            font-weight: 500;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #d5d5d5;
+            background-color: #ff0000ec;
+            border: 1px solid #ff0000;
+            box-shadow: 0 0 4px 0 #ff0000;
           }
         }
       }
@@ -211,5 +272,17 @@
         }
       }
     }
+  }
+}
+
+@keyframes mover {
+  0% {
+    top: -150px;
+  }
+  50% {
+    top: 20%;
+  }
+  100% {
+    top: -240px;
   }
 }
