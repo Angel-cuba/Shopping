@@ -7,10 +7,10 @@ import StoreMallDirectoryIcon from '@mui/icons-material/StoreMallDirectory'
 import LightModeIcon from '@mui/icons-material/LightMode'
 import Brightness4Icon from '@mui/icons-material/Brightness4'
 
-import { NavbarIcon } from '../Cart/Cart'
+import { NavbarIcon, WishListIcon } from '../Cart/Cart'
 import { AppDispatch, RootState } from '../../redux/store'
 import { logout } from '../../redux/actions/UserAction'
-import './styles/Navbar.scss'
+import './Navbar.scss'
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = React.useState(false)
@@ -26,8 +26,8 @@ const Navbar = () => {
     setIsDark(!isDark)
   }
   return (
-    <div className="flex justify-between items-center bg-gray-100 p-4">
-      <div className="text-2xl font-bold text-gray-800 flex items-center">
+    <div className="navbar">
+      <div className="navbar__navbar-left">
         {user ? (
           <>
             <img
@@ -52,33 +52,34 @@ const Navbar = () => {
           />
         )}
       </div>
-      <div className="navbar">
+      <div className="navbar__navbar-right">
         {user && user.role === 'ADMIN' && (
-          <Link to="/admin/dashboard" className="navbar__links">
+          <Link to="/admin/dashboard" className="navbar__navbar-right__links">
             Admin
           </Link>
         )}
         {user ? (
           <>
-            <Link to="/home" className="navbar__links">
+            <Link to="/home" className="navbar__navbar-right__links">
               Store
             </Link>
-            <Link to="/profile" className="navbar__links">
+            <Link to="/profile" className="navbar__navbar-right__links">
               Profile
             </Link>
-            <div className="navbar__links--login" onClick={handleLogout}>
+            <div className="navbar__navbar-right__links--login" onClick={handleLogout}>
               Logout
             </div>
-            <div className="navbar__links__cart">
+            <div className="navbar__navbar-right__links__cart">
+              <WishListIcon />
               <NavbarIcon />
             </div>
           </>
         ) : (
           <>
-            <Link to="/login" className="navbar__links">
+            <Link to="/" className="navbar__navbar-right__links">
               Login to Store
             </Link>
-            <div className="navbar__links">
+            <div className="navbar__navbar-right__links">
               {isDark ? (
                 <Brightness4Icon
                   onClick={handleDarkMode}
@@ -101,41 +102,53 @@ const Navbar = () => {
           </>
         )}
       </div>
-      <div className="navbar_mobile">
+      <div className="navbar__navbar_mobile">
         {isOpen ? (
-          <CloseIcon className="text-gray-800" onClick={() => setIsOpen(!isOpen)} />
+          <CloseIcon
+            style={{
+              color: '#000'
+            }}
+            onClick={() => setIsOpen(!isOpen)}
+          />
         ) : (
-          <MenuIcon className="text-gray-800" onClick={() => setIsOpen(!isOpen)} />
+          <MenuIcon
+            style={{
+              color: '#000'
+            }}
+            onClick={() => setIsOpen(!isOpen)}
+          />
         )}
         {isOpen && (
-          <div className="navbar_mobile__view">
-            <div className="navbar_mobile__view__user">
+          <div className="navbar__navbar_mobile__view">
+            <div className="navbar__navbar_mobile__view__user">
               <div
                 style={{
                   display: 'flex',
                   justifyContent: 'space-between',
                   width: '100%'
                 }}>
-                <div className="navbar_mobile__view__user--avatar">
+                <div className="navbar__navbar_mobile__view__user--avatar">
                   <img src={user.picture} alt="user" className="w-20 h-20" />
                 </div>
-                <p className="navbar_mobile__view__user--name">
-                  <span className="text-gray-800">{user.given_name}</span>
+                <p className="navbar__navbar_mobile__view__user--name">
+                  <span className="navbar__navbar_mobile__view__user--name--text">
+                    {user.given_name}
+                  </span>
                 </p>
               </div>
               <div className="email">
-                <p className="navbar_mobile__view__user--email">{user?.email}</p>
+                <p className="navbar__navbar_mobile__view__user--email">{user?.email}</p>
               </div>
-              <div className="navbar_mobile__view__user--cart">{/* <NavbarIcon /> */}</div>
+              <div className="navbar__navbar_mobile__view__user--cart">{/* <NavbarIcon /> */}</div>
             </div>
-            <div className="navbar_mobile__view__links">
-              <Link to="/home" className="navbar_mobile__view__links--item">
+            <div className="navbar__navbar_mobile__view__links">
+              <Link to="/home" className="navbar__navbar_mobile__view__links--item">
                 Home
               </Link>
-              <Link to="/login" className="navbar_mobile__view__links--item">
+              <Link to="/login" className="navbar__navbar_mobile__view__links--item">
                 Products
               </Link>
-              <Link to="/" className="navbar_mobile__view__links--item--login">
+              <Link to="/" className="navbar__navbar_mobile__view__links--item--login">
                 Login
               </Link>
             </div>
