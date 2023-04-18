@@ -5,7 +5,7 @@ export type CartProduct = {
   description: string
   image: string
   categories: string
-  variant: string
-  sizes: string
+  variant: string | undefined
+  sizes: string | undefined
   quantity?: number
 }
