@@ -36,7 +36,7 @@ const Products = ({ products }: { products: Product[] }) => {
   };
   const filterBySizes = () => {
     const filtered = products.filter((product: Product) => {
-      return product.sizes.toLocaleLowerCase().includes(size.toLowerCase());
+      return product.sizes.map((size: string) => size).includes(size);
     });
     return filtered;
   };
@@ -59,7 +59,7 @@ const Products = ({ products }: { products: Product[] }) => {
   const filterByAll = () => {
     const filtered = products.filter((product: Product) => {
       return (
-        product.sizes.toLocaleLowerCase().includes(size.toLowerCase()) ||
+        product.sizes.map((size: string) => size).includes(size) ||
         product.categories.toLocaleLowerCase().includes(category.toLowerCase()) ||
         product.variant.toLocaleLowerCase().includes(variant.toLowerCase())
       );
