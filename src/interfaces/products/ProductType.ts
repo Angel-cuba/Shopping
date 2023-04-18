@@ -1,33 +1,22 @@
 export type Product = {
   id: number
   name: string
-  price: number
   description: string
   image: string
   categories: Category
   variant: Variant
-  sizes: Size
-}
-
-export type NewProduct = {
-  id: number
-  name: string
+  sizes: Size[]
   price: number
-  description: string
-  image: string
-  categories: string
-  variant: string
-  sizes: string
 }
 
 export type NewProductToStock = {
-  id?: number
+  id: number
   name: string
   description: string
   image: string
   categories: string
   variant: string
-  sizes: string
+  sizes: string[]
   price: number
 }
 
