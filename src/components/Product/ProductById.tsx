@@ -6,17 +6,23 @@ import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp'
 import StarsIcon from '@mui/icons-material/Stars'
 
 import { AppDispatch, RootState } from '../../redux/store'
-import {
-  NewProduct,
-  Product,
-  Sizes,
-  Variants,
-  VariantsColors
-} from '../../interfaces/products/ProductType'
+import { Product, Sizes, Variants, VariantsColors } from '../../interfaces/products/ProductType'
+import ProductItem from './ProductItem'
 import RecommendedProducts from './RecommendedProducts'
 import { addToCart } from '../../redux/actions/CartActions'
-import ProductItem from './ProductItem'
 import './ProductById.scss'
+import { CartProduct } from '../../interfaces/cart/CartType'
+
+const initialProduct: CartProduct = {
+  id: 0,
+  name: '',
+  price: 0,
+  description: '',
+  image: '',
+  categories: '',
+  sizes: '',
+  variant: ''
+}
 
 const ProductById = () => {
   const params = useParams()
@@ -30,7 +36,6 @@ const ProductById = () => {
   React.useEffect(() => {
     if (product) {
       setVariant(product.variant)
-      setSize(product.sizes)
     }
   }, [id, product])
 
@@ -42,31 +47,36 @@ const ProductById = () => {
   const [variant, setVariant] = React.useState<string>()
   const [openSizesBox, setOpenSizesBox] = React.useState<boolean>(false)
   const [openVariantsBox, setOpenVariantsBox] = React.useState<boolean>(false)
-  const [newProduct, setNewProduct] = React.useState<NewProduct>()
+  const [newProduct, setNewProduct] = React.useState<CartProduct>(initialProduct)
+  const [openSelection, setOpenSelection] = React.useState<boolean>(false)
 
   const dispatch = useDispatch<AppDispatch>()
 
-  const SizeBlocks = Sizes.map((item) => (
-    <div
+  const productSizes = product?.sizes
+
+  const SizeBlocks = Sizes.map((item: string) => (
+    <button
       key={item}
       style={{
-        backgroundColor: item === size ? '#5D8A68' : '#F7F7F7',
-        color: item === size ? '#f0f0f0' : 'black',
+        backgroundColor: productSizes?.includes(item) ? '#5D8A68' : '#c2c2c28f',
+        color: productSizes?.includes(item) ? '#f0f0f0' : 'black',
         borderRadius: '5px',
         margin: '10px',
         boxShadow: '0 0 5px 0 lightgray',
-        border: item === size ? '1px solid #f0f0f0' : '',
+        border: productSizes?.includes(item) ? '1px solid #f0f0f0' : '',
         textAlign: 'center',
         cursor: 'pointer',
         minWidth: '50px',
         height: '40px',
         display: 'flex',
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+        outline: 'none'
       }}
-      onClick={() => setSize(item)}>
+      onClick={() => setSize(item)}
+      disabled={!productSizes?.includes(item)}>
       {item}
-    </div>
+    </button>
   ))
 
   const VariantBlocks = Variants.map((item) => (
@@ -107,45 +117,47 @@ const ProductById = () => {
   }
 
   const setNewProductHandler = () => {
-    setNewProduct({
+    const productToCart = {
       id: product.id,
       name: product.name,
       description: product.description,
       price: product.price,
-      sizes: !size ? '' : size,
-      variant: !variant ? '' : variant,
+      sizes: size,
+      variant: variant,
       categories: product.categories,
       image: product.image
-    })
+    }
     if (openSizesBox) {
       setOpenSizesBox(false)
     }
     if (openVariantsBox) {
       setOpenVariantsBox(false)
     }
+    if (size) {
+      setNewProduct(productToCart)
+    }
+    setOpenSelection(true)
   }
   const newProductHandler = () => {
-    if (newProduct) {
-      dispatch(addToCart(newProduct))
-      newProductCancelHandler()
-    }
+    dispatch(addToCart(newProduct))
+    newProductCancelHandler()
   }
   const newProductCancelHandler = () => {
-    setNewProduct(undefined)
-    setSize(product.sizes)
-    setVariant(product.variant)
+    setNewProduct(initialProduct)
+    setSize('')
+    setOpenSelection(false)
   }
 
   return (
     <div className="productId">
-      {size !== product?.sizes || variant !== product?.variant ? (
+      {size ? (
         <div
           className="productId__set-product"
           onClick={setNewProductHandler}
           style={{
             backgroundColor: '#5D8A68'
           }}>
-          <h3>Check what you have choosen</h3>
+          <h3>Add to cart</h3>
         </div>
       ) : (
         <p className="productId__change-product-notice">
@@ -153,7 +165,7 @@ const ProductById = () => {
           <br /> or <br /> pick a colour
         </p>
       )}
-      {newProduct && (
+      {openSelection && (
         <div className="productId__new-product">
           <div className="productId__new-product__info">
             <div className="productId__new-product__info__image">
@@ -215,13 +227,12 @@ const ProductById = () => {
                     <span
                       style={{
                         backgroundColor: 'lightgray',
-                        width: '40px',
+                        width: size ? '30px' : 'auto',
                         borderRadius: '5px',
                         display: 'inline-block',
-                        marginRight: '10px',
-                        boxShadow: '0 0 5px 0 lightgray',
-                        border: '1px solid #F7F7F7',
-                        padding: '3px 5px',
+                        marginRight: size ? '10px' : '0',
+                        boxShadow: !size ? '0 0 5px 0 lightgray' : 'none',
+                        padding: size ? '3px 5px' : '0',
                         textAlign: 'center'
                       }}>
                       {size}
