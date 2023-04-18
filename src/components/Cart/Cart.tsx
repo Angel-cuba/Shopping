@@ -1,15 +1,16 @@
 import React from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart'
+import { Favorite, ProductionQuantityLimits, ShoppingCart } from '@mui/icons-material'
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
 import FavoriteIcon from '@mui/icons-material/Favorite'
 import AccountBalanceIcon from '@mui/icons-material/AccountBalance'
-import { useDispatch, useSelector } from 'react-redux'
 
+import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch, RootState } from '../../redux/store'
-import { addToCart, removeFromCart } from '../../redux/actions/CartActions'
-import { Product } from '../../interfaces/products/ProductType'
 import SingleProduct from './Product/SingleProduct'
+import { Product } from '../../interfaces/products/ProductType'
+import { addToWishList, removeFromWishList } from '../../redux/actions/WishesActions'
+import { ProductInWishList } from './Wishes/ProductInWishList'
 
 export const NavbarIcon = () => {
   const [openCart, setOpenCart] = React.useState(false)
@@ -45,11 +46,16 @@ export const NavbarIcon = () => {
         )}
       </div>
       <div className="navbar-cart__icon" onClick={showCartItems}>
-        <AddShoppingCartIcon
-          style={{
-            fontSize: '2rem'
-          }}
-        />
+        {itemInCart?.length ? (
+          <ShoppingCart
+            style={{
+              fontSize: '2rem',
+              color: '#5a5a5a'
+            }}
+          />
+        ) : (
+          <ProductionQuantityLimits style={{ fontSize: '2rem', color: '#323232' }} />
+        )}
       </div>
       <div
         className={
@@ -78,17 +84,17 @@ type CartIconProps = {
 
 export const CartIcon = ({ product, handleLike, handleTrash }: CartIconProps) => {
   const dispatch = useDispatch<AppDispatch>()
-  const { itemInCart } = useSelector((state: RootState) => state.cart)
+  const { itemInWishlist } = useSelector((state: RootState) => state.wishes)
   const addItemToCart = () => {
-    dispatch(addToCart(product))
+    dispatch(addToWishList(product))
     handleLike()
   }
   const removeItemFromCart = () => {
-    dispatch(removeFromCart(product))
+    dispatch(removeFromWishList(product))
     handleTrash()
   }
 
-  const itemAddedToCart = itemInCart?.find((item) => item.id === product.id)
+  const itemAddedToCart = itemInWishlist?.find((item) => item.id === product.id)
 
   return (
     <div className="products__content__item--add--icon__view">
@@ -108,6 +114,37 @@ export const CartIcon = ({ product, handleLike, handleTrash }: CartIconProps) =>
           onClick={addItemToCart}
         />
       )}
+    </div>
+  )
+}
+
+export const WishListIcon = () => {
+  const [openWishList, setOpenWishList] = React.useState(false)
+  const { itemInWishlist } = useSelector((state: RootState) => state.wishes)
+
+  const showWishList = () => {
+    setOpenWishList(!openWishList)
+  }
+  return (
+    <div className="navbar-wishes">
+      {!itemInWishlist?.length ? (
+        <FavoriteBorderIcon
+          style={{ fontSize: '2.1rem', color: '#323232' }}
+          onClick={showWishList}
+        />
+      ) : (
+        <Favorite style={{ fontSize: '2.1rem', color: '#5a5a5a' }} onClick={showWishList} />
+      )}
+      <div className="navbar-wishes__amount">{!itemInWishlist ? 0 : itemInWishlist.length}</div>
+      <div className={openWishList ? 'navbar-wishes__cart' : 'navbar-wishes__cart--hidden'}>
+        {itemInWishlist?.length ? (
+          <ProductInWishList setOpenWishList={setOpenWishList} />
+        ) : (
+          <div className="navbar-wishes__cart__empty-wishlist">
+            <p className="navbar-wishes__cart__empty-wishlist__text">Your wishlist is empty</p>
+          </div>
+        )}
+      </div>
     </div>
   )
 }
