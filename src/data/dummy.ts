@@ -3,7 +3,7 @@ import { Product } from '../interfaces/products/ProductType';
 export const PRODUCTS: Product[] = [
   {
     id: 1,
-    name: 'Global Blood Therapeutics, Inc.',
+    name: 'NIke Air Max 270',
     description:
       'Nike, Inc., formerly (1964–78) Blue Ribbon Sports, American sportswear company headquartered in Beaverton, Oregon.',
     categories: 'Summer',
@@ -15,7 +15,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: 2,
-    name: 'General Electric Company',
+    name: 'Nike Air Max 90',
     description:
       'It was founded in 1964 as Blue Ribbon Sports by Bill Bowerman, a track-and-field coach at the University of Oregon',
     categories: 'Winter',
@@ -27,7 +27,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: 3,
-    name: 'China TechFaith Wireless Communication Technology Limited',
+    name: 'Nike Air Max 95',
     description:
       'They opened their first retail outlet in 1966 and launched the Nike brand shoe in 1972.',
     categories: 'Spring',
@@ -39,7 +39,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: 4,
-    name: 'STRATS Trust',
+    name: 'Nike Air Max 97',
     description:
       'The company was renamed Nike, Inc., in 1978 and went public two years later. By the early 21st century',
     categories: 'Autumn',
@@ -50,7 +50,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: 5,
-    name: 'QuickLogic Corporation',
+    name: 'Air Max 200',
     description:
       'From the late 1980s Nike steadily expanded its business and diversified its product line through numerous acquisitions',
     categories: 'Summer',
@@ -63,7 +63,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: 6,
-    name: 'Yield10 Bioscience, Inc.',
+    name: 'Nike Air Force 1',
     description:
       'On December 19, 2013, Nikes quarterly profit rose due to a 13 percent increase in global orders for merchandise since April of that year. Future orders of shoes or clothes for delivery between December and April, rose to $10.4 billion. ',
     categories: 'Winter',
@@ -76,7 +76,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: 7,
-    name: 'China Commercial CCrimsonit, Inc.',
+    name: 'Nike Air Force 2',
     description:
       'Nike produces a wide range of sports equipment and apparel. Their first products were track running shoes.',
     categories: 'Winter',
@@ -88,7 +88,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: 8,
-    name: 'Nu Skin Enterprises, Inc.',
+    name: 'New Balance Athletics',
     description:
       'From the late 1980s Nike steadily expanded its business and diversified its product line through numerous acquisitions',
     categories: 'Spring',
@@ -101,7 +101,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: 9,
-    name: 'Ashford Hospitality Trust Inc',
+    name: 'Fila Holdings Corporation',
     description: 'In the early 21st century Nike began selling sports-technology accessories.',
     categories: 'Winter',
     image:
@@ -114,7 +114,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: 10,
-    name: 'Calithera Biosciences, Inc.',
+    name: 'Skechers USA, Inc.',
     description:
       'Nike produces a wide range of sports equipment and apparel. Their first products were track running shoes.',
     categories: 'Spring',
@@ -126,7 +126,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: 11,
-    name: 'Global Indemnity Limited',
+    name: 'Nike Air Jordan XX3',
     description:
       'In 2008, Nike introduced the Air Jordan XX3, a high-performance basketball shoe designed with the environment in mind.',
     categories: 'Spring',
@@ -139,7 +139,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: 12,
-    name: 'Western Union Company (The)',
+    name: 'Adidas',
     description: 'Acute bronchospasm',
     categories: 'Summer',
     image:
@@ -151,7 +151,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: 13,
-    name: 'Shineco, Inc.',
+    name: 'Louis Vuitton',
     description:
       'From the late 1980s Nike steadily expanded its business and diversified its product line through numerous acquisitions',
     categories: 'Spring',
@@ -163,7 +163,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: 14,
-    name: 'Lydall, Inc.',
+    name: 'Jordan Brand',
     description:
       'Part of Nike’s success is owed to endorsements by such athletes as Michael Jordan, Mia Hamm, Roger Federer, and Tiger Woods.',
     image:
@@ -177,7 +177,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: 15,
-    name: 'Hamilton Bancorp, Inc.',
+    name: 'Nike',
     description:
       'Platinum certification and will be highlighted by natural daylight, and a gray water treatment center.',
     categories: 'Autumn',
@@ -189,7 +189,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: 16,
-    name: 'Citigroup Inc.',
+    name: 'Reebook',
     description: 'In the early 21st century Nike began selling sports-technology accessories.',
     categories: 'Winter',
     image:
@@ -200,7 +200,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: 17,
-    name: 'Regal Beloit Corporation',
+    name: 'Toms',
     description:
       'Part of Nike’s success is owed to endorsements by such athletes as Michael Jordan, Mia Hamm, Roger Federer, and Tiger Woods.',
     categories: 'Summer',
@@ -212,7 +212,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: 18,
-    name: 'Liberty Interactive Corporation',
+    name: 'Lacoste SA',
     description:
       'On December 19, 2013, Nikes quarterly profit rose due to a 13 percent increase in global orders for merchandise since April of that year. Future orders of shoes or clothes for delivery between December and April, rose to $10.4 billion. ',
     categories: 'Winter',
@@ -224,7 +224,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: 19,
-    name: 'Violet Hills Bancorp, Inc.',
+    name: 'Yvis Saint Laurent',
     description:
       'Cole Haan (1988; sold in 2012) and Converse, Inc. (2003), the sports-equipment producer Canstar Sports, Inc. ',
     categories: 'Winter',
@@ -235,7 +235,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: 20,
-    name: 'FlexShares Disciplined Duration MBS Index Fund',
+    name: 'Fossil Group, Inc.',
     description:
       'Wieden+Kennedy, Nikes primary ad agency, has worked with Nike to create many print and television advertisements, and Wieden+Kennedy remains Nikes primary ad agency.',
     categories: 'Winter',
@@ -247,7 +247,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: 21,
-    name: 'Artisan Partners Asset Management Inc.',
+    name: 'Ecco Biom 2.0',
     description:
       'On December 19, 2013, Nikes quarterly profit rose due to a 13 percent increase in global orders for merchandise since April of that year. Future orders of shoes or clothes for delivery between December and April, rose to $10.4 billion. ',
     categories: 'Winter',
@@ -259,7 +259,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: 22,
-    name: 'Validus Holdings, Ltd.',
+    name: 'Puma Sport Fashion',
     description:
       'Beaverton, city, Washington county, northwestern Oregon, U.S., in the Tualatin Valley, immediately west of Portland. ',
     categories: 'Spring',
@@ -272,7 +272,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: 23,
-    name: 'Voya Infrastructure, Industrials and Materials Fund',
+    name: 'Adidas',
     description:
       'Wieden+Kennedy, Nikes primary ad agency, has worked with Nike to create many print and television advertisements, and Wieden+Kennedy remains Nikes primary ad agency.',
     categories: 'Autumn',
@@ -284,7 +284,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: 24,
-    name: 'Greif Bros. Corporation',
+    name: 'Nike',
     description:
       'Part of Nike’s success is owed to endorsements by such athletes as Michael Jordan, Mia Hamm, Roger Federer, and Tiger Woods.',
     categories: 'Summer',
@@ -296,7 +296,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: 25,
-    name: 'Fortress Transportation and Infrastructure Investors LLC',
+    name: 'Lacoste',
     description:
       'Cole Haan (1988; sold in 2012) and Converse, Inc. (2003), the sports-equipment producer Canstar Sports, Inc. ',
     categories: 'Spring',
@@ -308,7 +308,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: 26,
-    name: 'Atlanticus Holdings Corporation',
+    name: 'Hugo Boss',
     description:
       'From the late 1980s Nike steadily expanded its business and diversified its product line through numerous acquisitions',
     categories: 'Spring',
@@ -320,7 +320,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: 27,
-    name: 'ServiceNow, Inc.',
+    name: 'Diesel S.p.A.',
     description:
       'In 2008, Nike introduced the Air Jordan XX3, a high-performance basketball shoe designed with the environment in mind.',
     categories: 'Summer',
@@ -333,7 +333,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: 28,
-    name: 'Foamix Pharmaceuticals Ltd.',
+    name: 'Yeezy',
     description:
       'Beaverton, city, Washington county, northwestern Oregon, U.S., in the Tualatin Valley, immediately west of Portland. ',
     categories: 'Winter',
@@ -356,7 +356,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: 30,
-    name: 'PowerShares Optimum Yield Diversified Commodity Strategy No K-',
+    name: 'Puma SE',
     description:
       'Cole Haan (1988; sold in 2012) and Converse, Inc. (2003), the sports-equipment producer Canstar Sports, Inc. ',
     categories: 'Autumn',
@@ -368,7 +368,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: 31,
-    name: 'Ashford Hospitality Trust Inc',
+    name: 'Adidas AG',
     description: 'In the early 21st century Nike began selling sports-technology accessories.',
     categories: 'Summer',
     image:
@@ -381,7 +381,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: 32,
-    name: 'Ashford Hospitality Trust Inc',
+    name: 'Yves Saint Laurent',
     description: 'In the early 21st century Nike began selling sports-technology accessories.',
     categories: 'Autumn',
     image:
@@ -393,7 +393,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: 33,
-    name: 'Ashford Hospitality Trust Inc',
+    name: 'Calvin Klein, Inc.',
     description: 'In the early 21st century Nike began selling sports-technology accessories.',
     categories: 'Spring',
     image:
@@ -405,7 +405,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: 34,
-    name: 'Hamilton Bancorp, Inc.',
+    name: 'New Balance Athletics, Inc.',
     description:
       'Platinum certification and will be highlighted by natural daylight, and a gray water treatment center.',
     categories: 'Autumn',
@@ -417,7 +417,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: 35,
-    name: 'Citigroup Inc.',
+    name: 'Calvin Klein, Inc.',
     description: 'In the early 21st century Nike began selling sports-technology accessories.',
     categories: 'Winter',
     image:
@@ -428,7 +428,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: 36,
-    name: 'Regal Beloit Corporation',
+    name: 'Lequipeur Inc.',
     description:
       'Part of Nike’s success is owed to endorsements by such athletes as Michael Jordan, Mia Hamm, Roger Federer, and Tiger Woods.',
     categories: 'Summer',
@@ -441,7 +441,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: 37,
-    name: 'Liberty Interactive Corporation',
+    name: 'New Balance Athletics, Inc.',
     description:
       'On December 19, 2013, Nikes quarterly profit rose due to a 13 percent increase in global orders for merchandise since April of that year. Future orders of shoes or clothes for delivery between December and April, rose to $10.4 billion. ',
     categories: 'Winter',
@@ -453,7 +453,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: 38,
-    name: 'Violet Hills Bancorp, Inc.',
+    name: 'Reebok International Ltd.',
     description:
       'Cole Haan (1988; sold in 2012) and Converse, Inc. (2003), the sports-equipment producer Canstar Sports, Inc. ',
     categories: 'Winter',
@@ -464,7 +464,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: 39,
-    name: 'FlexShares Disciplined Duration MBS Index Fund',
+    name: 'Apple Industries, Inc.',
     description:
       'Wieden+Kennedy, Nikes primary ad agency, has worked with Nike to create many print and television advertisements, and Wieden+Kennedy remains Nikes primary ad agency.',
     categories: 'Winter',
@@ -476,7 +476,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: 40,
-    name: 'Artisan Partners Asset Management Inc.',
+    name: 'Adidas AG',
     description:
       'On December 19, 2013, Nikes quarterly profit rose due to a 13 percent increase in global orders for merchandise since April of that year. Future orders of shoes or clothes for delivery between December and April, rose to $10.4 billion. ',
     categories: 'Winter',
@@ -488,7 +488,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: 41,
-    name: 'Validus Holdings, Ltd.',
+    name: 'Adidas AG',
     description:
       'Beaverton, city, Washington county, northwestern Oregon, U.S., in the Tualatin Valley, immediately west of Portland. ',
     categories: 'Spring',
@@ -500,7 +500,7 @@ price: 333.99,
   },
   {
     id: 42,
-    name: 'Voya Infrastructure, Industrials and Materials Fund',
+    name: 'New Balance Athletics, Inc.',
     description:
       'Wieden+Kennedy, Nikes primary ad agency, has worked with Nike to create many print and television advertisements, and Wieden+Kennedy remains Nikes primary ad agency.',
     categories: 'Autumn',
@@ -513,7 +513,7 @@ price: 333.99,
   },
   {
     id: 43,
-    name: 'Greif Bros. Corporation',
+    name: 'Tommy Hilfiger Licensing, Inc.',
     description:
       'Part of Nike’s success is owed to endorsements by such athletes as Michael Jordan, Mia Hamm, Roger Federer, and Tiger Woods.',
     categories: 'Summer',
@@ -526,7 +526,7 @@ price: 333.99,
   },
   {
     id: 44,
-    name: 'Fortress Transportation and Infrastructure Investors LLC',
+    name: 'Tommy Hilfiger Licensing, Inc.',
     description:
       'Cole Haan (1988; sold in 2012) and Converse, Inc. (2003), the sports-equipment producer Canstar Sports, Inc. ',
     categories: 'Spring',
@@ -538,7 +538,7 @@ price: 333.99,
   },
   {
     id: 45,
-    name: 'Atlanticus Holdings Corporation',
+    name: 'Columbia Sportswear Company',
     description:
       'From the late 1980s Nike steadily expanded its business and diversified its product line through numerous acquisitions',
     categories: 'Spring',
@@ -550,7 +550,7 @@ price: 333.99,
   },
   {
     id: 46,
-    name: 'ServiceNow, Inc.',
+    name: 'Toms Shoes',
     description:
       'In 2008, Nike introduced the Air Jordan XX3, a high-performance basketball shoe designed with the environment in mind.',
     categories: 'Summer',
