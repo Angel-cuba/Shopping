@@ -30,15 +30,16 @@ export default function productReducer(state = initialProductState, action: AnyA
       }
     }
     case UPDATE_PRODUCT: {
-      const product = state.products.find((product) => product.id === action.payload.id)
+      const products = state.products.map((product) => {
+        if (product.id === action.payload.id) {
+          return action.payload
+        }
+        return product
+      })
+
       return {
         ...state,
-        products: product
-          ? [
-              action.payload,
-              ...state.products.filter((product) => product.id !== action.payload.id)
-            ]
-          : state.products
+        products
       }
     }
     case DELETE_PRODUCT: {
