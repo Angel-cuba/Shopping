@@ -13,16 +13,6 @@ import { addToCart } from '../../redux/actions/CartActions';
 import './ProductById.scss';
 import { CartProduct } from '../../interfaces/cart/CartType';
 
-const initialProduct: CartProduct = {
-  id: 0,
-  name: '',
-  price: 0,
-  description: '',
-  image: '',
-  categories: '',
-  sizes: '',
-  variant: '',
-};
 
 const ProductById = () => {
   const params = useParams();
@@ -32,6 +22,17 @@ const ProductById = () => {
   const product = products.find((product: Product) => {
     return product.id.toString() === id;
   });
+  
+  const initialProduct: CartProduct = {
+  id: !id ? 0 : parseInt(id),
+  name: '',
+  price: 0,
+  description: '',
+  image: '',
+  categories: '',
+  sizes: '',
+  variant: '',
+};
 
   React.useEffect(() => {
     if (product) {
