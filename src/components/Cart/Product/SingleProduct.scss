@@ -3,10 +3,26 @@
   display: flex;
   padding: 0.8rem 0.2rem;
   width: 500px;
-  border-bottom: 1px solid rgba(35, 35, 35, 0.1);
+  background-color: #acacac;
+  border-bottom: 1px solid #2323231a;
+  transition: all 0.3s ease-in-out;
+  margin: 1px;
+  border-radius: 10px;
+  box-shadow: 0px 0px 5px 0px #383838b2;
+  &:hover {
+    background-color: #7c7c7c;
+    transform: scale(1.02);
+    transform: rotateX(10deg);
+  }
   &__image {
     min-width: 80px;
     height: 80px;
+    transition: all 0.4s ease-in-out;
+    &:hover {
+      cursor: pointer;
+      transform: scale(1.08);
+      transform: rotateZ(-5deg);
+    }
   }
   &__buttons {
     display: flex;
@@ -17,9 +33,36 @@
       width: 25%;
       display: flex;
       justify-content: space-between;
+      align-items: center;
+      &--add {
+        color: #12590076;
+        box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.072);
+        border-radius: 5px;
+        transform: scale(0.96);
+        transition: all 0.4s ease-in-out;
+        &:hover {
+          color: #1c8e00;
+          box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.12), inset 0 0 10px 0 #2dbd094d;
+          cursor: pointer;
+          transform: scale(1.06);
+        }
+      }
+      &--remove {
+        color: #a5000074;
+        box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.072);
+        border-radius: 5px;
+        transform: scale(0.96);
+        transition: all 0.4s ease-in-out;
+        &:hover {
+          color: #8b0000;
+          box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2), inset 0 0 10px 0 #a5000074;
+          cursor: pointer;
+          transform: scale(1.06);
+        }
+      }
       &--quantity {
         font-size: 1.32rem;
-        font-weight: 500;
+        font-weight: bolder;
       }
     }
     &--price {
@@ -35,7 +78,14 @@
       font-size: 1.2rem;
       font-weight: 500;
       width: 250px;
-      height: 1.5rem;
+      height: 100%;
+      display: flex;
+      justify-content: flex-start;
+      color: #373737;
+      align-items: center;
+      &:hover {
+        color: #2a2525;
+      }
     }
   }
 }

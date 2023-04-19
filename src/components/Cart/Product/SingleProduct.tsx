@@ -34,14 +34,14 @@ const SingleProduct = ({ item }: { item: CartProduct }) => {
           />
         </Link>
       </div>
-
       <div className="cart-product__buttons">
         <div className="cart-product__buttons__plus-minus">
-          <AddBoxIcon style={{ fontSize: '2rem', color: '#146D00' }} onClick={addItemToCart} />
+          <AddBoxIcon style={{ fontSize: '2rem'}} onClick={addItemToCart}className="cart-product__buttons__plus-minus--add" />
           <p className="cart-product__buttons__plus-minus--quantity">{item.quantity}</p>
           <IndeterminateCheckBoxIcon
-            style={{ fontSize: '2rem', color: '#9D0000' }}
+            style={{ fontSize: '2rem'}}
             onClick={removeItemFromCart}
+            className="cart-product__buttons__plus-minus--remove"
           />
         </div>
         <div className="cart-product__buttons--data">
@@ -52,9 +52,11 @@ const SingleProduct = ({ item }: { item: CartProduct }) => {
               height: '25px',
               backgroundColor: `${item.variant}`,
               position: 'absolute',
-              top: '3px',
-              left: '2%',
-              borderRadius: '25px',
+              top: '-20px',
+              left: '0px',
+              borderTopLeftRadius: '10px',
+              borderBottomRightRadius: '10px',
+              boxShadow:`0px 0px 3px 0px ${item.variant}`
             }}
           ></p>
         </div>
