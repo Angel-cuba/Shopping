@@ -47,22 +47,73 @@
         align-items: center;
         .navbar-cart {
           position: relative;
-
           &__total {
             position: absolute;
             top: 60px;
-            right: 495px;
+            right: 515px;
             font-size: 1.2rem;
             font-weight: 500;
             z-index: 100;
             width: 115px;
             text-align: center;
-            background-color: #6c6c6c;
+            background-color: #929292;
+            border-radius: 5px;
+            z-index: 100;
+            &--hidden {
+              display: none;
+            }
+            &--close {
+              background-color: #ff000066;
+              width: 100%;
+              border-radius: 5px;
+              z-index: 100;
+              &:hover {
+                background-color: #ff0000;
+                cursor: pointer;
+                box-shadow: inset 0 0 10px 0 #000000;
+              }
+            }
+            &--text {
+              font-weight: bolder;
+              color: #2e2e2e;
+            }
+            &--price {
+              font-weight: bolder;
+              color: #3c3c3c;
+            }
+            &--link {
+              width: 100%;
+              &__icon {
+                color: #c8c8c8;
+                transition: all 0.3s ease-in-out;
+                &:hover {
+                  color: #000;
+                  box-shadow: 0 1px 5px 0 #000000;
+                  transform: scale(1.2);
+                }
+              }
+            }
+          }
+          &__close {
+            position: absolute;
+            top: 60px;
+            right: 630px;
+            font-size: 1.2rem;
+            font-weight: 500;
+            z-index: 100;
+            padding: 0 10px;
+            text-align: center;
             border-top-left-radius: 5px;
             border-bottom-left-radius: 5px;
             border-top-right-radius: 5px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             &--hidden {
               display: none;
+            }
+            &:hover {
+              cursor: pointer;
             }
           }
           &__icon {
@@ -102,11 +153,10 @@
             position: absolute;
             top: 60px;
             right: 10px;
-            width: 510px;
-            min-height: 100px;
+            min-width: 530px;
+            min-height: 0px;
             max-height: 400px;
             overflow-y: scroll;
-            background-color: #e3e3e3;
             border-radius: 5px;
             z-index: 100;
             transform: translateX(25px);
@@ -121,29 +171,19 @@
           cursor: pointer;
           &__cart {
             display: block;
-            position: absolute;
-            top: 86px;
-            right: -84px;
-            width: 98vw;
-            height: 78vh;
-            z-index: 100;
-            &--hidden {
-              display: none;
-            }
-            &__empty-wishlist {
-              background-color: red;
-              width: 200px;
-              padding: 20px 50px;
-              border-radius: 6px;
-              color: white;
+            &--empty {
+              display: block;
+              width: fit-content;
+              height: 25px;
+              background-color: #d50000;
+              color: #fff;
+              text-align: center;
               font-size: 1.2rem;
               font-weight: 500;
-              text-align: center;
-              position: absolute;
-              right: 2px;
-              top: -100px;
-              right: 5%;
-              animation: mover 4s ease forwards;
+              padding: 0.5rem 1rem;
+              border-radius: 5px;
+              margin: 0.5rem auto;
+              box-shadow: 0 0 4px 0 #ff0000;
             }
           }
           &__amount {
