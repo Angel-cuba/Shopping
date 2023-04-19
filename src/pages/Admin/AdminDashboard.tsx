@@ -52,31 +52,30 @@ const AdminDashboard = () => {
           to="/admin/createandcheck"
           className="admin-dashboard__buttons"
           style={{
-            textDecoration: 'none'
+            textDecoration: 'none',
           }}
         >
           <StorageRounded fontSize="large" />
           <p className="admin-dashboard__buttons--text">In stock</p>
         </Link>
-        <div className="admin-dashboard__buttons" onClick={handleOpenCreate}>
-          {
-            !openCreateAndEdit ? (
-              <AddBoxSharp fontSize="large" />
-            ) : (
-              <ClosedCaptionDisabledOutlined fontSize="large" />
-            )
-          }
-
-          <p className="admin-dashboard__buttons--text">{
-            openCreateAndEdit ? 'Close' : 'Create'
-          }</p>
-        </div>
       </div>
       {openCustomers && <Customers />}
-      {openProducts && <Products {...products} />}
+      {openProducts && <div className='admin-dashboard__products'>
+       <div className={!openCreateAndEdit ? "admin-dashboard__products__create-button" : "admin-dashboard__products__create-button-close"} onClick={handleOpenCreate}>
+            {!openCreateAndEdit ? (
+              <AddBoxSharp fontSize="large" />
+            ) : (
+              <ClosedCaptionDisabledOutlined fontSize="large" style={{color: '#ff0000'}}/>
+            )}
+
+            <p className="admin-dashboard__products__create-button--text">
+              {openCreateAndEdit ? 'Close' : 'Add'}
+            </p>
+          </div>
+      <Products {...products} /></div>}
       {openCreateAndEdit && (
         <div className="admin-dashboard-create-product">
-          <CreateAndEdit productId={id} setOpenCreateAndEdit={setOpenCreateAndEdit}/>
+          <CreateAndEdit productId={id} setOpenCreateAndEdit={setOpenCreateAndEdit} />
         </div>
       )}
     </>
