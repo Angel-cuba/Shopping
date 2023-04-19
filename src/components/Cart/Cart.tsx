@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { Favorite, ProductionQuantityLimits, ShoppingCart } from '@mui/icons-material'
+import { Close, Favorite, ProductionQuantityLimits, ShoppingCart } from '@mui/icons-material'
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
 import FavoriteIcon from '@mui/icons-material/Favorite'
 import AccountBalanceIcon from '@mui/icons-material/AccountBalance'
@@ -8,9 +8,9 @@ import AccountBalanceIcon from '@mui/icons-material/AccountBalance'
 import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch, RootState } from '../../redux/store'
 import SingleProduct from './Product/SingleProduct'
+import { ProductInWishList } from './Wishes/ProductInWishList'
 import { Product } from '../../interfaces/products/ProductType'
 import { addToWishList, removeFromWishList } from '../../redux/actions/WishesActions'
-import { ProductInWishList } from './Wishes/ProductInWishList'
 
 export const NavbarIcon = () => {
   const [openCart, setOpenCart] = React.useState(false)
@@ -36,12 +36,27 @@ export const NavbarIcon = () => {
 
   return (
     <div className="navbar-cart">
-      <div className={openCart ? 'navbar-cart__total' : 'navbar-cart__total--hidden'}>
-        <p className="navbar-cart__total--text">Total to pay:</p>
+      <div
+        className={
+          openCart
+            ? itemInCart?.length
+              ? 'navbar-cart__total'
+              : 'navbar-cart__total--hidden'
+            : 'navbar-cart__total--hidden'
+        }>
+        <Close
+          style={{ fontSize: '2.2rem', fontWeight: 'bolder', color: '#ffdede' }}
+          onClick={closeCart}
+          className="navbar-cart__total--close"
+        />
+        <p className="navbar-cart__total--text">Total to pay</p>
         <p className="navbar-cart__total--price">$ {toPay()}</p>
         {location.pathname !== '/checkout' && (
           <Link to="/checkout" className="navbar-cart__total--link" onClick={closeCart}>
-            <AccountBalanceIcon style={{ fontSize: '2rem' }} />
+            <AccountBalanceIcon
+              style={{ fontSize: '2.3rem', fontWeight: 'bolder' }}
+              className="navbar-cart__total--link__icon"
+            />
           </Link>
         )}
       </div>
@@ -125,6 +140,7 @@ export const WishListIcon = () => {
   const showWishList = () => {
     setOpenWishList(!openWishList)
   }
+
   return (
     <div className="navbar-wishes">
       {!itemInWishlist?.length ? (
@@ -136,15 +152,11 @@ export const WishListIcon = () => {
         <Favorite style={{ fontSize: '2.1rem', color: '#5a5a5a' }} onClick={showWishList} />
       )}
       <div className="navbar-wishes__amount">{!itemInWishlist ? 0 : itemInWishlist.length}</div>
-      <div className={openWishList ? 'navbar-wishes__cart' : 'navbar-wishes__cart--hidden'}>
-        {itemInWishlist?.length ? (
+      {openWishList && (
+        <div className="navbar-wishes__cart">
           <ProductInWishList setOpenWishList={setOpenWishList} />
-        ) : (
-          <div className="navbar-wishes__cart__empty-wishlist">
-            <p className="navbar-wishes__cart__empty-wishlist__text">Your wishlist is empty</p>
-          </div>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   )
 }
