@@ -1,5 +1,5 @@
 export type CartProduct = {
-  id: number
+  id: number | string
   name: string
   price: number
   description: string
