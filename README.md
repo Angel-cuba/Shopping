@@ -1,6 +1,6 @@
-# Online Shoes Store
+# Online Shoe Store
 
-##### Live Demo: [Shoes Store](https://bespoke-granita-018679.netlify.app/)
+##### Live Demo: [Shoe Store](https://starlit-bienenstitch-282c7d.netlify.app/)
 **Table of Content**
 - Desciption
 - Features
@@ -19,7 +19,7 @@ The website also has an administration area that allows site owners to add new p
 ### Features
 - The integrated inventory management system ensures that users can only purchase products that are in stock.
 
-In summary, "Online Shoes Store" is a React-based eCommerce project that provides an easy and secure online shopping experience for users and an efficient store management tool for site owners.
+In summary, "Shoe Store" is a React-based eCommerce project that provides an easy and secure online shopping experience for users and an efficient store management tool for site owners.
 
 ## Characteristic
 - User-friendly interface and intuitive navigation
@@ -44,12 +44,14 @@ In summary, "Online Shoes Store" is a React-based eCommerce project that provide
 
   ### All store's products
   
-<img width="1496" alt="Captura de pantalla 2023-04-02 a las 19 44 10" src="https://user-images.githubusercontent.com/69958243/229366829-f9767e92-8f9e-4013-8985-d7c08ebbedc3.png">
+  <img width="1212" alt="Captura de pantalla 2023-04-19 a las 22 41 59" src="https://user-images.githubusercontent.com/69958243/233182866-cb2720a4-342b-48fe-b701-71bf340bc5e0.png">
 
 #### User likes some from here, with just a click this product goes to cart 
 
 <img width="284" alt="Captura de pantalla 2023-04-02 a las 19 51 10" src="https://user-images.githubusercontent.com/69958243/229367201-3210fbd1-adab-4f3c-9e16-ea4ca8cb8459.png">
-<img width="481" alt="Captura de pantalla 2023-04-02 a las 19 51 30" src="https://user-images.githubusercontent.com/69958243/229367209-e3d52f3a-4dda-4c81-84df-25c2dc91ba05.png">
+<img width="487" alt="Captura de pantalla 2023-04-19 a las 22 47 10" src="https://user-images.githubusercontent.com/69958243/233183818-5c2d4c44-1069-40cf-be5d-92824012150d.png">
+
+
 
 ###### If wants to know more about a specific product, is avaible a view for this, also, from here could be sure of what has choosen by selecting the size and colour of preference. 
 
@@ -61,8 +63,7 @@ After this, user goes to the payment side(**ongoing work**)
 <img width="1346" alt="Captura de pantalla 2023-04-02 a las 20 09 29" src="https://user-images.githubusercontent.com/69958243/229368502-2fac489a-0b84-44c2-a562-704e64745759.png">
 
 #### Admin has an extra navbar link, that goes to admin panel.
-
-<img width="1019" alt="Captura de pantalla 2023-04-02 a las 19 59 36" src="https://user-images.githubusercontent.com/69958243/229369417-48864278-6e1e-4718-8bd4-8ed86eacaf9a.png">
+<img width="1407" alt="Captura de pantalla 2023-04-19 a las 23 24 56" src="https://user-images.githubusercontent.com/69958243/233191887-16500022-fcef-4cf2-b71f-5b0be999659d.png">
 
 `From admin panel, once the product catalog is open, each product item has an extra feature that allows to update or delete the product`
 
@@ -74,3 +75,6 @@ After this, user goes to the payment side(**ongoing work**)
   - Sass
   - Json file as data simulating a backend response.
   
+## Data modelling
+![Captura de pantalla 2023-04-19 a las 19 19 56](https://user-images.githubusercontent.com/69958243/233192438-8687c744-4c6d-47b9-80fd-e9b0d3f0b414.png)
+
