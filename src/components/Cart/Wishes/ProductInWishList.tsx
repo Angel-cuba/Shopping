@@ -33,48 +33,60 @@ export const ProductInWishList = ({ setOpenWishList }: Props) => {
   }
 
   return (
-    <div className="view">
-      <div className="view__products">
-        {itemInWishlist?.map((item) => (
-          <div
-            key={item.id}
-            onMouseEnter={() => setOpenInformation(item)}
-            className="view__products__item">
-            <div className="view__products__item--image">
-              <img src={item.image} alt={item.name} />
-            </div>
-            <div className="view__products__item--buttons">
-              <Link to={`/product/${item.id}`} onClick={closeWishList}>
-                <button className="view__products__item--buttons__buy">
-                  <AddShoppingCart />
-                </button>
-              </Link>
-              <button
-                className="view__products__item--buttons__remove"
-                onClick={() => removeFromList(item)}>
-                Remove
-                <HeartBrokenIcon />
-              </button>
-            </div>
-          </div>
-        ))}
-      </div>
-      <div className="view__content">
-        <h1>Information</h1>
-        {openInformation && (
-          <div className="view__content__information">
-            <p className="view__content__information--description">{openInformation.description}</p>
-            <div className="view__content__information__small-info">
-              <p>{openInformation.name}</p>
-              <div className="">
-                <p>{openInformation.variant}</p>
-                <p>{openInformation.categories}</p>
-                <p>{openInformation.price}</p>
+    <>
+      {itemInWishlist?.length ? (
+        <div className="view" onMouseLeave={closeWishList}>
+          <div className="view__products">
+            {itemInWishlist?.map((item) => (
+              <div
+                key={item.id}
+                onMouseEnter={() => setOpenInformation(item)}
+                className="view__products__item">
+                <div className="view__products__item--image">
+                  <img src={item.image} alt={item.name} />
+                </div>
+                <div className="view__products__item--buttons">
+                  <Link to={`/product/${item.id}`} onClick={closeWishList}>
+                    <button className="view__products__item--buttons__buy">
+                      <AddShoppingCart />
+                    </button>
+                  </Link>
+                  <button
+                    className="view__products__item--buttons__remove"
+                    onClick={() => removeFromList(item)}>
+                    Remove
+                    <HeartBrokenIcon />
+                  </button>
+                </div>
               </div>
-            </div>
+            ))}
           </div>
-        )}
-      </div>
-    </div>
+          <div className="view__content">
+            <h1>Information</h1>
+            {openInformation && (
+              <div className="view__content__information">
+                <p className="view__content__information--description">
+                  {openInformation.description}
+                </p>
+                <div className="view__content__information__small-info">
+                  <p>{openInformation.name}</p>
+                  <div className="">
+                    <p>{openInformation.variant}</p>
+                    <p>{openInformation.categories}</p>
+                    <p>{openInformation.price}</p>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      ) : (
+        <div className="view-empty" onMouseOver={closeWishList}>
+          <h3>
+            Your wishlist is empty. <br /> Add some products to your wishlist.
+          </h3>
+        </div>
+      )}
+    </>
   )
 }
