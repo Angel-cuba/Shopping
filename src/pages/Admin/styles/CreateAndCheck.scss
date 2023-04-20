@@ -16,12 +16,17 @@
     }
     &__create-and-edit {
       min-width: 40%;
-      background-color: #d3d3d3;
-      border-radius: 10px;
+      background-color: #e9e2e2;
+      border-radius: 8px;
       padding: 8px 5px;
-      margin: 3px;
-      @media screen and (min-width: 768px) {
-        margin: 10px;
+      border: 1px solid #c7c7c748;
+      box-shadow: 0 0 5px 0 #c3c3c345;
+      &--label{
+        font-size: 1.52em;
+        font-weight: bold;
+        color: #4c4c4c;
+        margin: 5px;
+        text-align: center;
       }
       &__form {
         width: 100%;
