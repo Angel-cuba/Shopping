@@ -22,7 +22,7 @@ export function login(user: UserType) {
   };
   const userToStorage = {
     ...newUser,
-    role: user.email === 'araozangel842@gmail.com' ? 'ADMIN' : 'USER',
+    role: user.email === 'araozangel842@gmail.com' || 'santeri.auvinen@elisa.fi' ? 'ADMIN' : 'USER',
   };
   return {
     type: LOGGED_IN,
