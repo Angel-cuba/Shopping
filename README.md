@@ -78,3 +78,9 @@ After this, user goes to the payment side(**ongoing work**)
 ## Data modelling
 ![Captura de pantalla 2023-04-19 a las 19 19 56](https://user-images.githubusercontent.com/69958243/233192438-8687c744-4c6d-47b9-80fd-e9b0d3f0b414.png)
 
+## Data sources
+#### Structures and Types
+<img width="637" alt="Captura de pantalla 2023-04-20 a las 12 10 29" src="https://user-images.githubusercontent.com/69958243/233333662-f4a8d7e0-c6bb-4eab-b906-bc276c6dacdb.png">
+
+
+
