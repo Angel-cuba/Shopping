@@ -139,8 +139,7 @@
       flex-direction: column;
       justify-content: space-between;
       align-items: center;
-      background-color: #dbdbdb23;
-      
+      background-color: #dbdbdb23;     
       &--admin-icons {
         position: absolute;
         display: flex;
@@ -258,7 +257,7 @@
       &--editing-view {
         position: absolute;
         top: 300px;
-        right: 0;
+        right: -40px;
         z-index: 2;
       }
       @media screen and (min-width: 356px) {
