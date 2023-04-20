@@ -116,9 +116,9 @@ const ProductItem = ({ product }: { product: Product }) => {
           />
         </div>
         <div className="products__content__item--info">
-          <h3 className="products__content__item--info--name">{product.name.slice(0, 12)}</h3>
+          <h3 className="products__content__item--info--name">{product.name}</h3>
           <p className="products__content__item--info--description">
-            {product.description.slice(0, 20)}...
+            {product.description.slice(0, 26)}...
           </p>
           <p className="products__content__item--info--price">£{product.price}</p>
         </div>
