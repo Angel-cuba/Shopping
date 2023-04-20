@@ -3,14 +3,14 @@
   display: flex;
   padding: 0.8rem 0.2rem;
   width: 500px;
-  background-color: #acacac;
+  background-color: #e5e5e5;
   border-bottom: 1px solid #2323231a;
   transition: all 0.3s ease-in-out;
   margin: 1px;
   border-radius: 10px;
   box-shadow: 0px 0px 5px 0px #383838b2;
   &:hover {
-    background-color: #7c7c7c;
+    background-color: #c8c8c8;
     transform: scale(1.02);
     transform: rotateX(10deg);
   }

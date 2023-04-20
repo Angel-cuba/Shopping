@@ -56,11 +56,15 @@
             z-index: 100;
             width: 115px;
             text-align: center;
-            background-color: #929292;
+            background-color: #e5e5e5;
             border-radius: 5px;
             z-index: 100;
+            transition: all 0.3s ease-in-out;
             &--hidden {
               display: none;
+            }
+            &:hover{
+              background-color: #b8b8b8;
             }
             &--close {
               background-color: #ff000066;
@@ -84,10 +88,11 @@
             &--link {
               width: 100%;
               &__icon {
-                color: #c8c8c8;
+                color: #8e8e8e;
                 transition: all 0.3s ease-in-out;
                 &:hover {
-                  color: #000;
+                  color: #232323;
+                  border-radius: 3px;
                   box-shadow: 0 1px 5px 0 #000000;
                   transform: scale(1.2);
                 }
