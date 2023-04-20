@@ -10,8 +10,8 @@ import { Product, Sizes, Variants, VariantsColors } from '../../interfaces/produ
 import ProductItem from './ProductItem';
 import RecommendedProducts from './RecommendedProducts';
 import { addToCart } from '../../redux/actions/CartActions';
-import './ProductById.scss';
 import { CartProduct } from '../../interfaces/cart/CartType';
+import './ProductById.scss';
 
 
 const ProductById = () => {
@@ -177,15 +177,19 @@ const ProductById = () => {
                 src={newProduct.image}
                 alt=""
                 style={{
-                  width: '200px',
-                  height: '200px',
+                  width: '300px',
+                  height: '300px',
                   objectFit: 'cover',
                 }}
               />
             </div>
             <div className="productId__new-product__info__content">
               <p>{newProduct.name}</p>
-              <p>{newProduct.description}</p>
+              <p style={{
+                fontSize: '14px',
+                color: 'gray',
+                width: '500px',
+              }}>{newProduct.description}</p>
               <p>{newProduct.price}</p>
               <p>{newProduct.sizes}</p>
               <p>{newProduct.variant}</p>
@@ -195,24 +199,12 @@ const ProductById = () => {
           <div className="productId__new-product__buttons">
             <div
               className="productId__new-product__buttons--send"
-              style={{
-                backgroundColor: 'green',
-                padding: '10px',
-                borderRadius: '5px',
-                width: '100px',
-              }}
               onClick={newProductHandler}
             >
               Send
             </div>
             <div
               className="productId__new-product__buttons--cancel"
-              style={{
-                backgroundColor: 'red',
-                padding: '10px',
-                borderRadius: '5px',
-                width: '100px',
-              }}
               onClick={newProductCancelHandler}
             >
               Cancel

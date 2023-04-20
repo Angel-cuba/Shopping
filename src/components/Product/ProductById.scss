@@ -39,27 +39,64 @@
       align-items: center;
       padding: 10px;
       &__image {
-        box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+        width: 80%;
         border-radius: 10px;
-        background-color: #fff;
+        margin-right: 150px;
       }
       &__content {
         text-align: left;
+        width: 100%;
       }
     }
     &__buttons {
       display: flex;
-      justify-content: space-around;
+      justify-content: space-between;
       align-items: center;
-      padding: 10px;
-      background-color: #ffffff5e;
-      border-radius: 15px;
+      padding: 15px 20px;
+      border-radius: 5px;
       width: 300px;
       margin-top: 50px;
       margin-left: auto;
       margin-right: auto;
-      &__button {
-        margin: 0 10px;
+      transition: all 0.3s ease;
+      &:hover {
+        background-color: #eaeaea;
+        filter: blur(0.5px);
+        transform: scale(1.02);
+        transform: rotateY(30deg);
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.21);
+      }
+      &--send {
+        background-color: #3d9200bc;
+        box-shadow: 0 0 5px 0 #3d9200bc;
+        color: #d8d8d8;
+        padding: 6px 30px;
+        border-radius: 5px;
+        font-size: 1.2rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        &:hover {
+          transform: scale(1.1);
+          background-color: #2f6f00;
+          color: #ffffff;
+        }
+      }
+      &--cancel {
+        background-color: #ff0000bc;
+        box-shadow: 0 0 5px 0 #ff0000bc;
+        color: #d8d8d8;
+        padding: 6px 25px;
+        border-radius: 5px;
+        font-size: 1.2rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        &:hover {
+          transform: scale(1.1);
+          background-color: #ff0000;
+          color: #ffffff;
+        }
       }
     }
   }
@@ -115,9 +152,9 @@
           top: 55px;
           right: -90px;
           width: 300px;
-          background-color: #ffffffa9;
-          box-shadow: 0 0 30px 0 #0000000c;
-          border-radius: 3px;
+          background-color: #ededed;
+          box-shadow: 0 0 10px 0 #acacac5f;
+          border-radius: 5px;
           display: flex;
           justify-content: space-evenly;
           align-items: center;
