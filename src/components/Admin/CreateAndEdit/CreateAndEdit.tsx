@@ -103,17 +103,9 @@ const CreateAndEdit = ({ productId, setOpenCreateAndEdit }: Props) => {
   return (
     <div className="admin-createandcheck__views__create-and-edit">
       <h1 className="admin-createandcheck__views__create-and-edit--label">
-        {!productId ? 'Create product' : 'Edit product'}
+        {!productId ? 'Creating' : 'Editing'}
       </h1>
       <form onSubmit={handlerSubmit} className="admin-createandcheck__views__create-and-edit__form">
-        <Input
-          name="id"
-          placeholder="Give a product id"
-          value={`${newProduct.id}`}
-          onChange={handlerInput}
-          type="number"
-          admin
-        />
         <Input
           name="name"
           placeholder="Give a product name"
