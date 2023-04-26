@@ -139,7 +139,7 @@
       flex-direction: column;
       justify-content: space-between;
       align-items: center;
-      background-color: #dbdbdb23;     
+      background-color: #dbdbdb23;
       &--admin-icons {
         position: absolute;
         display: flex;
@@ -183,7 +183,7 @@
         }
         height: 80px;
       }
-      &--animation-add{
+      &--animation-add {
         position: absolute;
         top: -67px;
         right: -40px;
@@ -194,7 +194,7 @@
         justify-content: center;
         align-items: center;
       }
-      &--animation-remove{
+      &--animation-remove {
         position: absolute;
         top: -40px;
         right: -15px;
@@ -430,6 +430,67 @@
         width: 100%;
         overflow: hidden;
       }
+    }
+  }
+  &__create {
+    position: absolute;
+    top: 100px;
+    left: 26px;
+    z-index: 300;
+  }
+  &__button-open {
+    position: absolute;
+    top: -65px;
+    left: 36px;
+    z-index: 300;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 95px;
+    justify-content: space-around;
+    background-color: #d3d3d3;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    opacity: 0.8;
+    padding: 0.079rem 0.4rem;
+    color: #040e20;
+    &:hover {
+      background-color: #a4ffaa15;
+      box-shadow: 0px 0px 5px 0px rgba(35, 40, 32, 0.297);
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+  &__button-close {
+    position: absolute;
+    top: -65px;
+    left: 36px;
+    z-index: 300;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 95px;
+    justify-content: space-around;
+    background-color: #d1afaf;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    opacity: 0.8;
+    padding: 0.005rem 0.13rem;
+    color: #040e20;
+    &:hover {
+      background-color: #ff5f5f1b;
+      box-shadow: 0px 0px 5px 0px rgba(255, 0, 0, 0.183);
+      transform: scale(1.01);
+      opacity: 1;
+    }
+  }
+  &__button-text {
+    color: #313131;
+    font-weight: 600;
+    &:hover {
+      color: #261414;
     }
   }
 }

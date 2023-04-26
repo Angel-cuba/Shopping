@@ -3,7 +3,10 @@ import { Input } from '../../components/Input/Input';
 import ProductItem from '../../components/Product/ProductItem';
 import { Product, Sizes } from '../../interfaces/products/ProductType';
 import ProductNotFound from './ProductNotFound';
+import { useLocation, useParams } from 'react-router-dom';
 import './Products.scss';
+import CreateAndEdit from '../../components/Admin/CreateAndEdit/CreateAndEdit';
+import { AddBoxSharp, ClosedCaptionDisabledOutlined } from '@mui/icons-material';
 
 const Products = ({ products }: { products: Product[] }) => {
   const [size, setSize] = React.useState('');
@@ -11,6 +14,11 @@ const Products = ({ products }: { products: Product[] }) => {
   const [category, setCategory] = React.useState('');
   const [singleFilter, setSingleFilter] = React.useState('');
   const [openFilters, setOpenFilters] = React.useState(false);
+  const [openCreateAndEdit, setOpenCreateAndEdit] = React.useState(false);
+  const {id} = useParams()
+
+
+  const location = useLocation();
 
   const handleSizeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSize(event.target.value);
@@ -111,9 +119,28 @@ const Products = ({ products }: { products: Product[] }) => {
     const value = event.currentTarget.textContent ?? '';
     setCategory(value);
   };
+
+    const handleOpenCreate = () => {
+    setOpenCreateAndEdit(!openCreateAndEdit);
+  };
   const seasson: string[] = ['Summer', 'Winter', 'Autumn', 'Spring'];
   return (
     <div className="products">
+      {location.pathname.includes('admin')  ? <div className="products__create">
+         <div className={!openCreateAndEdit ? "products__button-open" : "products__button-close"} onClick={handleOpenCreate}>
+            {!openCreateAndEdit ? (
+              <AddBoxSharp fontSize="large" />
+            ) : (
+              <ClosedCaptionDisabledOutlined fontSize="large" style={{color: '#ff0000'}}/>
+            )}
+
+            <p className="products__button-text">
+              {openCreateAndEdit ? 'Close' : 'Add'}
+            </p>
+          </div>
+          {openCreateAndEdit &&  <CreateAndEdit productId={id} setOpenCreateAndEdit={setOpenCreateAndEdit} />}
+      
+      </div> : null}
       <div className="products__controlPanel" onClick={handleOpenFilters}>
         {openFilters ? (
           <p className="products__controlPanel--button" onClick={filtersToDefaultValue}>
