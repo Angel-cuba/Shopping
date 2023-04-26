@@ -1,84 +1,64 @@
 import React, { useEffect } from 'react';
-import { Link, useParams } from 'react-router-dom';
-import { AddBoxSharp, ClosedCaptionDisabledOutlined, StorageRounded } from '@mui/icons-material';
+import { Link } from 'react-router-dom';
+import { StorageRounded } from '@mui/icons-material';
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 import StoreMallDirectoryRounded from '@mui/icons-material/StoreMallDirectoryRounded';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
-import { AppDispatch, RootState } from '../../redux/store';
-import Customers from '../../components/Admin/Customers/Customers';
+import { AppDispatch } from '../../redux/store';
 import { fetchProducts } from '../../redux/actions/ProductActions';
-import CreateAndEdit from '../../components/Admin/CreateAndEdit/CreateAndEdit';
-import Products from '../Products/Products';
 import './styles/AdminDashboard.scss';
+
+type ButtonProps = {
+  name: string;
+  icon: JSX.Element;
+  link: string;
+};
 
 const AdminDashboard = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const [openCustomers, setOpenCustomers] = React.useState(false);
-  const [openProducts, setOpenProducts] = React.useState(false);
-  const [openCreateAndEdit, setOpenCreateAndEdit] = React.useState(false);
-  const { products } = useSelector((state: RootState) => state);
-  const { id } = useParams();
 
   useEffect(() => {
     dispatch(fetchProducts());
   }, [dispatch]);
 
-  const handleOpenCustomers = () => {
-    setOpenProducts(false);
-    setOpenCustomers(!openCustomers);
-  };
-
-  const handleOpenProducts = () => {
-    setOpenCustomers(false);
-    setOpenProducts(!openProducts);
-  };
-
-  const handleOpenCreate = () => {
-    setOpenCreateAndEdit(!openCreateAndEdit);
+  const buttonsLink: ButtonProps[] = [
+    {
+      name: 'Customers',
+      icon: <PeopleAltIcon fontSize="large" />,
+      link: '/admin/customers',
+    },
+    {
+      name: 'Products',
+      icon: <StoreMallDirectoryRounded fontSize="large" />,
+      link: '/admin/products',
+    },
+    {
+      name: 'In stock',
+      icon: <StorageRounded fontSize="large" />,
+      link: '/admin/createandcheck',
+    },
+  ];
+  const Buttons = (link: ButtonProps) => {
+    return (
+      <Link
+        to={link.link}
+        className="admin-dashboard__buttons"
+        style={{
+          textDecoration: 'none',
+        }}
+      >
+        {link.icon}
+        <p className="admin-dashboard__buttons--text">{link.name}</p>
+      </Link>
+    );
   };
   return (
-    <>
       <div className="admin-dashboard">
-        <div className="admin-dashboard__buttons" onClick={handleOpenCustomers}>
-          <PeopleAltIcon fontSize="large" />
-          <p className="admin-dashboard__buttons--text">Customers</p>
-        </div>
-        <div className="admin-dashboard__buttons" onClick={handleOpenProducts}>
-          <StoreMallDirectoryRounded fontSize="large" />
-          <p className="admin-dashboard__buttons--text">Products</p>
-        </div>
-        <Link
-          to="/admin/createandcheck"
-          className="admin-dashboard__buttons"
-          style={{
-            textDecoration: 'none',
-          }}
-        >
-          <StorageRounded fontSize="large" />
-          <p className="admin-dashboard__buttons--text">In stock</p>
-        </Link>
+        {buttonsLink.map((link) => (
+          <Buttons key={link.name} {...link} />
+        ))}
       </div>
-      {openCustomers && <Customers />}
-      {openProducts && <div className='admin-dashboard__products'>
-       <div className={!openCreateAndEdit ? "admin-dashboard__products__create-button" : "admin-dashboard__products__create-button-close"} onClick={handleOpenCreate}>
-            {!openCreateAndEdit ? (
-              <AddBoxSharp fontSize="large" />
-            ) : (
-              <ClosedCaptionDisabledOutlined fontSize="large" style={{color: '#ff0000'}}/>
-            )}
-
-            <p className="admin-dashboard__products__create-button--text">
-              {openCreateAndEdit ? 'Close' : 'Add'}
-            </p>
-          </div>
-      <Products {...products} /></div>}
-      {openCreateAndEdit && (
-        <div className="admin-dashboard-create-product">
-          <CreateAndEdit productId={id} setOpenCreateAndEdit={setOpenCreateAndEdit} />
-        </div>
-      )}
-    </>
   );
 };
 
