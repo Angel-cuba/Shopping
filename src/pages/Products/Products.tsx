@@ -4,9 +4,9 @@ import ProductItem from '../../components/Product/ProductItem';
 import { Product, Sizes } from '../../interfaces/products/ProductType';
 import ProductNotFound from './ProductNotFound';
 import { useLocation, useParams } from 'react-router-dom';
-import './Products.scss';
 import CreateAndEdit from '../../components/Admin/CreateAndEdit/CreateAndEdit';
 import { AddBoxSharp, ClosedCaptionDisabledOutlined } from '@mui/icons-material';
+import './Products.scss';
 
 const Products = ({ products }: { products: Product[] }) => {
   const [size, setSize] = React.useState('');
