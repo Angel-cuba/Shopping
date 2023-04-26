@@ -57,7 +57,7 @@ const ProductItem = ({ product }: { product: Product }) => {
   return (
     <>
       <div key={product.id} className="products__content__item">
-        {user?.role === 'ADMIN' && pathname.includes('/admin/dashboard') && (
+        {user?.role === 'ADMIN' && pathname.includes('/admin/products') && (
           <div className="products__content__item--admin-icons">
             <div
               onClick={() => handleEdit(product)}
