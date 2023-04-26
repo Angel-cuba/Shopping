@@ -10,6 +10,8 @@ import Profile from '../pages/User/Profile'
 import Checkout from '../pages/Checkout/Checkout'
 import AdminDashboard from '../pages/Admin/AdminDashboard'
 import CreateAndCheck from '../pages/Admin/CreateAndCheck'
+import AdminProducts from '../pages/Admin/AdminProducts'
+import Customers from '../components/Admin/Customers/Customers'
 
 const Navigation = () => {
   const { user } = useSelector((state: RootState) => state.userLogged)
@@ -36,6 +38,8 @@ const Navigation = () => {
     { path: '/admin/dashboard', element: <AdminDashboard /> },
     { path: '/admin/createandcheck', element: <CreateAndCheck /> },
     { path: '/admin/createandcheck/check', element: <CreateAndCheck /> },
+    { path: '/admin/products', element: <AdminProducts /> },
+    { path: '/admin/customers', element: <Customers /> },
     { path: '/admin/*', element: <AdminDashboard /> }
   ]
 
