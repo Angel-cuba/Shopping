@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { StorageRounded } from '@mui/icons-material';
+import { ShoppingCartRounded, StorageRounded } from '@mui/icons-material';
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 import StoreMallDirectoryRounded from '@mui/icons-material/StoreMallDirectoryRounded';
 import { useDispatch } from 'react-redux';
@@ -38,6 +38,11 @@ const AdminDashboard = () => {
       icon: <StorageRounded fontSize="large" />,
       link: '/admin/createandcheck',
     },
+    {
+    name: 'Orders',
+    icon: <ShoppingCartRounded fontSize="large" />,
+    link: '/admin/orders'
+    }
   ];
   const Buttons = (link: ButtonProps) => {
     return (
