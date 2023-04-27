@@ -8,13 +8,12 @@
   &__buttons {
     display: flex;
     align-items: center;
-    flex-wrap: wrap;
     width: 120px;
     justify-content: space-around;
     background-color: #d3d3d3;
     border-radius: 10px;
-    padding: 8px 5px;
-    margin: 13px;
+    padding: 6px 5px;
+    margin: 12px;
     cursor: pointer;
     transition: all 0.2s ease-in-out;
     opacity: 0.8;
@@ -35,6 +34,9 @@
       &--text {
         display: inline-block;
         color: #000;
+        font-weight: 600;
+        width: 90px;
+        text-align: center;
       }
     }
     @media screen and (min-width: 420px) {
