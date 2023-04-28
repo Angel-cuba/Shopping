@@ -1,11 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { ORDERS, PAYMENT_DETAILS } from '../../data/orders';
+import { ORDERS, OrderType, PAYMENT_DETAILS } from '../../data/orders';
 import { users } from '../../data/users';
 import './styles/AdminOrders.scss';
 
 const AdminOrders = () => {
   const [orders, setOrders] = React.useState(ORDERS);
   const [providers, setProviders] = React.useState<string[] | any>();
+  const [provider, setProvider] = React.useState<string | null>('');
   const [deleteFilters, setDeleteFilters] = React.useState(false);
 
   const maxValue = Math.max(...ORDERS.map((order) => order.totalInvoice));
@@ -18,38 +19,93 @@ const AdminOrders = () => {
   const ordersRef = useRef(orders);
 
   useEffect(() => {
-    if (ordersRef.current.length) {
-      const filtersByPaymentProvider = () => {
-        const payments = ordersRef.current.map((order) => {
-          const payment = PAYMENT_DETAILS.find((payment) => payment.id === order.paymentId);
-          return payment?.provider;
-        });
+    const filtersByPaymentProvider = () => {
+      const payments = ordersRef.current.map((order) => {
+        const payment = PAYMENT_DETAILS.find((payment) => payment.id === order.paymentId);
+        return payment?.provider;
+      });
 
-        const provider = payments.flat().filter((provider, index, self) => {
-          return self.indexOf(provider) === index;
-        });
-        setProviders(provider);
-      };
-      filtersByPaymentProvider();
-    }
+      const providers = payments.flat().filter((provider, index, self) => {
+        return self.indexOf(provider) === index;
+      });
+      setProviders(providers);
+    };
+    filtersByPaymentProvider();
   }, []);
 
-  const renderUserPayments = (paymentId: number) => {
-      const payment = PAYMENT_DETAILS.find((payment) => payment.id === paymentId);
-      return (
-        <div
-          key={payment?.id}
-          style={{
-            backgroundColor:  'green',
-            textAlign: 'center',
-          }}
-          className="admin-orders__container--order--payment-methods"
-        >
-          <p>{payment?.provider}</p>
-        </div>
-      );
-  };
+  useEffect(() => {
+    const handleFilter = () => {
+      const filtered = ORDERS.filter((order) => {
+        const payment = PAYMENT_DETAILS.find((payment) => payment.id === order.paymentId);
+        return payment?.provider === provider;
+      });
+      setOrders(filtered);
+    };
+    handleFilter();
+  }, [provider]);
 
+  useEffect(() => {
+    const handleFilterByTotalInvoice = () => {
+      const filtered = ordersRef.current.filter((order: OrderType) => {
+        const payment = PAYMENT_DETAILS.find((payment) => payment.id === order.paymentId);
+        return payment?.provider === provider && order.totalInvoice <= Number(inputValue);
+      });
+      setOrders(filtered);
+    };
+    if (inputValue !== undefined && inputValue > minValue && inputValue < maxValue) {
+      handleFilterByTotalInvoice();
+    }
+  }, [inputValue, provider, minValue, maxValue]);
+
+  useEffect(() => {
+    const filterAllByTotalInvoice = () => {
+      const filtered = ORDERS.filter((order: OrderType) => {
+        return order.totalInvoice <= Number(inputValue);
+      });
+      setOrders(filtered);
+    };
+    if (!provider) {
+      filterAllByTotalInvoice();
+    }
+  }, [inputValue, minValue, provider, maxValue]);
+
+  const cleanFilters = () => {
+    setDeleteFilters(false);
+    setProvider(null);
+  };
+  const providersButtons = () => {
+    return providers?.map((providerString: string) => (
+      <button
+        key={providerString}
+        className="admin-orders__filters--buttons"
+        onClick={() => addProvider(providerString)}
+        style={{
+          backgroundColor: provider === providerString ? '#000000eb' : '#ffffff',
+          color: provider === providerString ? '#ffffff' : '#000000',
+          border: '1px solid #343434',
+        }}
+      >
+        {providerString}
+      </button>
+    ));
+  };
+  const addProvider = (providerString: string) => {
+    setDeleteFilters(true);
+    setProvider(providerString);
+  };
+  const filterByTotalInvoice = () => {
+    return (
+      <div className="admin-orders__filters--buttons">
+        <input
+          type="range"
+          value={inputValue}
+          onChange={handleInputChange}
+          min={minValue}
+          max={maxValue}
+        />
+      </div>
+    );
+  };
   const userInfo = (userId: number) => {
     const user = users.find((user) => user.id === userId);
     return (
@@ -68,54 +124,17 @@ const AdminOrders = () => {
       </div>
     );
   };
-  const handleFilter = (provider: string) => {
-    const filteredOrders = ORDERS.filter((order) => {
-      const payment = PAYMENT_DETAILS.find((payment) => payment.id === order.paymentId);
-      return payment?.provider === provider;
-    });
-    setDeleteFilters(true);
-    setOrders(filteredOrders);
-  };
-  const filterByTotalInvoice = () => {
+  const renderUserPayments = (paymentId: number) => {
+    const payment = PAYMENT_DETAILS.find((payment) => payment.id === paymentId);
     return (
-      <div className="admin-orders__filters--buttons">
-        <input
-          type="range"
-          value={inputValue}
-          onChange={handleInputChange}
-          min={minValue}
-          max={maxValue}
-        />
+      <div
+        key={payment?.provider}
+        className="admin-orders__container--order--payment-methods"
+      >
+        <p>{payment?.provider}</p>
       </div>
     );
   };
-  const cleanFilters = () => {
-    setDeleteFilters(false);
-    setOrders(ORDERS);
-  };
-  const providersButtons = () => {
-    return providers?.map((provider: string) => (
-      <button
-        key={provider}
-        className="admin-orders__filters--buttons"
-        onClick={() => handleFilter(provider)}
-      >
-        {provider}
-      </button>
-    ));
-  };
-
-  useEffect(() => {
-    const handleFilterByTotalInvoice = () => {
-      const filteredOrders = ORDERS.filter((order) => {
-        return order.totalInvoice <= Number(inputValue);
-      });
-      setOrders(filteredOrders);
-    };
-    if (inputValue !== undefined && inputValue !== 0) {
-      handleFilterByTotalInvoice();
-    }
-  }, [inputValue]);
 
   return (
     <div className="admin-orders">
@@ -127,9 +146,12 @@ const AdminOrders = () => {
         </div>
       )}
       <div className="admin-orders__filters">{providersButtons()}</div>
-      <div className="admin-orders__filters">{filterByTotalInvoice()}</div>
+      <div className="admin-orders__filters">
+        {filterByTotalInvoice()}
+      </div>
+
       <div className="admin-orders__container">
-        {orders.map((order) => (
+        {orders.map((order: OrderType) => (
           <div key={order.orderId} className="admin-orders__container--order">
             {userInfo(order.userId)}
             <p className="admin-orders__container--order--information">
@@ -141,13 +163,14 @@ const AdminOrders = () => {
             <p className="admin-orders__container--order--information">
               Amount of products:
               <span className="admin-orders__container--order--information--number">
-                {order.items.length}
+                {order.items?.length}
               </span>
             </p>
             <p className="admin-orders__container--order--date">{order.orderDate}</p>
             {renderUserPayments(order.paymentId)}
           </div>
         ))}
+        {!orders.length && <p>No orders less {inputValue}€ spent</p>}
       </div>
     </div>
   );
