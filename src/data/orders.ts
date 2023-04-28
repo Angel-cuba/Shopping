@@ -13,7 +13,6 @@ export type OrderType = {
 export type PaymentsType = {
   id: number;
   provider: string;
-  status: boolean;
   createdAt: string;
   updatedAt: string;
 };
@@ -33,7 +32,7 @@ export const ORDERS: OrderType[] = [
   {
     orderId: 1,
     userId: 1,
-    paymentId:  9,
+    paymentId: 9,
     items: [
       {
         productId: 1,
@@ -95,7 +94,7 @@ export const ORDERS: OrderType[] = [
     orderDate: '2021-01-04',
   },
   {
-    orderId: 14,
+    orderId: 5,
     userId: 6,
     paymentId: 7,
     items: [
@@ -108,7 +107,7 @@ export const ORDERS: OrderType[] = [
         quantity: 1,
       },
     ],
-    totalInvoice: 55,
+    totalInvoice: 255,
     orderDate: '2021-01-04',
   },
   {
@@ -125,7 +124,7 @@ export const ORDERS: OrderType[] = [
         quantity: 1,
       },
     ],
-    totalInvoice: 55,
+    totalInvoice: 405,
     orderDate: '2021-01-04',
   },
   {
@@ -137,8 +136,12 @@ export const ORDERS: OrderType[] = [
         productId: 5,
         quantity: 1,
       },
+      {
+        productId: 15,
+        quantity: 10,
+      },
     ],
-    totalInvoice: 55,
+    totalInvoice: 555,
     orderDate: '2021-01-04',
   },
   {
@@ -155,7 +158,130 @@ export const ORDERS: OrderType[] = [
         quantity: 1,
       },
     ],
-    totalInvoice: 55,
+    totalInvoice: 342,
+    orderDate: '2021-01-04',
+  },
+  {
+    orderId: 9,
+    userId: 4,
+    paymentId: 1,
+    items: [
+      {
+        productId: 4,
+        quantity: 1,
+      },
+      {
+        productId: 5,
+        quantity: 1,
+      },
+    ],
+    totalInvoice: 160,
+    orderDate: '2021-01-04',
+  },
+  {
+    orderId: 10,
+    userId: 4,
+    paymentId: 1,
+    items: [
+      {
+        productId: 4,
+        quantity: 1,
+      },
+      {
+        productId: 5,
+        quantity: 1,
+      },
+    ],
+    totalInvoice: 90,
+    orderDate: '2021-01-04',
+  },
+  {
+    orderId: 11,
+    userId: 4,
+    paymentId: 1,
+    items: [
+      {
+        productId: 4,
+        quantity: 1,
+      },
+      {
+        productId: 5,
+        quantity: 1,
+      },
+    ],
+    totalInvoice: 35,
+    orderDate: '2021-01-04',
+  },
+  {
+    orderId: 12,
+    userId: 3,
+    paymentId: 6,
+    items: [
+      {
+        productId: 5,
+        quantity: 1,
+      },
+      {
+        productId: 15,
+        quantity: 10,
+      },
+    ],
+    totalInvoice: 355,
+    orderDate: '2021-01-04',
+  },
+  {
+    orderId: 13,
+    userId: 4,
+    paymentId: 3,
+    items: [
+      {
+        productId: 5,
+        quantity: 1,
+      },
+      {
+        productId: 15,
+        quantity: 10,
+      },
+    ],
+    totalInvoice: 35,
+    orderDate: '2021-01-04',
+  },
+  {
+    orderId: 14,
+    userId: 3,
+    paymentId: 3,
+    items: [
+      {
+        productId: 5,
+        quantity: 1,
+      },
+      {
+        productId: 15,
+        quantity: 10,
+      },
+    ],
+    totalInvoice: 305,
+    orderDate: '2021-01-04',
+  },
+  {
+    orderId: 15,
+    userId: 5,
+    paymentId: 3,
+    items: [
+      {
+        productId: 5,
+        quantity: 1,
+      },
+      {
+        productId: 15,
+        quantity: 10,
+      },
+      {
+        productId: 15,
+        quantity: 10,
+      },
+    ],
+    totalInvoice: 5,
     orderDate: '2021-01-04',
   },
 ];
@@ -164,63 +290,54 @@ export const PAYMENT_DETAILS: PaymentsType[] = [
   {
     id: 1,
     provider: 'Paypal',
-    status: false,
     createdAt: '01/01/2020',
     updatedAt: '01/01/2020',
   },
   {
     id: 2,
     provider: 'Stripe',
-    status: true,
     createdAt: '01/01/2020',
     updatedAt: '01/01/2020',
   },
   {
     id: 3,
     provider: 'Apple Pay',
-    status: true,
     createdAt: '01/01/2020',
     updatedAt: '01/01/2020',
   },
   {
     id: 4,
     provider: 'Google Pay',
-    status: true,
     createdAt: '01/01/2020',
     updatedAt: '01/01/2020',
   },
   {
     id: 5,
     provider: 'Amazon Pay',
-    status: true,
     createdAt: '01/01/2020',
     updatedAt: '01/01/2020',
   },
   {
     id: 6,
     provider: 'Samsung Pay',
-    status: true,
     createdAt: '01/01/2020',
     updatedAt: '01/01/2020',
   },
   {
     id: 7,
     provider: 'Visa',
-    status: true,
     createdAt: '01/01/2020',
     updatedAt: '01/01/2020',
   },
   {
     id: 8,
     provider: 'Mastercard',
-    status: true,
     createdAt: '01/01/2020',
     updatedAt: '01/01/2020',
   },
   {
     id: 9,
     provider: 'American Express',
-    status: true,
     createdAt: '01/01/2020',
     updatedAt: '01/01/2020',
   },
@@ -243,4 +360,4 @@ export const ORDERS_BY_USER: OrderByUserType[] = [
     createdAt: '2021-01-01',
     modifiedAt: '2021-01-01',
   },
-]
+];
