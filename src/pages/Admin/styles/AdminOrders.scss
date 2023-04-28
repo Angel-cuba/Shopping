@@ -41,15 +41,14 @@
       padding: 5px 10px;
       margin: 5px;
       cursor: pointer;
-      transition: all 0.2s ease-in-out;
       opacity: 0.8;
       font-weight: bold;
+      transition: all 0.2s ease-in-out;
       &:hover {
         background-color: #000000;
         color: #ffffff;
-        box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.32);
+        box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.2);
         transform: scale(1.05);
-        border: 1px solid #ffffff96;
         opacity: 1;
       }
     }
@@ -97,13 +96,12 @@
       }
       &--payment-methods {
         display: flex;
-        align-items: center;
-        justify-content: space-between;
+        justify-content: center;
         margin: 5px 0;
-        padding: 0 5px;
+        background-color: #114800df;
+        color: #ffffff;
         box-shadow: inset 0px 0px 5px 0px rgba(0, 0, 0, 0.172), 0px 0px 1px 0px #00000016;
         border-radius: 5px;
-        color: #fff;
         font-weight: bold;
       }
     }
