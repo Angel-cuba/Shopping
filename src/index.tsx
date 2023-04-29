@@ -5,8 +5,8 @@ import { BrowserRouter } from 'react-router-dom';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import App from './App';
 import { store } from './redux/store';
-import './styles/index.scss';
 import { ThemeProvider } from './context/ThemeProvider';
+import './styles/index.scss';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <ThemeProvider>
