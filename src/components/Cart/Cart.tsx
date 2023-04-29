@@ -11,10 +11,15 @@ import SingleProduct from './Product/SingleProduct';
 import { ProductInWishList } from './Wishes/ProductInWishList';
 import { Product } from '../../interfaces/products/ProductType';
 import { addToWishList, removeFromWishList } from '../../redux/actions/WishesActions';
+import { useTheme } from '../../context/ThemeProvider';
+import { darkTheme, lightTheme } from '../../styles/styles';
 
 export const NavbarIcon = () => {
   const [openCart, setOpenCart] = React.useState(false);
   const location = useLocation();
+
+  const { theme } = useTheme();
+  const colorCondition = theme === 'dark' ? lightTheme.textLink : darkTheme.textLink;
 
   const emptyCart = 0;
   const { itemInCart } = useSelector((state: RootState) => state.cart);
@@ -45,12 +50,19 @@ export const NavbarIcon = () => {
             : 'navbar-cart__total--hidden'
         }
       >
-        <Close style={{ fontSize: '2.2rem', fontWeight:'bolder', color:'#ffdede' }} onClick={closeCart}  className="navbar-cart__total--close"/>
+        <Close
+          style={{ fontSize: '2.2rem', fontWeight: 'bolder', color: '#ffdede' }}
+          onClick={closeCart}
+          className="navbar-cart__total--close"
+        />
         <p className="navbar-cart__total--text">Total to pay</p>
         <p className="navbar-cart__total--price">$ {toPay()}</p>
         {location.pathname !== '/checkout' && (
           <Link to="/checkout" className="navbar-cart__total--link" onClick={closeCart}>
-            <AccountBalanceIcon style={{ fontSize: '2.3rem', fontWeight: 'bolder' }}  className="navbar-cart__total--link__icon"/>
+            <AccountBalanceIcon
+              style={{ fontSize: '2.3rem', fontWeight: 'bolder' }}
+              className="navbar-cart__total--link__icon"
+            />
           </Link>
         )}
       </div>
@@ -59,11 +71,11 @@ export const NavbarIcon = () => {
           <ShoppingCart
             style={{
               fontSize: '2rem',
-              color: '#5a5a5a',
+              color: colorCondition,
             }}
           />
         ) : (
-          <ProductionQuantityLimits style={{ fontSize: '2rem', color: '#323232' }} />
+          <ProductionQuantityLimits style={{ fontSize: '2rem', color: colorCondition }} />
         )}
       </div>
       <div
@@ -132,19 +144,38 @@ export const WishListIcon = () => {
   const [openWishList, setOpenWishList] = React.useState(false);
   const { itemInWishlist } = useSelector((state: RootState) => state.wishes);
 
+  const { theme } = useTheme();
+  const colorCondition = theme === 'dark' ? lightTheme.textLink : darkTheme.textLink;
+
   const showWishList = () => {
     setOpenWishList(!openWishList);
   };
 
+  const shadowCondition = theme === 'dark' ? '0 0 5px 0 #ff9494a9' : '0 0 5px 0 #ff0000a9';
   return (
     <div className="navbar-wishes">
       {!itemInWishlist?.length ? (
         <FavoriteBorderIcon
-          style={{ fontSize: '2.1rem', color: '#323232' }}
+          style={{
+            fontSize: '2.1rem',
+            color: colorCondition,
+          }}
           onClick={showWishList}
         />
       ) : (
-        <Favorite style={{ fontSize: '2.1rem', color: '#5a5a5a' }} onClick={showWishList} />
+        <Favorite
+          style={{
+            fontSize: '2.1rem',
+            color: colorCondition,
+            boxShadow: shadowCondition,
+            borderTopLeftRadius: '50%',
+            borderTopRightRadius: '50%',
+            borderBottomLeftRadius: '90%',
+            borderBottomRightRadius: '90%',
+            backgroundColor: lightTheme.shadow,
+          }}
+          onClick={showWishList}
+        />
       )}
       <div className="navbar-wishes__amount">{!itemInWishlist ? 0 : itemInWishlist.length}</div>
       {openWishList && (
