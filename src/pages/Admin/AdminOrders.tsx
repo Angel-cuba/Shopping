@@ -1,21 +1,24 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { ChangeEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { ORDERS, OrderType, PAYMENT_DETAILS } from '../../data/orders';
 import { users } from '../../data/users';
 import './styles/AdminOrders.scss';
 
 const AdminOrders = () => {
-  const [orders, setOrders] = React.useState(ORDERS);
-  const [providers, setProviders] = React.useState<string[] | any>();
-  const [provider, setProvider] = React.useState<string | null>('');
-  const [deleteFilters, setDeleteFilters] = React.useState(false);
+  const [orders, setOrders] = useState(ORDERS);
+  const [providers, setProviders] = useState<string[] | any>();
+  const [provider, setProvider] = useState<string | null>('');
+  const [deleteFilters, setDeleteFilters] = useState(false);
 
-  const maxValue = Math.max(...ORDERS.map((order) => order.totalInvoice));
-  const minValue = Math.min(...ORDERS.map((order) => order.totalInvoice));
-  const [inputValue, setInputValue] = useState<number | undefined>(maxValue);
+  const maxValue = useMemo(() => Math.max(...ORDERS.map((order) => order.totalInvoice)), []);
+  const minValue = useMemo(() => Math.min(...ORDERS.map((order) => order.totalInvoice)), []);
+  const [inputValue, setInputValue] = useState<number>(maxValue);
 
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setInputValue(Number(event.target.value));
-  };
+  const handleInputChange = useCallback(
+    (event: ChangeEvent<HTMLInputElement>) => {
+      setInputValue(Number(event.target.value));
+    },
+    [setInputValue]
+  );
   const ordersRef = useRef(orders);
 
   useEffect(() => {
@@ -127,10 +130,7 @@ const AdminOrders = () => {
   const renderUserPayments = (paymentId: number) => {
     const payment = PAYMENT_DETAILS.find((payment) => payment.id === paymentId);
     return (
-      <div
-        key={payment?.provider}
-        className="admin-orders__container--order--payment-methods"
-      >
+      <div key={payment?.provider} className="admin-orders__container--order--payment-methods">
         <p>{payment?.provider}</p>
       </div>
     );
@@ -146,9 +146,7 @@ const AdminOrders = () => {
         </div>
       )}
       <div className="admin-orders__filters">{providersButtons()}</div>
-      <div className="admin-orders__filters">
-        {filterByTotalInvoice()}
-      </div>
+      <div className="admin-orders__filters">{filterByTotalInvoice()}</div>
 
       <div className="admin-orders__container">
         {orders.map((order: OrderType) => (
