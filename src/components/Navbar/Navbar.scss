@@ -6,7 +6,9 @@
   justify-content: space-between;
   align-items: center;
   margin: auto;
-  padding: 20px 1%;
+  padding: 20px 2%;
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
   &__navbar-left {
     display: flex;
     justify-content: space-around;
@@ -19,24 +21,28 @@
     &__links {
       margin: 0 0.5rem;
       text-decoration: none;
-      color: #262626;
-      font-size: 1rem;
-      font-weight: 500;
+      font-size: 1.1rem;
+      font-weight: bolder;
       transition: all 0.3s ease-in-out;
       &:hover {
         color: #ffb300;
+        cursor: pointer;
+        font-size: 1.11rem;
       }
       &--login {
-        color: #523900;
+        color: #ffffff;
+        font-weight: bold;
         border: 1px solid #ffb300;
         border-radius: 0.25rem;
-        padding: 0.15rem 0.51rem;
+        padding: 0.15rem 1rem;
         background-color: #ffb3003a;
         transition: all 0.3s ease-in-out;
         &:hover {
-          color: #262626;
-          background-color: #ffb300;
+          border: 1.2px solid #ffffff;
+          background-color: #ffb30081;
           cursor: pointer;
+          transform: scale(1.1);
+          box-shadow: 0 0 2px 0 #ffffff;
         }
       }
       &__cart {
@@ -63,7 +69,7 @@
             &--hidden {
               display: none;
             }
-            &:hover{
+            &:hover {
               background-color: #b8b8b8;
             }
             &--close {
