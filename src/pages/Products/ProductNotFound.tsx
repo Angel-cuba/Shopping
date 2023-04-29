@@ -24,7 +24,7 @@ const ProductNotFound = ({ valueNotFound }: { valueNotFound: string }) => {
     }
   };
   const handleNextButtonClick = () => {
-    if (startIndex + 5 < products.length) {
+    if (startIndex + 5 < products?.length) {
       setStartIndex(startIndex + 1);
     }
   };
@@ -70,9 +70,9 @@ const ProductNotFound = ({ valueNotFound }: { valueNotFound: string }) => {
           {startIndex >= 6 && startIndex < 12 && `Still not found? What about of these products?`}
           {startIndex >= 12 && startIndex < 20 && 'Keep looking, we are sure you will find it'}
           {startIndex >= 20 &&
-            startIndex < products.length - 5 &&
+            startIndex < products?.length - 5 &&
             'Many products to show, keep looking'}
-          {startIndex === products.length - 5 && 'No more products to show'}
+          {startIndex === products?.length - 5 && 'No more products to show'}
         </h3>
         <button
           className={
@@ -87,12 +87,12 @@ const ProductNotFound = ({ valueNotFound }: { valueNotFound: string }) => {
         </button>
         <button
           className={
-            startIndex + 5 >= products.length
+            startIndex + 5 >= products?.length
               ? 'products__content__not-found-recommended__slider-button-next--disabled'
               : 'products__content__not-found-recommended__slider-button-next'
           }
           onClick={handleNextButtonClick}
-          disabled={startIndex + 5 >= products.length}
+          disabled={startIndex + 5 >= products?.length}
         >
           <ArrowForward />
         </button>

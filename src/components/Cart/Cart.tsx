@@ -107,6 +107,8 @@ type CartIconProps = {
 export const CartIcon = ({ product, handleLike, handleTrash }: CartIconProps) => {
   const dispatch = useDispatch<AppDispatch>();
   const { itemInWishlist } = useSelector((state: RootState) => state.wishes);
+  const { theme } = useTheme();
+
   const addItemToCart = () => {
     dispatch(addToWishList(product));
     handleLike();
@@ -132,6 +134,7 @@ export const CartIcon = ({ product, handleLike, handleTrash }: CartIconProps) =>
         <FavoriteBorderIcon
           style={{
             fontSize: '2.1rem',
+            color: theme === 'dark' ? lightTheme.textLink : darkTheme.textLink,
           }}
           onClick={addItemToCart}
         />

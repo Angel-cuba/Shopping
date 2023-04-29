@@ -6,6 +6,8 @@ import ProductNotFound from './ProductNotFound';
 import { useLocation, useParams } from 'react-router-dom';
 import CreateAndEdit from '../../components/Admin/CreateAndEdit/CreateAndEdit';
 import { AddBoxSharp, ClosedCaptionDisabledOutlined } from '@mui/icons-material';
+import { useTheme } from '../../context/ThemeProvider';
+import { darkTheme, lightTheme } from '../../styles/styles';
 import './Products.scss';
 
 const Products = ({ products }: { products: Product[] }) => {
@@ -15,10 +17,10 @@ const Products = ({ products }: { products: Product[] }) => {
   const [singleFilter, setSingleFilter] = React.useState('');
   const [openFilters, setOpenFilters] = React.useState(false);
   const [openCreateAndEdit, setOpenCreateAndEdit] = React.useState(false);
-  const {id} = useParams()
-
+  const { id } = useParams();
 
   const location = useLocation();
+  const { theme } = useTheme();
 
   const handleSizeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSize(event.target.value);
@@ -120,27 +122,31 @@ const Products = ({ products }: { products: Product[] }) => {
     setCategory(value);
   };
 
-    const handleOpenCreate = () => {
+  const handleOpenCreate = () => {
     setOpenCreateAndEdit(!openCreateAndEdit);
   };
   const seasson: string[] = ['Summer', 'Winter', 'Autumn', 'Spring'];
   return (
     <div className="products">
-      {location.pathname.includes('admin')  ? <div className="products__create">
-         <div className={!openCreateAndEdit ? "products__button-open" : "products__button-close"} onClick={handleOpenCreate}>
+      {location.pathname.includes('admin') ? (
+        <div className="products__create">
+          <div
+            className={!openCreateAndEdit ? 'products__button-open' : 'products__button-close'}
+            onClick={handleOpenCreate}
+          >
             {!openCreateAndEdit ? (
               <AddBoxSharp fontSize="large" />
             ) : (
-              <ClosedCaptionDisabledOutlined fontSize="large" style={{color: '#ff0000'}}/>
+              <ClosedCaptionDisabledOutlined fontSize="large" style={{ color: '#ff0000' }} />
             )}
 
-            <p className="products__button-text">
-              {openCreateAndEdit ? 'Close' : 'Add'}
-            </p>
+            <p className="products__button-text">{openCreateAndEdit ? 'Close' : 'Add'}</p>
           </div>
-          {openCreateAndEdit &&  <CreateAndEdit productId={id} setOpenCreateAndEdit={setOpenCreateAndEdit} />}
-      
-      </div> : null}
+          {openCreateAndEdit && (
+            <CreateAndEdit productId={id} setOpenCreateAndEdit={setOpenCreateAndEdit} />
+          )}
+        </div>
+      ) : null}
       <div className="products__controlPanel" onClick={handleOpenFilters}>
         {openFilters ? (
           <p className="products__controlPanel--button" onClick={filtersToDefaultValue}>
@@ -177,6 +183,14 @@ const Products = ({ products }: { products: Product[] }) => {
                   key={seasson}
                   className="products__panel--visible__seasson__item"
                   onClick={setCategoryValue}
+                  style={{
+                    backgroundColor: category === seasson ? '#0f0e0e' : '',
+                    color: category === seasson ? '#ffffff' : '',
+                    border:
+                      theme === 'light'
+                        ? `1px solid ${darkTheme.bg}`
+                        : `1px solid ${lightTheme.shadow}`,
+                  }}
                 >
                   {seasson}
                 </p>

@@ -111,7 +111,8 @@ const Navbar = () => {
                 style={{
                   width: '35px',
                   height: '35px',
-                  color: '#fff',
+                  color: lightTheme.textLink,
+                  cursor: 'pointer',
                 }}
               />
             ) : (
@@ -121,10 +122,16 @@ const Navbar = () => {
                 style={{
                   width: '35px',
                   height: '35px',
+                  cursor: 'pointer',
                 }}
               />
             )}
-            <div className="navbar__navbar-right__links--login" onClick={handleLogout}>
+            <div className="navbar__navbar-right__links--login" onClick={handleLogout}
+                style={{
+              color: theme === 'light' ? darkTheme.textLink : lightTheme.textLink,
+            }}
+            
+            >
               Logout
             </div>
             <div className="navbar__navbar-right__links__cart">

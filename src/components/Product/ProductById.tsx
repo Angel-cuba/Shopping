@@ -12,27 +12,29 @@ import RecommendedProducts from './RecommendedProducts';
 import { addToCart } from '../../redux/actions/CartActions';
 import { CartProduct } from '../../interfaces/cart/CartType';
 import './ProductById.scss';
-
+import { useTheme } from '../../context/ThemeProvider';
+import { darkTheme, lightTheme } from '../../styles/styles';
 
 const ProductById = () => {
   const params = useParams();
   const { id } = params;
   const { products } = useSelector((state: RootState) => state.products);
+  const { theme } = useTheme();
 
   const product = products.find((product: Product) => {
     return product.id.toString() === id;
   });
-  
+
   const initialProduct: CartProduct = {
-  id: !id ? 0 : parseInt(id),
-  name: '',
-  price: 0,
-  description: '',
-  image: '',
-  categories: '',
-  sizes: '',
-  variant: '',
-};
+    id: !id ? 0 : parseInt(id),
+    name: '',
+    price: 0,
+    description: '',
+    image: '',
+    categories: '',
+    sizes: '',
+    variant: '',
+  };
 
   React.useEffect(() => {
     if (product) {
@@ -89,11 +91,13 @@ const ProductById = () => {
         borderRadius: '5px',
         marginRight: '10px',
         marginBottom: '4px',
-        boxShadow: '0 0 5px 0 lightgray',
         textAlign: 'center',
         cursor: 'pointer',
         width: '40px',
         height: '40px',
+        boxShadow: `inset 0 0 2px 0 ${theme === 'dark' ? lightTheme.bg : darkTheme.bg}, 0 0 5px 0 ${
+          VariantsColors[item]
+        }`,
       }}
       onClick={() => setVariant(item)}
     >
@@ -185,11 +189,15 @@ const ProductById = () => {
             </div>
             <div className="productId__new-product__info__content">
               <p>{newProduct.name}</p>
-              <p style={{
-                fontSize: '14px',
-                color: 'gray',
-                width: '500px',
-              }}>{newProduct.description}</p>
+              <p
+                style={{
+                  fontSize: '14px',
+                  color: 'gray',
+                  width: '500px',
+                }}
+              >
+                {newProduct.description}
+              </p>
               <p>{newProduct.price}</p>
               <p>{newProduct.sizes}</p>
               <p>{newProduct.variant}</p>
@@ -197,10 +205,7 @@ const ProductById = () => {
             </div>
           </div>
           <div className="productId__new-product__buttons">
-            <div
-              className="productId__new-product__buttons--send"
-              onClick={newProductHandler}
-            >
+            <div className="productId__new-product__buttons--send" onClick={newProductHandler}>
               Send
             </div>
             <div
@@ -213,7 +218,12 @@ const ProductById = () => {
         </div>
       )}
       {product && (
-        <div className="productId__item">
+        <div
+          className="productId__item"
+          style={{
+            color: theme === 'light' ? darkTheme.bg : lightTheme.bg,
+          }}
+        >
           <ProductItem product={product} />
           <div className="productId__item__info">
             <h3 className="productId__item__info__name">{product.name}</h3>
@@ -244,7 +254,14 @@ const ProductById = () => {
                   </>
                 )}
                 {openSizesBox && (
-                  <div className="productId__item__info__small-details--blocks">{SizeBlocks}</div>
+                  <div
+                    className="productId__item__info__small-details--blocks"
+                    style={{
+                      backgroundColor: theme === 'dark' ? lightTheme.primary : darkTheme.secondary,
+                    }}
+                  >
+                    {SizeBlocks}
+                  </div>
                 )}
               </div>
               <p className="productId__item__info__small-details--categories">
@@ -260,7 +277,6 @@ const ProductById = () => {
                       borderRadius: '5px',
                       display: 'inline-block',
                       boxShadow: `0 0 5px 0 ${VariantsColors[variant]}`,
-                      border: '1px solid #F7F7F7',
                     }}
                     className="productId__item__info__small-details--variant--color"
                   ></span>
@@ -286,9 +302,22 @@ const ProductById = () => {
         </div>
       )}
 
-      <div className="productId__recommended">
+      <div
+        className="productId__recommended"
+        style={{
+          color: theme === 'light' ? darkTheme.bg : lightTheme.bg,
+        }}
+      >
         <h3 className="productId__recommended--text">You might also like...</h3>
-        <div className="productId__recommended__items">
+        <div
+          className="productId__recommended__items"
+          style={{
+            border:
+              theme === 'dark' ? `1px solid ${darkTheme.shadow}` : `1px solid ${lightTheme.shadow}`,
+            boxShadow:
+              theme === 'dark' ? `0 0 5px 0 ${darkTheme.shadow}` : `0 0 5px 0 ${lightTheme.shadow}`,
+          }}
+        >
           {recommendedProducts.map((product: Product) => (
             <RecommendedProducts key={product.id} product={product} />
           ))}

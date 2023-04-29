@@ -7,6 +7,8 @@ import { useDispatch } from 'react-redux';
 
 import { AppDispatch } from '../../redux/store';
 import { fetchProducts } from '../../redux/actions/ProductActions';
+import { useTheme } from '../../context/ThemeProvider';
+import { darkTheme, lightTheme } from '../../styles/styles';
 import './styles/AdminDashboard.scss';
 
 type ButtonProps = {
@@ -17,6 +19,7 @@ type ButtonProps = {
 
 const AdminDashboard = () => {
   const dispatch = useDispatch<AppDispatch>();
+  const {theme} = useTheme();
 
   useEffect(() => {
     dispatch(fetchProducts());
@@ -51,10 +54,15 @@ const AdminDashboard = () => {
         className="admin-dashboard__buttons"
         style={{
           textDecoration: 'none',
+          border: theme === 'dark' ? `1px solid ${lightTheme.bg}` : 'none',
+          color: theme === 'dark' ? lightTheme.bg : darkTheme.bg,
         }}
       >
         {link.icon}
-        <p className="admin-dashboard__buttons--text">{link.name}</p>
+        <p className="admin-dashboard__buttons--text" style={{
+          color: theme === 'dark' ? lightTheme.bg : darkTheme.bg,
+        }}>{link.name}</p>
+
       </Link>
     );
   };

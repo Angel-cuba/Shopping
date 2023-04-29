@@ -11,6 +11,8 @@ import CreateAndEdit from '../Admin/CreateAndEdit/CreateAndEdit';
 
 import LikeItem from './component/LikeItem';
 import TrashItem from './component/TrashItem';
+import { useTheme } from '../../context/ThemeProvider';
+import { darkTheme, lightTheme } from '../../styles/styles';
 
 const ProductItem = ({ product }: { product: Product }) => {
   const [openCreateAndEdit, setOpenCreateAndEdit] = React.useState(false);
@@ -22,6 +24,8 @@ const ProductItem = ({ product }: { product: Product }) => {
   const dispatch = useDispatch<AppDispatch>();
 
   const { user } = useSelector((state: RootState) => state.userLogged);
+
+  const { theme } = useTheme();
 
   const handleEdit = (product: Product) => {
     setOpenCreateAndEdit(!openCreateAndEdit);
@@ -56,9 +60,21 @@ const ProductItem = ({ product }: { product: Product }) => {
 
   return (
     <>
-      <div key={product.id} className="products__content__item">
+      <div
+        key={product.id}
+        className="products__content__item"
+        style={{
+          backgroundColor: theme === 'dark' ? lightTheme.primary : darkTheme.secondary,
+          boxShadow: theme === 'dark' ? 'none' : '0px 0px 10px 0px rgba(0,0,0,0.075)',
+        }}
+      >
         {user?.role === 'ADMIN' && pathname.includes('/admin/products') && (
-          <div className="products__content__item--admin-icons">
+          <div
+            className="products__content__item--admin-icons"
+            style={{
+              backgroundColor: theme === 'dark' ? darkTheme.bg : lightTheme.bg,
+            }}
+          >
             <div
               onClick={() => handleEdit(product)}
               style={{
@@ -87,7 +103,7 @@ const ProductItem = ({ product }: { product: Product }) => {
                 to={`/product/${product.id}`}
                 style={{
                   textDecoration: 'none',
-                  color: '#4c4c4c',
+                  color: darkTheme.textLink,
                   display: 'flex',
                 }}
               >
@@ -97,7 +113,12 @@ const ProductItem = ({ product }: { product: Product }) => {
             </div>
           )}
         {Animation()}
-        <div className="products__content__item--add">
+        <div
+          className="products__content__item--add"
+          style={{
+            backgroundColor: theme === 'dark' ? darkTheme.bg : lightTheme.bg,
+          }}
+        >
           <div className="products__content__item--add--icon">
             <CartIcon product={product} handleLike={handleLike} handleTrash={handleTrash} />
           </div>
@@ -115,7 +136,12 @@ const ProductItem = ({ product }: { product: Product }) => {
             }}
           />
         </div>
-        <div className="products__content__item--info">
+        <div
+          className="products__content__item--info"
+          style={{
+            color: theme === 'dark' ? lightTheme.textItem : darkTheme.textItem,
+          }}
+        >
           <h3 className="products__content__item--info--name">{product.name}</h3>
           <p className="products__content__item--info--description">
             {product.description.slice(0, 26)}...
