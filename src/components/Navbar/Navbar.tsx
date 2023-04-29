@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import MenuIcon from '@mui/icons-material/Menu';
 import CloseIcon from '@mui/icons-material/Close';
@@ -11,22 +11,43 @@ import { NavbarIcon, WishListIcon } from '../Cart/Cart';
 import { AppDispatch, RootState } from '../../redux/store';
 import { logout } from '../../redux/actions/UserAction';
 import './Navbar.scss';
+import { useTheme } from '../../context/ThemeProvider';
+import { darkTheme, lightTheme } from '../../styles/styles';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = React.useState(false);
   const [isDark, setIsDark] = React.useState(false);
   const { user } = useSelector((state: RootState) => state.userLogged);
   const dispatch = useDispatch<AppDispatch>();
+  const { theme, setTheme } = useTheme();
+
+  const navigation = useNavigate();
 
   const handleLogout = () => {
     localStorage.removeItem('user');
+    navigation('/');
     dispatch(logout());
   };
   const handleDarkMode = () => {
+    if (theme === 'light') {
+      setTheme('dark');
+    } else {
+      setTheme('light');
+    }
     setIsDark(!isDark);
   };
   return (
-    <div className="navbar">
+    <div
+      className="navbar"
+      style={{
+        backgroundColor: theme === 'light' ? lightTheme.bg : darkTheme.bg,
+        boxShadow:
+          theme === 'light'
+            ? `0 0 12px 0 ${lightTheme.shadow}, inset 0 0 12px 0 ${lightTheme.shadow}`
+            : `0 0 10px 0 ${darkTheme.shadow}, inset 0 0 10px 0 ${darkTheme.shadow}`,
+        color: theme === 'light' ? '#000' : '#fff',
+      }}
+    >
       <div className="navbar__navbar-left">
         {user ? (
           <>
@@ -54,18 +75,55 @@ const Navbar = () => {
       </div>
       <div className="navbar__navbar-right">
         {user && user.role === 'ADMIN' && (
-          <Link to="/admin/dashboard" className="navbar__navbar-right__links">
+          <Link
+            to="/admin/dashboard"
+            className="navbar__navbar-right__links"
+            style={{
+              color: theme === 'light' ? darkTheme.textLink : lightTheme.textLink,
+            }}
+          >
             Admin
           </Link>
         )}
         {user ? (
           <>
-            <Link to="/home" className="navbar__navbar-right__links">
+            <Link
+              to="/home"
+              className="navbar__navbar-right__links"
+              style={{
+                color: theme === 'light' ? darkTheme.textLink : lightTheme.textLink,
+              }}
+            >
               Store
             </Link>
-            <Link to="/profile" className="navbar__navbar-right__links">
+            <Link
+              to="/profile"
+              className="navbar__navbar-right__links"
+              style={{
+                color: theme === 'light' ? darkTheme.textLink : lightTheme.textLink,
+              }}
+            >
               Profile
             </Link>
+               {isDark ? (
+              <Brightness4Icon
+                onClick={handleDarkMode}
+                style={{
+                  width: '35px',
+                  height: '35px',
+                  color: '#fff',
+                }}
+              />
+            ) : (
+              <LightModeIcon
+                onClick={handleDarkMode}
+                color="warning"
+                style={{
+                  width: '35px',
+                  height: '35px',
+                }}
+              />
+            )}
             <div className="navbar__navbar-right__links--login" onClick={handleLogout}>
               Logout
             </div>
@@ -74,39 +132,13 @@ const Navbar = () => {
               <NavbarIcon />
             </div>
           </>
-        ) : (
-          <>
-            <Link to="/" className="navbar__navbar-right__links">
-              Login to Store
-            </Link>
-            <div className="navbar__navbar-right__links">
-              {isDark ? (
-                <Brightness4Icon
-                  onClick={handleDarkMode}
-                  style={{
-                    width: '35px',
-                    height: '35px',
-                  }}
-                />
-              ) : (
-                <LightModeIcon
-                  onClick={handleDarkMode}
-                  color="warning"
-                  style={{
-                    width: '35px',
-                    height: '35px',
-                  }}
-                />
-              )}
-            </div>
-          </>
-        )}
+        ) : null}
       </div>
       <div className="navbar__navbar_mobile">
         {isOpen ? (
           <CloseIcon
             style={{
-              color: '#000',
+              color: theme === 'light' ? darkTheme.textLink : lightTheme.textLink,
             }}
             onClick={() => setIsOpen(!isOpen)}
           />
