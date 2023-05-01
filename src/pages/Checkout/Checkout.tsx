@@ -1,17 +1,29 @@
-import React from 'react'
-import { useSelector } from 'react-redux'
-import SingleProduct from '../../components/Cart/Product/SingleProduct'
-import { Input } from '../../components/Input/Input'
-import { RootState } from '../../redux/store'
-import './Checkout.scss'
+import React from 'react';
+import { useSelector } from 'react-redux';
+import SingleProduct from '../../components/Cart/Product/SingleProduct';
+import { Input } from '../../components/Input/Input';
+import { RootState } from '../../redux/store';
+import './Checkout.scss';
+
+import { darkTheme, lightTheme } from '../../styles/styles';
+import { GlobalTheme } from '../../context/ThemeProvider';
 
 const Checkout = () => {
-  const [cardNumber, setCardNumber] = React.useState<string>('')
-  const { itemInCart } = useSelector((state: RootState) => state.cart)
+  const [cardNumber, setCardNumber] = React.useState<string>('');
+  const { itemInCart } = useSelector((state: RootState) => state.cart);
+  const { theme } = GlobalTheme();
 
   const handleCardNumber = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setCardNumber(e.target.value)
-  }
+    setCardNumber(e.target.value);
+  };
+
+  const toPay = () => {
+    let total = 0;
+    itemInCart?.forEach((item) => {
+      total += item.price * item.quantity;
+    });
+    return total.toFixed(2);
+  };
 
   return (
     <div className="checkout-view">
@@ -19,8 +31,25 @@ const Checkout = () => {
         {itemInCart?.map((item) => (
           <SingleProduct item={item} key={item.id} />
         ))}
+        <div
+          className="checkout-view__cart__total"
+          style={{
+            color: theme === 'dark' ? lightTheme.textLink : darkTheme.textLink,
+            backgroundColor: theme === 'dark' ? darkTheme.shadow : lightTheme.shadow,
+            boxShadow: `0 0 5px 0 ${theme === 'dark' ? darkTheme.shadowMedium : lightTheme.shadowMedium}`,
+
+          }}
+        >
+          <p className="checkout-view__cart__total--label">Total to pay</p>
+          <p className="checkout-view__cart__total--price">$ {toPay()}</p>
+        </div>
       </div>
-      <div className="checkout-view__payment-method">
+      <div
+        className="checkout-view__payment-method"
+        style={{
+          color: theme === 'dark' ? lightTheme.textLink : darkTheme.textLink,
+        }}
+      >
         <h1 className="checkout-view__payment-method--label">Select a payment method</h1>
         <div className="checkout-view__payment-method__card-number">
           <Input
@@ -40,7 +69,7 @@ const Checkout = () => {
               style={{
                 width: '60%',
                 height: '40%',
-                objectFit: 'cover'
+                objectFit: 'cover',
               }}
             />
           </div>
@@ -51,7 +80,7 @@ const Checkout = () => {
               style={{
                 width: '70%',
                 height: '40%',
-                objectFit: 'cover'
+                objectFit: 'cover',
               }}
             />
           </div>
@@ -62,14 +91,14 @@ const Checkout = () => {
               style={{
                 width: '60%',
                 height: '30%',
-                objectFit: 'fill'
+                objectFit: 'fill',
               }}
             />
           </div>
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Checkout
+export default Checkout;
