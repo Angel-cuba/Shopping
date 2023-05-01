@@ -65,6 +65,31 @@
           }
         }
       }
+      &__variant {
+        width: 40%;
+        display: flex;
+        justify-content: space-evenly;
+        align-items: center;
+        flex-wrap: wrap;
+        &__item {
+          color: #000000;
+          background-color: #ffffff;
+          border-radius: 5px;
+          padding: 3px 6px;
+          margin: 5px;
+          cursor: pointer;
+          opacity: 0.8;
+          font-weight: bold;
+          transition: all 0.2s ease-in-out;
+          &:hover {
+            background-color: #000000;
+            color: #ffffff;
+            box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.2);
+            transform: scale(1.05);
+            opacity: 1;
+          }
+        }
+      }
       &__size {
         position: relative;
         width: 60px;
@@ -128,6 +153,7 @@
     padding: 0px;
     display: flex;
     flex-wrap: wrap;
+    margin-top: 20px;
     @media screen and (min-width: 768px) {
       justify-content: space-around;
     }
