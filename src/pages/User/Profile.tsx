@@ -17,8 +17,10 @@ import {
   StreetviewTwoTone,
 } from '@mui/icons-material';
 import ProfileForm from './ProfileForm';
-import './Profile.scss';
 import ProfilePayment from './ProfilePayment';
+import { GlobalTheme } from '../../context/ThemeProvider';
+import { darkTheme, lightTheme } from '../../styles/styles';
+import './Profile.scss';
 
 const Profile = () => {
   const { user }: { user: UserType } = useSelector((state: RootState) => state.userLogged);
@@ -26,6 +28,8 @@ const Profile = () => {
   const [editPayment, setEditPayment] = React.useState(false);
   const [openHistory, setOpenHistory] = React.useState(false);
   const [userEdited, setUserEdited] = React.useState<UserType>(user);
+
+  const { theme } = GlobalTheme();
 
   const handleOpenProfile = () => {
     setEdit(!edit);
@@ -43,7 +47,13 @@ const Profile = () => {
   const iconStyles = {
     width: '60%',
     height: '100%',
-    color: '#6c6c6c',
+    color: theme === 'dark' ? lightTheme.greyLight : darkTheme.greyDark,
+  };
+
+  const infoItemStyles = {
+    color: theme === 'dark' ? lightTheme.greyLight : darkTheme.greyDark,
+    fontWeight: 'bolder',
+    boxShadow: `0px 0px 5px 0px ${theme === 'dark' ? lightTheme.shadowMedium : darkTheme.shadowMedium}`,
   };
 
   return (
@@ -87,19 +97,19 @@ const Profile = () => {
             alt={user?.name}
             className="profile__data__image-and-info__image"
           />
-          <div className="profile__data__image-and-info__item">
+          <div className="profile__data__image-and-info__item" style={infoItemStyles}>
             <div className="profile__data__image-and-info__item--icon">
               <Person style={iconStyles} />
             </div>
             {user.name}
           </div>
-          <div className="profile__data__image-and-info__item">
+          <div className="profile__data__image-and-info__item" style={infoItemStyles}>
             <div className="profile__data__image-and-info__item--icon">
               <Email style={iconStyles} />
             </div>
             {user.email}
           </div>
-          <div className="profile__data__image-and-info__item">
+          <div className="profile__data__image-and-info__item" style={infoItemStyles}>
             <div className="profile__data__image-and-info__item--icon">
               <PasswordSharp style={iconStyles} />
             </div>
@@ -109,25 +119,25 @@ const Profile = () => {
                 : '********'
               : user.password}
           </div>
-          <div className="profile__data__image-and-info__item">
+          <div className="profile__data__image-and-info__item" style={infoItemStyles}>
             <div className="profile__data__image-and-info__item--icon">
               <Phone style={iconStyles} />
             </div>
             {!user.phone ? (userEdited.phone ? userEdited.phone : 'Phone') : user.phone}
           </div>
-          <div className="profile__data__image-and-info__item">
+          <div className="profile__data__image-and-info__item" style={infoItemStyles}>
             <div className="profile__data__image-and-info__item--icon">
               <StreetviewTwoTone style={iconStyles} />
             </div>
             {!user.address ? (userEdited.address ? userEdited.address : 'Address') : user.address}
           </div>
-          <div className="profile__data__image-and-info__item">
+          <div className="profile__data__image-and-info__item" style={infoItemStyles}>
             <div className="profile__data__image-and-info__item--icon">
               <Apartment style={iconStyles} />
             </div>
             {!user.city ? (userEdited.city ? userEdited.city : 'City') : user.city}
           </div>
-          <div className="profile__data__image-and-info__item">
+          <div className="profile__data__image-and-info__item" style={infoItemStyles}>
             <div className="profile__data__image-and-info__item--icon">
               <PostAdd style={iconStyles} />
             </div>
@@ -137,7 +147,7 @@ const Profile = () => {
                 : 'Postal Code'
               : user.postalCode}
           </div>
-          <div className="profile__data__image-and-info__item">
+          <div className="profile__data__image-and-info__item" style={infoItemStyles}>
             <div className="profile__data__image-and-info__item--icon">
               <PublicRounded style={iconStyles} />
             </div>
@@ -148,7 +158,7 @@ const Profile = () => {
           <div className="profile__data__payment-info__button" onClick={handleOpenPayment}>
             Update payment information
           </div>
-          <div className="profile__data__payment-info__item">
+          <div className="profile__data__payment-info__item" style={infoItemStyles}>
             <div className="profile__data__payment-info__item--icon">
               <Person style={iconStyles} />
             </div>
@@ -158,7 +168,7 @@ const Profile = () => {
                 : 'Card holder'
               : user.cardHolder}
           </div>
-          <div className="profile__data__payment-info__item">
+          <div className="profile__data__payment-info__item" style={infoItemStyles}>
             <div className="profile__data__payment-info__item--icon">
               <CardTravelTwoTone style={iconStyles} />
             </div>
@@ -168,7 +178,7 @@ const Profile = () => {
                 : 'VISA'
               : user.paymentType}
           </div>
-          <div className="profile__data__payment-info__item">
+          <div className="profile__data__payment-info__item" style={infoItemStyles}>
             <div className="profile__data__payment-info__item--icon">
               <CardMembershipTwoTone style={iconStyles} />
             </div>
@@ -178,7 +188,7 @@ const Profile = () => {
                 : 'Provider'
               : user.provider}
           </div>
-          <div className="profile__data__payment-info__item">
+          <div className="profile__data__payment-info__item" style={infoItemStyles}>
             <div className="profile__data__payment-info__item--icon">
               <Numbers style={iconStyles} />
             </div>
@@ -188,7 +198,7 @@ const Profile = () => {
                 : '1234 5678 9012 3456'
               : user.accountNumber}
           </div>
-          <div className="profile__data__payment-info__item">
+          <div className="profile__data__payment-info__item" style={infoItemStyles}>
             <div className="profile__data__payment-info__item--icon">
               <DateRange style={iconStyles} />
             </div>

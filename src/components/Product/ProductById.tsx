@@ -11,15 +11,15 @@ import ProductItem from './ProductItem';
 import RecommendedProducts from './RecommendedProducts';
 import { addToCart } from '../../redux/actions/CartActions';
 import { CartProduct } from '../../interfaces/cart/CartType';
-import './ProductById.scss';
-import { useTheme } from '../../context/ThemeProvider';
+import { GlobalTheme } from '../../context/ThemeProvider';
 import { darkTheme, lightTheme } from '../../styles/styles';
+import './ProductById.scss';
 
 const ProductById = () => {
   const params = useParams();
   const { id } = params;
   const { products } = useSelector((state: RootState) => state.products);
-  const { theme } = useTheme();
+  const { theme } = GlobalTheme();
 
   const product = products.find((product: Product) => {
     return product.id.toString() === id;
@@ -76,12 +76,16 @@ const ProductById = () => {
         alignItems: 'center',
         outline: 'none',
       }}
-      onClick={() => setSize(item)}
+      onClick={() => chosenSize(item)}
       disabled={!productSizes?.includes(item)}
     >
       {item}
     </button>
   ));
+  const chosenSize = (item: string) => {
+    setSize(item);
+    setOpenSizesBox(!openSizesBox);
+  };
 
   const VariantBlocks = Variants.map((item) => (
     <div
@@ -312,10 +316,8 @@ const ProductById = () => {
         <div
           className="productId__recommended__items"
           style={{
-            border:
-              theme === 'dark' ? `1px solid ${darkTheme.shadow}` : `1px solid ${lightTheme.shadow}`,
-            boxShadow:
-              theme === 'dark' ? `0 0 5px 0 ${darkTheme.shadow}` : `0 0 5px 0 ${lightTheme.shadow}`,
+            border: `1px solid ${theme === 'dark' ? darkTheme.shadow : lightTheme.shadow}`,
+            boxShadow: `0 0 5px 0 ${theme === 'dark' ? darkTheme.shadow : lightTheme.shadow}`,
           }}
         >
           {recommendedProducts.map((product: Product) => (
