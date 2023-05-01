@@ -1,7 +1,7 @@
 import React from 'react';
 import { Input } from '../../components/Input/Input';
 import ProductItem from '../../components/Product/ProductItem';
-import { Product, Sizes } from '../../interfaces/products/ProductType';
+import { Product, Sizes, Variants } from '../../interfaces/products/ProductType';
 import ProductNotFound from './ProductNotFound';
 import { useLocation, useParams } from 'react-router-dom';
 import CreateAndEdit from '../../components/Admin/CreateAndEdit/CreateAndEdit';
@@ -27,9 +27,6 @@ const Products = ({ products }: { products: Product[] }) => {
     setSize(event.target.value);
   };
 
-  const handleVariantChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setVariant(event.target.value);
-  };
   const handleChangeSingleFilter = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSingleFilter(event.target.value);
   };
@@ -122,6 +119,10 @@ const Products = ({ products }: { products: Product[] }) => {
     const value = event.currentTarget.textContent ?? '';
     setCategory(value);
   };
+  const setVariantValue = (event: React.MouseEvent<HTMLParagraphElement, MouseEvent>) => {
+    const value = event.currentTarget.textContent ?? '';
+    setVariant(value);
+  };
 
   const handleOpenCreate = () => {
     setOpenCreateAndEdit(!openCreateAndEdit);
@@ -210,13 +211,26 @@ const Products = ({ products }: { products: Product[] }) => {
               );
             })}
           </div>
-          <Input
-            name="Variant"
-            value={variant}
-            placeholder=""
-            type="text"
-            onChange={handleVariantChange}
-          />
+         <div className="products__panel--visible__variant">
+           {
+            Variants.map((variantValue: string) => {
+              return (
+                <p
+                  key={variantValue}
+                  className="products__panel--visible__variant__item"
+                  onClick={setVariantValue}
+                  style={{
+                    backgroundColor: variantValue === variant ? '#111010' : '',
+                    color: variantValue === variant ? '#ffffff' : '',
+                    border: `1.4px solid ${theme === 'light' ? darkTheme.bg : lightTheme.shadow}`,
+                  }}
+                >
+                  {variantValue}
+                </p>
+              );
+            })
+          }
+         </div>
         </div>
         <div className={!openFilters ? 'products__panel--single' : 'products__panel--hidden'}>
           <Input
