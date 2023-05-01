@@ -42,7 +42,6 @@ export const Input = ({
     >
       <label
         style={{
-          color: '#7e7e7e',
           width: profile ? '40%' : small ? '100px' : '80%',
           fontSize: '18px',
           fontWeight: 'bold',

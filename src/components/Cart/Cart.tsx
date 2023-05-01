@@ -11,14 +11,14 @@ import SingleProduct from './Product/SingleProduct';
 import { ProductInWishList } from './Wishes/ProductInWishList';
 import { Product } from '../../interfaces/products/ProductType';
 import { addToWishList, removeFromWishList } from '../../redux/actions/WishesActions';
-import { useTheme } from '../../context/ThemeProvider';
+import { GlobalTheme } from '../../context/ThemeProvider';
 import { darkTheme, lightTheme } from '../../styles/styles';
 
 export const NavbarIcon = () => {
   const [openCart, setOpenCart] = React.useState(false);
   const location = useLocation();
 
-  const { theme } = useTheme();
+  const { theme } = GlobalTheme();
   const colorCondition = theme === 'dark' ? lightTheme.textLink : darkTheme.textLink;
 
   const emptyCart = 0;
@@ -107,7 +107,7 @@ type CartIconProps = {
 export const CartIcon = ({ product, handleLike, handleTrash }: CartIconProps) => {
   const dispatch = useDispatch<AppDispatch>();
   const { itemInWishlist } = useSelector((state: RootState) => state.wishes);
-  const { theme } = useTheme();
+  const { theme } = GlobalTheme();
 
   const addItemToCart = () => {
     dispatch(addToWishList(product));
@@ -147,14 +147,14 @@ export const WishListIcon = () => {
   const [openWishList, setOpenWishList] = React.useState(false);
   const { itemInWishlist } = useSelector((state: RootState) => state.wishes);
 
-  const { theme } = useTheme();
+  const { theme } = GlobalTheme();
   const colorCondition = theme === 'dark' ? lightTheme.textLink : darkTheme.textLink;
 
   const showWishList = () => {
     setOpenWishList(!openWishList);
   };
 
-  const shadowCondition = theme === 'dark' ? '0 0 5px 0 #ff9494a9' : '0 0 5px 0 #ff0000a9';
+  const shadowCondition = `0 0 5px 0 ${theme === 'dark' ? '#ff9494a9' : '#ff0000a9'}`;
   return (
     <div className="navbar-wishes">
       {!itemInWishlist?.length ? (

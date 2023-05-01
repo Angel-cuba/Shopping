@@ -10,16 +10,16 @@ import Brightness4Icon from '@mui/icons-material/Brightness4';
 import { NavbarIcon, WishListIcon } from '../Cart/Cart';
 import { AppDispatch, RootState } from '../../redux/store';
 import { logout } from '../../redux/actions/UserAction';
-import './Navbar.scss';
-import { useTheme } from '../../context/ThemeProvider';
+import { GlobalTheme } from '../../context/ThemeProvider';
 import { darkTheme, lightTheme } from '../../styles/styles';
+import './Navbar.scss';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = React.useState(false);
   const [isDark, setIsDark] = React.useState(false);
   const { user } = useSelector((state: RootState) => state.userLogged);
   const dispatch = useDispatch<AppDispatch>();
-  const { theme, setTheme } = useTheme();
+  const { theme, setTheme } = GlobalTheme();
 
   const navigation = useNavigate();
 
@@ -41,10 +41,7 @@ const Navbar = () => {
       className="navbar"
       style={{
         backgroundColor: theme === 'light' ? lightTheme.bg : darkTheme.bg,
-        boxShadow:
-          theme === 'light'
-            ? `0 0 12px 0 ${lightTheme.shadow}, inset 0 0 12px 0 ${lightTheme.shadow}`
-            : `0 0 10px 0 ${darkTheme.shadow}, inset 0 0 10px 0 ${darkTheme.shadow}`,
+        boxShadow: `0 0 12 0 ${theme === 'light' ? lightTheme.shadow : darkTheme.shadow}, inset 0 0 12px 0 ${theme === 'light' ? lightTheme.shadow : darkTheme.shadow}`,
         color: theme === 'light' ? '#000' : '#fff',
       }}
     >

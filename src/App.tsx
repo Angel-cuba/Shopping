@@ -1,11 +1,11 @@
 import React from 'react'
 import Navbar from './components/Navbar/Navbar'
 import Navigation from './router/Navigation'
-import { useTheme } from './context/ThemeProvider'
+import { GlobalTheme } from './context/ThemeProvider'
 import { darkTheme, lightTheme } from './styles/styles'
 
 function App() {
-  const { theme } = useTheme()
+  const { theme } = GlobalTheme()
   return (
     <div style={{
       backgroundColor: theme === 'light' ? lightTheme.bg : darkTheme.bg,

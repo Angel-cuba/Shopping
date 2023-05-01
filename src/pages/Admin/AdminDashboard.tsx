@@ -7,7 +7,7 @@ import { useDispatch } from 'react-redux';
 
 import { AppDispatch } from '../../redux/store';
 import { fetchProducts } from '../../redux/actions/ProductActions';
-import { useTheme } from '../../context/ThemeProvider';
+import { GlobalTheme } from '../../context/ThemeProvider';
 import { darkTheme, lightTheme } from '../../styles/styles';
 import './styles/AdminDashboard.scss';
 
@@ -19,7 +19,7 @@ type ButtonProps = {
 
 const AdminDashboard = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const {theme} = useTheme();
+  const {theme} = GlobalTheme();
 
   useEffect(() => {
     dispatch(fetchProducts());

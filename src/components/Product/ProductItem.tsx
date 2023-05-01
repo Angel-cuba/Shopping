@@ -11,7 +11,7 @@ import CreateAndEdit from '../Admin/CreateAndEdit/CreateAndEdit';
 
 import LikeItem from './component/LikeItem';
 import TrashItem from './component/TrashItem';
-import { useTheme } from '../../context/ThemeProvider';
+import { GlobalTheme } from '../../context/ThemeProvider';
 import { darkTheme, lightTheme } from '../../styles/styles';
 
 const ProductItem = ({ product }: { product: Product }) => {
@@ -25,7 +25,7 @@ const ProductItem = ({ product }: { product: Product }) => {
 
   const { user } = useSelector((state: RootState) => state.userLogged);
 
-  const { theme } = useTheme();
+  const { theme } = GlobalTheme();
 
   const handleEdit = (product: Product) => {
     setOpenCreateAndEdit(!openCreateAndEdit);
@@ -65,7 +65,7 @@ const ProductItem = ({ product }: { product: Product }) => {
         className="products__content__item"
         style={{
           backgroundColor: theme === 'dark' ? lightTheme.primary : darkTheme.secondary,
-          boxShadow: theme === 'dark' ? 'none' : '0px 0px 10px 0px rgba(0,0,0,0.075)',
+          boxShadow: `-1px 0px 2px 2px ${theme === 'dark' ? darkTheme.shadow : lightTheme.shadow}, inset 0 0 ${theme === 'dark' ? '4px' : '1px'} 0 ${theme === 'dark' ? darkTheme.shadowMedium : lightTheme.shadowMedium}`,
         }}
       >
         {user?.role === 'ADMIN' && pathname.includes('/admin/products') && (
