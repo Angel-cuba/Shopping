@@ -6,7 +6,7 @@ import ProductNotFound from './ProductNotFound';
 import { useLocation, useParams } from 'react-router-dom';
 import CreateAndEdit from '../../components/Admin/CreateAndEdit/CreateAndEdit';
 import { AddBoxSharp, ClosedCaptionDisabledOutlined } from '@mui/icons-material';
-import { useTheme } from '../../context/ThemeProvider';
+import { GlobalTheme } from '../../context/ThemeProvider';
 import { darkTheme, lightTheme } from '../../styles/styles';
 import './Products.scss';
 
@@ -17,10 +17,11 @@ const Products = ({ products }: { products: Product[] }) => {
   const [singleFilter, setSingleFilter] = React.useState('');
   const [openFilters, setOpenFilters] = React.useState(false);
   const [openCreateAndEdit, setOpenCreateAndEdit] = React.useState(false);
+  const [openSizes, setOpenSizes] = React.useState(false);
   const { id } = useParams();
 
   const location = useLocation();
-  const { theme } = useTheme();
+  const { theme } = GlobalTheme();
 
   const handleSizeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSize(event.target.value);
@@ -126,6 +127,7 @@ const Products = ({ products }: { products: Product[] }) => {
     setOpenCreateAndEdit(!openCreateAndEdit);
   };
   const seasson: string[] = ['Summer', 'Winter', 'Autumn', 'Spring'];
+
   return (
     <div className="products">
       {location.pathname.includes('admin') ? (
@@ -165,10 +167,24 @@ const Products = ({ products }: { products: Product[] }) => {
               value={size}
               onChange={handleSizeChange}
               className="products__panel--visible__size__item"
+              style={{
+                border: `1px solid ${theme === 'light' ? darkTheme.textLink : lightTheme.shadow}`,
+                minWidth: '140px',
+              }}
+              onMouseLeave={() => {
+                setOpenSizes(false);
+              }}
+              onMouseEnter={() => {
+                setOpenSizes(true);
+              }}
             >
-              <option value="" disabled>
-                Select size
-              </option>
+                <option value="" disabled style={{
+                  textAlign: 'center',
+                }}>
+                  {
+                    !openSizes ? 'Select size' : 'Selecting'
+                  }
+                </option>
               {Sizes.map((size) => (
                 <option key={size} value={size}>
                   {size}
@@ -184,12 +200,9 @@ const Products = ({ products }: { products: Product[] }) => {
                   className="products__panel--visible__seasson__item"
                   onClick={setCategoryValue}
                   style={{
-                    backgroundColor: category === seasson ? '#0f0e0e' : '',
+                    backgroundColor: category === seasson ? '#111010' : '',
                     color: category === seasson ? '#ffffff' : '',
-                    border:
-                      theme === 'light'
-                        ? `1px solid ${darkTheme.bg}`
-                        : `1px solid ${lightTheme.shadow}`,
+                    border: `1.4px solid ${theme === 'light' ? darkTheme.bg : lightTheme.shadow}`,
                   }}
                 >
                   {seasson}
