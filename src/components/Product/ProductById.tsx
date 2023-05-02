@@ -6,7 +6,7 @@ import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import StarsIcon from '@mui/icons-material/Stars';
 
 import { AppDispatch, RootState } from '../../redux/store';
-import { Product, Sizes, Variants, VariantsColors } from '../../interfaces/products/ProductType';
+import { Product, Sizes, VariantsColors } from '../../interfaces/products/ProductType';
 import ProductItem from './ProductItem';
 import RecommendedProducts from './RecommendedProducts';
 import { addToCart } from '../../redux/actions/CartActions';
@@ -36,15 +36,9 @@ const ProductById = () => {
     variant: '',
   };
 
-  React.useEffect(() => {
-    if (product) {
-      setVariant(product.variant);
-    }
-  }, [id, product]);
-
-  const recommendedProducts = products.filter(
-    (p: Product) => p.variant === product?.variant && p.id !== product?.id
-  );
+  const recommendedProducts = products.filter((p: Product) => {
+      return product.variants.map((variant: string) => variant).includes(p.variants[0]) && p.id !== product.id;
+  })
 
   const [size, setSize] = React.useState<string>();
   const [variant, setVariant] = React.useState<string>();
@@ -56,6 +50,7 @@ const ProductById = () => {
   const dispatch = useDispatch<AppDispatch>();
 
   const productSizes = product?.sizes;
+  const productVariants = product?.variants;
 
   const SizeBlocks = Sizes.map((item: string) => (
     <button
@@ -66,11 +61,13 @@ const ProductById = () => {
         borderRadius: '5px',
         margin: '10px',
         boxShadow: '0 0 5px 0 lightgray',
-        border: productSizes?.includes(item) ? '1px solid #f0f0f0' : '',
+        border: productSizes?.includes(item) ? '1px solid #949494' : '#343434',
         textAlign: 'center',
         cursor: 'pointer',
         minWidth: '50px',
         height: '40px',
+        fontWeight: productSizes?.includes(item) ? '900' : '600',
+        fontSize: productSizes?.includes(item) ? '18px' : '16px',
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
@@ -87,11 +84,11 @@ const ProductById = () => {
     setOpenSizesBox(!openSizesBox);
   };
 
-  const VariantBlocks = Variants.map((item) => (
+  const VariantBlocks = productVariants.map((item: string) => (
     <div
       key={item}
       style={{
-        backgroundColor: `${VariantsColors[item]}`,
+        backgroundColor: VariantsColors[item],
         borderRadius: '5px',
         marginRight: '10px',
         marginBottom: '4px',
@@ -99,23 +96,13 @@ const ProductById = () => {
         cursor: 'pointer',
         width: '40px',
         height: '40px',
-        boxShadow: `inset 0 0 2px 0 ${theme === 'dark' ? lightTheme.bg : darkTheme.bg}, 0 0 5px 0 ${
+        boxShadow: `0 0 2px 0 ${
           VariantsColors[item]
         }`,
       }}
       onClick={() => setVariant(item)}
     >
-      {variant === item && (
-        <StarsIcon
-          style={{
-            color: 'white',
-            fontSize: '30px',
-            marginTop: '5px',
-            backgroundColor: 'rgba(0, 0, 0, 0.75)',
-            borderRadius: '50%',
-          }}
-        />
-      )}
+      {variant === item && <StarsIcon style={{ color: 'white' }} />}
     </div>
   ));
 
@@ -156,6 +143,7 @@ const ProductById = () => {
   const newProductCancelHandler = () => {
     setNewProduct(initialProduct);
     setSize('');
+    setVariant('');
     setOpenSelection(false);
   };
 
@@ -246,6 +234,9 @@ const ProductById = () => {
                         boxShadow: !size ? '0 0 5px 0 lightgray' : 'none',
                         padding: size ? '3px 5px' : '0',
                         textAlign: 'center',
+                        fontSize:'18px',
+                        fontWeight:'800',
+                        color: size ? darkTheme.bg : '',
                       }}
                     >
                       {size}
@@ -285,7 +276,7 @@ const ProductById = () => {
                     className="productId__item__info__small-details--variant--color"
                   ></span>
                 )}
-                {product.variant && (
+                {product.variants && (
                   <>
                     {openVariantsBox ? (
                       <ArrowDropUpIcon onClick={openVariants} />
