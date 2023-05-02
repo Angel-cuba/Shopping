@@ -32,7 +32,7 @@ const Products = ({ products }: { products: Product[] }) => {
   };
   const filterByVariant = () => {
     const filtered = products.filter((product: Product) => {
-      return product.variant.toLocaleLowerCase().includes(variant.toLowerCase());
+      return product.variants.map((variant: string) => variant).includes(variant);
     });
     return filtered;
   };
@@ -69,7 +69,7 @@ const Products = ({ products }: { products: Product[] }) => {
       return (
         product.sizes.map((size: string) => size).includes(size) ||
         product.categories.toLocaleLowerCase().includes(category.toLowerCase()) ||
-        product.variant.toLocaleLowerCase().includes(variant.toLowerCase())
+        product.variants.map((variant: string) => variant).includes(variant)
       );
     });
     return filtered;
@@ -179,13 +179,15 @@ const Products = ({ products }: { products: Product[] }) => {
                 setOpenSizes(true);
               }}
             >
-                <option value="" disabled style={{
+              <option
+                value=""
+                disabled
+                style={{
                   textAlign: 'center',
-                }}>
-                  {
-                    !openSizes ? 'Select size' : 'Selecting'
-                  }
-                </option>
+                }}
+              >
+                {!openSizes ? 'Select size' : 'Selecting'}
+              </option>
               {Sizes.map((size) => (
                 <option key={size} value={size}>
                   {size}
@@ -211,9 +213,8 @@ const Products = ({ products }: { products: Product[] }) => {
               );
             })}
           </div>
-         <div className="products__panel--visible__variant">
-           {
-            Variants.map((variantValue: string) => {
+          <div className="products__panel--visible__variant">
+            {Variants.map((variantValue: string) => {
               return (
                 <p
                   key={variantValue}
@@ -228,18 +229,29 @@ const Products = ({ products }: { products: Product[] }) => {
                   {variantValue}
                 </p>
               );
-            })
-          }
-         </div>
+            })}
+          </div>
         </div>
         <div className={!openFilters ? 'products__panel--single' : 'products__panel--hidden'}>
           <Input
-            name="Search by name"
+            name=""
             value={singleFilter}
-            placeholder=""
+            placeholder="Search by name"
             type="text"
             onChange={handleChangeSingleFilter}
-            style={styles}
+            style={{
+              border: `1px solid ${theme === 'light' ? darkTheme.shadow : lightTheme.shadow}`,
+              color: theme === 'light' ? darkTheme.textLink : lightTheme.shadowMedium,
+              width: '170px',
+              height: '40px',
+              fontSize: '18px',
+              borderRadius: '5px',
+              padding: '5px',
+              boxShadow: `0 0 3px 0 ${
+                theme === 'light' ? darkTheme.textLink : lightTheme.textLink
+              }`,
+              fontWeight: 'bold',
+            }}
           />
         </div>
       </div>
@@ -257,12 +269,3 @@ const Products = ({ products }: { products: Product[] }) => {
 };
 
 export default Products;
-
-const styles = {
-  width: '170px',
-  height: '40px',
-  fontSize: '18px',
-  border: '1px solid #ccc',
-  borderRadius: '5px',
-  padding: '5px',
-};
