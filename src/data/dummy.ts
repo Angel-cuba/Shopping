@@ -9,7 +9,7 @@ export const PRODUCTS: Product[] = [
     categories: 'Summer',
     image:
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679761938/air-max-270-mens-shoes-KkLcGR_o7h0wd.png',
-    variant: 'Crimson',
+    variants: ['Crimson'],
     sizes: ['6', '7', '8', '9', '10', '11', '12'],
     price: 102.56,
   },
@@ -21,7 +21,7 @@ export const PRODUCTS: Product[] = [
     categories: 'Winter',
     image:
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679993566/shoes/images_6_hqvorc.png',
-    variant: 'Goldenrod',
+    variants: ['Goldenrod', 'Teal', 'Pink'],
     sizes: ['6.5', '7', '8', '9.5', '10', '11'],
     price: 22.45,
   },
@@ -33,7 +33,7 @@ export const PRODUCTS: Product[] = [
     categories: 'Spring',
     image:
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679993566/shoes/precision-6-basketball-shoes-l7zDFB_rlezav.png',
-    variant: 'Violet',
+    variants: ['Violet', 'Fuscia', 'Pink'],
     sizes: ['5.5', '7.5', '8'],
     price: 80.99,
   },
@@ -44,7 +44,7 @@ export const PRODUCTS: Product[] = [
       'The company was renamed Nike, Inc., in 1978 and went public two years later. By the early 21st century',
     categories: 'Autumn',
     image: 'https://res.cloudinary.com/dqaerysgb/image/upload/v1679993565/shoes/images_o04fcw.png',
-    variant: 'Crimson',
+    variants: ['Crimson'],
     sizes: ['5.5', '6.5', '7.5', '8.5', '9.5', '11.5', '12'],
     price: 60.95,
   },
@@ -56,7 +56,7 @@ export const PRODUCTS: Product[] = [
     categories: 'Summer',
     image:
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679993565/shoes/images_8_spmfby.png',
-    variant: 'Teal',
+    variants: ['Teal', 'Maroon'],
     sizes: ['5.5', '6.5', '7.5', '8.5', '9.5', '11.5', '12'],
 
     price: 543.99,
@@ -69,8 +69,8 @@ export const PRODUCTS: Product[] = [
     categories: 'Winter',
     image:
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679761938/air-max-270-mens-shoes-KkLcGR_o7h0wd.png',
-    variant: 'Crimson',
-        sizes: ['5.5', '6', '6.5', '7', '10', '10.5', '11.5', '12'],
+    variants: ['Crimson'],
+    sizes: ['5.5', '6', '6.5', '7', '10', '10.5', '11.5', '12'],
 
     price: 150.99,
   },
@@ -82,7 +82,7 @@ export const PRODUCTS: Product[] = [
     categories: 'Winter',
     image:
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679761938/air-max-270-mens-shoes-KkLcGR_o7h0wd.png',
-    variant: 'Teal',
+    variants: ['Teal', 'Maroon'],
     sizes: ['10.5', '11.5', '12'],
     price: 610.99,
   },
@@ -95,7 +95,7 @@ export const PRODUCTS: Product[] = [
     image:
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679993566/shoes/images_6_hqvorc.png',
 
-    variant: 'Aquamarine',
+    variants: ['Teal', 'Aquamarine', 'Maroon'],
     sizes: ['5.5', '6', '6.5', '7', '7.5', '8', '8.5', '9', '9.5', '10', '10.5', '11.5', '12'],
     price: 710.99,
   },
@@ -107,8 +107,8 @@ export const PRODUCTS: Product[] = [
     image:
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679995206/shoes/images_4_bcb5tl.png',
 
-    variant: 'Maroon',
-        sizes: [ '9.5', '10', '12'],
+    variants: ['Teal', 'Maroon'],
+    sizes: ['9.5', '10', '12'],
 
     price: 810.99,
   },
@@ -120,8 +120,8 @@ export const PRODUCTS: Product[] = [
     categories: 'Spring',
     image:
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679993565/shoes/images_1_gnczxb.png',
-    variant: 'Violet',
-        sizes: ['5.5', '6', '6.5', '7', '7.5', '8', '8.5', '9', '9.5', '10', '10.5', '11.5', '12'],
+    variants: ['Violet', 'Fuscia'],
+    sizes: ['5.5', '6', '6.5', '7', '7.5', '8', '8.5', '9', '9.5', '10', '10.5', '11.5', '12'],
     price: 910.99,
   },
   {
@@ -132,8 +132,8 @@ export const PRODUCTS: Product[] = [
     categories: 'Spring',
     image:
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679993565/shoes/images_7_nor1an.png',
-    variant: 'Fuscia',
-    sizes: [ '6', '7.5', '8', '9', '9.5', '10', '11.5', '12'],
+    variants: ['Teal', 'Maroon', 'Fuscia'],
+    sizes: ['6', '7.5', '8', '9', '9.5', '10', '11.5', '12'],
 
     price: 100.99,
   },
@@ -144,7 +144,7 @@ export const PRODUCTS: Product[] = [
     categories: 'Summer',
     image:
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679993565/shoes/images_4_svmpdu.png',
-    variant: 'Goldenrod',
+    variants: ['Goldenrod', 'Teal', 'Pink'],
     sizes: ['5', '6', '7.5', '10', '11.5', '12'],
 
     price: 109.79,
@@ -157,7 +157,7 @@ export const PRODUCTS: Product[] = [
     categories: 'Spring',
     image:
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679993565/shoes/images_1_gnczxb.png',
-    variant: 'Maroon',
+    variants: ['Teal', 'Maroon'],
     sizes: ['5', '6', '7.5', '8', '11.5', '12'],
     price: 507.81,
   },
@@ -170,8 +170,8 @@ export const PRODUCTS: Product[] = [
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679993565/shoes/1FM00139_423_01_e_gi4ga1.png',
 
     categories: 'Autumn',
-    variant: 'Maroon',
-        sizes: [ '5.5', '6', '6.5', '7', '7.5', '8', '8.5', '9', '9.5', '10', '10.5', '11.5', '12'],
+    variants: ['Teal', 'Maroon'],
+    sizes: ['5.5', '6', '6.5', '7', '7.5', '8', '8.5', '9', '9.5', '10', '10.5', '11.5', '12'],
 
     price: 855.999,
   },
@@ -183,7 +183,7 @@ export const PRODUCTS: Product[] = [
     categories: 'Autumn',
     image:
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679993564/shoes/images_2_p2wpfo.png',
-    variant: 'Aquamarine',
+    variants: ['Crimson', 'Aquamarine', 'Maroon'],
     sizes: ['5', '6', '7.5'],
     price: 82185.14,
   },
@@ -194,7 +194,7 @@ export const PRODUCTS: Product[] = [
     categories: 'Winter',
     image:
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679995209/shoes/Varion-Indoor-Sports-Shoes_wdipwa.png',
-    variant: 'Pink',
+    variants: ['Pink', 'Crimson', 'Teal', 'Aquamarine'],
     sizes: ['5.5', '7.5', '9.5'],
     price: 84.5,
   },
@@ -206,8 +206,8 @@ export const PRODUCTS: Product[] = [
     categories: 'Summer',
     image:
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679995208/shoes/images_9_vg9wgg.png',
-    variant: 'Violet',
-    sizes: [ '8', '9.5', '10', '11.5', '12'],
+    variants: ['Maroon', 'Fuscia'],
+    sizes: ['8', '9.5', '10', '11.5', '12'],
     price: 9898.99,
   },
   {
@@ -218,7 +218,7 @@ export const PRODUCTS: Product[] = [
     categories: 'Winter',
     image:
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679993566/shoes/images_6_hqvorc.png',
-    variant: 'Violet',
+    variants: ['Violet', 'Fuscia'],
     sizes: ['7', '7.5', '9', '9.5'],
     price: 5484,
   },
@@ -229,7 +229,7 @@ export const PRODUCTS: Product[] = [
       'Cole Haan (1988; sold in 2012) and Converse, Inc. (2003), the sports-equipment producer Canstar Sports, Inc. ',
     categories: 'Winter',
     image: 'https://res.cloudinary.com/dqaerysgb/image/upload/v1679995207/shoes/1_j2n1rx.png',
-    variant: 'Aquamarine',
+    variants: ['Teal', 'Aquamarine'],
     sizes: ['5', '7', '9', '9.5'],
     price: 555.99,
   },
@@ -241,9 +241,9 @@ export const PRODUCTS: Product[] = [
     categories: 'Winter',
     image:
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679993566/shoes/precision-6-basketball-shoes-l7zDFB_rlezav.png',
-    variant: 'Teal',
+    variants: ['Teal', 'Maroon'],
     sizes: ['8', '8.5', '10', '11.5', '12'],
-    price: 999.00,
+    price: 999.0,
   },
   {
     id: 21,
@@ -253,7 +253,7 @@ export const PRODUCTS: Product[] = [
     categories: 'Winter',
     image:
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679995207/shoes/ecco-biom-2-1368501_tppmla.png',
-    variant: 'Teal',
+    variants: ['Teal', 'Maroon'],
     sizes: ['6', '7.5', '8', '9', '9.5', '10', '11.5', '12'],
     price: 222.15,
   },
@@ -265,8 +265,8 @@ export const PRODUCTS: Product[] = [
     categories: 'Spring',
     image:
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679995207/shoes/images_5_mgdkor.png',
-    variant: 'Maroon',
-    sizes: [ '5.5', '9', '9.5', '10', '10.5', '11.5', '12'],
+    variants: ['Teal', 'Maroon'],
+    sizes: ['5.5', '9', '9.5', '10', '10.5', '11.5', '12'],
 
     price: 333.99,
   },
@@ -276,10 +276,10 @@ export const PRODUCTS: Product[] = [
     description:
       'Wieden+Kennedy, Nikes primary ad agency, has worked with Nike to create many print and television advertisements, and Wieden+Kennedy remains Nikes primary ad agency.',
     categories: 'Autumn',
-    variant: 'Fuscia',
+    variants: ['Teal', 'Maroon', 'Fuscia'],
     image:
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679995207/shoes/images_8_drvkcn.png',
-    sizes: [ '5.5', '6', '6.5', '7', '7.5', '8', '8.5', '9', '9.5', '10', '10.5', '11.5', '12'],
+    sizes: ['5.5', '6', '6.5', '7', '7.5', '8', '8.5', '9', '9.5', '10', '10.5', '11.5', '12'],
     price: 444.99,
   },
   {
@@ -290,7 +290,7 @@ export const PRODUCTS: Product[] = [
     categories: 'Summer',
     image:
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679995207/shoes/images_6_t13ydu.png',
-    variant: 'Maroon',
+    variants: ['Teal', 'Maroon'],
     sizes: ['7.5', '9.5', '10'],
     price: 568.99,
   },
@@ -302,7 +302,7 @@ export const PRODUCTS: Product[] = [
     categories: 'Spring',
     image:
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679995206/shoes/images_2_fcu3ei.png',
-    variant: 'Crimson',
+    variants: ['Crimson'],
     sizes: ['6', '7.5', '8', '9', '9.5', '12'],
     price: 8745.99,
   },
@@ -312,10 +312,10 @@ export const PRODUCTS: Product[] = [
     description:
       'From the late 1980s Nike steadily expanded its business and diversified its product line through numerous acquisitions',
     categories: 'Spring',
-    variant: 'Aquamarine',
+    variants: ['Teal', 'Aquamarine', 'Maroon'],
     image:
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679993565/shoes/images_1_gnczxb.png',
-    sizes: [ '6', '7.5', '8', '10', '11.5', '12'],
+    sizes: ['6', '7.5', '8', '10', '11.5', '12'],
     price: 98752.99,
   },
   {
@@ -326,8 +326,8 @@ export const PRODUCTS: Product[] = [
     categories: 'Summer',
     image:
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679995206/shoes/images_4_bcb5tl.png',
-    variant: 'Aquamarine',
-        sizes: [ '8', '8.5', '9', '9.5', '10', '10.5'],
+    variants: ['Teal', 'Pink', 'Maroon'],
+    sizes: ['8', '8.5', '9', '9.5', '10', '10.5'],
 
     price: 977.99,
   },
@@ -339,8 +339,8 @@ export const PRODUCTS: Product[] = [
     categories: 'Winter',
     image:
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679995206/shoes/images_3_sgzz2d.png',
-    variant: 'Violet',
-        sizes: ['5', '5.5', '6'],
+    variants: ['Violet', 'Fuscia'],
+    sizes: ['5', '5.5', '6'],
     price: 12354.99,
   },
   {
@@ -350,9 +350,9 @@ export const PRODUCTS: Product[] = [
     categories: 'Spring',
     image:
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679993564/shoes/descarga_iqjs7w.png',
-    variant: 'Maroon',
-        sizes: ['5.5', '6','10.5', '11.5', '12'],
-    price: 198745.10,
+    variants: ['Teal', 'Maroon'],
+    sizes: ['5.5', '6', '10.5', '11.5', '12'],
+    price: 198745.1,
   },
   {
     id: 30,
@@ -362,8 +362,8 @@ export const PRODUCTS: Product[] = [
     categories: 'Autumn',
     image:
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679993564/shoes/descarga_1_yntgd3.png',
-    variant: 'Maroon',
-        sizes: ['5', '5.5', '6', '6.5', '7', '7.5', '8', '8.5', '9', '9.5', '10', '10.5', '11.5', '12'],
+    variants: ['Teal', 'Maroon'],
+    sizes: ['5', '5.5', '6', '6.5', '7', '7.5', '8', '8.5', '9', '9.5', '10', '10.5', '11.5', '12'],
     price: 163.25,
   },
   {
@@ -374,8 +374,8 @@ export const PRODUCTS: Product[] = [
     image:
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679993566/shoes/precision-6-basketball-shoes-l7zDFB_rlezav.png',
 
-    variant: 'Maroon',
-        sizes: ['5.5', '6', '6.5', '7', '7.5', '12'],
+    variants: ['Teal', 'Maroon'],
+    sizes: ['5.5', '6', '6.5', '7', '7.5', '12'],
 
     price: 810.99,
   },
@@ -387,8 +387,8 @@ export const PRODUCTS: Product[] = [
     image:
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679995206/shoes/images_4_bcb5tl.png',
 
-    variant: 'Maroon',
-        sizes: [ '10', '10.5'],
+    variants: ['Teal', 'Maroon'],
+    sizes: ['10', '10.5'],
     price: 810.99,
   },
   {
@@ -399,8 +399,8 @@ export const PRODUCTS: Product[] = [
     image:
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679995207/shoes/images_6_t13ydu.png',
 
-    variant: 'Teal',
-    sizes: [ '7.5', '8', '8.5', '9', '9.5', '10', '10.5', '11.5', '12'],
+    variants: ['Teal', 'Maroon'],
+    sizes: ['7.5', '8', '8.5', '9', '9.5', '10', '10.5', '11.5', '12'],
     price: 810.99,
   },
   {
@@ -411,7 +411,7 @@ export const PRODUCTS: Product[] = [
     categories: 'Autumn',
     image:
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679993564/shoes/images_2_p2wpfo.png',
-    variant: 'Aquamarine',
+    variants: ['Teal', 'Aquamarine', 'Maroon'],
     sizes: ['5', '5.5', '6', '6.5', '7', '7.5', '8', '8.5', '9', '9.5', '10'],
     price: 82185.14,
   },
@@ -422,8 +422,8 @@ export const PRODUCTS: Product[] = [
     categories: 'Winter',
     image:
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679995209/shoes/Varion-Indoor-Sports-Shoes_wdipwa.png',
-    variant: 'Pink',
-        sizes: ['6', '6.5', '7', '7.5', '8', '8.5', '9','11.5', '12'],
+    variants: ['Violet', 'Fuscia', 'Pink', 'Goldenrod'],
+    sizes: ['6', '6.5', '7', '7.5', '8', '8.5', '9', '11.5', '12'],
     price: 84.5,
   },
   {
@@ -434,8 +434,8 @@ export const PRODUCTS: Product[] = [
     categories: 'Summer',
     image:
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679995208/shoes/images_9_vg9wgg.png',
-    variant: 'Violet',
-        sizes: ['10.5', '11.5'],
+    variants: ['Violet', 'Crimson'],
+    sizes: ['10.5', '11.5'],
 
     price: 9898.99,
   },
@@ -447,8 +447,8 @@ export const PRODUCTS: Product[] = [
     categories: 'Winter',
     image:
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679993566/shoes/images_6_hqvorc.png',
-    variant: 'Violet',
-        sizes: ['5.5', '6', '6.5', '7', '7.5', '8', '8.5', '9', '9.5', '10', '10.5', '11.5', '12'],
+    variants: ['Violet', 'Fuscia'],
+    sizes: ['5.5', '6', '6.5', '7', '7.5', '8', '8.5', '9', '9.5', '10', '10.5', '11.5', '12'],
     price: 5484,
   },
   {
@@ -458,8 +458,8 @@ export const PRODUCTS: Product[] = [
       'Cole Haan (1988; sold in 2012) and Converse, Inc. (2003), the sports-equipment producer Canstar Sports, Inc. ',
     categories: 'Winter',
     image: 'https://res.cloudinary.com/dqaerysgb/image/upload/v1679995207/shoes/1_j2n1rx.png',
-    variant: 'Aquamarine',
-        sizes: ['5.5', '6', '6.5', '7', '7.5', '8','12'],
+    variants: ['Teal', 'Maroon'],
+    sizes: ['5.5', '6', '6.5', '7', '7.5', '8', '12'],
     price: 555.99,
   },
   {
@@ -470,8 +470,8 @@ export const PRODUCTS: Product[] = [
     categories: 'Winter',
     image:
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679993566/shoes/precision-6-basketball-shoes-l7zDFB_rlezav.png',
-    variant: 'Teal',
-        sizes: ['6.5', '7', '8', '8.5', '9', '9.5', '10', '12'],
+    variants: ['Teal', 'Maroon'],
+    sizes: ['6.5', '7', '8', '8.5', '9', '9.5', '10', '12'],
     price: 999.99,
   },
   {
@@ -482,7 +482,7 @@ export const PRODUCTS: Product[] = [
     categories: 'Winter',
     image:
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679995207/shoes/ecco-biom-2-1368501_tppmla.png',
-    variant: 'Teal',
+    variants: ['Teal', 'Maroon'],
     sizes: ['6', '7.5', '8', '9', '9.5', '10', '11.5', '12'],
     price: 222.99,
   },
@@ -494,9 +494,9 @@ export const PRODUCTS: Product[] = [
     categories: 'Spring',
     image:
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679995207/shoes/images_5_mgdkor.png',
-    variant: 'Maroon',
- sizes: ['6.5', '7', '7.5', '8', '8.5', '9', '9.5',  '12'],
-price: 333.99,
+    variants: ['Teal', 'Maroon'],
+    sizes: ['6.5', '7', '7.5', '8', '8.5', '9', '9.5', '12'],
+    price: 333.99,
   },
   {
     id: 42,
@@ -504,10 +504,10 @@ price: 333.99,
     description:
       'Wieden+Kennedy, Nikes primary ad agency, has worked with Nike to create many print and television advertisements, and Wieden+Kennedy remains Nikes primary ad agency.',
     categories: 'Autumn',
-    variant: 'Fuscia',
+    variants: ['Teal', 'Maroon', 'Fuscia'],
     image:
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679995207/shoes/images_8_drvkcn.png',
-        sizes: ['5.5', '6', '6.5', '7', '7.5'],
+    sizes: ['5.5', '6', '6.5', '7', '7.5'],
 
     price: 444.99,
   },
@@ -519,9 +519,9 @@ price: 333.99,
     categories: 'Summer',
     image:
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679995207/shoes/images_6_t13ydu.png',
-    variant: 'Maroon',
-    sizes: [ '5.5', '6', '12'],
-   
+    variants: ['Teal', 'Maroon'],
+    sizes: ['5.5', '6', '12'],
+
     price: 568.99,
   },
   {
@@ -532,8 +532,8 @@ price: 333.99,
     categories: 'Spring',
     image:
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679995206/shoes/images_2_fcu3ei.png',
-    variant: 'Crimson',
-        sizes: ['5', '5.5'],
+    variants: ['Crimson'],
+    sizes: ['5', '5.5'],
     price: 8745.99,
   },
   {
@@ -542,10 +542,10 @@ price: 333.99,
     description:
       'From the late 1980s Nike steadily expanded its business and diversified its product line through numerous acquisitions',
     categories: 'Spring',
-    variant: 'Aquamarine',
+    variants: ['Teal', 'Aquamarine', 'Maroon'],
     image:
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679993565/shoes/images_1_gnczxb.png',
-    sizes: [ '8', '10', '11.5', '12'],
+    sizes: ['8', '10', '11.5', '12'],
     price: 98752.99,
   },
   {
@@ -556,7 +556,7 @@ price: 333.99,
     categories: 'Summer',
     image:
       'https://res.cloudinary.com/dqaerysgb/image/upload/v1679995206/shoes/images_4_bcb5tl.png',
-    variant: 'Aquamarine',
+    variants: ['Teal', 'Aquamarine', 'Maroon'],
     sizes: ['5.5', '6.5', '7.5', '8.5', '9.5', '11.5', '12'],
 
     price: 977.99,
