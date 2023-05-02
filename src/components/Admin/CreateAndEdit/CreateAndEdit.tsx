@@ -4,7 +4,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../../redux/store';
 import { addProductToStock, updateProductInStock } from '../../../redux/actions/ProductActions';
 import { Input } from '../../Input/Input';
-import { NewProductToStock, Product, Sizes } from '../../../interfaces/products/ProductType';
+import {
+  NewProductToStock,
+  Product,
+  Sizes,
+  Variants,
+} from '../../../interfaces/products/ProductType';
 
 type Props = {
   productId?: string;
@@ -19,7 +24,7 @@ const initialProduct: NewProductToStock = {
   description: '',
   image: '',
   sizes: [],
-  variant: '',
+  variants: [],
   categories: '',
 };
 
@@ -33,6 +38,7 @@ const CreateAndEdit = ({ productId, setOpenCreateAndEdit }: Props) => {
   const productToEdit = product ? product : initialProduct;
   const [newProduct, setNewProduct] = React.useState<NewProductToStock>(productToEdit);
   const [showAddSizesButton, setShowAddSizesButton] = React.useState(true);
+  const [showAddVariantsButton, setShowAddVariantsButton] = React.useState(true);
 
   const dispatch = useDispatch<AppDispatch>();
 
@@ -85,6 +91,48 @@ const CreateAndEdit = ({ productId, setOpenCreateAndEdit }: Props) => {
     setShowAddSizesButton(true);
   };
 
+  const handleAllVariants = () => {
+    const emptyVariantsInProduct = newProduct.variants.length;
+    if (!emptyVariantsInProduct) {
+      handleClearVariants();
+      setNewProduct((prevProduct) => ({
+        ...prevProduct,
+        variants: [...prevProduct.variants, ...Variants],
+      }));
+      setShowAddVariantsButton(false);
+    } else {
+      handleClearVariants();
+      setShowAddVariantsButton(true);
+    }
+  };
+
+  const handleAddingVariant = (value: string) => () => {
+    setShowAddSizesButton(false);
+    const existVariant = newProduct.variants.find((variant: string) => variant === value);
+    if (!value || value === '') return;
+    if (existVariant) {
+      handleRemoveVariant(value);
+    } else {
+      const variants = [...newProduct.variants];
+      variants.push(value);
+      setNewProduct({ ...newProduct, variants });
+    }
+  };
+  const handleRemoveVariant = (variant: string) => {
+    const variants = [...newProduct.variants];
+    const index = variants.findIndex((variantInArray: string) => variantInArray === variant);
+    variants.splice(index, 1);
+    setNewProduct({ ...newProduct, variants });
+  };
+
+  const handleClearVariants = () => {
+    setNewProduct((prevProduct) => ({
+      ...prevProduct,
+      variants: [],
+    }));
+    setShowAddVariantsButton(true);
+  };
+
   const handlerSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const emptyFields = Object.values(newProduct).some((value) => value === '');
@@ -114,14 +162,24 @@ const CreateAndEdit = ({ productId, setOpenCreateAndEdit }: Props) => {
           type="text"
           admin
         />
-       <div className="admin-createandcheck__views__create-and-edit__form__description">
-         <label htmlFor="description" className="admin-createandcheck__views__create-and-edit__form__description--label">
-          Description
-        </label>
-        <textarea name="description" id="" cols={30} rows={10}  placeholder="Give a product description"
-          value={newProduct.description}
-          onChange={handlerInput} className="admin-createandcheck__views__create-and-edit__form__description--content"></textarea>
-       </div>
+        <div className="admin-createandcheck__views__create-and-edit__form__description">
+          <label
+            htmlFor="description"
+            className="admin-createandcheck__views__create-and-edit__form__description--label"
+          >
+            Description
+          </label>
+          <textarea
+            name="description"
+            id=""
+            cols={30}
+            rows={10}
+            placeholder="Give a product description"
+            value={newProduct.description}
+            onChange={handlerInput}
+            className="admin-createandcheck__views__create-and-edit__form__description--content"
+          ></textarea>
+        </div>
         <Input
           name="categories"
           placeholder="Give a product categories"
@@ -138,14 +196,25 @@ const CreateAndEdit = ({ productId, setOpenCreateAndEdit }: Props) => {
           type="text"
           admin
         />
-        <Input
-          name="variant"
-          placeholder="Give a product variant"
-          value={newProduct.variant}
-          onChange={handlerInput}
-          type="text"
-          admin
-        />
+        <div className="admin-createandcheck__views__create-and-edit__form__variants-block">
+          {Variants?.map((variant) => (
+            <p
+              key={variant}
+              style={{
+                backgroundColor: newProduct.variants.includes(variant) ? '#374c355b' : '#eeeeee',
+              }}
+              className="admin-createandcheck__views__create-and-edit__form__variants-block__variant"
+              onClick={handleAddingVariant(variant)}
+            >
+              {variant}
+            </p>
+          ))}
+        </div>
+        <div className="">
+          <div onClick={handleAllVariants} className="admin-createandcheck__views__create-and-edit__form__add-clear-buttons__handler-sizes admin-createandcheck__views__create-and-edit__form__add-clear-buttons__handler-sizes--all">
+            {showAddVariantsButton || newProduct.variants.length === 0 ? 'Add all variants' : 'Clear all variants'}
+          </div>
+        </div>
         <div className="admin-createandcheck__views__create-and-edit__form__sizes-block">
           {Sizes?.map((size) => (
             <p
@@ -166,7 +235,7 @@ const CreateAndEdit = ({ productId, setOpenCreateAndEdit }: Props) => {
               onClick={handleClearSizes}
               className="admin-createandcheck__views__create-and-edit__form__add-clear-buttons__handler-sizes admin-createandcheck__views__create-and-edit__form__add-clear-buttons__handler-sizes--clear"
             >
-              Delete  {newProduct.sizes.length} sizes
+              Delete {newProduct.sizes.length} sizes
             </div>
           ) : null}
           {newProduct.sizes.length && newProduct.sizes.length !== Sizes.length ? (
