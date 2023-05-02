@@ -21,7 +21,7 @@
       padding: 8px 5px;
       border: 1px solid #c7c7c748;
       box-shadow: 0 0 5px 0 #c3c3c345;
-      &--label{
+      &--label {
         font-size: 1.52em;
         font-weight: bold;
         color: #4c4c4c;
@@ -102,6 +102,28 @@
               font-weight: bold;
               font-size: 1.1em;
               transform: scale(1.1);
+              box-shadow: 0 0 5px 0 #00000045, 0 0 5px 0 #dadada, 0 0 5px 0 #ffe7e745;
+              border: 1px solid #ffffff51;
+            }
+          }
+        }
+        &__variants-block {
+          width: 350px;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          flex-wrap: wrap;
+          margin-top: 10px;
+          &__variant {
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 20px;
+            border: 1px solid #dadada;
+            box-shadow: 0 0 5px 0 #dadada;
+            font-weight: 600;
+            transition: all 0.3s ease-in-out;
+            &:hover {
+              transform: scale(1.08);
               box-shadow: 0 0 5px 0 #00000045, 0 0 5px 0 #dadada, 0 0 5px 0 #ffe7e745;
               border: 1px solid #ffffff51;
             }
