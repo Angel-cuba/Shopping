@@ -2,7 +2,7 @@ import React from 'react';
 
 type InputProps = {
   type?: string;
-  name: string;
+  name?: string;
   placeholder: string;
   value: string;
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
@@ -14,7 +14,7 @@ type InputProps = {
   small?: boolean;
   min?: string;
   max?: string;
-};
+  };
 
 export const Input = ({
   type,
@@ -48,7 +48,7 @@ export const Input = ({
         }}
         htmlFor={name}
       >
-        {name[0].toLocaleUpperCase() + name.slice(1)}
+        {name && name[0].toLocaleUpperCase() + name.slice(1)}
       </label>
       <input
         type={type}
