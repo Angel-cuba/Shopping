@@ -7,6 +7,8 @@ import { Product } from '../../../interfaces/products/ProductType';
 import { AppDispatch, RootState } from '../../../redux/store';
 import { useDispatch, useSelector } from 'react-redux';
 import { removeFromWishList } from '../../../redux/actions/WishesActions';
+import { GlobalTheme } from '../../../context/ThemeProvider';
+import { darkTheme, lightTheme } from '../../../styles/styles';
 import './ProductInWishList.scss';
 
 type Props = {
@@ -14,6 +16,7 @@ type Props = {
 };
 export const ProductInWishList = ({ setOpenWishList }: Props) => {
   const { itemInWishlist } = useSelector((state: RootState) => state.wishes);
+  const { theme } = GlobalTheme();
 
   const dispatch = useDispatch<AppDispatch>();
 
@@ -35,7 +38,17 @@ export const ProductInWishList = ({ setOpenWishList }: Props) => {
   return (
     <>
       {itemInWishlist?.length ? (
-        <div className="view" onMouseLeave={closeWishList}>
+        <div
+          className="view"
+          onMouseLeave={closeWishList}
+          style={{
+            backgroundColor: theme === 'dark' ? darkTheme.bg : '#fff',
+            color: theme === 'dark' ? '#fff' : '#000',
+            boxShadow: `0 0 10px ${
+              theme === 'dark' ? darkTheme.shadowMedium : lightTheme.shadowMedium
+            }`,
+          }}
+        >
           <div className="view__products">
             {itemInWishlist?.map((item) => (
               <div
@@ -71,12 +84,24 @@ export const ProductInWishList = ({ setOpenWishList }: Props) => {
                   {openInformation.description}
                 </p>
                 <div className="view__content__information__small-info">
-                  <p>{openInformation.name}</p>
-                  <div className="">
-                    <p>{openInformation.variant}</p>
-                    <p>{openInformation.categories}</p>
-                    <p>{openInformation.price}</p>
-                  </div>
+                  <p className="view__content__information__small-info--name">
+                    {openInformation.name}
+                  </p>
+                  <p className="view__content__information__small-info--categories">
+                    {openInformation.categories}
+                  </p>
+                  <p className="view__content__information__small-info--price">
+                    {openInformation.price}
+                  </p>
+                </div>
+                <div className="view__content__information__small-info--variants">
+                  {openInformation?.variants?.map((variantValue) => {
+                    return (
+                      <span key={variantValue} className="view__content__information__small-info--variants__item">
+                        {variantValue}
+                      </span>
+                    );
+                  })}
                 </div>
               </div>
             )}
