@@ -67,7 +67,7 @@ const ProductNotFound = ({ valueNotFound }: { valueNotFound: string }) => {
         <h3 className="products__content__not-found-recommended__title">
           {startIndex === 0 && 'We recommend you'}
           {startIndex > 0 && startIndex < 6 && 'Try to find what you are looking for'}
-          {startIndex >= 6 && startIndex < 12 && `Still not found? What about of these products?`}
+          {startIndex >= 6 && startIndex < 12 && 'Still not found? What about of these products?'}
           {startIndex >= 12 && startIndex < 20 && 'Keep looking, we are sure you will find it'}
           {startIndex >= 20 &&
             startIndex < products?.length - 5 &&

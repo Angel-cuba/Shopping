@@ -7,7 +7,7 @@
   height: 100%;
   &__controlPanel {
     position: absolute;
-    top: 10px;
+    top: -16px;
     right: 10px;
     &--button {
       @include customButton($bg_light, $components_dark, $letters_dark);
@@ -15,7 +15,6 @@
   }
   &__panel {
     width: 100%;
-    height: 80px;
     margin-top: 10px;
     &--single {
       display: flex;
@@ -153,7 +152,6 @@
     padding: 0px;
     display: flex;
     flex-wrap: wrap;
-    margin-top: 20px;
     @media screen and (min-width: 768px) {
       justify-content: space-around;
     }

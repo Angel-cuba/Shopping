@@ -65,7 +65,11 @@ const ProductItem = ({ product }: { product: Product }) => {
         className="products__content__item"
         style={{
           backgroundColor: theme === 'dark' ? lightTheme.primary : darkTheme.secondary,
-          boxShadow: `-1px 0px 2px 2px ${theme === 'dark' ? darkTheme.shadow : lightTheme.shadow}, inset 0 0 ${theme === 'dark' ? '4px' : '1px'} 0 ${theme === 'dark' ? darkTheme.shadowMedium : lightTheme.shadowMedium}`,
+          boxShadow: `-1px 0px 2px 2px ${
+            theme === 'dark' ? darkTheme.shadow : lightTheme.shadow
+          }, inset 0 0 ${theme === 'dark' ? '4px' : '1px'} 0 ${
+            theme === 'dark' ? darkTheme.shadowMedium : lightTheme.shadowMedium
+          }`,
         }}
       >
         {user?.role === 'ADMIN' && pathname.includes('/admin/products') && (

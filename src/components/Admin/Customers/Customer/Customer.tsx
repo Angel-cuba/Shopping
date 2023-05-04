@@ -45,7 +45,7 @@ export default function Customer({ customer }: { customer: CustomerType }): JSX.
         }}
       >
         {customer.last_purchase.date && customer.last_purchase.date
-          ? customer.last_purchase.date + ', ' + customer.last_purchase.time
+          ? `${customer.last_purchase.date}, ${customer.last_purchase.time}`
           : null}
       </td>
       <td className="customers__body--item">{customer.news ? <CheckIcon /> : <CloseIcon />}</td>

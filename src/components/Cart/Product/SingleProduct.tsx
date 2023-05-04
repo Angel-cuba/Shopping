@@ -58,7 +58,7 @@ const SingleProduct = ({ item }: { item: CartProduct }) => {
               borderBottomRightRadius: '10px',
               boxShadow:`0px 0px 3px 0px ${item.variant}`
             }}
-          ></p>
+          />
         </div>
         <p className="cart-product__buttons--price">
           ${item.quantity ? (item?.quantity * item?.price).toFixed(2) : item?.price}

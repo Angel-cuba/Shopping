@@ -20,7 +20,7 @@ export const ProductInWishList = ({ setOpenWishList }: Props) => {
 
   const dispatch = useDispatch<AppDispatch>();
 
-  const firstItem = itemInWishlist && itemInWishlist[0];
+  const firstItem = itemInWishlist?.[0];
   const [openInformation, setOpenInformation] = React.useState<Product>(firstItem);
 
   useEffect(() => {

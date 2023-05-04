@@ -178,7 +178,7 @@ const CreateAndEdit = ({ productId, setOpenCreateAndEdit }: Props) => {
             value={newProduct.description}
             onChange={handlerInput}
             className="admin-createandcheck__views__create-and-edit__form__description--content"
-          ></textarea>
+          />
         </div>
         <Input
           name="categories"

@@ -274,7 +274,7 @@ const ProductById = () => {
                       boxShadow: `0 0 5px 0 ${VariantsColors[variant]}`,
                     }}
                     className="productId__item__info__small-details--variant--color"
-                  ></span>
+                  />
                 )}
                 {product.variants && (
                   <>
