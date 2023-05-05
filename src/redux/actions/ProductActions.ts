@@ -1,5 +1,4 @@
 import { Dispatch } from 'redux';
-import { PRODUCTS } from '../../data/dummy';
 import {
   ADD_PRODUCT,
   DELETE_PRODUCT,
@@ -9,12 +8,12 @@ import {
   STOP_LOADING,
   UPDATE_PRODUCT,
 } from '../../interfaces/products/constants';
-import { NewProductToStock } from '../../interfaces/products/ProductType';
+import { NewProductToStock, Product } from '../../interfaces/products/ProductType';
 
-export const getProducts = () => {
+export const getProducts = (products: Product) => {
   return {
     type: GET_PRODUCTS,
-    payload: PRODUCTS,
+    payload: products,
   } as const;
 };
 
@@ -43,7 +42,9 @@ export const fetchProducts = () => {
   return async (dispatch: Dispatch) => {
     try {
       dispatch({ type: LOADING });
-      dispatch(getProducts());
+      const request = await fetch('http://localhost:8080/api/v1/products');
+      const response = await request.json();
+      dispatch(getProducts(response));
     } catch (error) {
       dispatch({ type: ERROR, payload: error });
     }

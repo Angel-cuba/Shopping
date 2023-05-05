@@ -257,7 +257,7 @@ const Products = ({ products }: { products: Product[] }) => {
       </div>
       <div className="products__content">
         {!singleFilter && !size && !category && !variant
-          ? products.map((product: Product) => {
+          ? !products ? 'Fetching' : products?.map((product: Product) => {
               return <ProductItem key={product.id} product={product} />;
             })
           : null}
