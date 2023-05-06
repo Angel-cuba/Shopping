@@ -8,6 +8,9 @@ import CreateAndEdit from '../../components/Admin/CreateAndEdit/CreateAndEdit';
 import { AddBoxSharp, ClosedCaptionDisabledOutlined } from '@mui/icons-material';
 import { GlobalTheme } from '../../context/ThemeProvider';
 import { darkTheme, lightTheme } from '../../styles/styles';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../redux/store';
+import LoadingProducts from '../../components/Loading/LoadingProducts';
 import './Products.scss';
 
 const Products = ({ products }: { products: Product[] }) => {
@@ -22,6 +25,8 @@ const Products = ({ products }: { products: Product[] }) => {
 
   const location = useLocation();
   const { theme } = GlobalTheme();
+
+  const { loading } = useSelector((state: RootState) => state.products)  
 
   const handleSizeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSize(event.target.value);
@@ -128,6 +133,8 @@ const Products = ({ products }: { products: Product[] }) => {
     setOpenCreateAndEdit(!openCreateAndEdit);
   };
   const seasson: string[] = ['Summer', 'Winter', 'Autumn', 'Spring'];
+
+  if(loading) return <LoadingProducts />
 
   return (
     <div className="products">
