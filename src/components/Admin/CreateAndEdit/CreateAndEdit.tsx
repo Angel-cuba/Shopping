@@ -15,10 +15,9 @@ type Props = {
   productId?: string;
   setOpenCreateAndEdit: (openCreateAndEdit: boolean) => void;
 };
-const time = new Date().getTime();
 
 const initialProduct: NewProductToStock = {
-  id: time,
+  id: '',
   name: '',
   price: 0,
   description: '',
@@ -32,7 +31,7 @@ const CreateAndEdit = ({ productId, setOpenCreateAndEdit }: Props) => {
   const { products } = useSelector((state: RootState) => state.products);
 
   const product = products?.find((product: Product) => {
-    return product.id.toString() === productId;
+    return product.id === productId;
   });
 
   const productToEdit = product ? product : initialProduct;
@@ -133,6 +132,13 @@ const CreateAndEdit = ({ productId, setOpenCreateAndEdit }: Props) => {
     setShowAddVariantsButton(true);
   };
 
+  const handlePrice = (value: string) => {
+    setNewProduct((prevProduct) => ({
+      ...prevProduct,
+      price: Number(value)
+    }))
+  }
+
   const handlerSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const emptyFields = Object.values(newProduct).some((value) => value === '');
@@ -171,7 +177,7 @@ const CreateAndEdit = ({ productId, setOpenCreateAndEdit }: Props) => {
           </label>
           <textarea
             name="description"
-            id=""
+            id="description"
             cols={30}
             rows={10}
             placeholder="Give a product description"
@@ -260,14 +266,7 @@ const CreateAndEdit = ({ productId, setOpenCreateAndEdit }: Props) => {
             </button>
           ) : null}
         </div>
-        <Input
-          name="price"
-          placeholder="Give a product price"
-          value={`${newProduct.price}`}
-          onChange={handlerInput}
-          type="text"
-          admin
-        />
+        <input type="number" placeholder='Price' value={newProduct.price} onChange={(e) =>handlePrice(e.target.value)}/>
         <button
           type="submit"
           className="admin-createandcheck__views__create-and-edit__form__submit"

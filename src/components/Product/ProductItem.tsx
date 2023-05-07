@@ -32,7 +32,7 @@ const ProductItem = ({ product }: { product: Product }) => {
     dispatch(updateProductInStock(product));
   };
 
-  const handleDelete = (id: number) => {
+  const handleDelete = (id: string) => {
     dispatch(deleteProductFromStock(id));
   };
   const handleLike = () => {
