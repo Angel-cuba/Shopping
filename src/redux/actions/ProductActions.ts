@@ -31,7 +31,7 @@ export const updateProduct = (product: NewProductToStock) => {
   } as const;
 };
 
-export const deleteProduct = (id: number) => {
+export const deleteProduct = (id: string) => {
   return {
     type: DELETE_PRODUCT,
     payload: id,
@@ -41,9 +41,9 @@ export const deleteProduct = (id: number) => {
 export const fetchProducts = () => {
   return async (dispatch: Dispatch) => {
     try {
-      dispatch({ type: LOADING });
       const request = await fetch('http://localhost:8080/api/v1/products');
       const response = await request.json();
+      dispatch({ type: LOADING });
       dispatch(getProducts(response));
     } catch (error) {
       dispatch({ type: ERROR, payload: error });
@@ -54,8 +54,18 @@ export const fetchProducts = () => {
 
 export const addProductToStock = (product: NewProductToStock) => {
   return async (dispatch: Dispatch) => {
+    const option = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(product),
+    };
     try {
       dispatch({ type: LOADING });
+      await fetch('http://localhost:8080/api/v1/products', option)
+        .then((response) => response.json())
+        .then((data) => console.log('server response', data));
       dispatch(addProduct(product));
     } catch (error) {
       dispatch({ type: ERROR, payload: error });
@@ -76,7 +86,7 @@ export const updateProductInStock = (product: NewProductToStock) => {
   };
 };
 
-export const deleteProductFromStock = (id: number) => {
+export const deleteProductFromStock = (id: string) => {
   return async (dispatch: Dispatch) => {
     try {
       dispatch({ type: LOADING });
