@@ -76,8 +76,18 @@ export const addProductToStock = (product: NewProductToStock) => {
 
 export const updateProductInStock = (product: NewProductToStock) => {
   return async (dispatch: Dispatch) => {
+    const option = {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(product),
+    };
     try {
       dispatch({ type: LOADING });
+      await fetch('http://localhost:8080/api/v1/products', option)
+        .then((response) => response.json())
+        .then((data) => console.log('server response', data));
       dispatch(updateProduct(product));
     } catch (error) {
       dispatch({ type: ERROR, payload: error });

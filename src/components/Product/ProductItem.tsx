@@ -6,7 +6,7 @@ import { CartIcon } from '../Cart/Cart';
 import { DeleteForever, ModeEdit } from '@mui/icons-material';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../redux/store';
-import { deleteProductFromStock, updateProductInStock } from '../../redux/actions/ProductActions';
+import { deleteProductFromStock } from '../../redux/actions/ProductActions';
 import CreateAndEdit from '../Admin/CreateAndEdit/CreateAndEdit';
 
 import LikeItem from './component/LikeItem';
@@ -27,9 +27,8 @@ const ProductItem = ({ product }: { product: Product }) => {
 
   const { theme } = GlobalTheme();
 
-  const handleEdit = (product: Product) => {
+  const handleEdit = () => {
     setOpenCreateAndEdit(!openCreateAndEdit);
-    dispatch(updateProductInStock(product));
   };
 
   const handleDelete = (id: string) => {
@@ -80,7 +79,7 @@ const ProductItem = ({ product }: { product: Product }) => {
             }}
           >
             <div
-              onClick={() => handleEdit(product)}
+              onClick={() => handleEdit()}
               style={{
                 backgroundColor: openCreateAndEdit ? 'rgba(23, 108, 0, 0.295)' : 'transparent',
               }}

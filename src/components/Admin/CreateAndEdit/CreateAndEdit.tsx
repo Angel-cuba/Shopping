@@ -149,6 +149,10 @@ const CreateAndEdit = ({ productId, setOpenCreateAndEdit }: Props) => {
     if (!productId) {
       dispatch(addProductToStock(newProduct));
     } else {
+      setNewProduct((prev) => ({
+        ...prev,
+        id: productId
+      }))
       dispatch(updateProductInStock(newProduct));
     }
     setOpenCreateAndEdit(false);

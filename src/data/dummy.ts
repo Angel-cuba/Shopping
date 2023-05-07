@@ -1,6 +1,6 @@
 import { Product } from '../interfaces/products/ProductType';
 
-export const PRODUCTS: Product[] = [
+export const PRODUCTS = [
   {
     id: 1,
     name: 'NIke Air Max 270',
