@@ -98,8 +98,12 @@ export const updateProductInStock = (product: NewProductToStock) => {
 
 export const deleteProductFromStock = (id: string) => {
   return async (dispatch: Dispatch) => {
+    const option = {
+      method: 'DELETE'
+    }
     try {
       dispatch({ type: LOADING });
+      await fetch(`http://localhost:8080/api/v1/products/${id}`, option)
       dispatch(deleteProduct(id));
     } catch (error) {
       dispatch({ type: ERROR, payload: error });
