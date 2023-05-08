@@ -3,10 +3,13 @@ import {
   ADD_PRODUCT,
   DELETE_PRODUCT,
   ERROR,
+  FAILURE,
   GET_PRODUCTS,
   LOADING,
   ProductState,
+  REQUEST,
   STOP_LOADING,
+  SUCCESSFUL,
   UPDATE_PRODUCT,
 } from '../../interfaces/products/constants';
 
@@ -14,6 +17,7 @@ export const initialProductState: ProductState = {
   products: [],
   loading: false,
   error: null,
+  success: false
 };
 
 export default function productReducer(state = initialProductState, action: AnyAction) {
@@ -58,6 +62,21 @@ export default function productReducer(state = initialProductState, action: AnyA
         ...state,
         loading: false,
       };
+    case REQUEST: 
+      return {
+        ...state,
+        success: true
+      }
+    case SUCCESSFUL: 
+      return {
+        ...state,
+        success: false
+      }
+    case FAILURE: 
+      return {
+        ...state,
+        success: false
+      }
     case ERROR:
       return {
         ...state,
