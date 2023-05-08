@@ -5,7 +5,9 @@ import {
   ERROR,
   GET_PRODUCTS,
   LOADING,
+  REQUEST,
   STOP_LOADING,
+  SUCCESSFUL,
   UPDATE_PRODUCT,
 } from '../../interfaces/products/constants';
 import { NewProductToStock, Product } from '../../interfaces/products/ProductType';
@@ -62,7 +64,7 @@ export const addProductToStock = (product: NewProductToStock) => {
       body: JSON.stringify(product),
     };
     try {
-      dispatch({ type: LOADING });
+      dispatch({ type: REQUEST });
       await fetch('http://localhost:8080/api/v1/products', option)
         .then((response) => response.json())
         .then((data) => console.log('server response', data));
@@ -70,7 +72,7 @@ export const addProductToStock = (product: NewProductToStock) => {
     } catch (error) {
       dispatch({ type: ERROR, payload: error });
     }
-    dispatch({ type: STOP_LOADING });
+    dispatch({ type: SUCCESSFUL });
   };
 };
 
@@ -84,7 +86,7 @@ export const updateProductInStock = (product: NewProductToStock) => {
       body: JSON.stringify(product),
     };
     try {
-      dispatch({ type: LOADING });
+      dispatch({ type: REQUEST });
       await fetch('http://localhost:8080/api/v1/products', option)
         .then((response) => response.json())
         .then((data) => console.log('server response', data));
@@ -92,7 +94,7 @@ export const updateProductInStock = (product: NewProductToStock) => {
     } catch (error) {
       dispatch({ type: ERROR, payload: error });
     }
-    dispatch({ type: STOP_LOADING });
+    dispatch({ type: SUCCESSFUL });
   };
 };
 
@@ -102,13 +104,13 @@ export const deleteProductFromStock = (id: string) => {
       method: 'DELETE'
     }
     try {
-      dispatch({ type: LOADING });
+      dispatch({ type: REQUEST });
       await fetch(`http://localhost:8080/api/v1/products/${id}`, option)
       dispatch(deleteProduct(id));
     } catch (error) {
       dispatch({ type: ERROR, payload: error });
     }
-    dispatch({ type: STOP_LOADING });
+    dispatch({ type: SUCCESSFUL });
   };
 };
 
