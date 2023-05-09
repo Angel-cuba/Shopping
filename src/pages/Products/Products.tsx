@@ -11,6 +11,7 @@ import { darkTheme, lightTheme } from '../../styles/styles';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../redux/store';
 import LoadingProducts from '../../components/Loading/LoadingProducts';
+import LoadingResponse from '../../components/Loading/LoadingResponse';
 import './Products.scss';
 
 const Products = ({ products }: { products: Product[] }) => {
@@ -26,7 +27,7 @@ const Products = ({ products }: { products: Product[] }) => {
   const location = useLocation();
   const { theme } = GlobalTheme();
 
-  const { loading } = useSelector((state: RootState) => state.products)  
+  const { loading, success } = useSelector((state: RootState) => state.products);
 
   const handleSizeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSize(event.target.value);
@@ -134,10 +135,15 @@ const Products = ({ products }: { products: Product[] }) => {
   };
   const seasson: string[] = ['Summer', 'Winter', 'Autumn', 'Spring'];
 
-  if(loading) return <LoadingProducts />
+  if (loading) return <LoadingProducts />;
 
   return (
     <div className="products">
+      {success && (
+        <div className="products__admin-loading">
+          <LoadingResponse />
+        </div>
+      )}
       {location.pathname.includes('admin') ? (
         <div className="products__create">
           <div
@@ -264,9 +270,11 @@ const Products = ({ products }: { products: Product[] }) => {
       </div>
       <div className="products__content">
         {!singleFilter && !size && !category && !variant
-          ? !products ? 'Fetching' : products?.map((product: Product) => {
-              return <ProductItem key={product.id} product={product} />;
-            })
+          ? !products
+            ? 'Fetching'
+            : products?.map((product: Product) => {
+                return <ProductItem key={product.id} product={product} />;
+              })
           : null}
         {singleFilter.length ? filterByName() : null}
         {showAllFitered()}
