@@ -1,6 +1,6 @@
 import React from 'react';
-import './LoadingProducts.scss';
 import { MoreVertOutlined } from '@mui/icons-material';
+import './styles/LoadingProducts.scss';
 
 const LoadingProducts = () => {
   return (
