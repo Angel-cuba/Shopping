@@ -12,7 +12,6 @@ export const SUCCESSFUL = 'SUCCESSFUL';
 export const FAILURE = 'FAILURE';
 export const ERROR = 'ERROR';
 
-//Action types for product
 export type LoadingAction = {
   type: typeof LOADING;
 };
