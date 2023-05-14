@@ -1,4 +1,4 @@
-type DecodedUser = {
+export type DecodedUser = {
   role: string
   user_id: string
   username: string
