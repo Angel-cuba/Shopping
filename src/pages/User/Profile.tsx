@@ -23,7 +23,8 @@ import { darkTheme, lightTheme } from '../../styles/styles';
 import './Profile.scss';
 
 const Profile = () => {
-  const { user }: { user: UserType } = useSelector((state: RootState) => state.userLogged);
+  //TODO: { user: UserType } is replaced by any
+  const { user }: any = useSelector((state: RootState) => state.userLogged);
   const [edit, setEdit] = React.useState(false);
   const [editPayment, setEditPayment] = React.useState(false);
   const [openHistory, setOpenHistory] = React.useState(false);
@@ -88,7 +89,7 @@ const Profile = () => {
         </div>
       )}
       <h1>
-        Welcome {user.role === 'ADMIN' ? `administrator ${user.given_name}` : `${user.given_name}`}
+        Welcome {user ? `administrator ${user.given_name}` : `Hello, please log in to continue`}
       </h1>
       <div className="profile__data">
         <div className="profile__data__image-and-info">
@@ -101,13 +102,13 @@ const Profile = () => {
             <div className="profile__data__image-and-info__item--icon">
               <Person style={iconStyles} />
             </div>
-            {user.name}
+            {user?.name}
           </div>
           <div className="profile__data__image-and-info__item" style={infoItemStyles}>
             <div className="profile__data__image-and-info__item--icon">
               <Email style={iconStyles} />
             </div>
-            {user.email}
+            {user?.email}
           </div>
           <div className="profile__data__image-and-info__item" style={infoItemStyles}>
             <div className="profile__data__image-and-info__item--icon">
