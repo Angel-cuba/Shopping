@@ -1,11 +1,11 @@
 import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useParams } from 'react-router-dom';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { Product } from '../../interfaces/products/ProductType';
 import { CartIcon } from '../Cart/Cart';
 import { DeleteForever, ModeEdit } from '@mui/icons-material';
-import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch, RootState } from '../../redux/store';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '../../redux/store';
 import { deleteProductFromStock } from '../../redux/actions/ProductActions';
 import CreateAndEdit from '../Admin/CreateAndEdit/CreateAndEdit';
 
@@ -21,9 +21,13 @@ const ProductItem = ({ product }: { product: Product }) => {
 
   const location = useLocation();
   const { pathname } = location;
+  const {id} = useParams()
   const dispatch = useDispatch<AppDispatch>();
 
-  const { user } = useSelector((state: RootState) => state.userLogged);
+//TODO: User from redux state, not from localstorage
+  // const { user } = useSelector((state: RootState) => state.userLogged);
+  const userRole = JSON.parse(localStorage.getItem('user') || '{}').role;
+  const decodedUserRole = JSON.parse(localStorage.getItem('decodedUser') || '{}').role;
 
   const { theme } = GlobalTheme();
 
@@ -71,7 +75,7 @@ const ProductItem = ({ product }: { product: Product }) => {
           }`,
         }}
       >
-        {user?.role === 'ADMIN' && pathname.includes('/admin/products') && (
+        {(userRole || decodedUserRole) === 'ADMIN' && pathname.includes('admin') && (
           <div
             className="products__content__item--admin-icons"
             style={{
@@ -99,8 +103,7 @@ const ProductItem = ({ product }: { product: Product }) => {
             </div>
           </div>
         )}
-        {pathname !== `/product/${product.id}` &&
-          pathname !== `/checkout/product/${product.id}` && (
+        {!id && (
             <div className="products__content__item--details">
               <Link
                 to={`/product/${product.id}`}

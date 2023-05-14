@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useLayoutEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
@@ -13,32 +13,47 @@ import { addToCart } from '../../redux/actions/CartActions';
 import { CartProduct } from '../../interfaces/cart/CartType';
 import { GlobalTheme } from '../../context/ThemeProvider';
 import { darkTheme, lightTheme } from '../../styles/styles';
+import axios from 'axios';
 import './ProductById.scss';
 
+const initialProduct: CartProduct = {
+  id: '',
+  name: '',
+  price: 0,
+  description: '',
+  image: '',
+  categories: '',
+  sizes: '',
+  variant: '',
+};
 const ProductById = () => {
   const params = useParams();
   const { id } = params;
   const { products } = useSelector((state: RootState) => state.products);
   const { theme } = GlobalTheme();
+  const token = localStorage.getItem('token');
+  const [product, setProduct] = React.useState<Product>();
 
-  const product = products.find((product: Product) => {
-    return product.id.toString() === id;
-  });
-
-  const initialProduct: CartProduct = {
-    id: !id ? 0 : parseInt(id),
-    name: '',
-    price: 0,
-    description: '',
-    image: '',
-    categories: '',
-    sizes: '',
-    variant: '',
-  };
+  useLayoutEffect(() => {
+    const productById = async () => {
+      const response = await axios.get(`http://localhost:8080/api/v1/products/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (response.status === 200) {
+        setProduct(response.data);
+      }
+    };
+    productById();
+  }, [id, token]);
 
   const recommendedProducts = products.filter((p: Product) => {
-      return product.variants.map((variant: string) => variant).includes(p.variants[0]) && p.id !== product.id;
-  })
+    return (
+      product?.variants.map((variant: string) => variant).includes(p.variants[0]) &&
+      p.id !== product.id
+    );
+  });
 
   const [size, setSize] = React.useState<string>();
   const [variant, setVariant] = React.useState<string>();
@@ -52,29 +67,29 @@ const ProductById = () => {
   const productSizes = product?.sizes;
   const productVariants = product?.variants;
 
-  const SizeBlocks = Sizes.map((item: string) => (
+  const SizeBlocks = Sizes.map((item) => (
     <button
       key={item}
       style={{
-        backgroundColor: productSizes?.includes(item) ? '#5D8A68' : '#c2c2c28f',
-        color: productSizes?.includes(item) ? '#f0f0f0' : 'black',
+        backgroundColor: productSizes?.find((size) => size === item) ? '#5D8A68' : '#c2c2c28f',
+        color: productSizes?.find((size) => size === item) ? 'white' : '#343434',
         borderRadius: '5px',
         margin: '10px',
         boxShadow: '0 0 5px 0 lightgray',
-        border: productSizes?.includes(item) ? '1px solid #949494' : '#343434',
+        border: productSizes?.find((size) => size === item) ? '1px solid #949494' : '#343434',
         textAlign: 'center',
         cursor: 'pointer',
         minWidth: '50px',
         height: '40px',
-        fontWeight: productSizes?.includes(item) ? '900' : '600',
-        fontSize: productSizes?.includes(item) ? '18px' : '16px',
+        fontWeight: productSizes?.find((size) => size === item) ? '900' : '600',
+        fontSize: productSizes?.find((size) => size === item) ? '18px' : '16px',
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
         outline: 'none',
       }}
       onClick={() => chosenSize(item)}
-      disabled={!productSizes?.includes(item)}
+      disabled={!productSizes?.find((size) => size === item)}
     >
       {item}
     </button>
@@ -84,7 +99,7 @@ const ProductById = () => {
     setOpenSizesBox(!openSizesBox);
   };
 
-  const VariantBlocks = productVariants.map((item: string) => (
+  const VariantBlocks = productVariants?.map((item: string) => (
     <div
       key={item}
       style={{
@@ -96,9 +111,7 @@ const ProductById = () => {
         cursor: 'pointer',
         width: '40px',
         height: '40px',
-        boxShadow: `0 0 2px 0 ${
-          VariantsColors[item]
-        }`,
+        boxShadow: `0 0 2px 0 ${VariantsColors[item]}`,
       }}
       onClick={() => setVariant(item)}
     >
@@ -115,23 +128,23 @@ const ProductById = () => {
   };
 
   const setNewProductHandler = () => {
-    const productToCart = {
-      id: product.id,
-      name: product.name,
-      description: product.description,
-      price: product.price,
-      sizes: size,
-      variant: variant,
-      categories: product.categories,
-      image: product.image,
-    };
     if (openSizesBox) {
       setOpenSizesBox(false);
     }
     if (openVariantsBox) {
       setOpenVariantsBox(false);
     }
-    if (size) {
+    if (product && size) {
+      const productToCart = {
+        id: product.id,
+        name: product.name,
+        description: product.description,
+        price: product.price,
+        sizes: size,
+        variant: variant,
+        categories: product.categories,
+        image: product.image,
+      };
       setNewProduct(productToCart);
     }
     setOpenSelection(true);
@@ -234,8 +247,8 @@ const ProductById = () => {
                         boxShadow: !size ? '0 0 5px 0 lightgray' : 'none',
                         padding: size ? '3px 5px' : '0',
                         textAlign: 'center',
-                        fontSize:'18px',
-                        fontWeight:'800',
+                        fontSize: '18px',
+                        fontWeight: '800',
                         color: size ? darkTheme.bg : '',
                       }}
                     >
@@ -266,7 +279,7 @@ const ProductById = () => {
                 {variant && (
                   <span
                     style={{
-                      backgroundColor: variant ? `${VariantsColors[variant]}` : product.variant,
+                      backgroundColor: variant ? `${VariantsColors[variant]}` : product.variants[0],
                       width: '40px',
                       height: '30px',
                       borderRadius: '5px',
