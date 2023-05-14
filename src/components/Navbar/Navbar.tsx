@@ -17,7 +17,10 @@ import './Navbar.scss';
 const Navbar = () => {
   const [isOpen, setIsOpen] = React.useState(false);
   const [isDark, setIsDark] = React.useState(false);
-  const { user } = useSelector((state: RootState) => state.userLogged);
+  //TODO: Checking if user is from localstorage or redux
+  const { user, userFromToken } = useSelector((state: RootState) => state.userLogged);
+
+  useSelector((state: RootState) => console.log(state));
   const dispatch = useDispatch<AppDispatch>();
   const { theme, setTheme } = GlobalTheme();
 
@@ -25,6 +28,8 @@ const Navbar = () => {
 
   const handleLogout = () => {
     localStorage.removeItem('user');
+    localStorage.removeItem('token')
+    localStorage.removeItem('decodedUser')
     navigation('/');
     dispatch(logout());
   };
@@ -46,10 +51,10 @@ const Navbar = () => {
       }}
     >
       <div className="navbar__navbar-left">
-        {user ? (
+        {userFromToken ? (
           <>
             <img
-              src={user?.picture}
+              src={user?.picture ? user?.picture : 'https://www.pngitem.com/pimgs/m/146-1468479_my-profile-icon-blank-profile-picture-circle-hd.png'}
               alt={user?.name}
               style={{
                 width: '50px',
@@ -58,7 +63,7 @@ const Navbar = () => {
                 borderRadius: '40%',
               }}
             />
-            <h1>{user?.name}</h1>
+            <h1>{user?.name ? user.name : userFromToken.username}</h1>
           </>
         ) : (
           <StoreMallDirectoryIcon
@@ -71,9 +76,10 @@ const Navbar = () => {
         )}
       </div>
       <div className="navbar__navbar-right">
-        {user && user.role === 'ADMIN' && (
+        {(userFromToken?.role || user?.role) === 'ADMIN' ? (
+
           <Link
-            to="/admin/dashboard"
+            to="/admin"
             className="navbar__navbar-right__links"
             style={{
               color: theme === 'light' ? darkTheme.textLink : lightTheme.textLink,
@@ -81,8 +87,8 @@ const Navbar = () => {
           >
             Admin
           </Link>
-        )}
-        {user ? (
+        ) : null}
+        {userFromToken ? (
           <>
             <Link
               to="/home"
