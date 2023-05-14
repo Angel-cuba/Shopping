@@ -11,6 +11,7 @@ import {
   UPDATE_PRODUCT,
 } from '../../interfaces/products/constants';
 import { NewProductToStock, Product } from '../../interfaces/products/ProductType';
+import { api } from '../../utils/api';
 
 export const getProducts = (products: Product) => {
   return {
@@ -42,55 +43,37 @@ export const deleteProduct = (id: string) => {
 
 export const fetchProducts = () => {
   return async (dispatch: Dispatch) => {
+    dispatch({ type: LOADING });
     try {
-      const request = await fetch('http://localhost:8080/api/v1/products');
-      const response = await request.json();
-      dispatch({ type: LOADING });
-      dispatch(getProducts(response));
+      const response = await api.get('/products')
+        dispatch(getProducts(response.data));
     } catch (error) {
       dispatch({ type: ERROR, payload: error });
     }
-    dispatch({ type: STOP_LOADING });
+      dispatch({ type: STOP_LOADING });
   };
 };
 
 export const addProductToStock = (product: NewProductToStock) => {
   return async (dispatch: Dispatch) => {
-    const option = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(product),
-    };
     try {
-      dispatch({ type: REQUEST });
-      await fetch('http://localhost:8080/api/v1/products', option)
-        .then((response) => response.json())
-        .then((data) => console.log('server response', data));
-      dispatch(addProduct(product));
+       dispatch({ type: REQUEST });
+       const resquest = await api.post('/products', product);
+      dispatch(addProduct(resquest.data));
     } catch (error) {
       dispatch({ type: ERROR, payload: error });
     }
-    dispatch({ type: SUCCESSFUL });
+     dispatch({ type: SUCCESSFUL });
   };
 };
 
 export const updateProductInStock = (product: NewProductToStock) => {
   return async (dispatch: Dispatch) => {
-    const option = {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(product),
-    };
     try {
       dispatch({ type: REQUEST });
-      await fetch('http://localhost:8080/api/v1/products', option)
-        .then((response) => response.json())
-        .then((data) => console.log('server response', data));
-      dispatch(updateProduct(product));
+      const request = await api.put('/products', product);
+
+      dispatch(updateProduct(request.data));
     } catch (error) {
       dispatch({ type: ERROR, payload: error });
     }
@@ -100,12 +83,11 @@ export const updateProductInStock = (product: NewProductToStock) => {
 
 export const deleteProductFromStock = (id: string) => {
   return async (dispatch: Dispatch) => {
-    const option = {
-      method: 'DELETE'
-    }
     try {
       dispatch({ type: REQUEST });
-      await fetch(`http://localhost:8080/api/v1/products/${id}`, option)
+     const request = await api.delete(`/products/${id}`);
+     //TODO: Do something with the response
+      console.log(request);
       dispatch(deleteProduct(id));
     } catch (error) {
       dispatch({ type: ERROR, payload: error });
