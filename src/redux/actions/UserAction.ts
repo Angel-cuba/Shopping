@@ -1,5 +1,5 @@
-import { LOGGED_IN, LOGGED_OUT } from '../../interfaces/user/constants';
-import { UserType } from '../../interfaces/user/UserType';
+import { LOGGED, LOGGED_IN, LOGGED_OUT } from '../../interfaces/user/constants';
+import { UserFromToken, UserType } from '../../interfaces/user/UserType';
 
 export function login(user: UserType) {
   const newUser: UserType = {
@@ -27,6 +27,13 @@ export function login(user: UserType) {
   return {
     type: LOGGED_IN,
     payload: userToStorage,
+  };
+}
+
+export function logged(user: UserFromToken) {
+  return {
+    type: LOGGED,
+    payload: user,
   };
 }
 

@@ -1,22 +1,30 @@
 import { AnyAction } from 'redux'
-import { UserState } from '../../interfaces/user/constants'
+import { LOGGED, LOGGED_IN, LOGGED_OUT, UserState } from '../../interfaces/user/constants'
 
 export const initialUserState: UserState = {
-  user: null
+  user: null,
+  userFromToken: null
 }
 
 export function userReducer(state = initialUserState, action: AnyAction) {
   switch (action.type) {
-    case 'LOGGED_IN': {
+    case LOGGED_IN: {
       return {
         ...state,
         user: action.payload
       }
     }
-    case 'LOGGED_OUT': {
+    case LOGGED : {
       return {
         ...state,
-        user: null
+        userFromToken: action.payload
+      }
+    }
+    case LOGGED_OUT: {
+      return {
+        ...state,
+        user: null,
+        userFromToken: null
       }
     }
     default:
