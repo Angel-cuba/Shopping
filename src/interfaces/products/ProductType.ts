@@ -10,7 +10,7 @@ export type Product = {
 };
 
 export type NewProductToStock = {
-  id: string
+  id?: string
   name: string;
   description: string;
   image: string;
