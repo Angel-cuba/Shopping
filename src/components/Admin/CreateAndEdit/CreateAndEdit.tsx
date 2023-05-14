@@ -41,9 +41,9 @@ const CreateAndEdit = ({ productId, setOpenCreateAndEdit }: Props) => {
 
   const dispatch = useDispatch<AppDispatch>();
 
-  const handlerInput = (e: React.FormEvent) => {
+  const handlerInput = (e: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     e.preventDefault();
-    const { name, value } = e.currentTarget as HTMLInputElement;
+    const { name, value } = e.currentTarget;
     setNewProduct({ ...newProduct, [name]: value });
   };
 
@@ -135,24 +135,40 @@ const CreateAndEdit = ({ productId, setOpenCreateAndEdit }: Props) => {
   const handlePrice = (value: string) => {
     setNewProduct((prevProduct) => ({
       ...prevProduct,
-      price: Number(value)
-    }))
-  }
+      price: Number(value),
+    }));
+  };
 
   const handlerSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const emptyFields = Object.values(newProduct).some((value) => value === '');
-    if (emptyFields) {
+    if (
+      newProduct.name === '' ||
+      newProduct.price === 0 ||
+      newProduct.description === '' ||
+      newProduct.image === '' ||
+      newProduct.sizes.length === 0 ||
+      newProduct.variants.length === 0 ||
+      newProduct.categories === ''
+    ) {
       alert('Please fill all the fields');
       return;
     }
     if (!productId) {
-      dispatch(addProductToStock(newProduct));
+      const productToStorage = {
+        name: newProduct.name,
+        price: newProduct.price,
+        description: newProduct.description,
+        image: newProduct.image,
+        sizes: newProduct.sizes,
+        variants: newProduct.variants,
+        categories: newProduct.categories,
+      };
+      dispatch(addProductToStock(productToStorage));
     } else {
       setNewProduct((prev) => ({
         ...prev,
-        id: productId
-      }))
+        id: productId,
+      }));
       dispatch(updateProductInStock(newProduct));
     }
     setOpenCreateAndEdit(false);
@@ -179,7 +195,7 @@ const CreateAndEdit = ({ productId, setOpenCreateAndEdit }: Props) => {
           >
             Description
           </label>
-          <textarea
+           <textarea
             name="description"
             id="description"
             cols={30}
@@ -188,8 +204,8 @@ const CreateAndEdit = ({ productId, setOpenCreateAndEdit }: Props) => {
             value={newProduct.description}
             onChange={handlerInput}
             className="admin-createandcheck__views__create-and-edit__form__description--content"
-          />
-        </div>
+          /> 
+        </div> 
         <Input
           name="categories"
           placeholder="Give a product categories"
@@ -221,8 +237,13 @@ const CreateAndEdit = ({ productId, setOpenCreateAndEdit }: Props) => {
           ))}
         </div>
         <div className="">
-          <div onClick={handleAllVariants} className="admin-createandcheck__views__create-and-edit__form__add-clear-buttons__handler-sizes admin-createandcheck__views__create-and-edit__form__add-clear-buttons__handler-sizes--all">
-            {showAddVariantsButton || newProduct.variants.length === 0 ? 'Add all variants' : 'Clear all variants'}
+          <div
+            onClick={handleAllVariants}
+            className="admin-createandcheck__views__create-and-edit__form__add-clear-buttons__handler-sizes admin-createandcheck__views__create-and-edit__form__add-clear-buttons__handler-sizes--all"
+          >
+            {showAddVariantsButton || newProduct.variants.length === 0
+              ? 'Add all variants'
+              : 'Clear all variants'}
           </div>
         </div>
         <div className="admin-createandcheck__views__create-and-edit__form__sizes-block">
@@ -270,7 +291,12 @@ const CreateAndEdit = ({ productId, setOpenCreateAndEdit }: Props) => {
             </button>
           ) : null}
         </div>
-        <input type="number" placeholder='Price' value={newProduct.price} onChange={(e) =>handlePrice(e.target.value)}/>
+        <input
+          type="number"
+          placeholder="Price"
+          value={newProduct.price}
+          onChange={(e) => handlePrice(e.target.value)}
+        />
         <button
           type="submit"
           className="admin-createandcheck__views__create-and-edit__form__submit"
