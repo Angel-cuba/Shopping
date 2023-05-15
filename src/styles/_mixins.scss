@@ -20,7 +20,15 @@
   &:hover {
     color: $background-color;
     background-color: $color;
-    border-color: $color;
+    border: $color;
     cursor: pointer;
+    box-shadow: 1px 1px 10px 0px rgba(0, 0, 0, 0.21),
+      inset 0px 0px 10px 0px rgba(75, 101, 98, 0.12);
   }
+
+}
+
+@mixin loginButton() {
+  @include customButton(#fff, #00bfff, #d3d3d3);
+  padding: 0.5em 1.5rem;
 }

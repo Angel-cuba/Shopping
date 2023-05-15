@@ -15,6 +15,7 @@ import './styles/Login.scss';
 const Login = () => {
   const [username, setUsername] = React.useState('');
   const [password, setPassword] = React.useState('');
+  const [isLogin, setIsLogin] = React.useState(true);
 
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
@@ -23,15 +24,15 @@ const Login = () => {
   const userToken = localStorage.getItem('token');
 
   useEffect(() => {
-    localStorage.clear()
-  }, [])
+    localStorage.clear();
+  }, []);
 
   const handleGoogleResponse = (response: any) => {
     if (response.credential) {
       localStorage.setItem('token', response.credential);
       const userDecoded: UserType = jwtDecode(response.credential);
-      const userToLocalStorage = JSON.stringify(userDecoded)
-      localStorage.setItem('user', userToLocalStorage)
+      const userToLocalStorage = JSON.stringify(userDecoded);
+      localStorage.setItem('user', userToLocalStorage);
       dispatch(login(userDecoded));
       navigate('/home');
     }
@@ -43,45 +44,81 @@ const Login = () => {
       setPassword(e.target.value);
     }
   };
-const handleLogin = async () => {
-  const postData = {
-    username,
-    password
-  }
- const request = await axios.post('http://localhost:8080/api/v1/users/signin', postData)
-  localStorage.setItem('token', request.data);
-  getTokenFromLocalStorage()
-  navigate('/home')
-}
+  const handleLogin = async () => {
+    const postData = {
+      username,
+      password,
+    };
+    const request = await axios.post('http://localhost:8080/api/v1/users/signin', postData);
+    localStorage.setItem('token', request.data);
+    getTokenFromLocalStorage();
+    navigate('/home');
+  };
+  const openSignUp = () => {
+    setIsLogin(!isLogin);
+  };
 
   return (
     <>
-    {
-      !userFromLocalStorage?.username && !userToken ? (
+      {!userFromLocalStorage?.username && !userToken ? (
         <div className="login-view">
-      <div className="login-view__container">
-        <Input
-          name="Email"
-          onChange={handlerChange}
-          value={username}
-          placeholder="youremail@gmail.com"
-          style={inputStyle}
-        />
-        <Input
-          name="Password"
-          onChange={handlerChange}
-          value={password}
-          placeholder="**********"
-          style={inputStyle}
-        />
-        <button className="login-view__container__button" onClick={handleLogin}>Login</button>
-        <GoogleLogin onSuccess={handleGoogleResponse} onError={() => console.log('Failed')} />
-      </div>
-    </div>
+          <div className="login-view__container">
+            {isLogin ? (
+              <div className="login-view__container__login">
+                <Input
+                  name="Email"
+                  onChange={handlerChange}
+                  value={username}
+                  placeholder="youremail@gmail.com"
+                  style={inputStyle}
+                />
+                <Input
+                  name="Password"
+                  onChange={handlerChange}
+                  value={password}
+                  placeholder="**********"
+                  style={inputStyle}
+                />
+                <button className="login-view__container__login__button" onClick={handleLogin}>
+                  Login
+                </button>
+              </div>
+            ) : null}
+            {!isLogin ? (
+              <div className="login-view__container__register">
+                <Input
+                  name="Email"
+                  onChange={handlerChange}
+                  value={username}
+                  placeholder=""
+                  style={inputStyle}
+                />
+                <Input
+                  name="Password"
+                  onChange={handlerChange}
+                  value={password}
+                  placeholder=""
+                  style={inputStyle}
+                />
+                <button className="login-view__container__register__button">Sign up</button>
+              </div>
+            ) : null}
+            <div className="login-view__container__text">
+              <p>
+              {
+                isLogin ? 'Don’t have an account? ' : 'Already have an account? '
+              }
+              <span className="login-view__container__text--span" onClick={openSignUp}>{!isLogin ? 'Login' : 'Sign up'}</span>
+            </p>
+            </div>
+            <div className="login-view__container--login-with-google">
+            </div>
+            <GoogleLogin onSuccess={handleGoogleResponse} onError={() => console.log('Failed')} />
+          </div>
+        </div>
       ) : (
         <Home />
-      ) 
-    }
+      )}
     </>
   );
 };
@@ -90,10 +127,11 @@ export default Login;
 
 const inputStyle = {
   width: '230px',
-  height: '40px',
+  height: '30px',
   fontSize: '20px',
   padding: '10px',
   borderRadius: '5px',
-  border: '1px solid #ccc',
+  border: 'none',
   marginBottom: '10px',
+  boxShadow: '0px 0px 5px 0px rgba(0,0,0,0.15)',
 };
