@@ -38,5 +38,24 @@
         @include loginButton();
       }
     }
+    &__text {
+      font-weight: 600;
+      &--span {
+        font-weight: 500;
+        color: #00bfff;
+        cursor: pointer;
+        transition: all 0.2s ease-in-out;
+        &:hover {
+          color: #192900;
+          transform: scale(1.2);
+        }
+      }
+    }
+    &__separator {
+      width: 80%;
+      height: 1px;
+      background-color: #dedede;
+      margin: 20px 0;
+    }
   }
 }

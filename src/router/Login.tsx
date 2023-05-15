@@ -111,6 +111,7 @@ const Login = () => {
               <span className="login-view__container__text--span" onClick={openSignUp}>{!isLogin ? 'Login' : 'Sign up'}</span>
             </p>
             </div>
+            <div className="login-view__container__separator"></div>
             <div className="login-view__container--login-with-google">
             </div>
             <GoogleLogin onSuccess={handleGoogleResponse} onError={() => console.log('Failed')} />
