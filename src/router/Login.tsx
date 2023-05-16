@@ -16,6 +16,15 @@ const Login = () => {
   const [username, setUsername] = React.useState('');
   const [password, setPassword] = React.useState('');
   const [isLogin, setIsLogin] = React.useState(true);
+  const [newUser, setNewUser] = React.useState({
+    username: '',
+    firstname: '',
+    lastname: '',
+    email: '',
+    phone: '',
+    password: '',
+  });
+  const [confirmPassword, setConfirmPassword] = React.useState('');
 
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
@@ -44,6 +53,27 @@ const Login = () => {
       setPassword(e.target.value);
     }
   };
+
+  const handleRegisterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.name === 'user Name') {
+      setNewUser({ ...newUser, username: e.target.value });
+    } else if (e.target.name === 'first Name') {
+      setNewUser({ ...newUser, firstname: e.target.value });
+    } else if (e.target.name === 'last Name') {
+      setNewUser({ ...newUser, lastname: e.target.value });
+    } else if (e.target.name === 'email') {
+      setNewUser({ ...newUser, email: e.target.value });
+    } else if (e.target.name === 'phone') {
+      setNewUser({ ...newUser, phone: e.target.value });
+    } else {
+      setNewUser({ ...newUser, password: e.target.value });
+    }
+  };
+
+  const handleConfirmPassword = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setConfirmPassword(e.target.value);
+  };
+
   const handleLogin = async () => {
     const postData = {
       username,
@@ -56,6 +86,29 @@ const Login = () => {
   };
   const openSignUp = () => {
     setIsLogin(!isLogin);
+  };
+
+  const handleRegister = async () => {
+    if(newUser.password !== confirmPassword) {
+      alert('passwords do not match');
+      return;
+    }
+    if(!newUser.username || !newUser.firstname || !newUser.lastname || !newUser.email || !newUser.phone || !newUser.password) {
+      alert('please fill all the fields');
+      return;
+    }
+    const postData = {
+      username: newUser.username,
+      firstname: newUser.firstname,
+      lastname: newUser.lastname,
+      email: newUser.email,
+      phone: newUser.phone,
+      password: newUser.password,
+    };
+    const request = await axios.post('http://localhost:8080/api/v1/users/signup', postData);
+    localStorage.setItem('token', request.data);
+    getTokenFromLocalStorage();
+    navigate('/home');
   };
 
   return (
@@ -87,33 +140,79 @@ const Login = () => {
             {!isLogin ? (
               <div className="login-view__container__register">
                 <Input
-                  name="Email"
-                  onChange={handlerChange}
-                  value={username}
-                  placeholder=""
+                  name="user Name"
+                  onChange={handleRegisterChange}
+                  value={newUser.username}
+                  placeholder="User Name"
                   style={inputStyle}
-                />
+                />{' '}
                 <Input
-                  name="Password"
-                  onChange={handlerChange}
-                  value={password}
-                  placeholder=""
+                  name="first Name"
+                  onChange={handleRegisterChange}
+                  value={newUser.firstname}
+                  placeholder="First Name"
+                  style={inputStyle}
+                />{' '}
+                <Input
+                  type="email"
+                  name="email"
+                  onChange={handleRegisterChange}
+                  value={newUser.email}
+                  placeholder="Email"
+                  style={inputStyle}
+                />{' '}
+                <Input
+                  name="last Name"
+                  onChange={handleRegisterChange}
+                  value={newUser.lastname}
+                  placeholder="Last Name"
                   style={inputStyle}
                 />
-                <button className="login-view__container__register__button">Sign up</button>
+               <div className="login-view__container__register--show-password">
+                 <Input
+                  type="password"
+                  name="password"
+                  onChange={handleRegisterChange}
+                  value={newUser.password}
+                  placeholder="Password"
+                  style={inputStyle}
+                />
+               </div>
+                <Input
+                  name="phone"
+                  onChange={handleRegisterChange}
+                  value={newUser.phone}
+                  placeholder="Phone Number"
+                  style={inputStyle}
+                />
+               <div className="login-view__container__register--show-password">
+                <Input
+                  type="password"
+                  name="Confirm Password"
+                  onChange={handleConfirmPassword}
+                  value={confirmPassword}
+                  placeholder="Confirm Password"
+                  style={inputStyle}
+                />
+                </div>
+                <button
+                  className="login-view__container__register__button"
+                  onClick={handleRegister}
+                >
+                  Register
+                </button>
               </div>
             ) : null}
             <div className="login-view__container__text">
               <p>
-              {
-                isLogin ? 'Don’t have an account? ' : 'Already have an account? '
-              }
-              <span className="login-view__container__text--span" onClick={openSignUp}>{!isLogin ? 'Login' : 'Sign up'}</span>
-            </p>
+                {isLogin ? 'Don’t have an account? ' : 'Already have an account? '}
+                <span className="login-view__container__text--span" onClick={openSignUp}>
+                  {!isLogin ? 'Login' : 'Sign up'}
+                </span>
+              </p>
             </div>
             <div className="login-view__container__separator"></div>
-            <div className="login-view__container--login-with-google">
-            </div>
+            <div className="login-view__container--login-with-google"></div>
             <GoogleLogin onSuccess={handleGoogleResponse} onError={() => console.log('Failed')} />
           </div>
         </div>
