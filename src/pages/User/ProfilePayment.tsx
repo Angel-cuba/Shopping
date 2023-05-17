@@ -1,6 +1,7 @@
 import React, { FormEvent } from 'react';
 import { UserFromDB } from '../../interfaces/user/UserType';
 import { Input } from '../../components/Input/Input';
+import {api} from '../../utils/api'
 
 type ProfilePaymentProps = {
   userEdited: UserFromDB;
@@ -8,25 +9,55 @@ type ProfilePaymentProps = {
   setEditPayment: (editPayment: boolean) => void;
 };
 const ProfilePayment = ({ userEdited, setUserEdited, setEditPayment }: ProfilePaymentProps) => {
+  const [payments, setPayments] = React.useState([]);
   const today = new Date();
   const currentMonth = (today.getMonth() + 1).toString().padStart(2, '0');
   const currentYear = today.getFullYear().toString();
+  const token = localStorage.getItem('token');
 
   const cancellForm = () => {
     setEditPayment(false);
     setUserEdited({
       ...userEdited,
-      cardHolder: '',
+      cardHolderName: '',
       paymentType: '',
       provider: '',
-      accountNumber: '',
+      cardNumber: '',
       expirationDate: '',
     });
   };
   const handlerSubmit = (e: FormEvent) => {
     e.preventDefault();
     setUserEdited(userEdited);
-    setEditPayment(false);
+    sendPaymentData();
+  };
+
+  const sendPaymentData = async () => {
+    const paymentData = {
+      paymentType: userEdited.paymentType,
+      provider: userEdited.provider,
+      cardNumber: userEdited.cardNumber,
+      expirationDate: userEdited.expirationDate,
+      cardHolderName: userEdited.cardHolderName,
+      user: {
+        id: userEdited.id,
+      }
+    };
+    try {
+      const response = await api.post('/payment', paymentData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setPayments(response.data);
+      if (response.status === 200) {
+        setEditPayment(false);
+      } else {
+        console.log('Error');
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
   return (
     <div className="profile__edit-form__container">
@@ -35,14 +66,14 @@ const ProfilePayment = ({ userEdited, setUserEdited, setEditPayment }: ProfilePa
         <Input
           type="text"
           name="card name"
-          value={userEdited.cardHolder ? userEdited.cardHolder : ''}
+          value={userEdited.cardHolderName ? userEdited.cardHolderName : ''}
           onChange={(e) =>
             setUserEdited({
               ...userEdited,
-              cardHolder: e.target.value,
+              cardHolderName: e.target.value,
             })
           }
-          placeholder={userEdited.cardHolder ? userEdited.cardHolder : 'Full card name'}
+          placeholder={userEdited.cardHolderName ? userEdited.cardHolderName : 'Full card name'}
           style={styles}
           admin
           profile
@@ -80,14 +111,14 @@ const ProfilePayment = ({ userEdited, setUserEdited, setEditPayment }: ProfilePa
         <Input
           type="text"
           name="card number"
-          value={userEdited.accountNumber ? userEdited.accountNumber : ''}
+          value={userEdited.cardNumber ? userEdited.cardNumber : ''}
           onChange={(e) =>
             setUserEdited({
               ...userEdited,
-              accountNumber: e.target.value,
+              cardNumber: e.target.value,
             })
           }
-          placeholder={userEdited.accountNumber ? userEdited.accountNumber : 'Card number'}
+          placeholder={userEdited.cardNumber ? userEdited.cardNumber : 'Card number'}
           style={styles}
           admin
           profile

@@ -16,22 +16,20 @@ import {
   PublicRounded,
   StreetviewTwoTone,
 } from '@mui/icons-material';
-import ProfileForm from './ProfileForm';
+import ProfileForm from './ProfileAddress';
 import ProfilePayment from './ProfilePayment';
 import { GlobalTheme } from '../../context/ThemeProvider';
 import { darkTheme, lightTheme } from '../../styles/styles';
-import axios from 'axios';
+import { api } from '../../utils/api'
 import './Profile.scss';
 
 const Profile = () => {
   //TODO: { user: UserType } is replaced by any
   const { user, userFromToken } = useSelector((state: RootState) => state.userLogged);
-  console.log('🚀 ~ file: Profile.tsx:28 ~ Profile ~ userFromToken:', userFromToken);
   const [edit, setEdit] = React.useState(false);
   const [editPayment, setEditPayment] = React.useState(false);
   const [openHistory, setOpenHistory] = React.useState(false);
   const [userEdited, setUserEdited] = React.useState<UserFromDB>();
-  console.log('🚀 ~ file: Profile.tsx:34 ~ Profile ~ userEdited:', userEdited);
 
   const { theme } = GlobalTheme();
 
@@ -65,7 +63,7 @@ const Profile = () => {
   useEffect(() => {
     const userId = userFromToken.user_id || user?.id;
     const request = async () => {
-      const response = await axios.get(`http://localhost:8080/api/v1/users/${userId}`, {
+      const response = await api.get(`/users/${userId}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
@@ -74,6 +72,36 @@ const Profile = () => {
     };
     request();
   }, [userFromToken, user?.id]);
+
+  useEffect(() => {
+    const userId = userFromToken.user_id || user?.id;
+
+    const request = async () => {
+      const response = await api.get(`/payment/user/${userId}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      });
+      console.log(response.data);
+      if (response.status !== 200) {
+        console.log('error');
+      }
+      setUserEdited((prev: UserFromDB | undefined) => {
+        if (prev === undefined) {
+          return;
+        }
+        return {
+          ...prev,
+          cardHolderName: response.data.cardHolderName,
+          cardNumber: response.data.cardNumber,
+          expirationDate: response.data.expirationDate,
+          provider: response.data.provider,
+          paymentType: response.data.paymentType,
+        };
+      });
+    };
+    request();
+  }, [user?.id, userFromToken]);
 
   return (
     <div className="profile">
@@ -168,44 +196,31 @@ const Profile = () => {
             <div className="profile__data__payment-info__item--icon">
               <Person style={iconStyles} />
             </div>
-            {userEdited?.cardHolder
-                ? userEdited.cardHolder
-                : 'Card holder'
-              }
-    
+            {userEdited?.cardHolderName ? userEdited.cardHolderName : 'Card holder'}
           </div>
           <div className="profile__data__payment-info__item" style={infoItemStyles}>
             <div className="profile__data__payment-info__item--icon">
               <CardTravelTwoTone style={iconStyles} />
             </div>
-            {userEdited?.paymentType
-                ? userEdited.paymentType
-                : 'VISA'}
+            {userEdited?.paymentType ? userEdited.paymentType : 'VISA'}
           </div>
           <div className="profile__data__payment-info__item" style={infoItemStyles}>
             <div className="profile__data__payment-info__item--icon">
               <CardMembershipTwoTone style={iconStyles} />
             </div>
-            {userEdited?.provider
-                ? userEdited.provider
-                : 'Provider'}
+            {userEdited?.provider ? userEdited.provider : 'Provider'}
           </div>
           <div className="profile__data__payment-info__item" style={infoItemStyles}>
             <div className="profile__data__payment-info__item--icon">
               <Numbers style={iconStyles} />
             </div>
-            {userEdited?.accountNumber
-                ? userEdited.accountNumber
-                : '1234 5678 9012 3456' }
-    
+            {userEdited?.cardNumber ? userEdited.cardNumber : '1234 5678 9012 3456'}
           </div>
           <div className="profile__data__payment-info__item" style={infoItemStyles}>
             <div className="profile__data__payment-info__item--icon">
               <DateRange style={iconStyles} />
             </div>
-            {userEdited?.expirationDate
-                ? userEdited.expirationDate
-                : 'MM/YY'}
+            {userEdited?.expirationDate ? userEdited.expirationDate : 'MM/YY'}
           </div>
         </div>
       </div>

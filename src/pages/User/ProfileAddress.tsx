@@ -23,7 +23,6 @@ const ProfileForm = ({ userEdited, setUserEdited, setEdit }: Props) => {
     setUserEdited({
       ...userEdited,
       username: '',
-      email: '',
       password: '',
       phone: '',
       address: '',
@@ -50,9 +49,8 @@ const ProfileForm = ({ userEdited, setUserEdited, setEdit }: Props) => {
           type="text"
           name="email"
           value={userEdited?.email}
-          onChange={(e) => setUserEdited({ ...userEdited, email: e.target.value })}
           className="profile__edit-form__container__input"
-          placeholder={userEdited.email ? userEdited.email : 'youremail@gmail.com'}
+          placeholder={userEdited.email}
           style={styles}
           admin
           profile
