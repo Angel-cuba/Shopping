@@ -1,39 +1,33 @@
-import React, { FormEvent } from 'react'
-import { UserType } from '../../interfaces/user/UserType'
-import { Input } from '../../components/Input/Input'
+import React, { FormEvent } from 'react';
+import { UserFromDB } from '../../interfaces/user/UserType';
+import { Input } from '../../components/Input/Input';
 
 type ProfilePaymentProps = {
-  user: UserType
-  userEdited: UserType
-  setUserEdited: (userEdited: UserType) => void
-  setEditPayment: (editPayment: boolean) => void
-}
-const ProfilePayment = ({
-  user,
-  userEdited,
-  setUserEdited,
-  setEditPayment
-}: ProfilePaymentProps) => {
-  const today = new Date()
-  const currentMonth = (today.getMonth() + 1).toString().padStart(2, '0')
-  const currentYear = today.getFullYear().toString()
+  userEdited: UserFromDB;
+  setUserEdited: (userEdited: UserFromDB) => void;
+  setEditPayment: (editPayment: boolean) => void;
+};
+const ProfilePayment = ({ userEdited, setUserEdited, setEditPayment }: ProfilePaymentProps) => {
+  const today = new Date();
+  const currentMonth = (today.getMonth() + 1).toString().padStart(2, '0');
+  const currentYear = today.getFullYear().toString();
 
   const cancellForm = () => {
-    setEditPayment(false)
+    setEditPayment(false);
     setUserEdited({
       ...userEdited,
       cardHolder: '',
       paymentType: '',
       provider: '',
       accountNumber: '',
-      expirationDate: ''
-    })
-  }
+      expirationDate: '',
+    });
+  };
   const handlerSubmit = (e: FormEvent) => {
-    e.preventDefault()
-    setUserEdited(userEdited)
-    setEditPayment(false)
-  }
+    e.preventDefault();
+    setUserEdited(userEdited);
+    setEditPayment(false);
+  };
   return (
     <div className="profile__edit-form__container">
       <h1>Payment method</h1>
@@ -41,26 +35,14 @@ const ProfilePayment = ({
         <Input
           type="text"
           name="card name"
-          value={
-            !user.cardHolder
-              ? userEdited.cardHolder
-                ? userEdited.cardHolder
-                : ''
-              : user.cardHolder
-          }
+          value={userEdited.cardHolder ? userEdited.cardHolder : ''}
           onChange={(e) =>
             setUserEdited({
               ...userEdited,
-              cardHolder: e.target.value
+              cardHolder: e.target.value,
             })
           }
-          placeholder={
-            !user.cardHolder
-              ? userEdited.cardHolder
-                ? userEdited.cardHolder
-                : 'Full card name'
-              : user.cardHolder
-          }
+          placeholder={userEdited.cardHolder ? userEdited.cardHolder : 'Full card name'}
           style={styles}
           admin
           profile
@@ -69,48 +51,28 @@ const ProfilePayment = ({
           <Input
             type="text"
             name="Type"
-            value={
-              !user.paymentType
-                ? userEdited.paymentType
-                  ? userEdited.paymentType
-                  : ''
-                : user.paymentType
-            }
+            value={userEdited.paymentType ? userEdited.paymentType : ''}
             onChange={(e) =>
               setUserEdited({
                 ...userEdited,
-                paymentType: e.target.value
+                paymentType: e.target.value,
               })
             }
-            placeholder={
-              !user.paymentType
-                ? userEdited.paymentType
-                  ? userEdited.paymentType
-                  : 'Type'
-                : user.paymentType
-            }
+            placeholder={userEdited.paymentType ? userEdited.paymentType : 'Type'}
             style={styleSmall}
             small
           />
           <Input
             type="text"
             name="Provider"
-            value={
-              !user.provider ? (userEdited.provider ? userEdited.provider : '') : user.provider
-            }
+            value={userEdited.provider ? userEdited.provider : ''}
             onChange={(e) =>
               setUserEdited({
                 ...userEdited,
-                provider: e.target.value
+                provider: e.target.value,
               })
             }
-            placeholder={
-              !user.provider
-                ? userEdited.provider
-                  ? userEdited.provider
-                  : 'Provider'
-                : user.provider
-            }
+            placeholder={userEdited.provider ? userEdited.provider : 'Provider'}
             style={styleSmall}
             small
           />
@@ -118,26 +80,14 @@ const ProfilePayment = ({
         <Input
           type="text"
           name="card number"
-          value={
-            !user.accountNumber
-              ? userEdited.accountNumber
-                ? userEdited.accountNumber
-                : ''
-              : user.accountNumber
-          }
+          value={userEdited.accountNumber ? userEdited.accountNumber : ''}
           onChange={(e) =>
             setUserEdited({
               ...userEdited,
-              accountNumber: e.target.value
+              accountNumber: e.target.value,
             })
           }
-          placeholder={
-            !user.accountNumber
-              ? userEdited.accountNumber
-                ? userEdited.accountNumber
-                : 'Card number'
-              : user.accountNumber
-          }
+          placeholder={userEdited.accountNumber ? userEdited.accountNumber : 'Card number'}
           style={styles}
           admin
           profile
@@ -151,16 +101,10 @@ const ProfilePayment = ({
           onChange={(e) =>
             setUserEdited({
               ...userEdited,
-              expirationDate: e.target.value
+              expirationDate: e.target.value,
             })
           }
-          placeholder={
-            !user.expirationDate
-              ? userEdited.expirationDate
-                ? userEdited.expirationDate
-                : 'Expiration date'
-              : user.expirationDate
-          }
+          placeholder={userEdited.expirationDate ? userEdited.expirationDate : 'Expiration date'}
           style={styles}
           admin
           profile
@@ -173,10 +117,10 @@ const ProfilePayment = ({
         Cancel
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default ProfilePayment
+export default ProfilePayment;
 
 const styles = {
   width: '280px',
@@ -184,8 +128,8 @@ const styles = {
   fontSize: '18px',
   border: 'none',
   borderRadius: '5px',
-  paddingLeft: '15px'
-}
+  paddingLeft: '15px',
+};
 
 const styleSmall = {
   width: '100px',
@@ -193,5 +137,5 @@ const styleSmall = {
   fontSize: '18px',
   border: 'none',
   borderRadius: '5px',
-  paddingLeft: '15px'
-}
+  paddingLeft: '15px',
+};

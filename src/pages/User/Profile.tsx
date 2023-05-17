@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../redux/store';
-import { UserType } from '../../interfaces/user/UserType';
+import { UserFromDB } from '../../interfaces/user/UserType';
 import {
   Apartment,
   CardMembershipTwoTone,
@@ -20,15 +20,18 @@ import ProfileForm from './ProfileForm';
 import ProfilePayment from './ProfilePayment';
 import { GlobalTheme } from '../../context/ThemeProvider';
 import { darkTheme, lightTheme } from '../../styles/styles';
+import axios from 'axios';
 import './Profile.scss';
 
 const Profile = () => {
   //TODO: { user: UserType } is replaced by any
-  const { user }: any = useSelector((state: RootState) => state.userLogged);
+  const { user, userFromToken } = useSelector((state: RootState) => state.userLogged);
+  console.log('🚀 ~ file: Profile.tsx:28 ~ Profile ~ userFromToken:', userFromToken);
   const [edit, setEdit] = React.useState(false);
   const [editPayment, setEditPayment] = React.useState(false);
   const [openHistory, setOpenHistory] = React.useState(false);
-  const [userEdited, setUserEdited] = React.useState<UserType>(user);
+  const [userEdited, setUserEdited] = React.useState<UserFromDB>();
+  console.log('🚀 ~ file: Profile.tsx:34 ~ Profile ~ userEdited:', userEdited);
 
   const { theme } = GlobalTheme();
 
@@ -54,8 +57,23 @@ const Profile = () => {
   const infoItemStyles = {
     color: theme === 'dark' ? lightTheme.greyLight : darkTheme.greyDark,
     fontWeight: 'bolder',
-    boxShadow: `0px 0px 5px 0px ${theme === 'dark' ? lightTheme.shadowMedium : darkTheme.shadowMedium}`,
+    boxShadow: `0px 0px 5px 0px ${
+      theme === 'dark' ? lightTheme.shadowMedium : darkTheme.shadowMedium
+    }`,
   };
+
+  useEffect(() => {
+    const userId = userFromToken.user_id || user?.id;
+    const request = async () => {
+      const response = await axios.get(`http://localhost:8080/api/v1/users/${userId}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      });
+      setUserEdited(response.data);
+    };
+    request();
+  }, [userFromToken, user?.id]);
 
   return (
     <div className="profile">
@@ -68,20 +86,14 @@ const Profile = () => {
       >
         History
       </div>
-      {edit && (
+      {edit && userEdited && (
         <div className="profile__edit-form">
-          <ProfileForm
-            user={user}
-            userEdited={userEdited}
-            setUserEdited={setUserEdited}
-            setEdit={setEdit}
-          />
+          <ProfileForm userEdited={userEdited} setUserEdited={setUserEdited} setEdit={setEdit} />
         </div>
       )}
-      {editPayment && (
+      {editPayment && userEdited && (
         <div className="profile__edit-form">
           <ProfilePayment
-            user={user}
             userEdited={userEdited}
             setUserEdited={setUserEdited}
             setEditPayment={setEditPayment}
@@ -89,12 +101,13 @@ const Profile = () => {
         </div>
       )}
       <h1>
-        Welcome {user ? `administrator ${user.given_name}` : `Hello, please log in to continue`}
+        Welcome{' '}
+        {userEdited ? `administrator ${userEdited.firstname}` : `Hello, please log in to continue`}
       </h1>
       <div className="profile__data">
         <div className="profile__data__image-and-info">
           <img
-            src={user?.picture}
+            src={user?.picture ? user.picture : 'https://i.imgur.com/HeIi0wU.png'}
             alt={user?.name}
             className="profile__data__image-and-info__image"
           />
@@ -102,57 +115,49 @@ const Profile = () => {
             <div className="profile__data__image-and-info__item--icon">
               <Person style={iconStyles} />
             </div>
-            {user?.name}
+            {userEdited?.username}
           </div>
           <div className="profile__data__image-and-info__item" style={infoItemStyles}>
             <div className="profile__data__image-and-info__item--icon">
               <Email style={iconStyles} />
             </div>
-            {user?.email}
+            {userEdited?.email}
           </div>
           <div className="profile__data__image-and-info__item" style={infoItemStyles}>
             <div className="profile__data__image-and-info__item--icon">
               <PasswordSharp style={iconStyles} />
             </div>
-            {!user.password
-              ? userEdited.password
-                ? userEdited.password
-                : '********'
-              : user.password}
+            ********
           </div>
           <div className="profile__data__image-and-info__item" style={infoItemStyles}>
             <div className="profile__data__image-and-info__item--icon">
               <Phone style={iconStyles} />
             </div>
-            {!user.phone ? (userEdited.phone ? userEdited.phone : 'Phone') : user.phone}
+            {userEdited?.phone}
           </div>
           <div className="profile__data__image-and-info__item" style={infoItemStyles}>
             <div className="profile__data__image-and-info__item--icon">
               <StreetviewTwoTone style={iconStyles} />
             </div>
-            {!user.address ? (userEdited.address ? userEdited.address : 'Address') : user.address}
+            {userEdited?.address ? userEdited.address : 'Address '}
           </div>
           <div className="profile__data__image-and-info__item" style={infoItemStyles}>
             <div className="profile__data__image-and-info__item--icon">
               <Apartment style={iconStyles} />
             </div>
-            {!user.city ? (userEdited.city ? userEdited.city : 'City') : user.city}
+            {!userEdited?.city ? 'City' : userEdited.city}
           </div>
           <div className="profile__data__image-and-info__item" style={infoItemStyles}>
             <div className="profile__data__image-and-info__item--icon">
               <PostAdd style={iconStyles} />
             </div>
-            {!user.postalCode
-              ? userEdited.postalCode
-                ? userEdited.postalCode
-                : 'Postal Code'
-              : user.postalCode}
+            {userEdited?.postalCode ? userEdited.postalCode : 'Postal Code'}
           </div>
           <div className="profile__data__image-and-info__item" style={infoItemStyles}>
             <div className="profile__data__image-and-info__item--icon">
               <PublicRounded style={iconStyles} />
             </div>
-            {!user.country ? (userEdited.country ? userEdited.country : 'Country') : user.country}
+            {userEdited?.country ? userEdited.country : 'Country'}
           </div>
         </div>
         <div className="profile__data__payment-info">
@@ -163,51 +168,44 @@ const Profile = () => {
             <div className="profile__data__payment-info__item--icon">
               <Person style={iconStyles} />
             </div>
-            {!user.cardHolder
-              ? userEdited.cardHolder
+            {userEdited?.cardHolder
                 ? userEdited.cardHolder
                 : 'Card holder'
-              : user.cardHolder}
+              }
+    
           </div>
           <div className="profile__data__payment-info__item" style={infoItemStyles}>
             <div className="profile__data__payment-info__item--icon">
               <CardTravelTwoTone style={iconStyles} />
             </div>
-            {!user.paymentType
-              ? userEdited.paymentType
+            {userEdited?.paymentType
                 ? userEdited.paymentType
-                : 'VISA'
-              : user.paymentType}
+                : 'VISA'}
           </div>
           <div className="profile__data__payment-info__item" style={infoItemStyles}>
             <div className="profile__data__payment-info__item--icon">
               <CardMembershipTwoTone style={iconStyles} />
             </div>
-            {!user.provider
-              ? userEdited.provider
+            {userEdited?.provider
                 ? userEdited.provider
-                : 'Provider'
-              : user.provider}
+                : 'Provider'}
           </div>
           <div className="profile__data__payment-info__item" style={infoItemStyles}>
             <div className="profile__data__payment-info__item--icon">
               <Numbers style={iconStyles} />
             </div>
-            {!user.accountNumber
-              ? userEdited.accountNumber
+            {userEdited?.accountNumber
                 ? userEdited.accountNumber
-                : '1234 5678 9012 3456'
-              : user.accountNumber}
+                : '1234 5678 9012 3456' }
+    
           </div>
           <div className="profile__data__payment-info__item" style={infoItemStyles}>
             <div className="profile__data__payment-info__item--icon">
               <DateRange style={iconStyles} />
             </div>
-            {!user.expirationDate
-              ? userEdited.expirationDate
+            {userEdited?.expirationDate
                 ? userEdited.expirationDate
-                : 'MM/YY'
-              : user.expirationDate}
+                : 'MM/YY'}
           </div>
         </div>
       </div>

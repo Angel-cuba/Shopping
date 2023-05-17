@@ -1,15 +1,14 @@
 import React, { FormEvent } from 'react';
-import { UserType } from '../../interfaces/user/UserType';
+import { UserFromDB } from '../../interfaces/user/UserType';
 import { Input } from '../../components/Input/Input';
 
 type Props = {
-  user: UserType;
-  userEdited: UserType;
-  setUserEdited: (userEdited: UserType) => void;
+  userEdited: UserFromDB;
+  setUserEdited: (userEdited: UserFromDB) => void;
   setEdit: (edit: boolean) => void;
 };
 
-const ProfileForm = ({ user, userEdited, setUserEdited, setEdit }: Props) => {
+const ProfileForm = ({ userEdited, setUserEdited, setEdit }: Props) => {
   const [confirmPassword, setConfirmPassword] = React.useState('');
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
@@ -23,7 +22,7 @@ const ProfileForm = ({ user, userEdited, setUserEdited, setEdit }: Props) => {
     setEdit(false);
     setUserEdited({
       ...userEdited,
-      name: '',
+      username: '',
       email: '',
       password: '',
       phone: '',
@@ -39,10 +38,10 @@ const ProfileForm = ({ user, userEdited, setUserEdited, setEdit }: Props) => {
         <Input
           type="text"
           name="name"
-          value={!user.name ? (userEdited.name ? userEdited.name : '') : user.name}
-          onChange={(e) => setUserEdited({ ...userEdited, name: e.target.value })}
+          value={userEdited?.username}
+          onChange={(e) => setUserEdited({ ...userEdited, username: e.target.value })}
           className="profile__edit-form__container__input"
-          placeholder={!user.name ? (userEdited.name ? userEdited.name : 'Full name') : user.name}
+          placeholder={userEdited?.username}
           style={styles}
           admin
           profile
@@ -50,12 +49,10 @@ const ProfileForm = ({ user, userEdited, setUserEdited, setEdit }: Props) => {
         <Input
           type="text"
           name="email"
-          value={!user.email ? (userEdited.email ? userEdited.email : '') : user.email}
+          value={userEdited?.email}
           onChange={(e) => setUserEdited({ ...userEdited, email: e.target.value })}
           className="profile__edit-form__container__input"
-          placeholder={
-            !user.email ? (userEdited.email ? userEdited.email : 'youremail@gmail.com') : user.email
-          }
+          placeholder={userEdited.email ? userEdited.email : 'youremail@gmail.com'}
           style={styles}
           admin
           profile
@@ -63,16 +60,10 @@ const ProfileForm = ({ user, userEdited, setUserEdited, setEdit }: Props) => {
         <Input
           type="text"
           name="password"
-          value={!user.password ? (userEdited.password ? userEdited.password : '') : user.password}
+          value={userEdited.password ? userEdited.password : ''}
           onChange={(e) => setUserEdited({ ...userEdited, password: e.target.value })}
           className="profile__edit-form__container__input"
-          placeholder={
-            !user.password
-              ? userEdited.password
-                ? userEdited.password
-                : '***********'
-              : user.password
-          }
+          placeholder={userEdited.password ? userEdited.password : '***********'}
           style={styles}
           admin
           profile
@@ -91,12 +82,10 @@ const ProfileForm = ({ user, userEdited, setUserEdited, setEdit }: Props) => {
         <Input
           type="text"
           name="phone"
-          value={!user.phone ? (userEdited.phone ? userEdited.phone : '') : user.phone}
+          value={userEdited.phone ? userEdited.phone : ''}
           onChange={(e) => setUserEdited({ ...userEdited, phone: e.target.value })}
           className="profile__edit-form__container__input"
-          placeholder={
-            !user.phone ? (userEdited.phone ? userEdited.phone : '+123 45 67 89000') : user.phone
-          }
+          placeholder={userEdited.phone ? userEdited.phone : '+123 45 67 89000'}
           style={styles}
           admin
           profile
@@ -104,12 +93,10 @@ const ProfileForm = ({ user, userEdited, setUserEdited, setEdit }: Props) => {
         <Input
           type="text"
           name="address"
-          value={!user.address ? (userEdited.address ? userEdited.address : '') : user.address}
+          value={userEdited.address ? userEdited.address : ''}
           onChange={(e) => setUserEdited({ ...userEdited, address: e.target.value })}
           className="profile__edit-form__container__input"
-          placeholder={
-            !user.address ? (userEdited.address ? userEdited.address : 'Street 1') : user.address
-          }
+          placeholder={userEdited.address ? userEdited.address : 'Street 1'}
           style={styles}
           admin
           profile
@@ -117,10 +104,10 @@ const ProfileForm = ({ user, userEdited, setUserEdited, setEdit }: Props) => {
         <Input
           type="text"
           name="city"
-          value={!user.city ? (userEdited.city ? userEdited.city : '') : user.city}
+          value={userEdited.city ? userEdited.city : ''}
           onChange={(e) => setUserEdited({ ...userEdited, city: e.target.value })}
           className="profile__edit-form__container__input"
-          placeholder={!user.city ? (userEdited.city ? userEdited.city : 'City') : user.city}
+          placeholder={userEdited.city ? userEdited.city : 'City'}
           style={styles}
           admin
           profile
@@ -128,12 +115,10 @@ const ProfileForm = ({ user, userEdited, setUserEdited, setEdit }: Props) => {
         <Input
           type="text"
           name="country"
-          value={!user.country ? (userEdited.country ? userEdited.country : '') : user.country}
+          value={userEdited.country ? userEdited.country : ''}
           onChange={(e) => setUserEdited({ ...userEdited, country: e.target.value })}
           className="profile__edit-form__container__input"
-          placeholder={
-            !user.country ? (userEdited.country ? userEdited.country : 'Country') : user.country
-          }
+          placeholder={userEdited.country ? userEdited.country : 'Country'}
           style={styles}
           admin
           profile
@@ -141,22 +126,10 @@ const ProfileForm = ({ user, userEdited, setUserEdited, setEdit }: Props) => {
         <Input
           type="text"
           name="postalCode"
-          value={
-            !user.postalCode
-              ? userEdited.postalCode
-                ? userEdited.postalCode
-                : ''
-              : user.postalCode
-          }
+          value={userEdited.postalCode ? userEdited.postalCode : ''}
           onChange={(e) => setUserEdited({ ...userEdited, postalCode: e.target.value })}
           className="profile__edit-form__container__input"
-          placeholder={
-            !user.postalCode
-              ? userEdited.postalCode
-                ? userEdited.postalCode
-                : 'Postal Code'
-              : user.postalCode
-          }
+          placeholder={userEdited.postalCode ? userEdited.postalCode : 'Postal Code'}
           style={styles}
           admin
           profile
