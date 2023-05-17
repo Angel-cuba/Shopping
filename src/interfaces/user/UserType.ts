@@ -53,3 +53,13 @@ export type UserPayment = {
   updatedAt?: string
   createdAt?: string
 }
+
+export type UserAddress = {
+  id?: string
+  address: string
+  city: string
+  postalCode: string
+  country: string
+  updatedAt?: string
+  createdAt?: string
+}

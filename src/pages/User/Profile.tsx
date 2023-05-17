@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useLayoutEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../redux/store';
 import { UserFromDB, UserPayment } from '../../interfaces/user/UserType';
@@ -26,6 +26,7 @@ import './Profile.scss';
 const Profile = () => {
   //TODO: { user: UserType } is replaced by any
   const { user, userFromToken } = useSelector((state: RootState) => state.userLogged);
+  const userId = userFromToken?.user_id || user?.id;
   const [edit, setEdit] = React.useState(false);
   const [editPayment, setEditPayment] = React.useState(false);
   const [openHistory, setOpenHistory] = React.useState(false);
@@ -34,6 +35,7 @@ const Profile = () => {
   const [payments, setPayments] = React.useState<UserPayment>();
   const [selectedPayment, setSelectedPayment] = React.useState<UserPayment>();
 
+  const token = localStorage.getItem('token');
   const lastPaymentMethod = userPaymentMethod?.[userPaymentMethod?.length - 1];
 
   const { theme } = GlobalTheme();
@@ -70,21 +72,19 @@ const Profile = () => {
     const request = async () => {
       const response = await api.get(`/users/${userId}`, {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
+          Authorization: `Bearer ${token}`,
         },
       });
       setUserEdited(response.data);
     };
     request();
-  }, [userFromToken]);
+  }, [userFromToken, token]);
 
-  useEffect(() => {
-    const userId = userFromToken?.user_id || user?.id;
-
+  useLayoutEffect(() => {
     const request = async () => {
       const response = await api.get(`/payment/user/${userId}`, {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
+          Authorization: `Bearer ${token}`,
         },
       });
       console.log(response.data);
@@ -94,7 +94,19 @@ const Profile = () => {
       setUserPaymentMethod(response.data);
     };
     request();
-  }, [user?.id, userFromToken, payments]);
+  }, [payments, token, userId]);
+
+  useLayoutEffect(() => {
+        const request = async () => {
+      const response = await api.get(`/addresses/user/${userId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      console.log(response.data);
+    };
+    request();
+  }, [token, userId]);
 
   const userPayments = userPaymentMethod?.map((payment: UserPayment) => {
     return (

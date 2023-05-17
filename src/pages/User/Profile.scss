@@ -27,15 +27,34 @@
     position: absolute;
     top: 70px;
     left: 18%;
-    padding: 10px 40px 10px 20px;
+    padding: 10px 30px 10px 20px;
     background-color: #dedede;
     border-radius: 15px;
     box-shadow: 0 0 5px 0 #00000041;
     z-index: 100;
+    min-width: 500px;
     &__container {
       display: flex;
       flex-direction: column;
       justify-content: center;
+      &__toggle {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 10px auto;
+        &--button {
+          margin: 0 10px;
+          @include customButton($bg_light, $components_dark, $letters_dark);
+          &--disable {
+           @include customButton( #555555, #bababa, #7f74746f);
+            &:hover {
+              background-color: #5e5e5e;
+              box-shadow: 0px 0px 15px 1px #0000001a;
+              transform: scale(1);
+            }
+          }
+        }
+      }
       &__input {
         margin: auto;
       }
@@ -61,6 +80,54 @@
           color: #d8d8d8;
           background-color: $components_dark;
           box-shadow: 0px 0px 5px 1px #0000000d;
+        }
+      }
+      &__user-data {
+        width: 100%;
+        &__buttons {
+          width: 60%;
+          display: flex;
+          justify-content: space-around;
+          align-items: center;
+          margin: 10px 2px 5px auto;
+          &--confirm {
+            @include customButton($bg_light, $components_dark, $letters_dark);
+            &:hover {
+              background-color: #000000;
+              transform: scale(1.05);
+            }
+          }
+          &--cancel {
+            @include customButton($bg_light, red, $letters_dark);
+            &:hover {
+              background-color: #000000;
+              transform: scale(1.05);
+            }
+          }
+        }
+      }
+      &__user-address {
+        width: 100%;
+        &__buttons {
+          width: 60%;
+          display: flex;
+          justify-content: space-around;
+          align-items: center;
+          margin: 10px 2px 5px auto;
+          &--confirm {
+            @include customButton($bg_light, $components_dark, $letters_dark);
+            &:hover {
+              background-color: #000000;
+              transform: scale(1.05);
+            }
+          }
+          &--cancel {
+            @include customButton($bg_light, red, $letters_dark);
+            &:hover {
+              background-color: #000000;
+              transform: scale(1.05);
+            }
+          }
         }
       }
       &__small {
@@ -141,6 +208,7 @@
         display: flex;
         justify-content: space-around;
         align-items: center;
+        flex-wrap: wrap;
         &__item {
           color: #000000;
           background-color: #ffffff;
