@@ -30,10 +30,10 @@ export type UserFromDB = {
   city: string
   postalCode: string
   country: string
-  cardHolder: string
+  cardHolderName: string
   paymentType: string
   provider: string
-  accountNumber: string
+  cardNumber: string
   expirationDate: string
   role: Role
 }
