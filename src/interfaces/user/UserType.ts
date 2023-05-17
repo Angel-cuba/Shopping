@@ -18,6 +18,26 @@ export type UserType = {
   role?: Role
 }
 
+export type UserFromDB = {
+  id: string
+  email: string
+  username: string
+  firstname: string
+  lastname: string
+  phone: string
+  password?: string
+  address: string
+  city: string
+  postalCode: string
+  country: string
+  cardHolder: string
+  paymentType: string
+  provider: string
+  accountNumber: string
+  expirationDate: string
+  role: Role
+}
+
 enum Role {
   ADMIN = 'ADMIN',
   USER = 'USER'
