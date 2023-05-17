@@ -16,7 +16,7 @@ import {
   PublicRounded,
   StreetviewTwoTone,
 } from '@mui/icons-material';
-import ProfileForm from './ProfileAddress';
+import ProfileForm from './ProfileForm';
 import ProfilePayment from './ProfilePayment';
 import { GlobalTheme } from '../../context/ThemeProvider';
 import { darkTheme, lightTheme } from '../../styles/styles';
@@ -74,7 +74,6 @@ const Profile = () => {
     };
     request();
   }, [userFromToken, user?.id]);
-
 
   return (
     <div className="profile">
@@ -169,8 +168,8 @@ const Profile = () => {
             <div className="profile__data__payment-info__item--icon">
               <Person style={iconStyles} />
             </div>
-            {userEdited?.cardHolderName
-                ? userEdited.cardHolderName
+            {userEdited?.cardHolder
+                ? userEdited.cardHolder
                 : 'Card holder'
               }
     
@@ -195,8 +194,8 @@ const Profile = () => {
             <div className="profile__data__payment-info__item--icon">
               <Numbers style={iconStyles} />
             </div>
-            {userEdited?.cardNumber
-                ? userEdited.cardNumber
+            {userEdited?.accountNumber
+                ? userEdited.accountNumber
                 : '1234 5678 9012 3456' }
     
           </div>
