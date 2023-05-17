@@ -1,47 +1,72 @@
 import React, { FormEvent } from 'react';
-import { UserFromDB } from '../../interfaces/user/UserType';
+import { UserPayment } from '../../interfaces/user/UserType';
 import { Input } from '../../components/Input/Input';
-import {api} from '../../utils/api'
+import { api } from '../../utils/api';
 
 type ProfilePaymentProps = {
-  userEdited: UserFromDB;
-  setUserEdited: (userEdited: UserFromDB) => void;
+  userId: string | undefined;
+  editPayment: boolean;
   setEditPayment: (editPayment: boolean) => void;
+  setPayments: (payments: UserPayment) => void;
 };
-const ProfilePayment = ({ userEdited, setUserEdited, setEditPayment }: ProfilePaymentProps) => {
-  const [payments, setPayments] = React.useState([]);
+
+const initialUserPayment: UserPayment = {
+  paymentType: '',
+  provider: '',
+  cardNumber: '',
+  expirationDate: '',
+  cardHolderName: '',
+};
+const ProfilePayment = ({
+  userId,
+  editPayment,
+  setEditPayment,
+  setPayments,
+}: ProfilePaymentProps) => {
   const today = new Date();
   const currentMonth = (today.getMonth() + 1).toString().padStart(2, '0');
   const currentYear = today.getFullYear().toString();
   const token = localStorage.getItem('token');
+  const [userPaymentMethod, setUserPaymentMethod] = React.useState<UserPayment>(initialUserPayment);
 
   const cancellForm = () => {
-    setEditPayment(false);
-    setUserEdited({
-      ...userEdited,
-      cardHolderName: '',
-      paymentType: '',
-      provider: '',
-      cardNumber: '',
-      expirationDate: '',
-    });
+    setEditPayment(!editPayment);
+    setUserPaymentMethod(initialUserPayment);
   };
   const handlerSubmit = (e: FormEvent) => {
     e.preventDefault();
-    setUserEdited(userEdited);
+    // if(userPaymentMethod?.expirationDate?.length === 5){
+    //   const expirationDate = userPaymentMethod?.expirationDate.split('/');
+    //   if(expirationDate){
+    //     if(Number(expirationDate[0])> 12 || expirationDate[1] < currentYear){
+    //       alert('Invalid date');
+    //       return;
+    //     }
+    //     if(expirationDate[1] === currentYear && expirationDate[0] < currentMonth){
+    //       alert('Invalid date');
+    //       return;
+    //     }
+    //   }
+    // } else {
+    //   alert('Invalid date');
+    //   return;
+    // }
+    if (userPaymentMethod) {
+      setUserPaymentMethod(userPaymentMethod);
+    }
     sendPaymentData();
   };
 
   const sendPaymentData = async () => {
     const paymentData = {
-      paymentType: userEdited.paymentType,
-      provider: userEdited.provider,
-      cardNumber: userEdited.cardNumber,
-      expirationDate: userEdited.expirationDate,
-      cardHolderName: userEdited.cardHolderName,
+      paymentType: userPaymentMethod?.paymentType,
+      provider: userPaymentMethod?.provider,
+      cardNumber: userPaymentMethod?.cardNumber,
+      expirationDate: userPaymentMethod?.expirationDate,
+      cardHolderName: userPaymentMethod?.cardHolderName,
       user: {
-        id: userEdited.id,
-      }
+        id: userId,
+      },
     };
     try {
       const response = await api.post('/payment', paymentData, {
@@ -59,21 +84,28 @@ const ProfilePayment = ({ userEdited, setUserEdited, setEditPayment }: ProfilePa
       console.log(error);
     }
   };
+
+  const handlePayment = (e: React.FormEvent<HTMLInputElement>) => {
+    e.preventDefault();
+    const { name, value } = e.currentTarget;
+    setUserPaymentMethod({
+      ...userPaymentMethod,
+      [name]: value,
+    });
+  };
+
   return (
     <div className="profile__edit-form__container">
       <h1>Payment method</h1>
-      <form onClick={handlerSubmit}>
+      <form>
         <Input
           type="text"
-          name="card name"
-          value={userEdited.cardHolderName ? userEdited.cardHolderName : ''}
-          onChange={(e) =>
-            setUserEdited({
-              ...userEdited,
-              cardHolderName: e.target.value,
-            })
+          name="cardHolderName"
+          value={userPaymentMethod?.cardHolderName ? userPaymentMethod.cardHolderName : ''}
+          onChange={handlePayment}
+          placeholder={
+            userPaymentMethod?.cardHolderName ? userPaymentMethod.cardHolderName : 'Full card name'
           }
-          placeholder={userEdited.cardHolderName ? userEdited.cardHolderName : 'Full card name'}
           style={styles}
           admin
           profile
@@ -81,66 +113,48 @@ const ProfilePayment = ({ userEdited, setUserEdited, setEditPayment }: ProfilePa
         <div className="profile__edit-form__container__small">
           <Input
             type="text"
-            name="Type"
-            value={userEdited.paymentType ? userEdited.paymentType : ''}
-            onChange={(e) =>
-              setUserEdited({
-                ...userEdited,
-                paymentType: e.target.value,
-              })
-            }
-            placeholder={userEdited.paymentType ? userEdited.paymentType : 'Type'}
+            name="paymentType"
+            value={userPaymentMethod?.paymentType ? userPaymentMethod.paymentType : ''}
+            onChange={handlePayment}
+            placeholder={userPaymentMethod?.paymentType ? userPaymentMethod.paymentType : 'Type'}
             style={styleSmall}
             small
           />
           <Input
             type="text"
-            name="Provider"
-            value={userEdited.provider ? userEdited.provider : ''}
-            onChange={(e) =>
-              setUserEdited({
-                ...userEdited,
-                provider: e.target.value,
-              })
-            }
-            placeholder={userEdited.provider ? userEdited.provider : 'Provider'}
+            name="provider"
+            value={userPaymentMethod?.provider ? userPaymentMethod.provider : ''}
+            onChange={handlePayment}
+            placeholder={userPaymentMethod?.provider ? userPaymentMethod.provider : 'Provider'}
             style={styleSmall}
             small
           />
         </div>
         <Input
           type="text"
-          name="card number"
-          value={userEdited.cardNumber ? userEdited.cardNumber : ''}
-          onChange={(e) =>
-            setUserEdited({
-              ...userEdited,
-              cardNumber: e.target.value,
-            })
-          }
-          placeholder={userEdited.cardNumber ? userEdited.cardNumber : 'Card number'}
+          name="cardNumber"
+          value={userPaymentMethod?.cardNumber ? userPaymentMethod.cardNumber : ''}
+          onChange={handlePayment}
+          placeholder={userPaymentMethod?.cardNumber ? userPaymentMethod.cardNumber : 'Card number'}
           style={styles}
           admin
           profile
         />
         <Input
           type="text"
-          name="expiration date"
-          value={userEdited.expirationDate ?? `${currentMonth}/${currentYear}`}
+          name="expirationDate"
+          value={userPaymentMethod?.expirationDate ?? `${currentMonth}/${currentYear}`}
           min={`${currentYear}-${currentMonth}`}
           max={`${currentYear + 10}-12`}
-          onChange={(e) =>
-            setUserEdited({
-              ...userEdited,
-              expirationDate: e.target.value,
-            })
+          onChange={handlePayment}
+          placeholder={
+            userPaymentMethod?.expirationDate ? userPaymentMethod.expirationDate : 'Expiration date'
           }
-          placeholder={userEdited.expirationDate ? userEdited.expirationDate : 'Expiration date'}
           style={styles}
           admin
           profile
         />
-        <button type="submit" className="profile__edit-form__container__button">
+        <button onClick={handlerSubmit} className="profile__edit-form__container__button">
           Save
         </button>
       </form>

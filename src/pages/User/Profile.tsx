@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../redux/store';
-import { UserFromDB } from '../../interfaces/user/UserType';
+import { UserFromDB, UserPayment } from '../../interfaces/user/UserType';
 import {
   Apartment,
   CardMembershipTwoTone,
@@ -20,7 +20,7 @@ import ProfileForm from './ProfileAddress';
 import ProfilePayment from './ProfilePayment';
 import { GlobalTheme } from '../../context/ThemeProvider';
 import { darkTheme, lightTheme } from '../../styles/styles';
-import { api } from '../../utils/api'
+import { api } from '../../utils/api';
 import './Profile.scss';
 
 const Profile = () => {
@@ -30,6 +30,11 @@ const Profile = () => {
   const [editPayment, setEditPayment] = React.useState(false);
   const [openHistory, setOpenHistory] = React.useState(false);
   const [userEdited, setUserEdited] = React.useState<UserFromDB>();
+  const [userPaymentMethod, setUserPaymentMethod] = React.useState<UserPayment[]>();
+  const [payments, setPayments] = React.useState<UserPayment>();
+  const [selectedPayment, setSelectedPayment] = React.useState<UserPayment>();
+
+  const lastPaymentMethod = userPaymentMethod?.[userPaymentMethod?.length - 1];
 
   const { theme } = GlobalTheme();
 
@@ -61,7 +66,7 @@ const Profile = () => {
   };
 
   useEffect(() => {
-    const userId = userFromToken.user_id || user?.id;
+    const userId = userFromToken?.user_id;
     const request = async () => {
       const response = await api.get(`/users/${userId}`, {
         headers: {
@@ -71,10 +76,10 @@ const Profile = () => {
       setUserEdited(response.data);
     };
     request();
-  }, [userFromToken, user?.id]);
+  }, [userFromToken]);
 
   useEffect(() => {
-    const userId = userFromToken.user_id || user?.id;
+    const userId = userFromToken?.user_id || user?.id;
 
     const request = async () => {
       const response = await api.get(`/payment/user/${userId}`, {
@@ -86,22 +91,27 @@ const Profile = () => {
       if (response.status !== 200) {
         console.log('error');
       }
-      setUserEdited((prev: UserFromDB | undefined) => {
-        if (prev === undefined) {
-          return;
-        }
-        return {
-          ...prev,
-          cardHolderName: response.data.cardHolderName,
-          cardNumber: response.data.cardNumber,
-          expirationDate: response.data.expirationDate,
-          provider: response.data.provider,
-          paymentType: response.data.paymentType,
-        };
-      });
+      setUserPaymentMethod(response.data);
     };
     request();
-  }, [user?.id, userFromToken]);
+  }, [user?.id, userFromToken, payments]);
+
+  const userPayments = userPaymentMethod?.map((payment: UserPayment) => {
+    return (
+      <div key={payment.id} onClick={() => setSelectedPayment(payment)}>
+        <p
+          className="profile__data__payment-info__user-payments__item"
+          style={{
+            backgroundColor: payment.id === selectedPayment?.id ? '#111010' : '',
+            color: payment.id === selectedPayment?.id ? '#ffffff' : '',
+            border: `1.4px solid ${theme === 'light' ? darkTheme.bg : lightTheme.shadow}`,
+          }}
+        >
+          {payment.provider}
+        </p>
+      </div>
+    );
+  });
 
   return (
     <div className="profile">
@@ -119,12 +129,13 @@ const Profile = () => {
           <ProfileForm userEdited={userEdited} setUserEdited={setUserEdited} setEdit={setEdit} />
         </div>
       )}
-      {editPayment && userEdited && (
+      {editPayment && (
         <div className="profile__edit-form">
           <ProfilePayment
-            userEdited={userEdited}
-            setUserEdited={setUserEdited}
+            userId={userEdited?.id}
             setEditPayment={setEditPayment}
+            editPayment={editPayment}
+            setPayments={setPayments}
           />
         </div>
       )}
@@ -189,38 +200,59 @@ const Profile = () => {
           </div>
         </div>
         <div className="profile__data__payment-info">
+          <div className="profile__data__payment-info__user-payments">{userPayments}</div>
           <div className="profile__data__payment-info__button" onClick={handleOpenPayment}>
-            Update payment information
+            Add Payment Method
           </div>
           <div className="profile__data__payment-info__item" style={infoItemStyles}>
             <div className="profile__data__payment-info__item--icon">
               <Person style={iconStyles} />
             </div>
-            {userEdited?.cardHolderName ? userEdited.cardHolderName : 'Card holder'}
+            {!selectedPayment?.cardHolderName
+              ? !lastPaymentMethod?.cardHolderName
+                ? 'Card Holder Name'
+                : lastPaymentMethod.cardHolderName
+              : selectedPayment.cardHolderName}
           </div>
           <div className="profile__data__payment-info__item" style={infoItemStyles}>
             <div className="profile__data__payment-info__item--icon">
               <CardTravelTwoTone style={iconStyles} />
             </div>
-            {userEdited?.paymentType ? userEdited.paymentType : 'VISA'}
+            {!selectedPayment?.paymentType
+              ? !lastPaymentMethod?.paymentType
+                ? 'Payment Type'
+                : lastPaymentMethod.paymentType
+              : selectedPayment.paymentType}
           </div>
           <div className="profile__data__payment-info__item" style={infoItemStyles}>
             <div className="profile__data__payment-info__item--icon">
               <CardMembershipTwoTone style={iconStyles} />
             </div>
-            {userEdited?.provider ? userEdited.provider : 'Provider'}
+            {!selectedPayment?.provider
+              ? !lastPaymentMethod?.provider
+                ? 'Provider'
+                : lastPaymentMethod.provider
+              : selectedPayment.provider}
           </div>
           <div className="profile__data__payment-info__item" style={infoItemStyles}>
             <div className="profile__data__payment-info__item--icon">
               <Numbers style={iconStyles} />
             </div>
-            {userEdited?.cardNumber ? userEdited.cardNumber : '1234 5678 9012 3456'}
+            {!selectedPayment?.cardNumber
+              ? !lastPaymentMethod?.cardNumber
+                ? 'Card Number'
+                : lastPaymentMethod.cardNumber
+              : selectedPayment.cardNumber}
           </div>
           <div className="profile__data__payment-info__item" style={infoItemStyles}>
             <div className="profile__data__payment-info__item--icon">
               <DateRange style={iconStyles} />
             </div>
-            {userEdited?.expirationDate ? userEdited.expirationDate : 'MM/YY'}
+            {!selectedPayment?.expirationDate
+              ? !lastPaymentMethod?.expirationDate
+                ? 'Expiration Date'
+                : lastPaymentMethod.expirationDate
+              : selectedPayment.expirationDate}
           </div>
         </div>
       </div>

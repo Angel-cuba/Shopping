@@ -42,3 +42,14 @@ enum Role {
   ADMIN = 'ADMIN',
   USER = 'USER'
 }
+
+export type UserPayment = {
+  id?: string
+  cardHolderName: string
+  cardNumber: string
+  expirationDate: string
+  paymentType: string
+  provider: string 
+  updatedAt?: string
+  createdAt?: string
+}
