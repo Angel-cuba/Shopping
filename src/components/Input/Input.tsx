@@ -14,6 +14,7 @@ type InputProps = {
   small?: boolean;
   min?: string;
   max?: string;
+  readonly?: boolean;
   };
 
 export const Input = ({
@@ -26,6 +27,7 @@ export const Input = ({
   admin,
   profile,
   small,
+  readonly
 }: InputProps) => {
   return (
     <div
@@ -58,6 +60,7 @@ export const Input = ({
         style={style}
         onChange={onChange}
         autoComplete="off"
+        readOnly={readonly ? true : false}
       />
     </div>
   );
