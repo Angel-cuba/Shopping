@@ -1,16 +1,28 @@
 import React, { FormEvent } from 'react';
-import { UserFromDB } from '../../interfaces/user/UserType';
+import { UserAddress, UserFromDB } from '../../interfaces/user/UserType';
 import { Input } from '../../components/Input/Input';
+import { api } from '../../utils/api';
 
 type Props = {
+  userId: string | undefined;
   userEdited: UserFromDB;
   setUserEdited: (userEdited: UserFromDB) => void;
   setEdit: (edit: boolean) => void;
+  setAddresses: (addresses: UserAddress) => void;
 };
 
-const ProfileForm = ({ userEdited, setUserEdited, setEdit }: Props) => {
+const initialUserAddress: UserAddress = {
+  address: '',
+  city: '',
+  country: '',
+  postalCode: '',
+};
+
+const ProfileForm = ({ userId, userEdited, setUserEdited, setEdit, setAddresses }: Props) => {
   const [openData, setOpenData] = React.useState(true);
   const [confirmPassword, setConfirmPassword] = React.useState('');
+  const [userAddress, setUserAddress] = React.useState(initialUserAddress);
+
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     if (userEdited.password !== confirmPassword) {
@@ -19,30 +31,76 @@ const ProfileForm = ({ userEdited, setUserEdited, setEdit }: Props) => {
     setUserEdited(userEdited);
     setEdit(false);
   };
-  const cancellForm = () => {
+  const cancelForm = () => {
     setEdit(false);
     setUserEdited({
       ...userEdited,
       username: '',
       password: '',
       phone: '',
-      address: '',
-      city: '',
-      country: '',
-      postalCode: '',
     });
+  };
+  const cancelAddress = () => {
+    setEdit(false);
+    setUserAddress(initialUserAddress);
   };
   const handleToggle = () => {
     setOpenData(!openData);
   };
 
+  const sendUserAddress = async () => {
+    const addressData = {
+      address: userAddress?.address,
+      city: userAddress?.city,
+      country: userAddress?.country,
+      postalCode: userAddress?.postalCode,
+      user: {
+        id: userId,
+      },
+    };
+    try {
+      const response = await api.post('/addresses', addressData);
+      setAddresses(response.data);
+      if (response.status === 200) {
+        setEdit(false);
+      } else {
+        console.log('Error');
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const handlerSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    if (userAddress) {
+      setUserAddress(userAddress);
+    }
+    sendUserAddress();
+  };
+
   return (
     <div className="profile__edit-form__container">
       <div className="profile__edit-form__container__toggle">
-         <div className={openData ? "profile__edit-form__container__toggle--button" : "profile__edit-form__container__toggle--button--disable"} onClick={handleToggle}
-        >Edit  your data</div>
-         <div className={openData ? "profile__edit-form__container__toggle--button--disable" : "profile__edit-form__container__toggle--button"}  onClick={handleToggle}
-        >Add address</div>
+        <div
+          className={
+            openData
+              ? 'profile__edit-form__container__toggle--button'
+              : 'profile__edit-form__container__toggle--button--disable'
+          }
+          onClick={handleToggle}
+        >
+          Edit your data
+        </div>
+        <div
+          className={
+            openData
+              ? 'profile__edit-form__container__toggle--button--disable'
+              : 'profile__edit-form__container__toggle--button'
+          }
+          onClick={handleToggle}
+        >
+          Add address
+        </div>
       </div>
       <form onSubmit={handleSubmit}>
         {openData ? (
@@ -109,9 +167,9 @@ const ProfileForm = ({ userEdited, setUserEdited, setEdit }: Props) => {
                 </div>
                 <div
                   className="profile__edit-form__container__user-data__buttons--cancel"
-                  onClick={cancellForm}
+                  onClick={cancelForm}
                 >
-                  Cancell
+                  Cancel
                 </div>
               </div>
             </div>
@@ -123,10 +181,10 @@ const ProfileForm = ({ userEdited, setUserEdited, setEdit }: Props) => {
               <Input
                 type="text"
                 name="address"
-                value={userEdited.address ? userEdited.address : ''}
-                onChange={(e) => setUserEdited({ ...userEdited, address: e.target.value })}
+                value={userAddress.address ? userAddress.address : ''}
+                onChange={(e) => setUserAddress({ ...userAddress, address: e.target.value })}
                 className="profile__edit-form__container__input"
-                placeholder={userEdited.address ? userEdited.address : 'Street 1'}
+                placeholder={userAddress.address ? userAddress.address : 'Street 1'}
                 style={styles}
                 admin
                 profile
@@ -134,10 +192,10 @@ const ProfileForm = ({ userEdited, setUserEdited, setEdit }: Props) => {
               <Input
                 type="text"
                 name="city"
-                value={userEdited.city ? userEdited.city : ''}
-                onChange={(e) => setUserEdited({ ...userEdited, city: e.target.value })}
+                value={userAddress.city ? userAddress.city : ''}
+                onChange={(e) => setUserAddress({ ...userAddress, city: e.target.value })}
                 className="profile__edit-form__container__input"
-                placeholder={userEdited.city ? userEdited.city : 'City'}
+                placeholder={userAddress.city ? userAddress.city : 'City'}
                 style={styles}
                 admin
                 profile
@@ -145,34 +203,37 @@ const ProfileForm = ({ userEdited, setUserEdited, setEdit }: Props) => {
               <Input
                 type="text"
                 name="country"
-                value={userEdited.country ? userEdited.country : ''}
-                onChange={(e) => setUserEdited({ ...userEdited, country: e.target.value })}
+                value={userAddress.country ? userAddress.country : ''}
+                onChange={(e) => setUserAddress({ ...userAddress, country: e.target.value })}
                 className="profile__edit-form__container__input"
-                placeholder={userEdited.country ? userEdited.country : 'Country'}
+                placeholder={userAddress.country ? userAddress.country : 'Country'}
                 style={styles}
-                admin
                 profile
+                admin
               />
               <Input
                 type="text"
                 name="postalCode"
-                value={userEdited.postalCode ? userEdited.postalCode : ''}
-                onChange={(e) => setUserEdited({ ...userEdited, postalCode: e.target.value })}
+                value={userAddress.postalCode ? userAddress.postalCode : ''}
+                onChange={(e) => setUserAddress({ ...userAddress, postalCode: e.target.value })}
                 className="profile__edit-form__container__input"
-                placeholder={userEdited.postalCode ? userEdited.postalCode : 'Postal Code'}
+                placeholder={userAddress.postalCode ? userAddress.postalCode : 'Postal Code'}
                 style={styles}
                 admin
                 profile
               />
               <div className="profile__edit-form__container__user-address__buttons">
-                <div className="profile__edit-form__container__user-address__buttons--confirm">
+                <div
+                  className="profile__edit-form__container__user-address__buttons--confirm"
+                  onClick={handlerSubmit}
+                >
                   Confirm
                 </div>
                 <div
                   className="profile__edit-form__container__user-address__buttons--cancel"
-                  onClick={cancellForm}
+                  onClick={cancelAddress}
                 >
-                  Cancell
+                  Cancel
                 </div>
               </div>
             </div>

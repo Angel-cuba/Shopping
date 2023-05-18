@@ -74,7 +74,7 @@
         justify-content: center;
         align-items: center;
         padding: 3px 5px;
-        background-color: red;
+        background-color: $bg_delete;
         border-radius: 5px;
         &:hover {
           color: #d8d8d8;
@@ -98,7 +98,7 @@
             }
           }
           &--cancel {
-            @include customButton($bg_light, red, $letters_dark);
+            @include customButton($bg_light, $bg_delete, $letters_dark);
             &:hover {
               background-color: #000000;
               transform: scale(1.05);
@@ -122,7 +122,7 @@
             }
           }
           &--cancel {
-            @include customButton($bg_light, red, $letters_dark);
+            @include customButton($bg_light, $bg_delete, $letters_dark);
             &:hover {
               background-color: #000000;
               transform: scale(1.05);
@@ -191,6 +191,18 @@
           transform: scale(1.05);
         }
       }
+      &__button-edit {
+        position: absolute;
+        bottom: 10px;
+        right: 10px;
+        @include customButton($bg_light, $components_dark, $letters_dark);
+      }
+      &__button-delete {
+        position: absolute;
+        bottom: 10px;
+        left: 0;
+        @include customButton($bg_light, $bg_delete, $letters_dark);
+      }
     }
     &__payment-info {
       position: relative;
@@ -200,6 +212,31 @@
       flex-direction: column;
       justify-content: center;
       align-items: center;
+      &__user-addresses {
+        width: 100%;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        flex-wrap: wrap;
+        &__item {
+          color: #000000;
+          background-color: #ffffff;
+          border-radius: 5px;
+          padding: 5px 10px;
+          margin: 5px;
+          cursor: pointer;
+          opacity: 0.8;
+          font-weight: bold;
+          transition: all 0.2s ease-in-out;
+          &:hover {
+            background-color: #000000;
+            color: #ffffff;
+            box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.2);
+            transform: scale(1.05);
+            opacity: 1;
+          }
+        }
+      }
       &__user-payments {
         position: absolute;
         top: 0;

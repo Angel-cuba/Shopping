@@ -26,7 +26,6 @@ const ProfilePayment = ({
   const today = new Date();
   const currentMonth = (today.getMonth() + 1).toString().padStart(2, '0');
   const currentYear = today.getFullYear().toString();
-  const token = localStorage.getItem('token');
   const [userPaymentMethod, setUserPaymentMethod] = React.useState<UserPayment>(initialUserPayment);
 
   const cancellForm = () => {
@@ -69,11 +68,7 @@ const ProfilePayment = ({
       },
     };
     try {
-      const response = await api.post('/payment', paymentData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await api.post('/payment', paymentData);
       setPayments(response.data);
       if (response.status === 200) {
         setEditPayment(false);

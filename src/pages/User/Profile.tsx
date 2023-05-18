@@ -1,7 +1,7 @@
 import React, { useEffect, useLayoutEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../redux/store';
-import { UserFromDB, UserPayment } from '../../interfaces/user/UserType';
+import { UserAddress, UserFromDB, UserPayment } from '../../interfaces/user/UserType';
 import {
   Apartment,
   CardMembershipTwoTone,
@@ -16,7 +16,7 @@ import {
   PublicRounded,
   StreetviewTwoTone,
 } from '@mui/icons-material';
-import ProfileForm from './ProfileAddress';
+import ProfileAddress from './ProfileAddress';
 import ProfilePayment from './ProfilePayment';
 import { GlobalTheme } from '../../context/ThemeProvider';
 import { darkTheme, lightTheme } from '../../styles/styles';
@@ -32,11 +32,15 @@ const Profile = () => {
   const [openHistory, setOpenHistory] = React.useState(false);
   const [userEdited, setUserEdited] = React.useState<UserFromDB>();
   const [userPaymentMethod, setUserPaymentMethod] = React.useState<UserPayment[]>();
+  const [userAddress, setUserAddress] = React.useState<UserAddress[]>();
+  const [address, setAddress] = React.useState<UserAddress>();
   const [payments, setPayments] = React.useState<UserPayment>();
   const [selectedPayment, setSelectedPayment] = React.useState<UserPayment>();
+  const [selectedAddress, setSelectedAddress] = React.useState<UserAddress>();
 
   const token = localStorage.getItem('token');
   const lastPaymentMethod = userPaymentMethod?.[userPaymentMethod?.length - 1];
+  const lastAddress = userAddress?.[userAddress?.length - 1];
 
   const { theme } = GlobalTheme();
 
@@ -97,16 +101,16 @@ const Profile = () => {
   }, [payments, token, userId]);
 
   useLayoutEffect(() => {
-        const request = async () => {
+    const request = async () => {
       const response = await api.get(`/addresses/user/${userId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-      console.log(response.data);
+      setUserAddress(response.data);
     };
     request();
-  }, [token, userId]);
+  }, [token, userId, address]);
 
   const userPayments = userPaymentMethod?.map((payment: UserPayment) => {
     return (
@@ -125,6 +129,23 @@ const Profile = () => {
     );
   });
 
+  const userAddressList = userAddress?.map((address: UserAddress) => {
+    return (
+      <div key={address.id} onClick={() => setSelectedAddress(address)}>
+        <p
+          className="profile__data__payment-info__user-addresses__item"
+          style={{
+            backgroundColor: address.id === selectedAddress?.id ? '#111010' : '',
+            color: address.id === selectedAddress?.id ? '#ffffff' : '',
+            border: `1.4px solid ${theme === 'light' ? darkTheme.bg : lightTheme.shadow}`,
+          }}
+        >
+          {address.city}
+        </p>
+      </div>
+    );
+  });
+
   return (
     <div className="profile">
       <div className="profile__edit-button" onClick={handleOpenProfile}>
@@ -138,7 +159,13 @@ const Profile = () => {
       </div>
       {edit && userEdited && (
         <div className="profile__edit-form">
-          <ProfileForm userEdited={userEdited} setUserEdited={setUserEdited} setEdit={setEdit} />
+          <ProfileAddress
+            userId={userEdited?.id}
+            userEdited={userEdited}
+            setUserEdited={setUserEdited}
+            setEdit={setEdit}
+            setAddresses={setAddress}
+          />
         </div>
       )}
       {editPayment && (
@@ -186,29 +213,58 @@ const Profile = () => {
             </div>
             {userEdited?.phone}
           </div>
+          <div className="profile__data__payment-info__user-addresses">{userAddressList}</div>
           <div className="profile__data__image-and-info__item" style={infoItemStyles}>
             <div className="profile__data__image-and-info__item--icon">
               <StreetviewTwoTone style={iconStyles} />
             </div>
-            {userEdited?.address ? userEdited.address : 'Address '}
+            {!selectedAddress?.address
+              ? !lastAddress?.address
+                ? 'Address'
+                : lastAddress.address
+              : selectedAddress.address}
           </div>
           <div className="profile__data__image-and-info__item" style={infoItemStyles}>
             <div className="profile__data__image-and-info__item--icon">
               <Apartment style={iconStyles} />
             </div>
-            {!userEdited?.city ? 'City' : userEdited.city}
+            {!selectedAddress?.city
+              ? !lastAddress?.city
+                ? 'City'
+                : lastAddress.city
+              : selectedAddress.city}
           </div>
           <div className="profile__data__image-and-info__item" style={infoItemStyles}>
             <div className="profile__data__image-and-info__item--icon">
               <PostAdd style={iconStyles} />
             </div>
-            {userEdited?.postalCode ? userEdited.postalCode : 'Postal Code'}
+            {!selectedAddress?.postalCode
+              ? !lastAddress?.postalCode
+                ? 'Postal Code'
+                : lastAddress.postalCode
+              : selectedAddress.postalCode}
           </div>
           <div className="profile__data__image-and-info__item" style={infoItemStyles}>
             <div className="profile__data__image-and-info__item--icon">
               <PublicRounded style={iconStyles} />
             </div>
-            {userEdited?.country ? userEdited.country : 'Country'}
+            {!selectedAddress?.country
+              ? !lastAddress?.country
+                ? 'Country'
+                : lastAddress.country
+              : selectedAddress.country}
+          </div>
+          <div
+            className="profile__data__image-and-info__button-delete"
+            onClick={() => console.log('edit', selectedAddress?.id)}
+          >
+            Delete
+          </div>
+          <div
+            className="profile__data__image-and-info__button-edit"
+            onClick={() => console.log('edit', selectedAddress?.id)}
+          >
+            Edit
           </div>
         </div>
         <div className="profile__data__payment-info">
