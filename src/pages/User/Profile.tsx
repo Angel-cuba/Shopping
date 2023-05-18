@@ -7,6 +7,8 @@ import {
   CardMembershipTwoTone,
   CardTravelTwoTone,
   DateRange,
+  DeleteForever,
+  Edit,
   Email,
   Numbers,
   PasswordSharp,
@@ -16,12 +18,13 @@ import {
   PublicRounded,
   StreetviewTwoTone,
 } from '@mui/icons-material';
-import ProfileAddress from './ProfileAddress';
+import ProfileAddress from './ProfileAndAddress';
 import ProfilePayment from './ProfilePayment';
 import { GlobalTheme } from '../../context/ThemeProvider';
 import { darkTheme, lightTheme } from '../../styles/styles';
 import { api } from '../../utils/api';
 import './Profile.scss';
+import LoadingResponse from '../../components/Loading/LoadingResponse';
 
 const Profile = () => {
   //TODO: { user: UserType } is replaced by any
@@ -37,10 +40,17 @@ const Profile = () => {
   const [payments, setPayments] = React.useState<UserPayment>();
   const [selectedPayment, setSelectedPayment] = React.useState<UserPayment>();
   const [selectedAddress, setSelectedAddress] = React.useState<UserAddress>();
+  const [principalAddress, setPrincipalAddress] = React.useState<UserAddress>();
+  const [loading, setLoading] = React.useState(false);
 
   const token = localStorage.getItem('token');
   const lastPaymentMethod = userPaymentMethod?.[userPaymentMethod?.length - 1];
-  const lastAddress = userAddress?.[userAddress?.length - 1];
+
+  useEffect(() => {
+    if(userAddress?.length){
+      setPrincipalAddress(userAddress[0]);
+    }
+  }, [userAddress, loading]);
 
   const { theme } = GlobalTheme();
 
@@ -70,7 +80,7 @@ const Profile = () => {
       theme === 'dark' ? lightTheme.shadowMedium : darkTheme.shadowMedium
     }`,
   };
-
+  
   useEffect(() => {
     const userId = userFromToken?.user_id;
     const request = async () => {
@@ -91,7 +101,6 @@ const Profile = () => {
           Authorization: `Bearer ${token}`,
         },
       });
-      console.log(response.data);
       if (response.status !== 200) {
         console.log('error');
       }
@@ -100,7 +109,7 @@ const Profile = () => {
     request();
   }, [payments, token, userId]);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     const request = async () => {
       const response = await api.get(`/addresses/user/${userId}`, {
         headers: {
@@ -146,8 +155,42 @@ const Profile = () => {
     );
   });
 
+  const updateAddress = () => {
+    if(!selectedAddress) {
+      return;
+    } else {
+       setEdit(!edit);
+    }
+  };
+
+  const deleteAddress = (addressId: string) => {
+    setLoading(true);
+    try {
+      const request = async () => {
+        const response = await api.delete(`/addresses/${addressId}`);
+        if (response.status === 200) {
+          const filteredAddresses = userAddress?.filter(
+            (address: UserAddress) => address.id !== addressId
+          );
+          setUserAddress(filteredAddresses);
+        }
+      };
+      request();
+    } catch (error) {
+      console.log(error);
+    }
+    setLoading(false);
+  };
+
   return (
     <div className="profile">
+      {
+        loading && (
+          <div className="profile__loading">
+            <LoadingResponse />
+          </div>
+        )
+      }
       <div className="profile__edit-button" onClick={handleOpenProfile}>
         {edit ? 'Close editing view' : 'Edit profile'}
       </div>
@@ -160,11 +203,13 @@ const Profile = () => {
       {edit && userEdited && (
         <div className="profile__edit-form">
           <ProfileAddress
+            address={selectedAddress}
             userId={userEdited?.id}
             userEdited={userEdited}
             setUserEdited={setUserEdited}
             setEdit={setEdit}
             setAddresses={setAddress}
+            setLoading={setLoading}
           />
         </div>
       )}
@@ -219,9 +264,9 @@ const Profile = () => {
               <StreetviewTwoTone style={iconStyles} />
             </div>
             {!selectedAddress?.address
-              ? !lastAddress?.address
+              ? !principalAddress?.address
                 ? 'Address'
-                : lastAddress.address
+                : principalAddress.address
               : selectedAddress.address}
           </div>
           <div className="profile__data__image-and-info__item" style={infoItemStyles}>
@@ -229,9 +274,9 @@ const Profile = () => {
               <Apartment style={iconStyles} />
             </div>
             {!selectedAddress?.city
-              ? !lastAddress?.city
+              ? !principalAddress?.city
                 ? 'City'
-                : lastAddress.city
+                : principalAddress.city
               : selectedAddress.city}
           </div>
           <div className="profile__data__image-and-info__item" style={infoItemStyles}>
@@ -239,9 +284,9 @@ const Profile = () => {
               <PostAdd style={iconStyles} />
             </div>
             {!selectedAddress?.postalCode
-              ? !lastAddress?.postalCode
+              ? !principalAddress?.postalCode
                 ? 'Postal Code'
-                : lastAddress.postalCode
+                : principalAddress.postalCode
               : selectedAddress.postalCode}
           </div>
           <div className="profile__data__image-and-info__item" style={infoItemStyles}>
@@ -249,23 +294,31 @@ const Profile = () => {
               <PublicRounded style={iconStyles} />
             </div>
             {!selectedAddress?.country
-              ? !lastAddress?.country
+              ? !principalAddress?.country
                 ? 'Country'
-                : lastAddress.country
+                : principalAddress.country
               : selectedAddress.country}
           </div>
-          <div
+         {
+            selectedAddress?.id && (
+               <div
             className="profile__data__image-and-info__button-delete"
-            onClick={() => console.log('edit', selectedAddress?.id)}
+            onClick={() => deleteAddress(selectedAddress?.id as string)}
           >
-            Delete
+            <DeleteForever />
           </div>
-          <div
+            )
+         }
+         {
+            selectedAddress?.id && (
+               <div
             className="profile__data__image-and-info__button-edit"
-            onClick={() => console.log('edit', selectedAddress?.id)}
+            onClick={updateAddress}
           >
-            Edit
+            <Edit />
           </div>
+            )
+         }
         </div>
         <div className="profile__data__payment-info">
           <div className="profile__data__payment-info__user-payments">{userPayments}</div>

@@ -5,10 +5,12 @@ import { api } from '../../utils/api';
 
 type Props = {
   userId: string | undefined;
+  address: UserAddress | undefined;
   userEdited: UserFromDB;
   setUserEdited: (userEdited: UserFromDB) => void;
   setEdit: (edit: boolean) => void;
   setAddresses: (addresses: UserAddress) => void;
+  setLoading: (loading: boolean) => void;
 };
 
 const initialUserAddress: UserAddress = {
@@ -18,10 +20,18 @@ const initialUserAddress: UserAddress = {
   postalCode: '',
 };
 
-const ProfileForm = ({ userId, userEdited, setUserEdited, setEdit, setAddresses }: Props) => {
-  const [openData, setOpenData] = React.useState(true);
+const ProfileAndAddress = ({
+  userId,
+  userEdited,
+  setUserEdited,
+  setEdit,
+  setAddresses,
+  address,
+  setLoading
+}: Props) => {
+  const [openData, setOpenData] = React.useState(!address?.id ? true : false);
   const [confirmPassword, setConfirmPassword] = React.useState('');
-  const [userAddress, setUserAddress] = React.useState(initialUserAddress);
+  const [userAddress, setUserAddress] = React.useState(!address?.id ? initialUserAddress : address);
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
@@ -49,26 +59,56 @@ const ProfileForm = ({ userId, userEdited, setUserEdited, setEdit, setAddresses 
   };
 
   const sendUserAddress = async () => {
-    const addressData = {
-      address: userAddress?.address,
-      city: userAddress?.city,
-      country: userAddress?.country,
-      postalCode: userAddress?.postalCode,
-      user: {
-        id: userId,
-      },
-    };
-    try {
-      const response = await api.post('/addresses', addressData);
-      setAddresses(response.data);
-      if (response.status === 200) {
-        setEdit(false);
-      } else {
-        console.log('Error');
+      setLoading(true);
+    if (!address?.id) {
+      const addressData = {
+        address: userAddress?.address,
+        city: userAddress?.city,
+        country: userAddress?.country,
+        postalCode: userAddress?.postalCode,
+        user: {
+          id: userId,
+        },
+      };
+      try {
+        const response = await api.post('/addresses', addressData);
+        setAddresses(response.data);
+        if (response.status === 200) {
+          setEdit(false);
+        } else {
+          console.log('Error');
+        }
+      } catch (error) {
+        console.log(error);
       }
-    } catch (error) {
-      console.log(error);
+
+    } else {
+      const addressToUpdate = {
+        id: address?.id,
+        address: userAddress.address,
+        city: userAddress.city,
+        postalCode: userAddress.postalCode,
+        country: userAddress.country,
+        user: {
+          id: userId,
+        },
+      };
+      try {
+        const request = async () => {
+          const response = await api.put(`/addresses`, addressToUpdate);
+          setAddresses(response.data);
+          if (response.status === 200) {
+            setEdit(false);
+          } else {
+            console.log('Error');
+          }
+        };
+        request();
+      } catch (error) {
+        console.log(error);
+      }
     }
+    setLoading(false);
   };
   const handlerSubmit = (e: FormEvent) => {
     e.preventDefault();
@@ -251,7 +291,7 @@ const ProfileForm = ({ userId, userEdited, setUserEdited, setEdit, setAddresses 
   );
 };
 
-export default ProfileForm;
+export default ProfileAndAddress;
 
 const styles = {
   width: '280px',
