@@ -117,6 +117,24 @@
       }
       &__user-address {
         width: 100%;
+        &__addresses {
+          width: 100%;
+          display: flex;
+         justify-content: space-around;
+        align-items: center;
+        &--item {
+          color: #000000;
+          background-color: #dbdbdb;
+          border-radius: 5px;
+          padding: 5px 10px;
+          margin: 5px;
+          cursor: pointer;
+          opacity: 0.8;
+          font-weight: bold;
+          border: 1px solid #000000;
+          box-shadow: 0px 0px 5px 1px #0000001e, inset 0px 0px 5px 0px #00000048, inset 0px 0px 8px 0px #ffefef, 0px 0px 18px 0px #fffafa;
+        }
+        }
         &__buttons {
           width: 60%;
           display: flex;
@@ -226,6 +244,15 @@
           border: 1px solid $components_dark;
         }
       }
+      &__button-add {
+        position: absolute;
+        bottom: 10px;
+        right: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        @include customButton($bg_light, $components_dark, $letters_dark);
+      }
     }
     &__payment-info {
       position: relative;
@@ -311,6 +338,24 @@
         bottom: 10px;
         right: 10px;
         @include customButton($bg_light, $components_dark, $letters_dark);
+        &--add-payment {
+          display: flex;  
+          justify-content: center;
+          align-items: center;
+        }
+      }
+      &__button-delete {
+        position: absolute;
+        bottom: 10px;
+        right: 120px;
+        @include customButton($bg_light, $bg_delete_light, $letters_dark);
+        &:hover {
+          cursor: pointer;
+          background-color: $bg_delete;
+          color: $components_dark;
+          transform: scale(1.05);
+          border: 1px solid $components_dark;
+        }
       }
     }
   }
