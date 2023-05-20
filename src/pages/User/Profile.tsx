@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../redux/store';
 import { UserAddress, UserFromDB, UserPayment } from '../../interfaces/user/UserType';
 import {
+  AddSharp,
   Apartment,
   CardMembershipTwoTone,
   CardTravelTwoTone,
@@ -47,7 +48,7 @@ const Profile = () => {
   const lastPaymentMethod = userPaymentMethod?.[userPaymentMethod?.length - 1];
 
   useEffect(() => {
-    if(userAddress?.length){
+    if (userAddress?.length) {
       setPrincipalAddress(userAddress[0]);
     }
   }, [userAddress, loading]);
@@ -80,7 +81,7 @@ const Profile = () => {
       theme === 'dark' ? lightTheme.shadowMedium : darkTheme.shadowMedium
     }`,
   };
-  
+
   useEffect(() => {
     const userId = userFromToken?.user_id;
     const request = async () => {
@@ -122,8 +123,15 @@ const Profile = () => {
   }, [token, userId, address]);
 
   const userPayments = userPaymentMethod?.map((payment: UserPayment) => {
+    const addingPayment = () => {
+      if (selectedPayment?.id === payment.id) {
+        setSelectedPayment(undefined);
+      } else {
+        setSelectedPayment(payment);
+      }
+    };
     return (
-      <div key={payment.id} onClick={() => setSelectedPayment(payment)}>
+      <div key={payment.id} onClick={addingPayment}>
         <p
           className="profile__data__payment-info__user-payments__item"
           style={{
@@ -139,27 +147,35 @@ const Profile = () => {
   });
 
   const userAddressList = userAddress?.map((address: UserAddress) => {
+    const addingAddress = () => {
+      if (selectedAddress?.id === address.id) {
+        setSelectedAddress(undefined);
+      } else {
+        setSelectedAddress(address);
+      }
+    };
+
     return (
-      <div key={address.id} onClick={() => setSelectedAddress(address)}>
         <p
+          key={address.id}
           className="profile__data__payment-info__user-addresses__item"
           style={{
             backgroundColor: address.id === selectedAddress?.id ? '#111010' : '',
             color: address.id === selectedAddress?.id ? '#ffffff' : '',
             border: `1.4px solid ${theme === 'light' ? darkTheme.bg : lightTheme.shadow}`,
           }}
+          onClick={addingAddress}
         >
           {address.city}
         </p>
-      </div>
     );
   });
 
   const updateAddress = () => {
-    if(!selectedAddress) {
+    if (!selectedAddress) {
       return;
     } else {
-       setEdit(!edit);
+      setEdit(!edit);
     }
   };
 
@@ -179,18 +195,41 @@ const Profile = () => {
     } catch (error) {
       console.log(error);
     }
+    setUserAddress(undefined);
     setLoading(false);
+  };
+
+  const deletePayment = (paymentId: string) => {
+    setLoading(true);
+    try {
+      const request = async () => {
+        const response = await api.delete(`/payment/${paymentId}`);
+        if (response.status === 200) {
+          const filteredPayments = userPaymentMethod?.filter(
+            (payment: UserPayment) => payment.id !== paymentId
+          );
+          setUserPaymentMethod(filteredPayments);
+        }
+      };
+      request();
+    } catch (error) {
+      console.log(error);
+    }
+    setSelectedPayment(undefined);
+    setLoading(false);
+  };
+
+  const handleOpenAddress = () => {
+    setEdit(!edit);
   };
 
   return (
     <div className="profile">
-      {
-        loading && (
-          <div className="profile__loading">
-            <LoadingResponse />
-          </div>
-        )
-      }
+      {loading && (
+        <div className="profile__loading">
+          <LoadingResponse />
+        </div>
+      )}
       <div className="profile__edit-button" onClick={handleOpenProfile}>
         {edit ? 'Close editing view' : 'Edit profile'}
       </div>
@@ -210,12 +249,14 @@ const Profile = () => {
             setEdit={setEdit}
             setAddresses={setAddress}
             setLoading={setLoading}
+            userAddresses={userAddress}
           />
         </div>
       )}
       {editPayment && (
         <div className="profile__edit-form">
           <ProfilePayment
+            payment={selectedPayment}
             userId={userEdited?.id}
             setEditPayment={setEditPayment}
             editPayment={editPayment}
@@ -299,32 +340,48 @@ const Profile = () => {
                 : principalAddress.country
               : selectedAddress.country}
           </div>
-         {
-            selectedAddress?.id && (
-               <div
-            className="profile__data__image-and-info__button-delete"
-            onClick={() => deleteAddress(selectedAddress?.id as string)}
-          >
-            <DeleteForever />
-          </div>
-            )
-         }
-         {
-            selectedAddress?.id && (
-               <div
-            className="profile__data__image-and-info__button-edit"
-            onClick={updateAddress}
-          >
-            <Edit />
-          </div>
-            )
-         }
+          {selectedAddress?.id && (
+            <div
+              className="profile__data__image-and-info__button-delete"
+              onClick={() => deleteAddress(selectedAddress?.id as string)}
+            >
+              <DeleteForever />
+            </div>
+          )}
+          {selectedAddress?.id && (
+            <div className="profile__data__image-and-info__button-edit" onClick={updateAddress}>
+              <Edit />
+            </div>
+          )}
+          {!selectedAddress?.id && (
+            <div className="profile__data__image-and-info__button-add" onClick={handleOpenAddress}>
+              <AddSharp style={{ transform: 'scale(1.5)', marginRight: '10px' }} /> Address
+            </div>
+          )}
         </div>
         <div className="profile__data__payment-info">
           <div className="profile__data__payment-info__user-payments">{userPayments}</div>
           <div className="profile__data__payment-info__button" onClick={handleOpenPayment}>
-            Add Payment Method
+            {!editPayment ? (
+              !selectedPayment?.id && !editPayment ? (
+                <span className="profile__data__payment-info__button--add-payment">
+                  <AddSharp style={{ transform: 'scale(1.5)', marginRight: '10px' }} /> Payment
+                </span>
+              ) : (
+                <Edit />
+              )
+            ) : (
+              'Close view'
+            )}
           </div>
+          {selectedPayment?.id && (
+            <div
+              className="profile__data__payment-info__button-delete"
+              onClick={() => deletePayment(selectedPayment?.id as string)}
+            >
+              <DeleteForever />
+            </div>
+          )}
           <div className="profile__data__payment-info__item" style={infoItemStyles}>
             <div className="profile__data__payment-info__item--icon">
               <Person style={iconStyles} />
