@@ -8,6 +8,7 @@ type ProfilePaymentProps = {
   editPayment: boolean;
   setEditPayment: (editPayment: boolean) => void;
   setPayments: (payments: UserPayment) => void;
+  payment: UserPayment | undefined;
 };
 
 const initialUserPayment: UserPayment = {
@@ -22,11 +23,14 @@ const ProfilePayment = ({
   editPayment,
   setEditPayment,
   setPayments,
+  payment,
 }: ProfilePaymentProps) => {
   const today = new Date();
   const currentMonth = (today.getMonth() + 1).toString().padStart(2, '0');
   const currentYear = today.getFullYear().toString();
-  const [userPaymentMethod, setUserPaymentMethod] = React.useState<UserPayment>(initialUserPayment);
+  const [userPaymentMethod, setUserPaymentMethod] = React.useState<UserPayment>(
+    !payment?.id ? initialUserPayment : payment
+  );
 
   const cancellForm = () => {
     setEditPayment(!editPayment);
@@ -34,6 +38,7 @@ const ProfilePayment = ({
   };
   const handlerSubmit = (e: FormEvent) => {
     e.preventDefault();
+    //TODO: Validate date format and expiration date
     // if(userPaymentMethod?.expirationDate?.length === 5){
     //   const expirationDate = userPaymentMethod?.expirationDate.split('/');
     //   if(expirationDate){
@@ -67,7 +72,18 @@ const ProfilePayment = ({
         id: userId,
       },
     };
-    try {
+    const updatePaymentData = {
+      id: userPaymentMethod?.id,
+      paymentType: userPaymentMethod?.paymentType,
+      provider: userPaymentMethod?.provider,
+      cardNumber: userPaymentMethod?.cardNumber,
+      expirationDate: userPaymentMethod?.expirationDate,
+      cardHolderName: userPaymentMethod?.cardHolderName,
+      user: {
+        id: userId,
+      },
+    };
+    if (!userPaymentMethod.id) {
       const response = await api.post('/payment', paymentData);
       setPayments(response.data);
       if (response.status === 200) {
@@ -75,8 +91,14 @@ const ProfilePayment = ({
       } else {
         console.log('Error');
       }
-    } catch (error) {
-      console.log(error);
+    } else {
+      const response = await api.put('/payment', updatePaymentData);
+      setPayments(response.data);
+      if (response.status === 200) {
+        setEditPayment(false);
+      } else {
+        console.log('Error');
+      }
     }
   };
 
@@ -150,7 +172,7 @@ const ProfilePayment = ({
           profile
         />
         <button onClick={handlerSubmit} className="profile__edit-form__container__button">
-          Save
+          {userPaymentMethod?.id ? 'Update' : 'Add'}
         </button>
       </form>
       <div className="profile__edit-form__container--cancel" onClick={cancellForm}>
