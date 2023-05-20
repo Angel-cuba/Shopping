@@ -11,6 +11,7 @@ type Props = {
   setEdit: (edit: boolean) => void;
   setAddresses: (addresses: UserAddress) => void;
   setLoading: (loading: boolean) => void;
+  userAddresses: UserAddress[] | undefined;
 };
 
 const initialUserAddress: UserAddress = {
@@ -27,7 +28,8 @@ const ProfileAndAddress = ({
   setEdit,
   setAddresses,
   address,
-  setLoading
+  setLoading,
+  userAddresses,
 }: Props) => {
   const [openData, setOpenData] = React.useState(!address?.id ? true : false);
   const [confirmPassword, setConfirmPassword] = React.useState('');
@@ -59,7 +61,7 @@ const ProfileAndAddress = ({
   };
 
   const sendUserAddress = async () => {
-      setLoading(true);
+    setLoading(true);
     if (!address?.id) {
       const addressData = {
         address: userAddress?.address,
@@ -81,7 +83,6 @@ const ProfileAndAddress = ({
       } catch (error) {
         console.log(error);
       }
-
     } else {
       const addressToUpdate = {
         id: address?.id,
@@ -117,6 +118,13 @@ const ProfileAndAddress = ({
     }
     sendUserAddress();
   };
+  const userAddressInfoStreet = userAddresses?.map((address: UserAddress) => {
+    return (
+      <p key={address.id} className="profile__edit-form__container__user-address__addresses--item">
+        {address.address}
+      </p>
+    );
+  });
 
   return (
     <div className="profile__edit-form__container">
@@ -217,7 +225,9 @@ const ProfileAndAddress = ({
         ) : (
           <>
             <div className="profile__edit-form__container__user-address">
-              <p>List of address</p>
+              <div className="profile__edit-form__container__user-address__addresses">
+                {userAddressInfoStreet}
+              </div>
               <Input
                 type="text"
                 name="address"
