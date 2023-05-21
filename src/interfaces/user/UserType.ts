@@ -54,3 +54,12 @@ export type UserAddress = {
   updatedAt?: string
   createdAt?: string
 }
+
+export type decodedUser = {
+  user_id: string 
+  username: string
+  sub: string
+  role: string
+  iat: number
+  exp: number
+}
