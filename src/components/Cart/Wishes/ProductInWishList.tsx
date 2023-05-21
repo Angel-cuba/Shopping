@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { AddShoppingCart } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
 import HeartBrokenIcon from '@mui/icons-material/HeartBroken';
@@ -16,21 +16,17 @@ type Props = {
 };
 export const ProductInWishList = ({ setOpenWishList }: Props) => {
   const { itemInWishlist } = useSelector((state: RootState) => state.wishes);
+  const { products } = useSelector((state: RootState) => state.products);
   const { theme } = GlobalTheme();
 
-  const {products} = useSelector((state: RootState) => state.products);
   const productsInWishlist = products?.filter((product: Product) => {
-    return itemInWishlist?.some((itemId) => itemId === product.id);
+    return itemInWishlist?.some((itemId: string) => itemId === product.id);
   });
 
   const dispatch = useDispatch<AppDispatch>();
 
-  const firstItem = itemInWishlist?.[0];
+  const firstItem = productsInWishlist?.[0];
   const [openInformation, setOpenInformation] = React.useState<Product>(firstItem);
-
-  useEffect(() => {
-    setOpenInformation(firstItem);
-  }, [firstItem]);
 
   const closeWishList = () => {
     setOpenWishList(false);
@@ -102,7 +98,10 @@ export const ProductInWishList = ({ setOpenWishList }: Props) => {
                 <div className="view__content__information__small-info--variants">
                   {openInformation?.variants?.map((variantValue) => {
                     return (
-                      <span key={variantValue} className="view__content__information__small-info--variants__item">
+                      <span
+                        key={variantValue}
+                        className="view__content__information__small-info--variants__item"
+                      >
                         {variantValue}
                       </span>
                     );
