@@ -118,7 +118,7 @@ export const CartIcon = ({ product, handleLike, handleTrash }: CartIconProps) =>
     handleTrash();
   };
 
-  const itemAddedToCart = itemInWishlist?.find((item) => item === product.id);
+  const itemAddedToCart = itemInWishlist?.find((item: string) => item === product.id);
 
   return (
     <div className="products__content__item--add--icon__view">
