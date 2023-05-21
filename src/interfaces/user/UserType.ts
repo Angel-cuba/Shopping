@@ -26,15 +26,6 @@ export type UserFromDB = {
   lastname: string
   phone: string
   password?: string
-  address: string
-  city: string
-  postalCode: string
-  country: string
-  cardHolderName: string
-  paymentType: string
-  provider: string
-  cardNumber: string
-  expirationDate: string
   role: Role
 }
 
