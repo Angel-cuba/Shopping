@@ -84,7 +84,7 @@ const ProfilePayment = ({
       },
     };
     if (!userPaymentMethod.id) {
-      const response = await api.post('/payment', paymentData);
+      const response = await api.post('/payments', paymentData);
       setPayments(response.data);
       if (response.status === 200) {
         setEditPayment(false);
@@ -92,7 +92,7 @@ const ProfilePayment = ({
         console.log('Error');
       }
     } else {
-      const response = await api.put('/payment', updatePaymentData);
+      const response = await api.put('/payments', updatePaymentData);
       setPayments(response.data);
       if (response.status === 200) {
         setEditPayment(false);

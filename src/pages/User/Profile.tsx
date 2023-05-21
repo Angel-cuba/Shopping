@@ -53,6 +53,7 @@ const Profile = () => {
     }
   }, [userAddress, loading]);
 
+
   const { theme } = GlobalTheme();
 
   const handleOpenProfile = () => {
@@ -97,7 +98,7 @@ const Profile = () => {
 
   useLayoutEffect(() => {
     const request = async () => {
-      const response = await api.get(`/payment/user/${userId}`, {
+      const response = await api.get(`/payments/user/${userId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -203,7 +204,7 @@ const Profile = () => {
     setLoading(true);
     try {
       const request = async () => {
-        const response = await api.delete(`/payment/${paymentId}`);
+        const response = await api.delete(`/payments/${paymentId}`);
         if (response.status === 200) {
           const filteredPayments = userPaymentMethod?.filter(
             (payment: UserPayment) => payment.id !== paymentId
