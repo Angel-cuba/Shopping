@@ -29,7 +29,7 @@ export default function wishReducer(state = initialWishState, action: AnyAction)
       }
       return {
         ...state,
-        itemInWishlist: state.itemInWishlist?.filter((item) => item.id !== action.payload.id),
+        itemInWishlist: state.itemInWishlist?.filter((item) => item !== action.payload),
       };
     }
     default:

@@ -109,16 +109,16 @@ export const CartIcon = ({ product, handleLike, handleTrash }: CartIconProps) =>
   const { itemInWishlist } = useSelector((state: RootState) => state.wishes);
   const { theme } = GlobalTheme();
 
-  const addItemToCart = () => {
-    dispatch(addToWishList(product));
+  const addItemToWishList = () => {
+    dispatch(addToWishList(product.id));
     handleLike();
   };
-  const removeItemFromCart = () => {
-    dispatch(removeFromWishList(product));
+  const removeItemFromWishList = () => {
+    dispatch(removeFromWishList(product.id));
     handleTrash();
   };
 
-  const itemAddedToCart = itemInWishlist?.find((item) => item.id === product.id);
+  const itemAddedToCart = itemInWishlist?.find((item) => item === product.id);
 
   return (
     <div className="products__content__item--add--icon__view">
@@ -128,7 +128,7 @@ export const CartIcon = ({ product, handleLike, handleTrash }: CartIconProps) =>
             fontSize: '2.1rem',
             color: 'red',
           }}
-          onClick={removeItemFromCart}
+          onClick={removeItemFromWishList}
         />
       ) : (
         <FavoriteBorderIcon
@@ -136,7 +136,7 @@ export const CartIcon = ({ product, handleLike, handleTrash }: CartIconProps) =>
             fontSize: '2.1rem',
             color: theme === 'dark' ? lightTheme.textLink : darkTheme.textLink,
           }}
-          onClick={addItemToCart}
+          onClick={addItemToWishList}
         />
       )}
     </div>

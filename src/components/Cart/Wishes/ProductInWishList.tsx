@@ -18,6 +18,11 @@ export const ProductInWishList = ({ setOpenWishList }: Props) => {
   const { itemInWishlist } = useSelector((state: RootState) => state.wishes);
   const { theme } = GlobalTheme();
 
+  const {products} = useSelector((state: RootState) => state.products);
+  const productsInWishlist = products?.filter((product: Product) => {
+    return itemInWishlist?.some((itemId) => itemId === product.id);
+  });
+
   const dispatch = useDispatch<AppDispatch>();
 
   const firstItem = itemInWishlist?.[0];
@@ -31,8 +36,8 @@ export const ProductInWishList = ({ setOpenWishList }: Props) => {
     setOpenWishList(false);
   };
 
-  const removeFromList = (product: Product) => {
-    dispatch(removeFromWishList(product));
+  const removeFromList = (productId: string) => {
+    dispatch(removeFromWishList(productId));
   };
 
   return (
@@ -50,7 +55,7 @@ export const ProductInWishList = ({ setOpenWishList }: Props) => {
           }}
         >
           <div className="view__products">
-            {itemInWishlist?.map((item) => (
+            {productsInWishlist?.map((item: Product) => (
               <div
                 key={item.id}
                 onMouseEnter={() => setOpenInformation(item)}
@@ -67,7 +72,7 @@ export const ProductInWishList = ({ setOpenWishList }: Props) => {
                   </Link>
                   <button
                     className="view__products__item--buttons__remove"
-                    onClick={() => removeFromList(item)}
+                    onClick={() => removeFromList(item.id)}
                   >
                     Remove
                     <HeartBrokenIcon />
