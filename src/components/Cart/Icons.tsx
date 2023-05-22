@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Close, Favorite, ProductionQuantityLimits, ShoppingCart } from '@mui/icons-material';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
@@ -10,7 +10,12 @@ import { AppDispatch, RootState } from '../../redux/store';
 import SingleProduct from './Product/SingleProduct';
 import { ProductInWishList } from './Wishes/ProductInWishList';
 import { Product } from '../../interfaces/products/ProductType';
-import { addToWishList, removeFromWishList } from '../../redux/actions/WishesActions';
+import {
+  addingToWishList,
+  createWishList,
+  deleteWishList,
+  removingFromWishList,
+} from '../../redux/actions/WishesActions';
 import { GlobalTheme } from '../../context/ThemeProvider';
 import { darkTheme, lightTheme } from '../../styles/styles';
 
@@ -107,14 +112,25 @@ type CartIconProps = {
 export const CartIcon = ({ product, handleLike, handleTrash }: CartIconProps) => {
   const dispatch = useDispatch<AppDispatch>();
   const { itemInWishlist } = useSelector((state: RootState) => state.wishes);
+  const { userFromToken } = useSelector((state: RootState) => state.userLogged);
+  const itemsLength = itemInWishlist?.length;
+
   const { theme } = GlobalTheme();
 
   const addItemToWishList = () => {
-    dispatch(addToWishList(product.id));
+    if (itemsLength) {
+      dispatch(addingToWishList(product.id, userFromToken.user_id));
+    } else {
+      dispatch(createWishList(product.id, userFromToken.user_id));
+    }
     handleLike();
   };
   const removeItemFromWishList = () => {
-    dispatch(removeFromWishList(product.id));
+    if (itemsLength === 1) {
+      dispatch(deleteWishList(userFromToken.user_id));
+    } else {
+      dispatch(removingFromWishList(product.id, userFromToken.user_id));
+    }
     handleTrash();
   };
 
@@ -146,6 +162,7 @@ export const CartIcon = ({ product, handleLike, handleTrash }: CartIconProps) =>
 export const WishListIcon = () => {
   const [openWishList, setOpenWishList] = React.useState(false);
   const { itemInWishlist } = useSelector((state: RootState) => state.wishes);
+  const [numberOfItems, setNumberOfItems] = React.useState(0);
 
   const { theme } = GlobalTheme();
   const colorCondition = theme === 'dark' ? lightTheme.textLink : darkTheme.textLink;
@@ -153,6 +170,10 @@ export const WishListIcon = () => {
   const showWishList = () => {
     setOpenWishList(!openWishList);
   };
+
+  useEffect(() => {
+    setNumberOfItems(itemInWishlist?.length);
+  }, [itemInWishlist]);
 
   const shadowCondition = `0 0 5px 0 ${theme === 'dark' ? '#ff9494a9' : '#ff0000a9'}`;
   return (
@@ -180,7 +201,7 @@ export const WishListIcon = () => {
           onClick={showWishList}
         />
       )}
-      <div className="navbar-wishes__amount">{!itemInWishlist ? 0 : itemInWishlist.length}</div>
+      <div className="navbar-wishes__amount">{!itemInWishlist ? 0 : numberOfItems}</div>
       {openWishList && (
         <div className="navbar-wishes__cart">
           <ProductInWishList setOpenWishList={setOpenWishList} />
