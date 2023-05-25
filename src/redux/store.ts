@@ -3,13 +3,17 @@ import CartReducer from './reducers/CartReducer'
 import ProductsReducer from './reducers/ProductReducer'
 import { userReducer } from './reducers/UserReducer'
 import WishReducer from './reducers/WishesReducer'
+import paymentReducer from './reducers/PaymentReducer'
+import addressReducer from './reducers/AddressReducer'
 
 export const store = configureStore({
   reducer: {
     cart: CartReducer,
     products: ProductsReducer,
     userLogged: userReducer,
-    wishes: WishReducer
+    wishes: WishReducer,
+    payments: paymentReducer,
+    addresses: addressReducer
   }
 })
 
