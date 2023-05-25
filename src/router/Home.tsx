@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useLayoutEffect } from 'react';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchProducts } from '../redux/actions/ProductActions';
@@ -7,6 +7,8 @@ import Products from '../pages/Products/Products';
 import { logged } from '../redux/actions/UserAction';
 import { getWishList } from '../redux/actions/WishesActions';
 import { decodedUser } from '../interfaces/user/UserType';
+import { fetchingAddresses } from '../redux/actions/AddressAction';
+import { fetchingPayments } from '../redux/actions/PaymentAction';
 
 const Home = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -19,6 +21,14 @@ const Home = () => {
       const { user_id } = JSON.parse(user) as decodedUser;
       dispatch(logged(JSON.parse(user)))
       dispatch(getWishList(user_id));
+    }
+  }, [dispatch, user]);
+
+  useLayoutEffect(() => {
+    if(user) {
+      const { user_id } = JSON.parse(user) as decodedUser;
+      dispatch(fetchingAddresses(user_id));
+      dispatch(fetchingPayments(user_id));
     }
   }, [dispatch, user]);
 
