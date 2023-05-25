@@ -1,5 +1,5 @@
 import { AnyAction } from 'redux'
-import { ADD_TO_CART, CartState, REMOVE_FROM_CART } from '../../interfaces/cart/constants'
+import { ADD_TO_CART, CLEAR_CART, CartState, REMOVE_FROM_CART } from '../../interfaces/cart/constants'
 
 export const initialCartState: CartState = {
   itemInCart: null
@@ -87,6 +87,12 @@ export default function cartReducer(state = initialCartState, action: AnyAction)
         }
       }
       return state
+    }
+    case CLEAR_CART: {
+      return {
+        ...state,
+        itemInCart: null
+      }
     }
     default:
       return state
