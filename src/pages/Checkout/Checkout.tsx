@@ -1,32 +1,28 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import SingleProduct from '../../components/Cart/Product/SingleProduct';
-import { Input } from '../../components/Input/Input';
+import { CreditCard, LocalShipping, LocationCityTwoTone } from '@mui/icons-material';
 import { RootState } from '../../redux/store';
-import './Checkout.scss';
 
+import SingleProduct from '../../components/Cart/Product/SingleProduct';
 import { darkTheme, lightTheme } from '../../styles/styles';
 import { GlobalTheme } from '../../context/ThemeProvider';
 import { api } from '../../utils/api';
 import { clearCart } from '../../redux/actions/CartActions';
+import './Checkout.scss';
 
 type Item = {
   id: string;
 };
 
 const Checkout = () => {
-  const [cardNumber, setCardNumber] = React.useState<string>('');
   const [loading, setLoading] = React.useState<boolean>(false);
+  const [checked, setChecked] = React.useState<boolean>(false);
 
   const { itemInCart } = useSelector((state: RootState) => state.cart);
   const { userFromToken } = useSelector((state: RootState) => state.userLogged);
-  
+
   const { theme } = GlobalTheme();
   const dispatch = useDispatch();
-
-  const handleCardNumber = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setCardNumber(e.target.value);
-  };
 
   const toPay = () => {
     let total = 0;
@@ -84,6 +80,10 @@ const Checkout = () => {
     );
   };
 
+  const handleChecked = () => {
+    setChecked(!checked);
+  };
+
   return (
     <div className="checkout">
       {checkAndPay()}
@@ -117,52 +117,86 @@ const Checkout = () => {
             color: theme === 'dark' ? lightTheme.textLink : darkTheme.textLink,
           }}
         >
-          <h1 className="checkout__checkout-view__payment-method--label">
-            Select a payment method
-          </h1>
-          <div className="checkout__checkout-view__payment-method__card-number">
-            <Input
-              name="Card number"
-              placeholder="Write.."
-              onChange={handleCardNumber}
-              value={cardNumber}
-            />
-            <p>cvc</p>
-            <input type="text" />
+          <h1 className="checkout__checkout-view__payment-method--label">Payment information</h1>
+          <div className="checkout__checkout-view__payment-method__title">
+            <h2>All shipping info goes here</h2>
           </div>
-          <div className="checkout__checkout-view__payment-method__cards">
-            <div className="checkout__checkout-view__payment-method__cards--card">
-              <img
-                src="https://res.cloudinary.com/dqaerysgb/image/upload/v1680200432/shoes/descarga_1_uln1vl.png"
-                alt="visa"
-                style={{
-                  width: '60%',
-                  height: '40%',
-                  objectFit: 'cover',
-                }}
-              />
+          <div className="checkout__checkout-view__payment-method__info">
+            <div className="checkout__checkout-view__payment-method__info--item">
+              <h3 className="checkout__checkout-view__payment-method__info--item__text">
+                Address
+                <LocationCityTwoTone
+                  style={{
+                    fontSize: '2rem',
+                    marginLeft: '1rem',
+                    color: theme === 'dark' ? lightTheme.textLink : darkTheme.textLink,
+                  }}
+                />
+              </h3>
+              <p>Choose one address</p>
+              <button>Click</button>
             </div>
-            <div className="checkout__checkout-view__payment-method__cards--card">
-              <img
-                src="https://res.cloudinary.com/dqaerysgb/image/upload/v1680200437/shoes/images_9_1_klgpe6.png"
-                alt="visa"
-                style={{
-                  width: '70%',
-                  height: '40%',
-                  objectFit: 'cover',
-                }}
-              />
+            <div className="checkout__checkout-view__payment-method__info--item">
+              <h3 className="checkout__checkout-view__payment-method__info--item__text">
+                Card
+                <CreditCard
+                  style={{
+                    fontSize: '2rem',
+                    marginLeft: '1rem',
+                    color: theme === 'dark' ? lightTheme.textLink : darkTheme.textLink,
+                  }}
+                />
+              </h3>
+              <p>Choose a card</p>
+              <button>Click</button>
             </div>
-            <div className="checkout__checkout-view__payment-method__cards--card">
-              <img
-                src="https://res.cloudinary.com/dqaerysgb/image/upload/v1680200452/shoes/images_10_hrrpnz.png"
-                alt="visa"
-                style={{
-                  width: '60%',
-                  height: '30%',
-                  objectFit: 'fill',
-                }}
-              />
+            <div className="checkout__checkout-view__payment-method__info--item">
+              <h3 className="checkout__checkout-view__payment-method__info--item__text">
+                Shipping type
+                <LocalShipping
+                  style={{
+                    fontSize: '2rem',
+                    marginLeft: '1rem',
+                    color: theme === 'dark' ? lightTheme.textLink : darkTheme.textLink,
+                  }}
+                />
+              </h3>
+              <p>Pick up the package or someone bring it to the door</p>
+              <div className="checkout__checkout-view__payment-method__info--item__checkboxs">
+                <div
+                  className="checkout__checkout-view__payment-method__info--item__checkboxs__item"
+                  onClick={handleChecked}
+                >
+                  <input type="checkbox" name="door" id="door" checked={checked} />
+                  <label
+                    htmlFor="door"
+                    style={{
+                      color: theme === 'dark' ? lightTheme.textLink : darkTheme.textLink,
+                      transform: checked ? 'scale(1.1)' : 'scale(1)',
+                      fontWeight: checked ? 'bold' : 'normal',
+                      marginLeft: checked ? '5px' : '0',
+                    }}
+                  >
+                    Bring it to my door
+                  </label>
+                </div>
+                <div
+                  className="checkout__checkout-view__payment-method__info--item__checkboxs__item"
+                  onClick={handleChecked}
+                >
+                  <input type="checkbox" name="pickup" id="pickup" checked={!checked} />
+                  <label
+                    htmlFor="pickup"
+                    style={{
+                      color: theme === 'dark' ? lightTheme.textLink : darkTheme.textLink,
+                      transform: !checked ? 'scale(1.1)' : 'scale(1)',
+                      fontWeight: !checked ? 'bold' : 'normal',
+                    }}
+                  >
+                    Pick up
+                  </label>
+                </div>
+              </div>
             </div>
           </div>
         </div>
