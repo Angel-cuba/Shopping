@@ -10,6 +10,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Home from './Home';
 import { getTokenFromLocalStorage } from '../utils/token';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 import './styles/Login.scss';
 
 const Login = () => {
@@ -25,6 +26,7 @@ const Login = () => {
     password: '',
   });
   const [confirmPassword, setConfirmPassword] = React.useState('');
+  const [showPassword, setShowPassword] = React.useState(false);
 
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
@@ -47,7 +49,7 @@ const Login = () => {
     }
   };
   const handlerChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.name === 'Email') {
+    if (e.target.name === 'Username') {
       setUsername(e.target.value);
     } else {
       setPassword(e.target.value);
@@ -89,11 +91,18 @@ const Login = () => {
   };
 
   const handleRegister = async () => {
-    if(newUser.password !== confirmPassword) {
+    if (newUser.password !== confirmPassword) {
       alert('passwords do not match');
       return;
     }
-    if(!newUser.username || !newUser.firstname || !newUser.lastname || !newUser.email || !newUser.phone || !newUser.password) {
+    if (
+      !newUser.username ||
+      !newUser.firstname ||
+      !newUser.lastname ||
+      !newUser.email ||
+      !newUser.phone ||
+      !newUser.password
+    ) {
       alert('please fill all the fields');
       return;
     }
@@ -111,6 +120,10 @@ const Login = () => {
     navigate('/home');
   };
 
+  const handleShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
+
   return (
     <>
       {!userFromLocalStorage?.username && !userToken ? (
@@ -119,19 +132,32 @@ const Login = () => {
             {isLogin ? (
               <div className="login-view__container__login">
                 <Input
-                  name="Email"
+                  name="Username"
                   onChange={handlerChange}
                   value={username}
-                  placeholder="youremail@gmail.com"
+                  placeholder="Username"
                   style={inputStyle}
                 />
-                <Input
-                  name="Password"
-                  onChange={handlerChange}
-                  value={password}
-                  placeholder="**********"
-                  style={inputStyle}
-                />
+                <div className="login-view__container__login--input-password">
+                  <Input
+                    type={showPassword ? 'text' : 'password'}
+                    name="Password"
+                    onChange={handlerChange}
+                    value={password}
+                    placeholder="**********"
+                    style={inputStyle}
+                  />
+                  <div
+                    onClick={handleShowPassword}
+                    className="login-view__container__login--input-password__icon"
+                  >
+                    {!showPassword ? (
+                      <Visibility style={{ fontSize: '1.6rem' }} />
+                    ) : (
+                      <VisibilityOff style={{ fontSize: '1.6rem' }} />
+                    )}
+                  </div>
+                </div>
                 <button className="login-view__container__login__button" onClick={handleLogin}>
                   Login
                 </button>
@@ -168,16 +194,26 @@ const Login = () => {
                   placeholder="Last Name"
                   style={inputStyle}
                 />
-               <div className="login-view__container__register--show-password">
-                 <Input
-                  type="password"
-                  name="password"
-                  onChange={handleRegisterChange}
-                  value={newUser.password}
-                  placeholder="Password"
-                  style={inputStyle}
-                />
-               </div>
+                <div className="login-view__container__register--show-password">
+                  <Input
+                    type={showPassword ? 'text' : 'password'}
+                    name="password"
+                    onChange={handleRegisterChange}
+                    value={newUser.password}
+                    placeholder="Password"
+                    style={inputStyle}
+                  />
+                  <div
+                    onClick={handleShowPassword}
+                    className="login-view__container__register--show-password__icon"
+                  >
+                    {!showPassword ? (
+                      <Visibility style={{ fontSize: '1.6rem' }} />
+                    ) : (
+                      <VisibilityOff style={{ fontSize: '1.6rem' }} />
+                    )}
+                  </div>
+                </div>
                 <Input
                   name="phone"
                   onChange={handleRegisterChange}
@@ -185,15 +221,15 @@ const Login = () => {
                   placeholder="Phone Number"
                   style={inputStyle}
                 />
-               <div className="login-view__container__register--show-password">
-                <Input
-                  type="password"
-                  name="Confirm Password"
-                  onChange={handleConfirmPassword}
-                  value={confirmPassword}
-                  placeholder="Confirm Password"
-                  style={inputStyle}
-                />
+                <div className="login-view__container__register--show-password">
+                  <Input
+                    type={showPassword ? 'text' : 'password'}
+                    name="Confirm Password"
+                    onChange={handleConfirmPassword}
+                    value={confirmPassword}
+                    placeholder="Confirm Password"
+                    style={inputStyle}
+                  />
                 </div>
                 <button
                   className="login-view__container__register__button"

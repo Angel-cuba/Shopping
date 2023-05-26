@@ -24,6 +24,16 @@
       align-items: center;
       flex-direction: column;
       padding: 20px 50px;
+      &--input-password {
+        width: 100%;
+        position: relative;
+        &__icon {
+          position: absolute;
+          right: -20px;
+          top: 45%;
+          cursor: pointer;
+        }
+      }
       &__button {
         @include loginButton();
       }
@@ -35,6 +45,15 @@
       align-items: center;
       flex-wrap: wrap;
       padding: 20px 50px;
+      &--show-password {
+        position: relative;
+        &__icon {
+          position: absolute;
+          right: -20px;
+          top: 45%;
+          cursor: pointer;
+        }
+      }
       &__button {
         @include loginButton();
       }
