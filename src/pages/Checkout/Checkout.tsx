@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { CreditCard, LocalShipping, LocationCityTwoTone } from '@mui/icons-material';
+import { AddHomeOutlined, CreditCard, LocalShipping, LocationCityTwoTone, StorefrontOutlined } from '@mui/icons-material';
 import { RootState } from '../../redux/store';
 
 import SingleProduct from '../../components/Cart/Product/SingleProduct';
@@ -9,6 +9,8 @@ import { GlobalTheme } from '../../context/ThemeProvider';
 import { api } from '../../utils/api';
 import { clearCart } from '../../redux/actions/CartActions';
 import './Checkout.scss';
+import Address from './address/Address';
+import Payment from './payments/Payment';
 
 type Item = {
   id: string;
@@ -16,22 +18,35 @@ type Item = {
 
 const Checkout = () => {
   const [loading, setLoading] = React.useState<boolean>(false);
-  const [checked, setChecked] = React.useState<boolean>(false);
+  const [checked, setChecked] = React.useState<boolean>(true);
+  const [openAddress, setOpenAddress] = React.useState<boolean>(false);
+  const [address, setAddress] = React.useState<string>('');
+  const [openPayments, setOpenPayments] = React.useState<boolean>(false);
+  const [payment, setPayment] = React.useState<string>('');
+  const [totalToPay, setTotalToPay] = React.useState<number>(0);
 
-  const { itemInCart } = useSelector((state: RootState) => state.cart);
   const { userFromToken } = useSelector((state: RootState) => state.userLogged);
+  const { itemInCart } = useSelector((state: RootState) => state.cart);
+  const { addresses } = useSelector((state: RootState) => state.addresses);
+  const { payments } = useSelector((state: RootState) => state.payments);
 
   const { theme } = GlobalTheme();
   const dispatch = useDispatch();
 
+  useEffect(() => {
   const toPay = () => {
     let total = 0;
     itemInCart?.forEach((item) => {
       total += item.price * item.quantity;
     });
-    return total.toFixed(2);
+    setTotalToPay(total);
   };
+    toPay();
+  }, [itemInCart]);
+
+  
   const handleCheckout = async () => {
+    if(!address || !payment) return alert('Please select address and payment method');
     setLoading(true);
     const newArray = itemInCart?.map((item) => {
       const { id, variant, image, sizes, price, quantity } = item;
@@ -51,37 +66,52 @@ const Checkout = () => {
     });
     const response = await api.post('/order-details/create-order-details', newArray);
     if (response.status === 200) {
-      const idsToCreateOrder = response.data.map((item: Item) => item.id);
+     const idsToCreateOrder = response.data.map((item: Item) => item.id);
+
       const orderToCreate = {
         user: {
           id: userFromToken?.user_id,
         },
         orderDetails: idsToCreateOrder,
-        paymentType: 'MASTER',
-        shippingAddress: 'Helsinki',
-        shippingMethod: 'pickup',
-        shippingFee: 2,
+        paymentType: payment,
+        shippingAddress: address,
+        shippingMethod: checked ? 'DOOR' : 'PICKUP',
+        shippingFee: checked ? 2.99 : 0,
+        total: totalToPay,
       };
       await api.post('/orders', orderToCreate);
       dispatch(clearCart());
     }
+    setAddress('');
+    setPayment('');
     setLoading(false);
   };
 
   const checkAndPay = () => {
     return (
       <div className="checkout__payment">
-        <div className="checkout__payment__steps">Address</div>
-        <div className="checkout__payment__steps">Card</div>
-        <div className="checkout__payment__steps" onClick={handleCheckout}>
+        <h2>Steps</h2>
+        <button className={!address ? "checkout__payment__steps" : "checkout__payment__step-disabled"}>Address</button>
+        <button className={!payment ? "checkout__payment__steps" : "checkout__payment__step-disabled"}>Payment</button>
+        <button className="checkout__payment__steps" onClick={handleCheckout}>
           Pay
-        </div>
+        </button>
       </div>
     );
   };
 
   const handleChecked = () => {
     setChecked(!checked);
+  };
+
+  const handleOpenAddress = () => {
+    setOpenPayments(false);
+    setOpenAddress(!openAddress);
+  };
+
+  const handleOpenCards = () => {
+    setOpenAddress(false);
+    setOpenPayments(!openPayments);
   };
 
   return (
@@ -108,7 +138,8 @@ const Checkout = () => {
             }}
           >
             <p className="checkout__checkout-view__cart__total--label">Total to pay</p>
-            <p className="checkout__checkout-view__cart__total--price">$ {toPay()}</p>
+            <p className="checkout__checkout-view__cart__total--price">$ {totalToPay}</p>
+
           </div>
         </div>
         <div
@@ -117,42 +148,62 @@ const Checkout = () => {
             color: theme === 'dark' ? lightTheme.textLink : darkTheme.textLink,
           }}
         >
-          <h1 className="checkout__checkout-view__payment-method--label">Payment information</h1>
-          <div className="checkout__checkout-view__payment-method__title">
-            <h2>All shipping info goes here</h2>
-          </div>
           <div className="checkout__checkout-view__payment-method__info">
             <div className="checkout__checkout-view__payment-method__info--item">
+              {openAddress && (
+                <div className="checkout__checkout-view__payment-method__info--item__address-view">
+                  <Address addresses={addresses} setOpenAddress={setOpenAddress} setAddress={setAddress}/>
+                </div>
+              )}
               <h3 className="checkout__checkout-view__payment-method__info--item__text">
-                Address
                 <LocationCityTwoTone
                   style={{
                     fontSize: '2rem',
-                    marginLeft: '1rem',
                     color: theme === 'dark' ? lightTheme.textLink : darkTheme.textLink,
                   }}
                 />
               </h3>
-              <p>Choose one address</p>
-              <button>Click</button>
+              <p className="checkout__checkout-view__payment-method__info--item__text--small">
+                {
+                  !address ? 'Click to add address' : address
+                }
+              </p>
+              <button
+                className="checkout__checkout-view__payment-method__info--item__text--btn"
+                onClick={handleOpenAddress}
+              >
+                Click
+              </button>
             </div>
             <div className="checkout__checkout-view__payment-method__info--item">
+              {openPayments && (
+                <div className="checkout__checkout-view__payment-method__info--item__payments-view">
+                  <Payment payments={payments} setOpenPayments={setOpenPayments} setPayment={setPayment}/>
+                </div>
+              )}
               <h3 className="checkout__checkout-view__payment-method__info--item__text">
-                Card
                 <CreditCard
                   style={{
                     fontSize: '2rem',
-                    marginLeft: '1rem',
                     color: theme === 'dark' ? lightTheme.textLink : darkTheme.textLink,
                   }}
                 />
               </h3>
-              <p>Choose a card</p>
-              <button>Click</button>
+              <p className="checkout__checkout-view__payment-method__info--item__text--small">
+                {
+                  !payment ? 'Click to add card' : payment
+                }
+              </p>
+              <button
+                className="checkout__checkout-view__payment-method__info--item__text--btn"
+                onClick={handleOpenCards}
+              >
+                Click
+              </button>
             </div>
             <div className="checkout__checkout-view__payment-method__info--item">
               <h3 className="checkout__checkout-view__payment-method__info--item__text">
-                Shipping type
+                Shipping method
                 <LocalShipping
                   style={{
                     fontSize: '2rem',
@@ -161,13 +212,23 @@ const Checkout = () => {
                   }}
                 />
               </h3>
-              <p>Pick up the package or someone bring it to the door</p>
+              <p className="checkout__checkout-view__payment-method__info--item__text--small" style={{
+                color: '#001e29'
+              }}>
+                {checked ? <AddHomeOutlined /> : <StorefrontOutlined />}
+                <span className="checkout__checkout-view__payment-method__info--item__text--small--label">
+                  {checked ? 'At home' : 'Posti'}
+                </span>
+              </p>
               <div className="checkout__checkout-view__payment-method__info--item__checkboxs">
-                <div
-                  className="checkout__checkout-view__payment-method__info--item__checkboxs__item"
-                  onClick={handleChecked}
-                >
-                  <input type="checkbox" name="door" id="door" checked={checked} />
+                <div className="checkout__checkout-view__payment-method__info--item__checkboxs__item">
+                  <input
+                    type="checkbox"
+                    name="door"
+                    id="door"
+                    checked={checked}
+                    onChange={handleChecked}
+                  />
                   <label
                     htmlFor="door"
                     style={{
@@ -180,11 +241,14 @@ const Checkout = () => {
                     Bring it to my door
                   </label>
                 </div>
-                <div
-                  className="checkout__checkout-view__payment-method__info--item__checkboxs__item"
-                  onClick={handleChecked}
-                >
-                  <input type="checkbox" name="pickup" id="pickup" checked={!checked} />
+                <div className="checkout__checkout-view__payment-method__info--item__checkboxs__item">
+                  <input
+                    type="checkbox"
+                    name="pickup"
+                    id="pickup"
+                    checked={!checked}
+                    onChange={handleChecked}
+                  />
                   <label
                     htmlFor="pickup"
                     style={{
