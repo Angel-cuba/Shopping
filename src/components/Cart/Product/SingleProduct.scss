@@ -65,12 +65,20 @@
         font-weight: bolder;
       }
     }
-    &--price {
+    &--price-by-quantity {
       position: absolute;
       bottom: 0;
       right: 20px;
       font-size: 1.3rem;
       font-weight: 800;
+      margin: 0.15rem 0;
+      color: rgba(35, 35, 35, 0.8);
+    }
+    &--price {
+      position: absolute;
+      top: 0;
+      right: 20px;
+      font-weight: 600;
       margin: 0.15rem 0;
       color: rgba(35, 35, 35, 0.8);
     }

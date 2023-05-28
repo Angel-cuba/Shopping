@@ -60,9 +60,12 @@ const SingleProduct = ({ item }: { item: CartProduct }) => {
             }}
           />
         </div>
-        <p className="cart-product__buttons--price">
-          ${item.quantity ? (item?.quantity * item?.price).toFixed(2) : item?.price}
+        <p className="cart-product__buttons--price-by-quantity">
+          $ {item.quantity ? (item?.quantity * item?.price).toFixed(2) : item?.price}
         </p>
+       {
+          item.quantity && item?.quantity > 1 && <p className="cart-product__buttons--price">$ {item.price}</p>
+       }
       </div>
     </div>
   );
