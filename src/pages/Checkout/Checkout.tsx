@@ -6,11 +6,11 @@ import { RootState } from '../../redux/store';
 import SingleProduct from '../../components/Cart/Product/SingleProduct';
 import { darkTheme, lightTheme } from '../../styles/styles';
 import { GlobalTheme } from '../../context/ThemeProvider';
-import { api } from '../../utils/api';
 import { clearCart } from '../../redux/actions/CartActions';
-import './Checkout.scss';
 import Address from './address/Address';
 import Payment from './payments/Payment';
+import { api } from '../../utils/api';
+import './Checkout.scss';
 
 type Item = {
   id: string;
@@ -132,7 +132,7 @@ const Checkout = () => {
             style={{
               color: theme === 'dark' ? lightTheme.textLink : darkTheme.textLink,
               backgroundColor: theme === 'dark' ? darkTheme.shadow : lightTheme.shadow,
-              boxShadow: `0 0 5px 0 ${
+              boxShadow: `-1px 0 5px -1px ${
                 theme === 'dark' ? darkTheme.shadowMedium : lightTheme.shadowMedium
               }`,
             }}
