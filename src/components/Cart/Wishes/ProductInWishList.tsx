@@ -6,7 +6,7 @@ import HeartBrokenIcon from '@mui/icons-material/HeartBroken';
 import { Product } from '../../../interfaces/products/ProductType';
 import { AppDispatch, RootState } from '../../../redux/store';
 import { useDispatch, useSelector } from 'react-redux';
-import { removeFromWishList } from '../../../redux/actions/WishesActions';
+import { removingFromWishList } from '../../../redux/actions/WishesActions';
 import { GlobalTheme } from '../../../context/ThemeProvider';
 import { darkTheme, lightTheme } from '../../../styles/styles';
 import './ProductInWishList.scss';
@@ -17,6 +17,7 @@ type Props = {
 export const ProductInWishList = ({ setOpenWishList }: Props) => {
   const { itemInWishlist } = useSelector((state: RootState) => state.wishes);
   const { products } = useSelector((state: RootState) => state.products);
+  const { userFromToken } = useSelector((state: RootState) => state.userLogged);
   const { theme } = GlobalTheme();
 
   const productsInWishlist = products?.filter((product: Product) => {
@@ -33,7 +34,7 @@ export const ProductInWishList = ({ setOpenWishList }: Props) => {
   };
 
   const removeFromList = (productId: string) => {
-    dispatch(removeFromWishList(productId));
+    dispatch(removingFromWishList(productId, userFromToken.user_id));
   };
 
   return (
