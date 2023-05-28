@@ -1,9 +1,7 @@
 import React from 'react'
-// import { useSelector } from 'react-redux'
 import { Route, Routes } from 'react-router'
 
 import ProductById from '../components/Product/ProductById'
-// import { RootState } from '../redux/store'
 import Home from './Home'
 import Login from './Login'
 import Profile from '../pages/User/Profile'
@@ -27,6 +25,8 @@ const Navigation = () => {
   ]
 
   const homeRoutes = [
+
+    { path: '/login', element: <Login /> },
     { path: '/', element: <Home /> },
     { path: '/home', element: <Home /> },
     { path: '/product/:id', element: <ProductById /> },
