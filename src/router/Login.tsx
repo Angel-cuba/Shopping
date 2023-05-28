@@ -7,10 +7,10 @@ import { login } from '../redux/actions/UserAction';
 import { UserType } from '../interfaces/user/UserType';
 import { Input } from '../components/Input/Input';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import Home from './Home';
 import { getTokenFromLocalStorage } from '../utils/token';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
+import Home from './Home';
+import { api } from '../utils/api';
 import './styles/Login.scss';
 
 const Login = () => {
@@ -81,10 +81,10 @@ const Login = () => {
       username,
       password,
     };
-    const request = await axios.post('http://localhost:8080/api/v1/users/signin', postData);
+    const request = await api.post('/users/signin', postData);
     localStorage.setItem('token', request.data);
     getTokenFromLocalStorage();
-    navigate('/home');
+    navigate('/');
   };
   const openSignUp = () => {
     setIsLogin(!isLogin);
@@ -114,10 +114,10 @@ const Login = () => {
       phone: newUser.phone,
       password: newUser.password,
     };
-    const request = await axios.post('http://localhost:8080/api/v1/users/signup', postData);
+    const request = await api.post('/users/signup', postData);
     localStorage.setItem('token', request.data);
     getTokenFromLocalStorage();
-    navigate('/home');
+    navigate('/');
   };
 
   const handleShowPassword = () => {
