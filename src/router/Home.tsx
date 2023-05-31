@@ -7,8 +7,6 @@ import Products from '../pages/Products/Products';
 import { logged } from '../redux/actions/UserAction';
 import { getWishList } from '../redux/actions/WishesActions';
 import { decodedUser } from '../interfaces/user/UserType';
-import { fetchingAddresses } from '../redux/actions/AddressAction';
-import { fetchingPayments } from '../redux/actions/PaymentAction';
 
 const Home = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -19,13 +17,12 @@ const Home = () => {
     dispatch(fetchProducts());
   }, [dispatch, user]);
 
+//TODO: Cambiar estos fetch aqui, pasarlo a cada uno de sus componentes.......
   useLayoutEffect(() => {
     if (user) {
       dispatch(logged(JSON.parse(user)));
       const { user_id } = JSON.parse(user) as decodedUser;
       dispatch(getWishList(user_id));
-      dispatch(fetchingAddresses(user_id));
-      dispatch(fetchingPayments(user_id));
     }
   }, [dispatch, user]);
 
