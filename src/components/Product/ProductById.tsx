@@ -13,7 +13,7 @@ import { addToCart } from '../../redux/actions/CartActions';
 import { CartProduct } from '../../interfaces/cart/CartType';
 import { GlobalTheme } from '../../context/ThemeProvider';
 import { darkTheme, lightTheme } from '../../styles/styles';
-import axios from 'axios';
+import { api } from '../../utils/api';
 import './ProductById.scss';
 
 const initialProduct: CartProduct = {
@@ -36,11 +36,7 @@ const ProductById = () => {
 
   useLayoutEffect(() => {
     const productById = async () => {
-      const response = await axios.get(`http://localhost:8080/api/v1/products/${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await api.get(`/products/${id}`);
       if (response.status === 200) {
         setProduct(response.data);
       }
