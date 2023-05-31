@@ -8,15 +8,11 @@ import Profile from '../pages/User/Profile'
 import Checkout from '../pages/Checkout/Checkout'
 import AdminDashboard from '../pages/Admin/AdminDashboard'
 import CreateAndCheck from '../pages/Admin/CreateAndCheck'
-import AdminProducts from '../pages/Admin/AdminProducts'
 import Customers from '../components/Admin/Customers/Customers'
 import AdminOrders from '../pages/Admin/AdminOrders'
 
 const Navigation = () => {
- // TODO: Check this user that comes from redux store
-  // const { user } = useSelector((state: RootState) => state.userLogged)
   const userToken = localStorage.getItem('token')
-  const { role } = JSON.parse(localStorage.getItem('user') || '{}')
   const decodedUserRole = JSON.parse(localStorage.getItem('decodedUser') || '{}').role
 
   const loginRoutes = [
@@ -39,7 +35,7 @@ const Navigation = () => {
     { path: '/admin', element: <AdminDashboard /> },
     { path: '/admin/createandcheck', element: <CreateAndCheck /> },
     { path: '/admin/createandcheck/check', element: <CreateAndCheck /> },
-    { path: '/admin/products', element: <AdminProducts /> },
+    { path: '/admin/products', element: <Home /> },
     { path: '/admin/customers', element: <Customers /> },
     { path: '/admin/orders', element: <AdminOrders />},
   ]
@@ -52,7 +48,7 @@ const Navigation = () => {
         ))}
       </Routes>
     )
-  } else if (userToken &&  (role === 'ADMIN' || decodedUserRole === 'ADMIN')) {
+  } else if (userToken && decodedUserRole === 'ADMIN') {
     return (
       <Routes>
         {adminRoutes.map((route) => (
