@@ -3,6 +3,7 @@ export type Product = {
   name: string;
   description: string;
   image: string;
+  inStock: number;
   categories: Category;
   variants: Variant[];
   sizes: Size[] 
@@ -15,6 +16,7 @@ export type NewProductToStock = {
   description: string;
   image: string;
   categories: string;
+  inStock: number;
   variants: string[];
   sizes: string[];
   price: number;
