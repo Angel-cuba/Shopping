@@ -17,7 +17,7 @@ type Props = {
 export const ProductInWishList = ({ setOpenWishList }: Props) => {
   const { itemInWishlist } = useSelector((state: RootState) => state.wishes);
   const { products } = useSelector((state: RootState) => state.products);
-  const { userFromToken } = useSelector((state: RootState) => state.userLogged);
+  const decodedUserId = JSON.parse(localStorage.getItem('decodedUser') || '{}').user_id;
   const { theme } = GlobalTheme();
 
   const productsInWishlist = products?.filter((product: Product) => {
@@ -34,7 +34,7 @@ export const ProductInWishList = ({ setOpenWishList }: Props) => {
   };
 
   const removeFromList = (productId: string) => {
-    dispatch(removingFromWishList(productId, userFromToken.user_id));
+    dispatch(removingFromWishList(productId, decodedUserId));
   };
 
   return (

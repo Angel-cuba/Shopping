@@ -2,7 +2,7 @@ import React from 'react';
 import { Link, useLocation, useParams } from 'react-router-dom';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { Product } from '../../interfaces/products/ProductType';
-import { CartIcon } from '../Cart/Cart';
+import { CartIcon } from '../Cart/Icons';
 import { DeleteForever, ModeEdit } from '@mui/icons-material';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../redux/store';
@@ -21,11 +21,9 @@ const ProductItem = ({ product }: { product: Product }) => {
 
   const location = useLocation();
   const { pathname } = location;
-  const {id} = useParams()
+  const { id } = useParams();
   const dispatch = useDispatch<AppDispatch>();
-
-//TODO: User from redux state, not from localstorage
-  // const { user } = useSelector((state: RootState) => state.userLogged);
+  
   const userRole = JSON.parse(localStorage.getItem('user') || '{}').role;
   const decodedUserRole = JSON.parse(localStorage.getItem('decodedUser') || '{}').role;
 
@@ -104,20 +102,20 @@ const ProductItem = ({ product }: { product: Product }) => {
           </div>
         )}
         {!id && (
-            <div className="products__content__item--details">
-              <Link
-                to={`/product/${product.id}`}
-                style={{
-                  textDecoration: 'none',
-                  color: darkTheme.textLink,
-                  display: 'flex',
-                }}
-              >
-                <MoreVertIcon />
-                Details
-              </Link>
-            </div>
-          )}
+          <div className="products__content__item--details">
+            <Link
+              to={`/product/${product.id}`}
+              style={{
+                textDecoration: 'none',
+                color: darkTheme.textLink,
+                display: 'flex',
+              }}
+            >
+              <MoreVertIcon />
+              Details
+            </Link>
+          </div>
+        )}
         {Animation()}
         <div
           className="products__content__item--add"
@@ -142,6 +140,8 @@ const ProductItem = ({ product }: { product: Product }) => {
             }}
           />
         </div>
+        {/* TODO: Add inStock */}
+        {/* <p>{product.inStock}</p> */}
         <div
           className="products__content__item--info"
           style={{

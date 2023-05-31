@@ -7,7 +7,7 @@ import StoreMallDirectoryIcon from '@mui/icons-material/StoreMallDirectory';
 import LightModeIcon from '@mui/icons-material/LightMode';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 
-import { NavbarIcon, WishListIcon } from '../Cart/Cart';
+import { NavbarIcon, WishListIcon } from '../Cart/Icons';
 import { AppDispatch, RootState } from '../../redux/store';
 import { logout } from '../../redux/actions/UserAction';
 import { GlobalTheme } from '../../context/ThemeProvider';
@@ -20,7 +20,6 @@ const Navbar = () => {
   //TODO: Checking if user is from localstorage or redux
   const { user, userFromToken } = useSelector((state: RootState) => state.userLogged);
 
-  useSelector((state: RootState) => console.log(state));
   const dispatch = useDispatch<AppDispatch>();
   const { theme, setTheme } = GlobalTheme();
 
@@ -30,8 +29,8 @@ const Navbar = () => {
     localStorage.removeItem('user');
     localStorage.removeItem('token')
     localStorage.removeItem('decodedUser')
-    navigation('/');
     dispatch(logout());
+    navigation('/login');
   };
   const handleDarkMode = () => {
     if (theme === 'light') {
@@ -76,7 +75,7 @@ const Navbar = () => {
         )}
       </div>
       <div className="navbar__navbar-right">
-        {(userFromToken?.role || user?.role) === 'ADMIN' ? (
+        {userFromToken?.role === 'ADMIN' ? (
 
           <Link
             to="/admin"
