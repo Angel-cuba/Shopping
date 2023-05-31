@@ -5,9 +5,7 @@ import {
   ERROR,
   GET_PRODUCTS,
   LOADING,
-  REQUEST,
   STOP_LOADING,
-  SUCCESSFUL,
   UPDATE_PRODUCT,
 } from '../../interfaces/products/constants';
 import { NewProductToStock, Product } from '../../interfaces/products/ProductType';
@@ -57,34 +55,34 @@ export const fetchProducts = () => {
 export const addProductToStock = (product: NewProductToStock) => {
   return async (dispatch: Dispatch) => {
     try {
-       dispatch({ type: REQUEST });
+       dispatch({ type: LOADING });
        const resquest = await api.post('/products', product);
       dispatch(addProduct(resquest.data));
     } catch (error) {
       dispatch({ type: ERROR, payload: error });
     }
-     dispatch({ type: SUCCESSFUL });
+     dispatch({ type: STOP_LOADING });
   };
 };
 
 export const updateProductInStock = (product: NewProductToStock) => {
   return async (dispatch: Dispatch) => {
     try {
-      dispatch({ type: REQUEST });
+      dispatch({ type: LOADING });
       const request = await api.put('/products', product);
 
       dispatch(updateProduct(request.data));
     } catch (error) {
       dispatch({ type: ERROR, payload: error });
     }
-    dispatch({ type: SUCCESSFUL });
+    dispatch({ type: STOP_LOADING });
   };
 };
 
 export const deleteProductFromStock = (id: string) => {
   return async (dispatch: Dispatch) => {
     try {
-      dispatch({ type: REQUEST });
+      dispatch({ type: LOADING });
      const request = await api.delete(`/products/${id}`);
      //TODO: Do something with the response
       console.log(request);
@@ -92,7 +90,7 @@ export const deleteProductFromStock = (id: string) => {
     } catch (error) {
       dispatch({ type: ERROR, payload: error });
     }
-    dispatch({ type: SUCCESSFUL });
+    dispatch({ type: STOP_LOADING });
   };
 };
 
