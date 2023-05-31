@@ -5,7 +5,7 @@ import { Product, Sizes, Variants } from '../../interfaces/products/ProductType'
 import ProductNotFound from './ProductNotFound';
 import { useLocation, useParams } from 'react-router-dom';
 import CreateAndEdit from '../../components/Admin/CreateAndEdit/CreateAndEdit';
-import { AddBoxSharp, ClosedCaptionDisabledOutlined } from '@mui/icons-material';
+import { AddBoxSharp, CancelOutlined } from '@mui/icons-material';
 import { GlobalTheme } from '../../context/ThemeProvider';
 import { darkTheme, lightTheme } from '../../styles/styles';
 import { useSelector } from 'react-redux';
@@ -138,13 +138,7 @@ const Products = ({ products }: { products: Product[] }) => {
   if (loading) return <LoadingProducts />;
 
   return (
-    <div className="products">
-      {success && (
-        <div className="products__admin-loading">
-          <LoadingResponse />
-        </div>
-      )}
-      {location.pathname.includes('admin') ? (
+    <>{location.pathname.includes('admin') ? (
         <div className="products__create">
           <div
             className={!openCreateAndEdit ? 'products__button-open' : 'products__button-close'}
@@ -153,16 +147,24 @@ const Products = ({ products }: { products: Product[] }) => {
             {!openCreateAndEdit ? (
               <AddBoxSharp fontSize="large" />
             ) : (
-              <ClosedCaptionDisabledOutlined fontSize="large" style={{ color: '#ff0000' }} />
+              <CancelOutlined fontSize="large" style={{ color: '#ff0000' }} />
             )}
 
-            <p className="products__button-text">{openCreateAndEdit ? 'Close' : 'Add'}</p>
+            <p className="products__button-text">{openCreateAndEdit ? '' : 'Add product'}</p>
           </div>
           {openCreateAndEdit && (
             <CreateAndEdit productId={id} setOpenCreateAndEdit={setOpenCreateAndEdit} />
           )}
         </div>
       ) : null}
+    {
+      products.length === 0 ? <p>Empty</p> : <div className="products">
+      {success && (
+        <div className="products__admin-loading">
+          <LoadingResponse />
+        </div>
+      )}
+      
       <div className="products__controlPanel" onClick={handleOpenFilters}>
         {openFilters ? (
           <p className="products__controlPanel--button" onClick={filtersToDefaultValue}>
@@ -280,6 +282,8 @@ const Products = ({ products }: { products: Product[] }) => {
         {showAllFitered()}
       </div>
     </div>
+    }
+    </>
   );
 };
 
