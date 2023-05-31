@@ -1,0 +1,41 @@
+.loading-login {
+  height: 50vh;
+  width: 94dvw;
+  margin:auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f6f3f358;
+  border-radius: 10px;
+  box-shadow: 0 0 10px 0 #2b2b2b1d;
+  &__container {
+    position: relative;
+    width: 80%;
+    height: 90%;
+    display: flex;
+    justify-content: center;
+    &__text {
+      position: absolute;
+      top: 10%;
+      right: 10%;
+    }
+    &__spinner {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      border-left: 2px solid #00bfff;
+      border-right: 2px solid #00bfff;
+      border-bottom: 5px solid #00bfff;
+      animation: spin 0.8s linear infinite;
+    }
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
