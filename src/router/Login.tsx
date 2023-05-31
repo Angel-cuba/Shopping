@@ -10,8 +10,9 @@ import { useNavigate } from 'react-router-dom';
 import { getTokenFromLocalStorage } from '../utils/token';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import Home from './Home';
-import { api } from '../utils/api';
+import axios from 'axios';
 import './styles/Login.scss';
+import LoadingLogin from '../components/Loading/LoadingLogin';
 
 const Login = () => {
   const [username, setUsername] = React.useState('');
@@ -27,6 +28,7 @@ const Login = () => {
   });
   const [confirmPassword, setConfirmPassword] = React.useState('');
   const [showPassword, setShowPassword] = React.useState(false);
+  const [loading, setLoading] = React.useState(false);
 
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
@@ -77,24 +79,38 @@ const Login = () => {
   };
 
   const handleLogin = async () => {
+    if (!username || !password) {
+      //TODO: cambiar esto por un toast
+      alert('please fill all the fields');
+      return;
+    }
     const postData = {
       username,
       password,
     };
-    const request = await api.post('/users/signin', postData);
+    const request = await axios.post(
+      'https://shopping-bhjf.onrender.com/api/v1/users/signin',
+      postData
+    );
+    if (request.status !== 200) {
+      //TODO: cambiar esto por un
+      alert('User not found');
+      setLoading(false);
+      return;
+    } else {
+    setLoading(true);
     localStorage.setItem('token', request.data);
     getTokenFromLocalStorage();
-    navigate('/');
+    navigate('/home');
+    }
+    setLoading(false);
+
   };
   const openSignUp = () => {
     setIsLogin(!isLogin);
   };
 
   const handleRegister = async () => {
-    if (newUser.password !== confirmPassword) {
-      alert('passwords do not match');
-      return;
-    }
     if (
       !newUser.username ||
       !newUser.firstname ||
@@ -106,6 +122,10 @@ const Login = () => {
       alert('please fill all the fields');
       return;
     }
+    if (newUser.password !== confirmPassword) {
+      alert('passwords do not match');
+      return;
+    }
     const postData = {
       username: newUser.username,
       firstname: newUser.firstname,
@@ -114,7 +134,11 @@ const Login = () => {
       phone: newUser.phone,
       password: newUser.password,
     };
-    const request = await api.post('/users/signup', postData);
+    const request = await axios.post(
+      'https://shopping-bhjf.onrender.com/api/v1/users/signup',
+      postData
+    );
+    console.log(request);
     localStorage.setItem('token', request.data);
     getTokenFromLocalStorage();
     navigate('/');
@@ -123,6 +147,8 @@ const Login = () => {
   const handleShowPassword = () => {
     setShowPassword(!showPassword);
   };
+
+  if (loading) return <LoadingLogin />;
 
   return (
     <>
