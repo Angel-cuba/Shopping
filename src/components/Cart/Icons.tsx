@@ -112,24 +112,25 @@ type CartIconProps = {
 export const CartIcon = ({ product, handleLike, handleTrash }: CartIconProps) => {
   const dispatch = useDispatch<AppDispatch>();
   const { itemInWishlist } = useSelector((state: RootState) => state.wishes);
-  const { userFromToken } = useSelector((state: RootState) => state.userLogged);
   const itemsLength = itemInWishlist?.length;
+  const decodedUserId = JSON.parse(localStorage.getItem('decodedUser') || '{}').user_id;
+
 
   const { theme } = GlobalTheme();
 
   const addItemToWishList = () => {
     if (itemsLength) {
-      dispatch(addingToWishList(product.id, userFromToken.user_id));
+      dispatch(addingToWishList(product.id, decodedUserId));
     } else {
-      dispatch(createWishList(product.id, userFromToken.user_id));
+      dispatch(createWishList(product.id, decodedUserId));
     }
     handleLike();
   };
   const removeItemFromWishList = () => {
     if (itemsLength === 1) {
-      dispatch(deleteWishList(userFromToken.user_id));
+      dispatch(deleteWishList(decodedUserId));
     } else {
-      dispatch(removingFromWishList(product.id, userFromToken.user_id));
+      dispatch(removingFromWishList(product.id, decodedUserId));
     }
     handleTrash();
   };
