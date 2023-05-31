@@ -22,6 +22,7 @@ const initialProduct: NewProductToStock = {
   price: 0,
   description: '',
   image: '',
+  inStock: 0,
   sizes: [],
   variants: [],
   categories: '',
@@ -132,10 +133,17 @@ const CreateAndEdit = ({ productId, setOpenCreateAndEdit }: Props) => {
     setShowAddVariantsButton(true);
   };
 
-  const handlePrice = (value: string) => {
+  const handlePrice = (value: number) => {
     setNewProduct((prevProduct) => ({
       ...prevProduct,
-      price: Number(value),
+      price: value,
+    }));
+  };
+
+  const handleInStock = (value: number) => {
+    setNewProduct((prevProduct) => ({
+      ...prevProduct,
+      inStock: value,
     }));
   };
 
@@ -146,6 +154,7 @@ const CreateAndEdit = ({ productId, setOpenCreateAndEdit }: Props) => {
       newProduct.price === 0 ||
       newProduct.description === '' ||
       newProduct.image === '' ||
+      newProduct.inStock === 0 ||
       newProduct.sizes.length === 0 ||
       newProduct.variants.length === 0 ||
       newProduct.categories === ''
@@ -160,6 +169,7 @@ const CreateAndEdit = ({ productId, setOpenCreateAndEdit }: Props) => {
         description: newProduct.description,
         image: newProduct.image,
         sizes: newProduct.sizes,
+        inStock: newProduct.inStock,
         variants: newProduct.variants,
         categories: newProduct.categories,
       };
@@ -195,7 +205,7 @@ const CreateAndEdit = ({ productId, setOpenCreateAndEdit }: Props) => {
           >
             Description
           </label>
-           <textarea
+          <textarea
             name="description"
             id="description"
             cols={30}
@@ -204,8 +214,8 @@ const CreateAndEdit = ({ productId, setOpenCreateAndEdit }: Props) => {
             value={newProduct.description}
             onChange={handlerInput}
             className="admin-createandcheck__views__create-and-edit__form__description--content"
-          /> 
-        </div> 
+          />
+        </div>
         <Input
           name="categories"
           placeholder="Give a product categories"
@@ -222,6 +232,17 @@ const CreateAndEdit = ({ productId, setOpenCreateAndEdit }: Props) => {
           type="text"
           admin
         />
+        {/* TODO: Add styles */}
+        <div className="">
+          <label htmlFor="">In stock</label>
+          <input
+            type="number"
+            name="inStock"
+            value={newProduct.inStock}
+            onChange={(e) => handleInStock(Number(e.target.value))}
+          />
+        </div>
+
         <div className="admin-createandcheck__views__create-and-edit__form__variants-block">
           {Variants?.map((variant) => (
             <p
@@ -291,12 +312,22 @@ const CreateAndEdit = ({ productId, setOpenCreateAndEdit }: Props) => {
             </button>
           ) : null}
         </div>
-        <input
-          type="number"
-          placeholder="Price"
-          value={newProduct.price}
-          onChange={(e) => handlePrice(e.target.value)}
-        />
+        {/* TODO: Add styles here*/}
+        <div className="">
+          <label
+            htmlFor="price"
+            className="admin-createandcheck__views__create-and-edit__form__price--label"
+          >
+            Price
+          </label>
+          <input
+            type="number"
+            placeholder="Price"
+            name="price"
+            value={newProduct.price}
+            onChange={(e) => handlePrice(Number(e.target.value))}
+          />
+        </div>
         <button
           type="submit"
           className="admin-createandcheck__views__create-and-edit__form__submit"
