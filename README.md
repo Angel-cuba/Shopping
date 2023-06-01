@@ -29,38 +29,48 @@ In summary, "Shoe Store" is a React-based eCommerce project that provides an eas
 - Admin area for adding/updating products and managing orders
 - Fast page loading and optimized performance
 - Easy customization with React components and flexible styling options
-  ### Ongoing feature
+- User profile
+  * Address
+  * Billing information
+### Ongoing feature
 - Responsive design optimized for all devices
-- User profile with order history and shipping/billing information management(UI)
   ### Features
 - Secure payment integration with, e.g: **Stripe, PaYPal**, etc...
 - Inventory management system to ensure product availability
 - Multi-language support for reaching a global audience
 
 # UI
-  ### Login 
-  
-<img width="725" alt="Captura de pantalla 2023-04-02 a las 19 39 27" src="https://user-images.githubusercontent.com/69958243/229366583-3886225d-96e5-450e-b87a-a978a3a7fa91.png">
+ ### Login 
+<img width="490" alt="Captura de pantalla 2023-04-02 a las 19 39 27" src="https://user-images.githubusercontent.com/69958243/242695991-406161ae-2a33-4d34-aa88-204b0198cb3c.png">
 
-  ### All store's products
+ ### Signup
+<img width="500" alt="Signup" src="https://github-production-user-asset-6210df.s3.amazonaws.com/69958243/242696023-97a9b574-ded0-4ddb-84a0-e3d2d3b25b74.png">
   
+### All store's products
+
   <img width="1212" alt="Captura de pantalla 2023-04-19 a las 22 41 59" src="https://user-images.githubusercontent.com/69958243/233182866-cb2720a4-342b-48fe-b701-71bf340bc5e0.png">
 
 #### User likes some from here, with just a click this product goes to cart 
 
 <img width="284" alt="Captura de pantalla 2023-04-02 a las 19 51 10" src="https://user-images.githubusercontent.com/69958243/229367201-3210fbd1-adab-4f3c-9e16-ea4ca8cb8459.png">
-<img width="487" alt="Captura de pantalla 2023-04-19 a las 22 47 10" src="https://user-images.githubusercontent.com/69958243/233183818-5c2d4c44-1069-40cf-be5d-92824012150d.png">
+
+### Wished products
+
+<img width="1428" alt="Captura de pantalla 2023-06-01 a las 21 03 22" src="https://github.com/Angel-cuba/Shopping/assets/69958243/97769cdc-dd25-4211-892d-b3a8b7ce7cd1">
 
 
-
-###### If wants to know more about a specific product, is avaible a view for this, also, from here could be sure of what has choosen by selecting the size and colour of preference. 
+###### By clicking the cart button will be shown the product details, from where the user could select the size and colour of preference. 
 
 <img width="1500" alt="Captura de pantalla 2023-04-02 a las 20 03 09" src="https://user-images.githubusercontent.com/69958243/229367882-a27f4968-626e-4653-94b5-8e28ece082ce.png">
 
-Once is ready to pay, click the `bank icon` in the left side of cart <img width="101" alt="Captura de pantalla 2023-04-02 a las 20 10 43" src="https://user-images.githubusercontent.com/69958243/229369186-7007ebf3-1b21-41b9-be4f-385b1267726d.png">.
-After this, user goes to the payment side(**ongoing work**)
+###### After choosing size and color, add it to the shopping cart
+<img width="487" alt="Captura de pantalla 2023-04-19 a las 22 47 10" src="https://user-images.githubusercontent.com/69958243/233183818-5c2d4c44-1069-40cf-be5d-92824012150d.png">
+Once is ready to pay, click the bank icon in the left side of cart. <img width="101" alt="Captura de pantalla 2023-04-02 a las 20 10 43" src="https://user-images.githubusercontent.com/69958243/229369186-7007ebf3-1b21-41b9-be4f-385b1267726d.png">
+After this, user goes to the payment side
 
-<img width="1346" alt="Captura de pantalla 2023-04-02 a las 20 09 29" src="https://user-images.githubusercontent.com/69958243/229368502-2fac489a-0b84-44c2-a562-704e64745759.png">
+### Checkout view
+
+<img width="1346" alt="Captura de pantalla 2023-04-02 a las 20 09 29" src="https://user-images.githubusercontent.com/69958243/242699684-0050c8f9-fc5c-4e7f-a966-c270466d001a.png">
 
 #### Admin has an extra navbar link, that goes to admin panel.
 <img width="1407" alt="Captura de pantalla 2023-04-19 a las 23 24 56" src="https://user-images.githubusercontent.com/69958243/233191887-16500022-fcef-4cf2-b71f-5b0be999659d.png">
@@ -73,14 +83,14 @@ After this, user goes to the payment side(**ongoing work**)
   - React
   - Redux
   - Sass
-  - Json file as data simulating a backend response.
+  - Java(Spring boot)
+  - PostgreSQL
   
 ## Data modelling
-![Captura de pantalla 2023-04-19 a las 19 19 56](https://user-images.githubusercontent.com/69958243/233192438-8687c744-4c6d-47b9-80fd-e9b0d3f0b414.png)
+![Captura de pantalla 2023-06-01 a las 22 23 55](https://github.com/Angel-cuba/Shopping/assets/69958243/7a2aae5b-6e19-4fab-8969-ee266f0e3688)
 
 ## Data sources
 #### Structures and Types
-<img width="637" alt="Captura de pantalla 2023-04-20 a las 12 10 29" src="https://user-images.githubusercontent.com/69958243/233333662-f4a8d7e0-c6bb-4eab-b906-bc276c6dacdb.png">
-
+![Captura de pantalla 2023-06-01 a las 22 33 22](https://github.com/Angel-cuba/Shopping/assets/69958243/1506b531-99a9-46da-bca9-991bf5b0374a)
 
 
