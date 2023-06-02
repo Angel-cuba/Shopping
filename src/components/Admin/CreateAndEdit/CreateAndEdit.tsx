@@ -238,7 +238,8 @@ const CreateAndEdit = ({ productId, setOpenCreateAndEdit }: Props) => {
           <input
             type="number"
             name="inStock"
-            value={newProduct.inStock}
+            placeholder='000'
+            value={newProduct.inStock !== 0 ? newProduct.inStock : ''}
             onChange={(e) => handleInStock(Number(e.target.value))}
           />
         </div>
@@ -322,9 +323,9 @@ const CreateAndEdit = ({ productId, setOpenCreateAndEdit }: Props) => {
           </label>
           <input
             type="number"
-            placeholder="Price"
+            placeholder="000"
             name="price"
-            value={newProduct.price}
+            value={newProduct.price !== 0 ? newProduct.price : ''}
             onChange={(e) => handlePrice(Number(e.target.value))}
           />
         </div>
