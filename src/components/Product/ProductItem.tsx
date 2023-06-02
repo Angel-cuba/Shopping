@@ -140,8 +140,21 @@ const ProductItem = ({ product }: { product: Product }) => {
             }}
           />
         </div>
-        {/* TODO: Add inStock */}
-        {/* <p>{product.inStock}</p> */}
+        {
+         id && product.inStock < 11 && (
+            <p className="products__content__item--in-stock">
+          Only {product.inStock} left - order soon.
+        </p>
+          )
+        }
+        {
+         id && product.inStock > 10 && product.inStock < 40 && (
+            <p className="products__content__item--in-stock">
+          Only {product.inStock} left in stock.
+        </p>
+          )
+
+        }
         <div
           className="products__content__item--info"
           style={{
