@@ -6,6 +6,7 @@ import { GoogleOAuthProvider } from '@react-oauth/google';
 import App from './App';
 import { store } from './redux/store';
 import { ThemeProvider } from './context/ThemeProvider';
+import 'react-toastify/dist/ReactToastify.css';
 import './styles/index.scss';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
