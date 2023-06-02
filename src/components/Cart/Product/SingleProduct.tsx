@@ -9,7 +9,16 @@ import { CartProduct } from '../../../interfaces/cart/CartType';
 import { Link } from 'react-router-dom';
 import './SingleProduct.scss';
 
-const SingleProduct = ({ item }: { item: CartProduct }) => {
+
+type SingleProductProps = {
+  item: CartProduct;
+  notEnoughStock?: string[];
+};
+
+type Item = {
+  id: string;
+};
+const SingleProduct = ({ item, notEnoughStock }: SingleProductProps) => {
   const dispatch = useDispatch<AppDispatch>();
 
   const addItemToCart = () => {
@@ -18,6 +27,13 @@ const SingleProduct = ({ item }: { item: CartProduct }) => {
   const removeItemFromCart = () => {
     dispatch(removeFromCart(item));
   };
+
+  const handleExistingStock = (notEnoughStock: string[] | undefined, item: Item): boolean => {
+  if (notEnoughStock && notEnoughStock.includes(item.id)) {
+    return true;
+  }
+  return false;
+};
 
   return (
     <div className="cart-product" key={item.id}>
@@ -34,6 +50,9 @@ const SingleProduct = ({ item }: { item: CartProduct }) => {
           />
         </Link>
       </div>
+        {
+          handleExistingStock(notEnoughStock, item) && <p className="cart-product__stock">Not enough stock</p>
+        }
       <div className="cart-product__buttons">
         <div className="cart-product__buttons__plus-minus">
           <AddBoxIcon style={{ fontSize: '2rem'}} onClick={addItemToCart}className="cart-product__buttons__plus-minus--add" />
