@@ -144,7 +144,7 @@ const handleEmpty = () => {
 
 const handleRedirect = () => {
   toast.success('Redirecting to home page...', {
-    position: 'top-center',
+    position: 'top-right',
     duration: 2000,
     style: {
       background: '#360000',
@@ -159,8 +159,8 @@ const handleRedirect = () => {
     icon: '🚀',
   });
 };
-const handleChecking = () => {
-  toast.success('Checking credentials...', {
+const handleChecking = (message: string) => {
+  toast.success(message, {
     position: 'top-center',
     duration: 2000,
     style: {
@@ -219,11 +219,11 @@ export const handleToast = (options: string, message: string) => {
   if (options === 'Empty cart') {
     handleEmpty();
   }
-  if (options === 'Redirecting') {
+  if (options === 'Welcome') {
     handleRedirect();
   }
   if (options === 'Checking') {
-    handleChecking();
+    handleChecking(message);
   }
   if (options === 'Error 401') {
     handleError401(message);
