@@ -12,6 +12,8 @@ import { AppDispatch, RootState } from '../../redux/store';
 import { logout } from '../../redux/actions/UserAction';
 import { GlobalTheme } from '../../context/ThemeProvider';
 import { darkTheme, lightTheme } from '../../styles/styles';
+import { notifyRedirectToLogin } from '../../utils/notify';
+import { ToastContainer } from 'react-toastify';
 import './Navbar.scss';
 
 const Navbar = () => {
@@ -26,11 +28,18 @@ const Navbar = () => {
   const navigation = useNavigate();
 
   const handleLogout = () => {
+    notifyRedirectToLogin()
+    setTimeout(() => {
+      goingToLogin()
+    }, 2800);
+  };
+
+  const goingToLogin = () => {
+    navigation('/login', { replace: true });
+    dispatch(logout());
     localStorage.removeItem('user');
     localStorage.removeItem('token')
     localStorage.removeItem('decodedUser')
-    dispatch(logout());
-    navigation('/login', { replace: true });
   };
   const handleDarkMode = () => {
     if (theme === 'light') {
@@ -196,6 +205,9 @@ const Navbar = () => {
             </div>
           </div>
         )}
+      </div>
+      <div className="navbar__notification">
+        <ToastContainer />
       </div>
     </div>
   );

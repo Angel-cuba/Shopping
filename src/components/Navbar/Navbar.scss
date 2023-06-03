@@ -324,6 +324,11 @@
       }
     }
   }
+  &__notification {
+    position: absolute;
+    top: 0;
+    right: 0;
+  }
 }
 
 @keyframes mover {
