@@ -9,10 +9,13 @@ import { Input } from '../components/Input/Input';
 import { useNavigate } from 'react-router-dom';
 import { getTokenFromLocalStorage } from '../utils/token';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
-import Home from './Home';
-import axios from 'axios';
-import './styles/Login.scss';
 import LoadingLogin from '../components/Loading/LoadingLogin';
+import { Toaster } from 'react-hot-toast';
+import { handleToast } from '../utils/notifications';
+import { ToastContainer } from 'react-toastify';
+import { notifyEmptyFields, notifyRedirectToHome } from '../utils/notify';
+import { apiWithoutAuth } from '../utils/api';
+import './styles/Login.scss';
 
 const Login = () => {
   const [username, setUsername] = React.useState('');
@@ -29,6 +32,8 @@ const Login = () => {
   const [confirmPassword, setConfirmPassword] = React.useState('');
   const [showPassword, setShowPassword] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
+
+  const userNameCapitalized = username.charAt(0).toUpperCase() + username.slice(1);
 
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
@@ -80,31 +85,38 @@ const Login = () => {
 
   const handleLogin = async () => {
     if (!username || !password) {
-      //TODO: cambiar esto por un toast
-      alert('please fill all the fields');
+      notifyEmptyFields('Please fill all the fields');
       return;
     }
     const postData = {
       username,
       password,
     };
-    const request = await axios.post(
-      'https://shopping-bhjf.onrender.com/api/v1/users/signin',
-      postData
-    );
-    if (request.status !== 200) {
-      //TODO: cambiar esto por un
-      alert('User not found');
-      setLoading(false);
-      return;
-    } else {
-    setLoading(true);
-    localStorage.setItem('token', request.data);
-    getTokenFromLocalStorage();
-    navigate('/home');
+    try {
+      const request = await apiWithoutAuth.post(
+        '/users/signin',
+        postData
+      );
+      if (request.status === 200) {
+        setLoading(true);
+        localStorage.setItem('token', request.data);
+        getTokenFromLocalStorage();
+      }
+        notifyRedirectToHome(userNameCapitalized);
+        setTimeout(() => {
+          redirectToHome();
+        }, 2200);
+    } catch (error: any) {
+      if (error.response.status === 401) {
+        handleToast('Error 401', `${error.response.data}`);
+      }
     }
     setLoading(false);
+  };
 
+  const redirectToHome = () => {
+    navigate('/home', { replace: true });
+    window.location.reload();
   };
   const openSignUp = () => {
     setIsLogin(!isLogin);
@@ -119,7 +131,7 @@ const Login = () => {
       !newUser.phone ||
       !newUser.password
     ) {
-      alert('please fill all the fields');
+      handleToast('Empty fields', 'Please fill all the fields');
       return;
     }
     if (newUser.password !== confirmPassword) {
@@ -134,11 +146,10 @@ const Login = () => {
       phone: newUser.phone,
       password: newUser.password,
     };
-    const request = await axios.post(
-      'https://shopping-bhjf.onrender.com/api/v1/users/signup',
+    const request = await apiWithoutAuth.post(
+      '/users/signup',
       postData
     );
-    console.log(request);
     localStorage.setItem('token', request.data);
     getTokenFromLocalStorage();
     navigate('/');
@@ -279,8 +290,10 @@ const Login = () => {
           </div>
         </div>
       ) : (
-        <Home />
+        null
       )}
+      <Toaster />
+      <ToastContainer />
     </>
   );
 };
