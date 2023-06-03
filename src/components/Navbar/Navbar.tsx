@@ -30,7 +30,7 @@ const Navbar = () => {
     localStorage.removeItem('token')
     localStorage.removeItem('decodedUser')
     dispatch(logout());
-    navigation('/login');
+    navigation('/login', { replace: true });
   };
   const handleDarkMode = () => {
     if (theme === 'light') {
