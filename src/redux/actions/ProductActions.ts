@@ -43,25 +43,25 @@ export const fetchProducts = () => {
   return async (dispatch: Dispatch) => {
     dispatch({ type: LOADING });
     try {
-      const response = await api.get('/products')
-        dispatch(getProducts(response.data));
+      const response = await api.get('/products');
+      dispatch(getProducts(response.data));
     } catch (error) {
       dispatch({ type: ERROR, payload: error });
     }
-      dispatch({ type: STOP_LOADING });
+    dispatch({ type: STOP_LOADING });
   };
 };
 
 export const addProductToStock = (product: NewProductToStock) => {
   return async (dispatch: Dispatch) => {
     try {
-       dispatch({ type: LOADING });
-       const resquest = await api.post('/products', product);
+      dispatch({ type: LOADING });
+      const resquest = await api.post('/products', product);
       dispatch(addProduct(resquest.data));
     } catch (error) {
       dispatch({ type: ERROR, payload: error });
     }
-     dispatch({ type: STOP_LOADING });
+    dispatch({ type: STOP_LOADING });
   };
 };
 
@@ -83,9 +83,7 @@ export const deleteProductFromStock = (id: string) => {
   return async (dispatch: Dispatch) => {
     try {
       dispatch({ type: LOADING });
-     const request = await api.delete(`/products/${id}`);
-     //TODO: Do something with the response
-      console.log(request);
+      await api.delete(`/products/${id}`);
       dispatch(deleteProduct(id));
     } catch (error) {
       dispatch({ type: ERROR, payload: error });
