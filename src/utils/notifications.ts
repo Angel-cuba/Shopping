@@ -1,7 +1,7 @@
 import { toast } from 'react-hot-toast';
 
-const handleEmptyFields = () => {
-  toast.success('All fields are required', {
+const handleEmptyFields = (message: string) => {
+  toast.success(message, {
     position: 'top-center',
     duration: 2000,
     style: {
@@ -196,7 +196,7 @@ const handleError401 = (message: string) => {
 
 export const handleToast = (options: string, message: string) => {
   if (options === 'Empty fields') {
-    handleEmptyFields();
+    handleEmptyFields(message);
   }
   if (options === 'Deleting product') {
     handleHold();
