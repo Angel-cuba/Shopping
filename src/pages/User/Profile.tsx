@@ -1,6 +1,6 @@
 import React, { useEffect, useLayoutEffect } from 'react';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../redux/store';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '../../redux/store';
 import { UserAddress, UserFromDB, UserPayment } from '../../interfaces/user/UserType';
 import {
   AddSharp,
@@ -23,14 +23,18 @@ import ProfileAddress from './ProfileAndAddress';
 import ProfilePayment from './ProfilePayment';
 import { GlobalTheme } from '../../context/ThemeProvider';
 import { darkTheme, lightTheme } from '../../styles/styles';
+import LoadingResponse from '../../components/Loading/LoadingResponse';
+import UserHistory from './History/UserHistory';
+import { fetchingAddresses } from '../../redux/actions/AddressAction';
+import { fetchingPayments } from '../../redux/actions/PaymentAction';
 import { api } from '../../utils/api';
 import './Profile.scss';
-import LoadingResponse from '../../components/Loading/LoadingResponse';
 
 const Profile = () => {
-  //TODO: { user: UserType } is replaced by any
   const { user, userFromToken } = useSelector((state: RootState) => state.userLogged);
-  const userId = userFromToken?.user_id || user?.id;
+  useSelector((state: RootState) => console.log(state));
+  const decodedUserId = JSON.parse(localStorage.getItem('decodedUser') || '{}').user_id;
+
   const [edit, setEdit] = React.useState(false);
   const [editPayment, setEditPayment] = React.useState(false);
   const [openHistory, setOpenHistory] = React.useState(false);
@@ -43,8 +47,51 @@ const Profile = () => {
   const [selectedAddress, setSelectedAddress] = React.useState<UserAddress>();
   const [principalAddress, setPrincipalAddress] = React.useState<UserAddress>();
   const [loading, setLoading] = React.useState(false);
+  const [history, setHistory] = React.useState<[]>();
+
+  const { theme } = GlobalTheme();
+  const dispatch = useDispatch<AppDispatch>();
 
   const token = localStorage.getItem('token');
+
+  useEffect(() => {
+    dispatch(fetchingAddresses(decodedUserId));
+    dispatch(fetchingPayments(decodedUserId));
+  }, [dispatch, decodedUserId]);
+
+  useEffect(() => {
+    const userId = userFromToken?.user_id;
+    const request = async () => {
+      const fetchUserData = await api.get(`/users/${userId}`);
+
+      setUserEdited(fetchUserData.data);
+    };
+    request();
+  }, [userFromToken, token]);
+
+  useLayoutEffect(() => {
+    const request = async () => {
+      const fetchUserPaymentsMethods = await api.get(`/payments/user/${decodedUserId}`);
+      if (fetchUserPaymentsMethods.status !== 200) {
+        console.log('error');
+      }
+      setUserPaymentMethod(fetchUserPaymentsMethods.data);
+    };
+    request();
+  }, [payments, token, decodedUserId]);
+
+  useEffect(() => {
+    const request = async () => {
+      const fetchUserAddresses = await api.get(`/addresses/user/${decodedUserId}`);
+      if (fetchUserAddresses.status !== 200) {
+        //TODO: handle error here with a toast
+        console.log('error', fetchUserAddresses.status);
+      } else if (fetchUserAddresses.status === 200) {
+        setUserAddress(fetchUserAddresses.data);
+      }
+    };
+    request();
+  }, [token, address, decodedUserId]);
   const lastPaymentMethod = userPaymentMethod?.[userPaymentMethod?.length - 1];
 
   useEffect(() => {
@@ -53,9 +100,6 @@ const Profile = () => {
     }
   }, [userAddress, loading]);
 
-
-  const { theme } = GlobalTheme();
-
   const handleOpenProfile = () => {
     setEdit(!edit);
     setEditPayment(false);
@@ -63,10 +107,6 @@ const Profile = () => {
   const handleOpenPayment = () => {
     setEditPayment(!editPayment);
     setEdit(false);
-  };
-
-  const handleOpenHistory = () => {
-    setOpenHistory(!openHistory);
   };
 
   const iconStyles = {
@@ -82,46 +122,6 @@ const Profile = () => {
       theme === 'dark' ? lightTheme.shadowMedium : darkTheme.shadowMedium
     }`,
   };
-
-  useEffect(() => {
-    const userId = userFromToken?.user_id;
-    const request = async () => {
-      const response = await api.get(`/users/${userId}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      setUserEdited(response.data);
-    };
-    request();
-  }, [userFromToken, token]);
-
-  useLayoutEffect(() => {
-    const request = async () => {
-      const response = await api.get(`/payments/user/${userId}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      if (response.status !== 200) {
-        console.log('error');
-      }
-      setUserPaymentMethod(response.data);
-    };
-    request();
-  }, [payments, token, userId]);
-
-  useEffect(() => {
-    const request = async () => {
-      const response = await api.get(`/addresses/user/${userId}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      setUserAddress(response.data);
-    };
-    request();
-  }, [token, userId, address]);
 
   const userPayments = userPaymentMethod?.map((payment: UserPayment) => {
     const addingPayment = () => {
@@ -157,18 +157,18 @@ const Profile = () => {
     };
 
     return (
-        <p
-          key={address.id}
-          className="profile__data__payment-info__user-addresses__item"
-          style={{
-            backgroundColor: address.id === selectedAddress?.id ? '#111010' : '',
-            color: address.id === selectedAddress?.id ? '#ffffff' : '',
-            border: `1.4px solid ${theme === 'light' ? darkTheme.bg : lightTheme.shadow}`,
-          }}
-          onClick={addingAddress}
-        >
-          {address.city}
-        </p>
+      <p
+        key={address.id}
+        className="profile__data__payment-info__user-addresses__item"
+        style={{
+          backgroundColor: address.id === selectedAddress?.id ? '#111010' : '',
+          color: address.id === selectedAddress?.id ? '#ffffff' : '',
+          border: `1.4px solid ${theme === 'light' ? darkTheme.bg : lightTheme.shadow}`,
+        }}
+        onClick={addingAddress}
+      >
+        {address.city}
+      </p>
     );
   });
 
@@ -186,6 +186,7 @@ const Profile = () => {
       const request = async () => {
         const response = await api.delete(`/addresses/${addressId}`);
         if (response.status === 200) {
+          //TODO: Add a toast to confirm the address was deleted
           const filteredAddresses = userAddress?.filter(
             (address: UserAddress) => address.id !== addressId
           );
@@ -206,6 +207,7 @@ const Profile = () => {
       const request = async () => {
         const response = await api.delete(`/payments/${paymentId}`);
         if (response.status === 200) {
+          //TODO: Add a toast to confirm the payment was deleted
           const filteredPayments = userPaymentMethod?.filter(
             (payment: UserPayment) => payment.id !== paymentId
           );
@@ -224,6 +226,12 @@ const Profile = () => {
     setEdit(!edit);
   };
 
+  const handleOpenHistory = async () => {
+    setOpenHistory(true);
+    const requestHistory = await api.get(`/orders/${decodedUserId}`);
+    setHistory(requestHistory.data);
+  };
+
   return (
     <div className="profile">
       {loading && (
@@ -240,6 +248,11 @@ const Profile = () => {
       >
         History
       </div>
+      {openHistory && (
+        <div className="profile__history">
+          <UserHistory setOpenHistory={setOpenHistory} history={history} />
+        </div>
+      )}
       {edit && userEdited && (
         <div className="profile__edit-form">
           <ProfileAddress
@@ -265,10 +278,7 @@ const Profile = () => {
           />
         </div>
       )}
-      <h1>
-        Welcome{' '}
-        {userEdited ? `administrator ${userEdited.firstname}` : `Hello, please log in to continue`}
-      </h1>
+      <h1>Welcome {userEdited ? `${userEdited.firstname}` : ``}</h1>
       <div className="profile__data">
         <div className="profile__data__image-and-info">
           <img

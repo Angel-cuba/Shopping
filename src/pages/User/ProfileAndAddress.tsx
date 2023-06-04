@@ -38,6 +38,7 @@ const ProfileAndAddress = ({
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     if (userEdited.password !== confirmPassword) {
+      //TODO: Change this alert for a toast
       return alert('Passwords do not match');
     }
     setUserEdited(userEdited);
@@ -76,6 +77,7 @@ const ProfileAndAddress = ({
         const response = await api.post('/addresses', addressData);
         setAddresses(response.data);
         if (response.status === 200) {
+          //TODO: Change this alert for a toast
           setEdit(false);
         } else {
           console.log('Error');
@@ -99,6 +101,7 @@ const ProfileAndAddress = ({
           const response = await api.put(`/addresses`, addressToUpdate);
           setAddresses(response.data);
           if (response.status === 200) {
+            //TODO: Change this alert for a toast
             setEdit(false);
           } else {
             console.log('Error');
@@ -125,6 +128,10 @@ const ProfileAndAddress = ({
       </p>
     );
   });
+
+  const updateUserInformation = async () => {
+    console.log(userEdited);
+  };
 
   return (
     <div className="profile__edit-form__container">
@@ -169,7 +176,6 @@ const ProfileAndAddress = ({
                 name="email"
                 value={userEdited?.email}
                 className="profile__edit-form__container__input"
-                // onChange={(e) => setUserEdited({ ...userEdited, email: e.target.value })}
                 placeholder={userEdited.email}
                 style={styles}
                 admin
@@ -210,7 +216,10 @@ const ProfileAndAddress = ({
                 profile
               />
               <div className="profile__edit-form__container__user-data__buttons">
-                <div className="profile__edit-form__container__user-data__buttons--confirm">
+                <div
+                  className="profile__edit-form__container__user-data__buttons--confirm"
+                  onClick={updateUserInformation}
+                >
                   Confirm
                 </div>
                 <div
