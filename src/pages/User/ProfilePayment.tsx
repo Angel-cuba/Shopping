@@ -2,6 +2,7 @@ import React, { FormEvent } from 'react';
 import { UserPayment } from '../../interfaces/user/UserType';
 import { Input } from '../../components/Input/Input';
 import { api } from '../../utils/api';
+import { notifyError } from '../../utils/notify';
 
 type ProfilePaymentProps = {
   userId: string | undefined;
@@ -38,23 +39,6 @@ const ProfilePayment = ({
   };
   const handlerSubmit = (e: FormEvent) => {
     e.preventDefault();
-    //TODO: Validate date format and expiration date
-    // if(userPaymentMethod?.expirationDate?.length === 5){
-    //   const expirationDate = userPaymentMethod?.expirationDate.split('/');
-    //   if(expirationDate){
-    //     if(Number(expirationDate[0])> 12 || expirationDate[1] < currentYear){
-    //       alert('Invalid date');
-    //       return;
-    //     }
-    //     if(expirationDate[1] === currentYear && expirationDate[0] < currentMonth){
-    //       alert('Invalid date');
-    //       return;
-    //     }
-    //   }
-    // } else {
-    //   alert('Invalid date');
-    //   return;
-    // }
     if (userPaymentMethod) {
       setUserPaymentMethod(userPaymentMethod);
     }
@@ -89,7 +73,7 @@ const ProfilePayment = ({
       if (response.status === 200) {
         setEditPayment(false);
       } else {
-        console.log('Error');
+        notifyError('Error');
       }
     } else {
       const response = await api.put('/payments', updatePaymentData);
@@ -97,7 +81,7 @@ const ProfilePayment = ({
       if (response.status === 200) {
         setEditPayment(false);
       } else {
-        console.log('Error');
+        notifyError('Error');
       }
     }
   };

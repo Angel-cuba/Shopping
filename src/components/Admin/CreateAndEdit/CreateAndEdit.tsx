@@ -10,6 +10,7 @@ import {
   Sizes,
   Variants,
 } from '../../../interfaces/products/ProductType';
+import { notifyError, notifySuccess } from '../../../utils/notify';
 
 type Props = {
   productId?: string;
@@ -159,7 +160,7 @@ const CreateAndEdit = ({ productId, setOpenCreateAndEdit }: Props) => {
       newProduct.variants.length === 0 ||
       newProduct.categories === ''
     ) {
-      alert('Please fill all the fields');
+      notifyError('Please fill all fields');
       return;
     }
     if (!productId) {
@@ -174,14 +175,36 @@ const CreateAndEdit = ({ productId, setOpenCreateAndEdit }: Props) => {
         categories: newProduct.categories,
       };
       dispatch(addProductToStock(productToStorage));
+      notifySuccess('Product added');
     } else {
       setNewProduct((prev) => ({
         ...prev,
         id: productId,
       }));
       dispatch(updateProductInStock(newProduct));
+      notifySuccess('Product updated');
     }
     setOpenCreateAndEdit(false);
+  };
+
+  const styles = {
+    width: '100%',
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    fontSize: '18px',
+    fontWeight: 'bold',
+  };
+  const inputStyles = {
+    width: '80px',
+    height: '30px',
+    fontSize: '18px',
+    fontWeight: 'semibold',
+    border: 'none',
+    outline: 'none',
+    borderRadius: '5px',
+    marginRight: '20px',
+    padding: '0 10px',
   };
 
   return (
@@ -232,8 +255,7 @@ const CreateAndEdit = ({ productId, setOpenCreateAndEdit }: Props) => {
           type="text"
           admin
         />
-        {/* TODO: Add styles */}
-        <div className="">
+        <div style={styles}>
           <label htmlFor="">In stock</label>
           <input
             type="number"
@@ -241,6 +263,7 @@ const CreateAndEdit = ({ productId, setOpenCreateAndEdit }: Props) => {
             placeholder='000'
             value={newProduct.inStock !== 0 ? newProduct.inStock : ''}
             onChange={(e) => handleInStock(Number(e.target.value))}
+            style={inputStyles}
           />
         </div>
 
@@ -313,8 +336,7 @@ const CreateAndEdit = ({ productId, setOpenCreateAndEdit }: Props) => {
             </button>
           ) : null}
         </div>
-        {/* TODO: Add styles here*/}
-        <div className="">
+        <div style={styles}>
           <label
             htmlFor="price"
             className="admin-createandcheck__views__create-and-edit__form__price--label"
@@ -327,13 +349,14 @@ const CreateAndEdit = ({ productId, setOpenCreateAndEdit }: Props) => {
             name="price"
             value={newProduct.price !== 0 ? newProduct.price : ''}
             onChange={(e) => handlePrice(Number(e.target.value))}
+            style={inputStyles}
           />
         </div>
         <button
           type="submit"
           className="admin-createandcheck__views__create-and-edit__form__submit"
         >
-          {!productId ? 'Add' : 'Edit'}
+          {!productId ? 'Add product' : 'Edit'}
         </button>
       </form>
     </div>

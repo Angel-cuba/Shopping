@@ -28,11 +28,11 @@ import UserHistory from './History/UserHistory';
 import { fetchingAddresses } from '../../redux/actions/AddressAction';
 import { fetchingPayments } from '../../redux/actions/PaymentAction';
 import { api } from '../../utils/api';
+import { notifyDelete, notifyError } from '../../utils/notify';
 import './Profile.scss';
 
 const Profile = () => {
   const { user, userFromToken } = useSelector((state: RootState) => state.userLogged);
-  useSelector((state: RootState) => console.log(state));
   const decodedUserId = JSON.parse(localStorage.getItem('decodedUser') || '{}').user_id;
 
   const [edit, setEdit] = React.useState(false);
@@ -73,7 +73,7 @@ const Profile = () => {
     const request = async () => {
       const fetchUserPaymentsMethods = await api.get(`/payments/user/${decodedUserId}`);
       if (fetchUserPaymentsMethods.status !== 200) {
-        console.log('error');
+        notifyError('Error to get user payments, try again later');
       }
       setUserPaymentMethod(fetchUserPaymentsMethods.data);
     };
@@ -84,8 +84,7 @@ const Profile = () => {
     const request = async () => {
       const fetchUserAddresses = await api.get(`/addresses/user/${decodedUserId}`);
       if (fetchUserAddresses.status !== 200) {
-        //TODO: handle error here with a toast
-        console.log('error', fetchUserAddresses.status);
+        notifyError('Error to get user addresses, try again later');
       } else if (fetchUserAddresses.status === 200) {
         setUserAddress(fetchUserAddresses.data);
       }
@@ -186,7 +185,7 @@ const Profile = () => {
       const request = async () => {
         const response = await api.delete(`/addresses/${addressId}`);
         if (response.status === 200) {
-          //TODO: Add a toast to confirm the address was deleted
+         notifyDelete('Address deleted successfully')
           const filteredAddresses = userAddress?.filter(
             (address: UserAddress) => address.id !== addressId
           );
@@ -195,7 +194,7 @@ const Profile = () => {
       };
       request();
     } catch (error) {
-      console.log(error);
+      notifyError('Error to delete address, try again later')
     }
     setUserAddress(undefined);
     setLoading(false);
@@ -207,7 +206,7 @@ const Profile = () => {
       const request = async () => {
         const response = await api.delete(`/payments/${paymentId}`);
         if (response.status === 200) {
-          //TODO: Add a toast to confirm the payment was deleted
+          notifyDelete('Card deleted successfully')
           const filteredPayments = userPaymentMethod?.filter(
             (payment: UserPayment) => payment.id !== paymentId
           );
@@ -216,7 +215,7 @@ const Profile = () => {
       };
       request();
     } catch (error) {
-      console.log(error);
+      notifyError('Error to delete card, try again later')
     }
     setSelectedPayment(undefined);
     setLoading(false);

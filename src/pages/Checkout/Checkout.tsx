@@ -17,7 +17,7 @@ import Address from './address/Address';
 import Payment from './payments/Payment';
 import { api } from '../../utils/api';
 import { useNavigate } from 'react-router-dom';
-import { notifyError, notifyRedirectToProfile } from '../../utils/notify';
+import { notifyError, notifyRedirectToProfile, notifySuccess } from '../../utils/notify';
 import { ToastContainer } from 'react-toastify';
 import { fetchingAddresses } from '../../redux/actions/AddressAction';
 import { fetchingPayments } from '../../redux/actions/PaymentAction';
@@ -100,33 +100,29 @@ const Checkout = () => {
       };
     });
     try {
-      //TODO: Add spinners or something to show the user that the app is checking the stock
       newArray?.forEach(async (item: Item) => {
         const gettingProductToCheck = await api.get(`/products/${item.productId}`);
         if (gettingProductToCheck.data.inStock < item.quantity) {
           setNotEnoughStock((prev: any) => [...prev, gettingProductToCheck.data.id]);
-          //TODO: Add warning message to the user that the product has not enough stock
-          return console.log(`${gettingProductToCheck.data.name} has not enough stock`);
+         return notifyError(`${gettingProductToCheck.data.name} has not enough stock`);
         }
-        //TODO: Cambiar todos los alerts por una notificacion
         if (gettingProductToCheck.data.inStock === 0) {
-          return alert(`${gettingProductToCheck.data.name} is out of stock`);
+          return notifyError(`${gettingProductToCheck.data.name} are not available`);
         } else {
-          console.log(`${gettingProductToCheck.data.name} are available`);
+          notifySuccess(`${gettingProductToCheck.data.name} are available`);
         }
       });
     } catch (error) {
-      console.log(error);
+      notifyError('Something went wrong');
     }
     if (notEnoughStock && notEnoughStock?.length > 0) {
-      return alert(`${notEnoughStock?.length} products has not enough stock`);
+      return notifyError(`${notEnoughStock?.length} products has not enough stock`);
     } else {
       setAllowToPay(true);
     }
   };
   const updateStock = async () => {
-    //TODO: Add warning message
-    if (itemInCart?.length === 0) return alert('Your cart is empty');
+    if (itemInCart?.length === 0) return notifyError('You have no products in your cart');
     const newArray = itemInCart?.map((item) => {
       const { id, quantity } = item;
       const productId = id;
@@ -145,10 +141,9 @@ const Checkout = () => {
   };
 
   const handleCheckout = async () => {
-    if (!address || !payment) return alert('Please select address and payment method');
+    if (!address || !payment) return notifyError('Select address and payment first');
     setLoading(true);
     updateStock();
-    //TODO: Another spinning or loading
     const newArray = itemInCart?.map((item) => {
       const { id, variant, image, sizes, price, quantity } = item;
       const productId = id;
@@ -165,9 +160,9 @@ const Checkout = () => {
         },
       };
     });
-    //TODO: Send a notification to show that the order is starting to be created
     const response = await api.post('/order-details/create-order-details', newArray);
     if (response.status === 200) {
+      notifySuccess('Wait a moment, your order is being created');
       const idsToCreateOrder = response.data.map((item: ItemProps) => item.id);
 
       const orderToCreate = {
@@ -187,7 +182,8 @@ const Checkout = () => {
     setAddress('');
     setPayment('');
     setLoading(false);
-    //TODO Send a notification to show that the order was created and redirect to home
+    setAllowToPay(false);
+    setNotEnoughStock([]);
     navigate('/home');
   };
 
@@ -206,13 +202,12 @@ const Checkout = () => {
           Payment
         </button>
         <button
-          //TODO: Add different background color when the user can pay
           className={
             !address || !payment ? 'checkout__payment__steps' : 'checkout__payment__step-disabled'
           }
           onClick={handleStock}
           style={{
-            backgroundColor: address && payment ? 'green' : 'red',
+            backgroundColor: address && payment ? 'green' : '',
           }}
         >
           {!address || !payment ? 'Checkout' : 'Continue'}

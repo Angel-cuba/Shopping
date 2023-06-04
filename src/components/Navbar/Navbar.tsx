@@ -19,7 +19,6 @@ import './Navbar.scss';
 const Navbar = () => {
   const [isOpen, setIsOpen] = React.useState(false);
   const [isDark, setIsDark] = React.useState(false);
-  //TODO: Checking if user is from localstorage or redux
   const { user, userFromToken } = useSelector((state: RootState) => state.userLogged);
 
   const dispatch = useDispatch<AppDispatch>();

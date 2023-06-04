@@ -17,7 +17,6 @@ const Home = () => {
     dispatch(fetchProducts());
   }, [dispatch, user]);
 
-//TODO: Cambiar estos fetch aqui, pasarlo a cada uno de sus componentes.......
   useLayoutEffect(() => {
     if (user) {
       dispatch(logged(JSON.parse(user)));

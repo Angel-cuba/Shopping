@@ -13,6 +13,7 @@ import LikeItem from './component/LikeItem';
 import TrashItem from './component/TrashItem';
 import { GlobalTheme } from '../../context/ThemeProvider';
 import { darkTheme, lightTheme } from '../../styles/styles';
+import { notifySuccess } from '../../utils/notify';
 
 const ProductItem = ({ product }: { product: Product }) => {
   const [openCreateAndEdit, setOpenCreateAndEdit] = React.useState(false);
@@ -35,6 +36,7 @@ const ProductItem = ({ product }: { product: Product }) => {
 
   const handleDelete = (id: string) => {
     dispatch(deleteProductFromStock(id));
+    notifySuccess('Product deleted successfully');
   };
   const handleLike = () => {
     setShowTrashAnimation(false);
