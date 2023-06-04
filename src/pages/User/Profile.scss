@@ -13,6 +13,7 @@
     font-size: 22px;
     font-weight: 600;
     color: $bg_light;
+    z-index: 200;
   }
   &__edit-button {
     position: absolute;
@@ -25,6 +26,18 @@
     top: 1%;
     right: 10.5%;
     @include customButton($bg_light, $components_dark, $letters_dark);
+  }
+  &__history {
+    position: absolute;
+    top: 70px;
+    left: 18%;
+    width: 500px;
+    height: 500px;
+    background-color: #dedede;
+    border-radius: 15px;
+    box-shadow: 0 0 5px 0 #00000041;
+    z-index: 100;
+
   }
   &__history-button-editing-open {
     position: absolute;
