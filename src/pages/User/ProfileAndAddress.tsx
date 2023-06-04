@@ -2,6 +2,7 @@ import React, { FormEvent } from 'react';
 import { UserAddress, UserFromDB } from '../../interfaces/user/UserType';
 import { Input } from '../../components/Input/Input';
 import { api } from '../../utils/api';
+import { notifyError, notifySuccess } from '../../utils/notify';
 
 type Props = {
   userId: string | undefined;
@@ -35,15 +36,6 @@ const ProfileAndAddress = ({
   const [confirmPassword, setConfirmPassword] = React.useState('');
   const [userAddress, setUserAddress] = React.useState(!address?.id ? initialUserAddress : address);
 
-  const handleSubmit = (e: FormEvent) => {
-    e.preventDefault();
-    if (userEdited.password !== confirmPassword) {
-      //TODO: Change this alert for a toast
-      return alert('Passwords do not match');
-    }
-    setUserEdited(userEdited);
-    setEdit(false);
-  };
   const cancelForm = () => {
     setEdit(false);
     setUserEdited({
@@ -77,13 +69,13 @@ const ProfileAndAddress = ({
         const response = await api.post('/addresses', addressData);
         setAddresses(response.data);
         if (response.status === 200) {
-          //TODO: Change this alert for a toast
+          notifySuccess('Address created');
           setEdit(false);
         } else {
-          console.log('Error');
+          notifyError('Error creating address, try again later');
         }
       } catch (error) {
-        console.log(error);
+        notifyError('Error creating address, try again later');
       }
     } else {
       const addressToUpdate = {
@@ -101,15 +93,15 @@ const ProfileAndAddress = ({
           const response = await api.put(`/addresses`, addressToUpdate);
           setAddresses(response.data);
           if (response.status === 200) {
-            //TODO: Change this alert for a toast
+            notifySuccess('Address updated');
             setEdit(false);
           } else {
-            console.log('Error');
+            notifyError('Error updating address, try again later');
           }
         };
         request();
       } catch (error) {
-        console.log(error);
+        notifyError('Error updating address, try again later');
       }
     }
     setLoading(false);
@@ -130,7 +122,32 @@ const ProfileAndAddress = ({
   });
 
   const updateUserInformation = async () => {
-    console.log(userEdited);
+    if (userEdited.password !== confirmPassword) {
+      return notifyError('Password does not match');
+    }
+    setLoading(true);
+    const userToUpdate = {
+      id: userId,
+      username: userEdited.username,
+      firstname: userEdited.firstname,
+      email: userEdited.email,
+      lastname: userEdited.lastname,
+      password: userEdited.password,
+      phone: userEdited.phone,
+    };
+    try {
+      const request = async () => {
+        const response = await api.put(`/users`, userToUpdate);
+        if (response.status === 200) {
+          notifySuccess('User updated');
+          setEdit(false);
+        } 
+      };
+      request();
+    } catch (error) {
+      notifyError('Error updating user, try again later');
+    }
+    setLoading(false);
   };
 
   return (
@@ -157,7 +174,7 @@ const ProfileAndAddress = ({
           Add address
         </div>
       </div>
-      <form onSubmit={handleSubmit}>
+      <form>
         {openData ? (
           <>
             <div className="profile__edit-form__container__user-data">
