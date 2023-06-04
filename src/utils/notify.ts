@@ -1,9 +1,14 @@
 import { toast } from "react-toastify";
 
-export const notify = () => toast.error('Please fill all the fields', {
+export const notifyDelete = (message: string) => toast.error(message, {
     position: toast.POSITION.TOP_LEFT,
-    icon: '❌',
-    autoClose: 2000, 
+    autoClose: 1600,
+    style: {
+      backgroundColor: '#FF0000',
+      color: '#fff',
+      fontWeight: 'bold',
+      borderRadius: '5px',
+    }, 
   });
 
   export const notifyEmptyFields = (message: string) => toast.error(message, {
