@@ -77,5 +77,14 @@
       background-color: #dedede;
       margin: 20px 0;
     }
+    &__login-with-google {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 8px 10px;
+      border-radius: 5px;
+      cursor: pointer;
+      border: 1px solid #dedede;
+    }
   }
 }

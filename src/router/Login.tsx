@@ -1,19 +1,13 @@
 import React, { useEffect } from 'react';
-import { GoogleLogin } from '@react-oauth/google';
-import jwtDecode from 'jwt-decode';
-import { useDispatch } from 'react-redux';
-import { AppDispatch } from '../redux/store';
-import { login } from '../redux/actions/UserAction';
-import { UserType } from '../interfaces/user/UserType';
 import { Input } from '../components/Input/Input';
 import { useNavigate } from 'react-router-dom';
 import { getTokenFromLocalStorage } from '../utils/token';
-import { Visibility, VisibilityOff } from '@mui/icons-material';
+import { Google, Visibility, VisibilityOff } from '@mui/icons-material';
 import LoadingLogin from '../components/Loading/LoadingLogin';
 import { Toaster } from 'react-hot-toast';
 import { handleToast } from '../utils/notifications';
 import { ToastContainer } from 'react-toastify';
-import { notifyEmptyFields, notifyRedirectToHome } from '../utils/notify';
+import { notifyEmptyFields, notifyError, notifyRedirectToHome, notifySuccess } from '../utils/notify';
 import { apiWithoutAuth } from '../utils/api';
 import './styles/Login.scss';
 
@@ -35,7 +29,6 @@ const Login = () => {
 
   const userNameCapitalized = username.charAt(0).toUpperCase() + username.slice(1);
 
-  const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
 
   const userFromLocalStorage = JSON.parse(localStorage.getItem('user') || '{}');
@@ -45,15 +38,11 @@ const Login = () => {
     localStorage.clear();
   }, []);
 
-  const handleGoogleResponse = (response: any) => {
-    if (response.credential) {
-      localStorage.setItem('token', response.credential);
-      const userDecoded: UserType = jwtDecode(response.credential);
-      const userToLocalStorage = JSON.stringify(userDecoded);
-      localStorage.setItem('user', userToLocalStorage);
-      dispatch(login(userDecoded));
-      navigate('/home');
-    }
+  const handleGoogleResponse = ( )=> {
+   notifyError('Google login is not available');
+   setTimeout(() => {
+    notifySuccess('Try using your username and password');
+    }, 2200);
   };
   const handlerChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.name === 'Username') {
@@ -93,19 +82,16 @@ const Login = () => {
       password,
     };
     try {
-      const request = await apiWithoutAuth.post(
-        '/users/signin',
-        postData
-      );
+      const request = await apiWithoutAuth.post('/users/signin', postData);
       if (request.status === 200) {
         setLoading(true);
         localStorage.setItem('token', request.data);
         getTokenFromLocalStorage();
       }
-        notifyRedirectToHome(userNameCapitalized);
-        setTimeout(() => {
-          redirectToHome();
-        }, 2200);
+      notifyRedirectToHome(userNameCapitalized);
+      setTimeout(() => {
+        redirectToHome();
+      }, 2200);
     } catch (error: any) {
       if (error.response.status === 401) {
         handleToast('Error 401', `${error.response.data}`);
@@ -135,7 +121,7 @@ const Login = () => {
       return;
     }
     if (newUser.password !== confirmPassword) {
-      alert('passwords do not match');
+      notifyError('Passwords do not match');
       return;
     }
     const postData = {
@@ -146,10 +132,7 @@ const Login = () => {
       phone: newUser.phone,
       password: newUser.password,
     };
-    const request = await apiWithoutAuth.post(
-      '/users/signup',
-      postData
-    );
+    const request = await apiWithoutAuth.post('/users/signup', postData);
     localStorage.setItem('token', request.data);
     getTokenFromLocalStorage();
     navigate('/');
@@ -285,13 +268,20 @@ const Login = () => {
               </p>
             </div>
             <div className="login-view__container__separator"></div>
-            <div className="login-view__container--login-with-google"></div>
-            <GoogleLogin onSuccess={handleGoogleResponse} onError={() => console.log('Failed')} />
+            <div className="login-view__container__login-with-google" onClick={handleGoogleResponse}>
+              {' '}
+              <Google
+                style={{
+                  fontSize: '1.6rem',
+                  marginRight: '3px',
+                  color: '#4285F4',
+                }}
+              />{' '}
+              Iniciar sesión con Google
+            </div>
           </div>
         </div>
-      ) : (
-        null
-      )}
+      ) : null}
       <Toaster />
       <ToastContainer />
     </>
