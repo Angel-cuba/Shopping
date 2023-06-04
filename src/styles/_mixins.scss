@@ -25,10 +25,15 @@
     box-shadow: 1px 1px 10px 0px rgba(0, 0, 0, 0.21),
       inset 0px 0px 10px 0px rgba(75, 101, 98, 0.12);
   }
-
 }
 
 @mixin loginButton() {
   @include customButton(#fff, #00bfff, #d3d3d3);
   padding: 0.5em 1.5rem;
+}
+
+@mixin smallButton($color, $background-color, $border-color) {
+  @include customButton($color, $background-color, $border-color);
+  padding: 3px 5px;
+  border-radius: 5px;
 }
