@@ -142,6 +142,8 @@ const Checkout = () => {
 
   const handleCheckout = async () => {
     if (!address || !payment) return notifyError('Select address and payment first');
+    if (!allowToPay) return notifyError('Check your products stock');
+    if(itemInCart?.length === 0) return notifyError('You have no products in your cart')
     setLoading(true);
     updateStock();
     const newArray = itemInCart?.map((item) => {
