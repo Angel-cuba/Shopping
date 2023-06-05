@@ -101,8 +101,7 @@ const Login = () => {
   };
 
   const redirectToHome = () => {
-    navigate('/home', { replace: true });
-    window.location.reload();
+    navigate('/',);
   };
   const openSignUp = () => {
     setIsLogin(!isLogin);
