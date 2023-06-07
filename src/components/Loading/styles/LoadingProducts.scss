@@ -1,4 +1,5 @@
 .loading-container {
+  position: relative;
   width: 100%;
   height: 100%;
   padding: 0px;
@@ -7,6 +8,96 @@
   @media screen and (min-width: 768px) {
     justify-content: space-around;
   }
+  &__spinner {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #d3d3d344;
+    border-top-color: transparent;
+    border-bottom-color: transparent;
+    border-radius: 35%;
+    animation: all 2s linear infinite;
+    &--animation {
+      width: 290px;
+      height: 2px;
+      border-radius: 50%;
+      border: 5px solid transparent;
+      background-color: #ededed;
+      border-top-color: #fff;
+      border-bottom-color: #fff;
+      animation: animate .1s linear infinite;
+    }
+    &::before {
+      content: "";
+      position: absolute;
+      top: -5px;
+      left: -5px;
+      width: 100%;
+      height: 100%;
+      border: 1px solid #d4d4d4;
+      border-radius: 50%;
+      border-top-color: transparent;
+      border-bottom-color: transparent;
+      animation: left 1s linear infinite;
+    }
+    &::after {
+      content: "";
+      position: absolute;
+      top: -15px;
+      left: -15px;
+      width: 100%;
+      height: 100%;
+      border: 1px solid #d4d4d4;
+      border-radius: 50%;
+      border-top-color: transparent;
+      border-bottom-color: transparent;
+      animation: right 1s linear infinite;
+    }
+  }
+  @keyframes all {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(-360deg);
+    }
+  }
+  @keyframes animate {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+    @keyframes left {
+      0% {
+        transform: translateX(0);
+      }
+      50% {
+        transform: translateX(-150%);
+      }
+      100% {
+        transform: translateX(0);
+      }
+    }
+    @keyframes right {
+      0% {
+        transform: translateX(0);
+      }
+      50% {
+        transform: translateX(150%);
+      }
+      100% {
+        transform: translateX(0);
+      }
+    }
   &__item {
     position: relative;
     width: calc(100% / 2 - 10px);

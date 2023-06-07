@@ -5,6 +5,9 @@ import './styles/LoadingProducts.scss';
 const LoadingProducts = () => {
   return (
     <div className="loading-container">
+      <div className="loading-container__spinner">
+        <div className="loading-container__spinner--animation"></div>
+      </div>
       <div className="loading-container__item">
         Loading...
         <div className="loading-container__item--details">
