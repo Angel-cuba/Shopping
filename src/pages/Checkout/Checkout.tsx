@@ -17,10 +17,16 @@ import Address from './address/Address';
 import Payment from './payments/Payment';
 import { api } from '../../utils/api';
 import { useNavigate } from 'react-router-dom';
-import { notifyError, notifyRedirectToProfile, notifySuccess } from '../../utils/notify';
+import {
+  notifyError,
+  notifyRedirectToProfile,
+  notifySuccess,
+  notifyWarning,
+} from '../../utils/notify';
 import { ToastContainer } from 'react-toastify';
 import { fetchingAddresses } from '../../redux/actions/AddressAction';
 import { fetchingPayments } from '../../redux/actions/PaymentAction';
+import { isUserAuthenticated } from '../../utils/authentication';
 import './Checkout.scss';
 
 type Item = {
@@ -56,7 +62,7 @@ const Checkout = () => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
 
-    useEffect(() => {
+  useEffect(() => {
     if (decodedUserId) {
       dispatch(fetchingAddresses(decodedUserId));
       dispatch(fetchingPayments(decodedUserId));
@@ -82,14 +88,13 @@ const Checkout = () => {
   }, [itemInCart]);
 
   const handleStock = async () => {
-    if(itemInCart?.length === 0){
+    if (itemInCart?.length === 0) {
       setTimeout(() => {
         notifyError('Please add products to your cart');
-      }
-      , 1500);
+      }, 1500);
     }
-    if(itemInCart?.length === 0) return notifyError('You have no products in your cart');
-    if(!address || !payment) return notifyError('Select address and payment first');
+    if (itemInCart?.length === 0) return notifyError('You have no products in your cart');
+    if (!address || !payment) return notifyError('Select address and payment first');
     setNotEnoughStock([]);
     const newArray = itemInCart?.map((item) => {
       const { id, quantity } = item;
@@ -104,7 +109,7 @@ const Checkout = () => {
         const gettingProductToCheck = await api.get(`/products/${item.productId}`);
         if (gettingProductToCheck.data.inStock < item.quantity) {
           setNotEnoughStock((prev: any) => [...prev, gettingProductToCheck.data.id]);
-         return notifyError(`${gettingProductToCheck.data.name} has not enough stock`);
+          return notifyError(`${gettingProductToCheck.data.name} has not enough stock`);
         }
         if (gettingProductToCheck.data.inStock === 0) {
           return notifyError(`${gettingProductToCheck.data.name} are not available`);
@@ -143,7 +148,7 @@ const Checkout = () => {
   const handleCheckout = async () => {
     if (!address || !payment) return notifyError('Select address and payment first');
     if (!allowToPay) return notifyError('Check your products stock');
-    if(itemInCart?.length === 0) return notifyError('You have no products in your cart')
+    if (itemInCart?.length === 0) return notifyError('You have no products in your cart');
     setLoading(true);
     updateStock();
     const newArray = itemInCart?.map((item) => {
@@ -232,6 +237,7 @@ const Checkout = () => {
   };
 
   const handleOpenAddress = () => {
+    if (!isUserAuthenticated()) return notifyWarning('Please login to provide us with your address information');
     setOpenPayments(false);
     if (addresses.length === 0) {
       setActiveAddAddress(true);
@@ -241,6 +247,7 @@ const Checkout = () => {
   };
 
   const handleOpenCards = () => {
+    if (!isUserAuthenticated()) return notifyWarning('Please login to provide us with your payment information');
     setOpenAddress(false);
     if (payments.length === 0) {
       setActiveAddPayment(true);

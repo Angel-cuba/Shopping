@@ -9,7 +9,7 @@ import {
   UPDATE_PRODUCT,
 } from '../../interfaces/products/constants';
 import { NewProductToStock, Product } from '../../interfaces/products/ProductType';
-import { api } from '../../utils/api';
+import { api, apiWithoutAuth } from '../../utils/api';
 
 export const getProducts = (products: Product) => {
   return {
@@ -43,7 +43,7 @@ export const fetchProducts = () => {
   return async (dispatch: Dispatch) => {
     dispatch({ type: LOADING });
     try {
-      const response = await api.get('/products');
+      const response = await apiWithoutAuth.get('/products');
       dispatch(getProducts(response.data));
     } catch (error) {
       dispatch({ type: ERROR, payload: error });

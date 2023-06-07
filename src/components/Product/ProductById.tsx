@@ -13,7 +13,7 @@ import { addToCart } from '../../redux/actions/CartActions';
 import { CartProduct } from '../../interfaces/cart/CartType';
 import { GlobalTheme } from '../../context/ThemeProvider';
 import { darkTheme, lightTheme } from '../../styles/styles';
-import { api } from '../../utils/api';
+import { apiWithoutAuth } from '../../utils/api';
 import './ProductById.scss';
 
 const initialProduct: CartProduct = {
@@ -36,7 +36,7 @@ const ProductById = () => {
 
   useLayoutEffect(() => {
     const productById = async () => {
-      const response = await api.get(`/products/${id}`);
+      const response = await apiWithoutAuth.get(`/products/${id}`);
       if (response.status === 200) {
         setProduct(response.data);
       }

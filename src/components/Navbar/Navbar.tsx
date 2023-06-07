@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -6,14 +6,17 @@ import CloseIcon from '@mui/icons-material/Close';
 import StoreMallDirectoryIcon from '@mui/icons-material/StoreMallDirectory';
 import LightModeIcon from '@mui/icons-material/LightMode';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
+import Group from '@mui/icons-material/Group';
 
 import { NavbarIcon, WishListIcon } from '../Cart/Icons';
 import { AppDispatch, RootState } from '../../redux/store';
 import { logout } from '../../redux/actions/UserAction';
 import { GlobalTheme } from '../../context/ThemeProvider';
 import { darkTheme, lightTheme } from '../../styles/styles';
-import { notifyRedirectToLogin } from '../../utils/notify';
+import { notifyRedirectToLogin, notifyWarning } from '../../utils/notify';
 import { ToastContainer } from 'react-toastify';
+import { isAdmin, isUserAuthenticated } from '../../utils/authentication';
+import Login from '../../router/Login';
 import './Navbar.scss';
 
 const Navbar = () => {
@@ -23,22 +26,31 @@ const Navbar = () => {
 
   const dispatch = useDispatch<AppDispatch>();
   const { theme, setTheme } = GlobalTheme();
+  const [openLogin, setOpenLogin] = useState(false);
 
   const navigation = useNavigate();
 
   const handleLogout = () => {
-    notifyRedirectToLogin()
+    notifyRedirectToLogin();
     setTimeout(() => {
-      goingToLogin()
+      goingToLogin();
     }, 2800);
   };
 
+  const handleLogin = () => {
+    setOpenLogin(!openLogin);
+  };
+
+  const profileWarning = () => {
+    return notifyWarning('Please, login first to see you profile');
+  };
+
   const goingToLogin = () => {
-    navigation('/login', { replace: true });
+    navigation('/', { replace: true });
     dispatch(logout());
     localStorage.removeItem('user');
-    localStorage.removeItem('token')
-    localStorage.removeItem('decodedUser')
+    localStorage.removeItem('token');
+    localStorage.removeItem('decodedUser');
   };
   const handleDarkMode = () => {
     if (theme === 'light') {
@@ -53,7 +65,9 @@ const Navbar = () => {
       className="navbar"
       style={{
         backgroundColor: theme === 'light' ? lightTheme.bg : darkTheme.bg,
-        boxShadow: `0 0 12 0 ${theme === 'light' ? lightTheme.shadow : darkTheme.shadow}, inset 0 0 12px 0 ${theme === 'light' ? lightTheme.shadow : darkTheme.shadow}`,
+        boxShadow: `0 0 12 0 ${
+          theme === 'light' ? lightTheme.shadow : darkTheme.shadow
+        }, inset 0 0 12px 0 ${theme === 'light' ? lightTheme.shadow : darkTheme.shadow}`,
         color: theme === 'light' ? '#000' : '#fff',
       }}
     >
@@ -61,7 +75,11 @@ const Navbar = () => {
         {userFromToken ? (
           <>
             <img
-              src={user?.picture ? user?.picture : 'https://www.pngitem.com/pimgs/m/146-1468479_my-profile-icon-blank-profile-picture-circle-hd.png'}
+              src={
+                user?.picture
+                  ? user?.picture
+                  : 'https://www.pngitem.com/pimgs/m/146-1468479_my-profile-icon-blank-profile-picture-circle-hd.png'
+              }
               alt={user?.name}
               style={{
                 width: '50px',
@@ -83,8 +101,7 @@ const Navbar = () => {
         )}
       </div>
       <div className="navbar__navbar-right">
-        {userFromToken?.role === 'ADMIN' ? (
-
+        {isAdmin() ? (
           <Link
             to="/admin"
             className="navbar__navbar-right__links"
@@ -95,17 +112,38 @@ const Navbar = () => {
             Admin
           </Link>
         ) : null}
-        {userFromToken ? (
+        <Link
+          to="/home"
+          className="navbar__navbar-right__links"
+          style={{
+            color: theme === 'light' ? darkTheme.textLink : lightTheme.textLink,
+          }}
+        >
+          Store
+        </Link>
+        {isDark ? (
+          <Brightness4Icon
+            onClick={handleDarkMode}
+            style={{
+              width: '35px',
+              height: '35px',
+              color: lightTheme.textLink,
+              cursor: 'pointer',
+            }}
+          />
+        ) : (
+          <LightModeIcon
+            onClick={handleDarkMode}
+            color="warning"
+            style={{
+              width: '35px',
+              height: '35px',
+              cursor: 'pointer',
+            }}
+          />
+        )}
+        {isUserAuthenticated() ? (
           <>
-            <Link
-              to="/home"
-              className="navbar__navbar-right__links"
-              style={{
-                color: theme === 'light' ? darkTheme.textLink : lightTheme.textLink,
-              }}
-            >
-              Store
-            </Link>
             <Link
               to="/profile"
               className="navbar__navbar-right__links"
@@ -115,32 +153,12 @@ const Navbar = () => {
             >
               Profile
             </Link>
-               {isDark ? (
-              <Brightness4Icon
-                onClick={handleDarkMode}
-                style={{
-                  width: '35px',
-                  height: '35px',
-                  color: lightTheme.textLink,
-                  cursor: 'pointer',
-                }}
-              />
-            ) : (
-              <LightModeIcon
-                onClick={handleDarkMode}
-                color="warning"
-                style={{
-                  width: '35px',
-                  height: '35px',
-                  cursor: 'pointer',
-                }}
-              />
-            )}
-            <div className="navbar__navbar-right__links--login" onClick={handleLogout}
-                style={{
-              color: theme === 'light' ? darkTheme.textLink : lightTheme.textLink,
-            }}
-            
+            <div
+              className="navbar__navbar-right__links--login"
+              onClick={handleLogout}
+              style={{
+                color: theme === 'light' ? darkTheme.textLink : lightTheme.textLink,
+              }}
             >
               Logout
             </div>
@@ -149,8 +167,41 @@ const Navbar = () => {
               <NavbarIcon />
             </div>
           </>
-        ) : null}
+        ) : (
+          <>
+            <div
+              className="navbar__navbar-right__links"
+              style={{
+                color: theme === 'light' ? darkTheme.textLink : lightTheme.textLink,
+              }}
+              onClick={profileWarning}
+            >
+              <Group
+                style={{
+                  fontSize: '2rem',
+                }}
+              />
+            </div>
+            <div
+              className="navbar__navbar-right__links--login"
+              onClick={handleLogin}
+              style={{
+                color: theme === 'light' ? darkTheme.textLink : lightTheme.textLink,
+              }}
+            >
+              Login
+            </div>
+            <div className="navbar__navbar-right__links__cart">
+              <NavbarIcon />
+            </div>
+          </>
+        )}
       </div>
+      {openLogin && 
+      <div className="navbar__open-login-register">
+        <Login />
+      </div>
+      }
       <div className="navbar__navbar_mobile">
         {isOpen ? (
           <CloseIcon

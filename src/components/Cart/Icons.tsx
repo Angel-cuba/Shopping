@@ -18,6 +18,8 @@ import {
 } from '../../redux/actions/WishesActions';
 import { GlobalTheme } from '../../context/ThemeProvider';
 import { darkTheme, lightTheme } from '../../styles/styles';
+import { isUserAuthenticated } from '../../utils/authentication';
+import { notifyWarning } from '../../utils/notify';
 
 export const NavbarIcon = () => {
   const [openCart, setOpenCart] = React.useState(false);
@@ -45,6 +47,8 @@ export const NavbarIcon = () => {
   };
 
   return (
+    <>
+      {location.pathname !== '/checkout' && ( 
     <div className="navbar-cart">
       <div
         className={
@@ -62,14 +66,12 @@ export const NavbarIcon = () => {
         />
         <p className="navbar-cart__total--text">Total to pay</p>
         <p className="navbar-cart__total--price">$ {toPay()}</p>
-        {location.pathname !== '/checkout' && (
           <Link to="/checkout" className="navbar-cart__total--link" onClick={closeCart}>
             <AccountBalanceIcon
               style={{ fontSize: '2.3rem', fontWeight: 'bolder' }}
               className="navbar-cart__total--link__icon"
             />
           </Link>
-        )}
       </div>
       <div className="navbar-cart__icon" onClick={showCartItems}>
         {itemInCart?.length ? (
@@ -100,6 +102,8 @@ export const NavbarIcon = () => {
         ))}
       </div>
     </div>
+        )} 
+    </>
   );
 };
 
@@ -119,6 +123,7 @@ export const CartIcon = ({ product, handleLike, handleTrash }: CartIconProps) =>
   const { theme } = GlobalTheme();
 
   const addItemToWishList = () => {
+    if(!isUserAuthenticated()) return notifyWarning('Login and we keep your wishes for you')
     if (itemsLength) {
       dispatch(addingToWishList(product.id, decodedUserId));
     } else {

@@ -8,8 +8,22 @@ export const notifyDelete = (message: string) => toast.error(message, {
       color: '#fff',
       fontWeight: 'bold',
       borderRadius: '5px',
+      textAlign: 'center'
     }, 
   });
+
+  export const notifyWarning = (message: string) => toast.error(message, {
+    position: toast.POSITION.TOP_CENTER,
+    autoClose: 1600,
+    style: {
+      backgroundColor: '#102F09',
+      color: '#fff',
+      fontWeight: 'bold',
+      borderRadius: '5px',
+      textAlign: 'center'
+    }, 
+  });
+
 
   export const notifyEmptyFields = (message: string) => toast.error(message, {
     position: toast.POSITION.TOP_CENTER,
