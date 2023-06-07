@@ -1,73 +1,48 @@
-import React from 'react'
-import { Route, Routes } from 'react-router'
+import React, { Suspense, lazy } from 'react';
+import { Route, Routes } from 'react-router';
+import LoadingResponse from '../components/Loading/LoadingResponse';
+import { isAdmin, isUserAuthenticated } from '../utils/authentication';
 
-import ProductById from '../components/Product/ProductById'
-import Home from './Home'
-import Login from './Login'
-import Profile from '../pages/User/Profile'
-import Checkout from '../pages/Checkout/Checkout'
-import AdminDashboard from '../pages/Admin/AdminDashboard'
-import CreateAndCheck from '../pages/Admin/CreateAndCheck'
-import Customers from '../components/Admin/Customers/Customers'
-import AdminOrders from '../pages/Admin/AdminOrders'
+const Login = lazy(() => import('./Login'));
+const Home = lazy(() => import('./Home'));
+const Profile = lazy(() => import('../pages/User/Profile'));
+const Checkout = lazy(() => import('../pages/Checkout/Checkout'));
+const AdminOrders = lazy(() => import('../pages/Admin/AdminOrders'));
+const CreateAndCheck = lazy(() => import('../pages/Admin/CreateAndCheck'));
+const ProductById = lazy(() => import('../components/Product/ProductById'));
+const AdminDashboard = lazy(() => import('../pages/Admin/AdminDashboard'));
+const Customers = lazy(() => import('../components/Admin/Customers/Customers'));
 
 const Navigation = () => {
-  const userToken = localStorage.getItem('token')
-  const decodedUserRole = JSON.parse(localStorage.getItem('decodedUser') || '{}').role
 
-  const loginRoutes = [
-    { path: '', element: <Login /> },
-    { path: '/login', element: <Login /> },
-  ]
-
-  const homeRoutes = [
-
-    { path: '/login', element: <Login /> },
-    { path: '/', element: <Home /> },
-    { path: '/home', element: <Home /> },
-    { path: '/product/:id', element: <ProductById /> },
-    { path: '/profile', element: <Profile /> },
-    { path: '/checkout', element: <Checkout /> },
-    { path: '/checkout/product/:id', element: <ProductById /> },
-  ]
-
-  const adminRoutes = [
-    { path: '/admin', element: <AdminDashboard /> },
-    { path: '/admin/createandcheck', element: <CreateAndCheck /> },
-    { path: '/admin/createandcheck/check', element: <CreateAndCheck /> },
-    { path: '/admin/products', element: <Home /> },
-    { path: '/admin/customers', element: <Customers /> },
-    { path: '/admin/orders', element: <AdminOrders />},
-  ]
-
-  if (!userToken) {
-    return (
+  return (
+    <Suspense fallback={<LoadingResponse />}>
       <Routes>
-        {loginRoutes.map((route) => (
-          <Route key={route.path} path={route.path} element={route.element} />
-        ))}
-      </Routes>
-    )
-  } else if (userToken && decodedUserRole === 'ADMIN') {
-    return (
-      <Routes>
-        {adminRoutes.map((route) => (
-          <Route key={route.path} path={route.path} element={route.element} />
-        ))}
-        {homeRoutes.map((route) => (
-          <Route key={route.path} path={route.path} element={route.element} />
-        ))}
-      </Routes>
-    )
-  } else {
-    return (
-      <Routes>
-        {homeRoutes.map((route) => (
-          <Route key={route.path} path={route.path} element={route.element} />
-        ))}
-      </Routes>
-    )
-  }
-}
+        <Route path="/login" element={<Login />} />
+        <Route path="/" element={<Home />} />
+        <Route path="/home" element={<Home />} />
+        <Route path="/product/:id" element={<ProductById />} />
 
-export default Navigation
+        {isUserAuthenticated() && (
+          <>
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/checkout" element={<Checkout />} />
+            <Route path="/checkout/product/:id" element={<ProductById />} />
+          </>
+        )}
+        {isAdmin() && isUserAuthenticated() ? (
+          <>
+            <Route path="/admin/products" element={<Home />} />
+            <Route path="/admin" element={<AdminDashboard />} />
+            <Route path="/admin/orders" element={<AdminOrders />} />
+            <Route path="/admin/customers" element={<Customers />} />
+            <Route path="/admin/createandcheck" element={<CreateAndCheck />} />
+            <Route path="/admin/createandcheck/check" element={<CreateAndCheck />} />
+          </>
+        ) : null}
+      </Routes>
+    </Suspense>
+  );
+};
+
+export default Navigation;
