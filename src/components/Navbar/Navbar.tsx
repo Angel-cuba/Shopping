@@ -13,7 +13,7 @@ import { AppDispatch, RootState } from '../../redux/store';
 import { logout } from '../../redux/actions/UserAction';
 import { GlobalTheme } from '../../context/ThemeProvider';
 import { darkTheme, lightTheme } from '../../styles/styles';
-import { notifyRedirectToLogin, notifyWarning } from '../../utils/notify';
+import { notifyRedirect, notifyWarning } from '../../utils/notify';
 import { ToastContainer } from 'react-toastify';
 import { isAdmin, isUserAuthenticated } from '../../utils/authentication';
 import Login from '../../router/Login';
@@ -31,7 +31,7 @@ const Navbar = () => {
   const navigation = useNavigate();
 
   const handleLogout = () => {
-    notifyRedirectToLogin();
+    notifyRedirect();
     setTimeout(() => {
       goingToLogin();
     }, 2800);
@@ -51,6 +51,7 @@ const Navbar = () => {
     localStorage.removeItem('user');
     localStorage.removeItem('token');
     localStorage.removeItem('decodedUser');
+    window.location.reload();
   };
   const handleDarkMode = () => {
     if (theme === 'light') {
@@ -72,7 +73,7 @@ const Navbar = () => {
       }}
     >
       <div className="navbar__navbar-left">
-        {userFromToken ? (
+        {isUserAuthenticated() ? (
           <>
             <img
               src={
@@ -88,7 +89,7 @@ const Navbar = () => {
                 borderRadius: '40%',
               }}
             />
-            <h1>{user?.name ? user.name : userFromToken.username}</h1>
+            <h1>{user?.name ? user.name : userFromToken?.username}</h1>
           </>
         ) : (
           <StoreMallDirectoryIcon
@@ -101,7 +102,7 @@ const Navbar = () => {
         )}
       </div>
       <div className="navbar__navbar-right">
-        {isAdmin() ? (
+        {isAdmin() && (
           <Link
             to="/admin"
             className="navbar__navbar-right__links"
@@ -111,7 +112,7 @@ const Navbar = () => {
           >
             Admin
           </Link>
-        ) : null}
+        )}
         <Link
           to="/home"
           className="navbar__navbar-right__links"
@@ -197,11 +198,11 @@ const Navbar = () => {
           </>
         )}
       </div>
-      {openLogin && 
-      <div className="navbar__open-login-register">
-        <Login />
-      </div>
-      }
+      {openLogin && (
+        <div className="navbar__open-login-register">
+          <Login />
+        </div>
+      )}
       <div className="navbar__navbar_mobile">
         {isOpen ? (
           <CloseIcon

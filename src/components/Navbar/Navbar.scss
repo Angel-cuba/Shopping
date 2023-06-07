@@ -10,6 +10,14 @@
   padding: 20px 2%;
   border-bottom-left-radius: 6px;
   border-bottom-right-radius: 6px;
+  &__open-login-register {
+    position: absolute;
+    top: 100%;
+    right: 25%;
+    background-color: #ffffff;
+    z-index: 100;
+    border-radius: 8px;
+  }
   &__navbar-left {
     display: flex;
     justify-content: space-around;

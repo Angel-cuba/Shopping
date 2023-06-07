@@ -15,7 +15,8 @@
     min-width: 550px;
     max-width: 600px;
     height: 100%;
-    box-shadow: 1px 1px 10px 0px rgba(0, 0, 0, 0.1), inset 0px 0px 10px 0px rgba(101, 75, 75, 0.12);
+    box-shadow: 1px 1px 200px 0px rgba(0, 0, 0, 0.4), inset 0px 0px 10px 0px rgba(101, 75, 75, 0.2),
+      inset 0px 0px 10px 0px rgba(0, 0, 0, 0.2);
     border-radius: 10px;
     &__login {
       border-radius: 5px;
@@ -60,8 +61,11 @@
     }
     &__text {
       font-weight: 600;
+      &:hover {
+        color: #00bfff;
+      }
       &--span {
-        font-weight: 500;
+        font-weight: 700;
         color: #00bfff;
         cursor: pointer;
         transition: all 0.2s ease-in-out;

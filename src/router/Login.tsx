@@ -101,7 +101,8 @@ const Login = () => {
   };
 
   const redirectToHome = () => {
-    navigate('/',);
+    navigate('/');
+    window.location.reload()
   };
   const openSignUp = () => {
     setIsLogin(!isLogin);
@@ -135,6 +136,7 @@ const Login = () => {
     localStorage.setItem('token', request.data);
     getTokenFromLocalStorage();
     navigate('/');
+    window.location.reload()
   };
 
   const handleShowPassword = () => {
@@ -258,14 +260,12 @@ const Login = () => {
                 </button>
               </div>
             ) : null}
-            <div className="login-view__container__text">
-              <p>
+            <p className="login-view__container__text">  
                 {isLogin ? 'Don’t have an account? ' : 'Already have an account? '}
                 <span className="login-view__container__text--span" onClick={openSignUp}>
                   {!isLogin ? 'Login' : 'Sign up'}
                 </span>
-              </p>
-            </div>
+            </p>
             <div className="login-view__container__separator"></div>
             <div className="login-view__container__login-with-google" onClick={handleGoogleResponse}>
               {' '}
