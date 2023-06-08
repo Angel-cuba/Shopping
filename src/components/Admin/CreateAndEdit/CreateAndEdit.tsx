@@ -11,6 +11,7 @@ import {
   Variants,
 } from '../../../interfaces/products/ProductType';
 import { notifyError, notifySuccess } from '../../../utils/notify';
+import '../../../pages/Admin/styles/CreateAndCheck.scss';
 
 type Props = {
   productId?: string;
@@ -161,6 +162,14 @@ const CreateAndEdit = ({ productId, setOpenCreateAndEdit }: Props) => {
       newProduct.categories === ''
     ) {
       notifyError('Please fill all fields');
+      return;
+    }
+    if(newProduct.inStock < 1){
+      notifyError('Give a');
+      return;
+    }
+      if(newProduct.price < 1){
+      notifyError('Too low price for this product');
       return;
     }
     if (!productId) {
