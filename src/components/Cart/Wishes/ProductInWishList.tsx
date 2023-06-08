@@ -6,7 +6,7 @@ import HeartBrokenIcon from '@mui/icons-material/HeartBroken';
 import { Product } from '../../../interfaces/products/ProductType';
 import { AppDispatch, RootState } from '../../../redux/store';
 import { useDispatch, useSelector } from 'react-redux';
-import { removingFromWishList } from '../../../redux/actions/WishesActions';
+import { deleteWishList, removingFromWishList } from '../../../redux/actions/WishesActions';
 import { GlobalTheme } from '../../../context/ThemeProvider';
 import { darkTheme, lightTheme } from '../../../styles/styles';
 import './ProductInWishList.scss';
@@ -19,6 +19,8 @@ export const ProductInWishList = ({ setOpenWishList }: Props) => {
   const { products } = useSelector((state: RootState) => state.products);
   const decodedUserId = JSON.parse(localStorage.getItem('decodedUser') || '{}').user_id;
   const { theme } = GlobalTheme();
+
+  const itemsLength = itemInWishlist?.length;
 
   const productsInWishlist = products?.filter((product: Product) => {
     return itemInWishlist?.some((itemId: string) => itemId === product.id);
@@ -34,8 +36,16 @@ export const ProductInWishList = ({ setOpenWishList }: Props) => {
   };
 
   const removeFromList = (productId: string) => {
-    dispatch(removingFromWishList(productId, decodedUserId));
+    if(itemsLength === 1){
+      dispatch(deleteWishList(decodedUserId));
+    } else {
+      dispatch(removingFromWishList(productId, decodedUserId));
+    }
   };
+
+  const deleteWishesList = () => {
+    dispatch(deleteWishList(decodedUserId))
+  }
 
   return (
     <>
@@ -51,6 +61,9 @@ export const ProductInWishList = ({ setOpenWishList }: Props) => {
             }`,
           }}
         >
+          <div className="view__clear-list" onClick={deleteWishesList}>
+            Delete all wishes
+          </div>
           <div className="view__products">
             {productsInWishlist?.map((item: Product) => (
               <div
