@@ -42,7 +42,7 @@ const Navbar = () => {
   };
 
   const profileWarning = () => {
-    return notifyWarning('Please, login first to see you profile');
+    return notifyWarning('Please, login first to see your profile');
   };
 
   const goingToLogin = () => {
