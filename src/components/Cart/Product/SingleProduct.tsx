@@ -54,8 +54,11 @@ const SingleProduct = ({ item, notEnoughStock }: SingleProductProps) => {
           handleExistingStock(notEnoughStock, item) && <p className="cart-product__stock">Not enough stock</p>
         }
       <div className="cart-product__buttons">
-        <div className="cart-product__buttons__plus-minus">
-          <AddBoxIcon style={{ fontSize: '2rem'}} onClick={addItemToCart}className="cart-product__buttons__plus-minus--add" />
+        <div className="cart-product__buttons__plus-minus" style={{
+          width: (item && item?.quantity) === item.stock || (item && item?.quantity) > item.stock ? '13.5%' : '',
+          marginLeft: (item && item?.quantity) === item.stock || (item && item?.quantity) > item.stock ? '80px' : '',
+        }}>
+          <AddBoxIcon style={{ fontSize: '2rem', display: (item && item?.quantity) === item.stock || (item && item?.quantity) > item.stock ? 'none' : ''}} onClick={addItemToCart}className="cart-product__buttons__plus-minus--add" />
           <p className="cart-product__buttons__plus-minus--quantity">{item.quantity}</p>
           <IndeterminateCheckBoxIcon
             style={{ fontSize: '2rem'}}

@@ -25,6 +25,8 @@ const initialProduct: CartProduct = {
   categories: '',
   sizes: '',
   variant: '',
+  quantity: 1,
+  stock: 1
 };
 const ProductById = () => {
   const params = useParams();
@@ -140,6 +142,8 @@ const ProductById = () => {
         variant: variant,
         categories: product.categories,
         image: product.image,
+        quantity: 1,
+        stock: product.inStock
       };
       setNewProduct(productToCart);
     }
