@@ -106,7 +106,8 @@ const Checkout = () => {
     });
     try {
       newArray?.forEach(async (item: Item) => {
-        const gettingProductToCheck = await api.get(`/products/${item.productId}`);
+        const id = item.productId.slice(0,36)
+        const gettingProductToCheck = await api.get(`/products/${id}`);
         if (gettingProductToCheck.data.inStock < item.quantity) {
           setNotEnoughStock((prev: any) => [...prev, gettingProductToCheck.data.id]);
           return notifyError(`${gettingProductToCheck.data.name} has not enough stock`);
@@ -138,7 +139,7 @@ const Checkout = () => {
     });
     newArray?.forEach(async (item: Item) => {
       const productToUpdate = {
-        id: item.productId,
+        id: item.productId.slice(0,36),
         quantity: item.quantity,
       };
       await api.put('/products/update/stock', productToUpdate);
@@ -153,7 +154,7 @@ const Checkout = () => {
     updateStock();
     const newArray = itemInCart?.map((item) => {
       const { id, variant, image, sizes, price, quantity } = item;
-      const productId = id;
+      const productId = id.slice(0,36);
       const size = sizes;
       return {
         productId,
