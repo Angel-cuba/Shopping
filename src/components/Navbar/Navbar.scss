@@ -53,6 +53,20 @@
           box-shadow: 0 0 2px 0 #ffffff;
         }
       }
+      &--login-close {
+        font-weight: bold;
+        border: 1px solid $bg_delete;
+        border-radius: 0.25rem;
+        padding: 0.15rem 1rem;
+        background-color: $bg_delete_light;
+        transition: all 0.3s ease-in-out;
+        &:hover {
+          background-color: $bg_delete_hover;
+          cursor: pointer;
+          transform: scale(1.1);
+          box-shadow: 0 0 2px 0 #ffffff;
+        }
+      }
       &__cart {
         position: relative;
         width: 80px;

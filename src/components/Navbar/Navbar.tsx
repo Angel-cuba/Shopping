@@ -184,13 +184,17 @@ const Navbar = () => {
               />
             </div>
             <div
-              className="navbar__navbar-right__links--login"
+              className={
+                !openLogin ? 'navbar__navbar-right__links--login' : 'navbar__navbar-right__links--login-close'
+              }
               onClick={handleLogin}
               style={{
                 color: theme === 'light' ? darkTheme.textLink : lightTheme.textLink,
               }}
             >
-              Login
+              {
+                openLogin ? 'Close' : 'Login'
+              }
             </div>
             <div className="navbar__navbar-right__links__cart">
               <NavbarIcon />
