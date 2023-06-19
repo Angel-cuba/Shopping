@@ -161,7 +161,7 @@ const ProductById = () => {
     setNewProduct(initialProduct);
     setSize('');
     setVariant('');
-    setOpenSelection(false) ;
+    setOpenSelection(false);
   };
 
   if (loading) {
@@ -230,7 +230,9 @@ const ProductById = () => {
           </div>
         </div>
       )}
-      {product && (
+      {!product ? (
+        <LoadingProductById />
+      ) : (
         <div
           className="productId__item"
           style={{
