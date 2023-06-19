@@ -1,4 +1,4 @@
-import React, { useLayoutEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
@@ -14,6 +14,7 @@ import { CartProduct } from '../../interfaces/cart/CartType';
 import { GlobalTheme } from '../../context/ThemeProvider';
 import { darkTheme, lightTheme } from '../../styles/styles';
 import { apiWithoutAuth } from '../../utils/api';
+import LoadingProductById from '../Loading/LoadingProductById';
 import './ProductById.scss';
 
 const initialProduct: CartProduct = {
@@ -26,7 +27,7 @@ const initialProduct: CartProduct = {
   sizes: '',
   variant: '',
   quantity: 1,
-  stock: 1
+  stock: 1,
 };
 const ProductById = () => {
   const params = useParams();
@@ -34,9 +35,11 @@ const ProductById = () => {
   const { products } = useSelector((state: RootState) => state.products);
   const { theme } = GlobalTheme();
   const token = localStorage.getItem('token');
-  const [product, setProduct] = React.useState<Product>();
+  const [product, setProduct] = useState<Product>();
+  const [loading, setLoading] = useState(false);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
+    setLoading(true);
     const productById = async () => {
       const response = await apiWithoutAuth.get(`/products/${id}`);
       if (response.status === 200) {
@@ -44,6 +47,7 @@ const ProductById = () => {
       }
     };
     productById();
+    setLoading(false);
   }, [id, token]);
 
   const recommendedProducts = products.filter((p: Product) => {
@@ -143,7 +147,7 @@ const ProductById = () => {
         categories: product.categories,
         image: product.image,
         quantity: 1,
-        stock: product.inStock
+        stock: product.inStock,
       };
       setNewProduct(productToCart);
     }
@@ -157,8 +161,12 @@ const ProductById = () => {
     setNewProduct(initialProduct);
     setSize('');
     setVariant('');
-    setOpenSelection(false);
+    setOpenSelection(false) ;
   };
+
+  if (loading) {
+    return <LoadingProductById />;
+  }
 
   return (
     <div className="productId">
@@ -310,25 +318,27 @@ const ProductById = () => {
         </div>
       )}
 
-      <div
-        className="productId__recommended"
-        style={{
-          color: theme === 'light' ? darkTheme.bg : lightTheme.bg,
-        }}
-      >
-        <h3 className="productId__recommended--text">You might also like...</h3>
+      {recommendedProducts.length && (
         <div
-          className="productId__recommended__items"
+          className="productId__recommended"
           style={{
-            border: `1px solid ${theme === 'dark' ? darkTheme.shadow : lightTheme.shadow}`,
-            boxShadow: `0 0 5px 0 ${theme === 'dark' ? darkTheme.shadow : lightTheme.shadow}`,
+            color: theme === 'light' ? darkTheme.bg : lightTheme.bg,
           }}
         >
-          {recommendedProducts.map((product: Product) => (
-            <RecommendedProducts key={product.id} product={product} />
-          ))}
+          <h3 className="productId__recommended--text">You might also like...</h3>
+          <div
+            className="productId__recommended__items"
+            style={{
+              border: `1px solid ${theme === 'dark' ? darkTheme.shadow : lightTheme.shadow}`,
+              boxShadow: `0 0 5px 0 ${theme === 'dark' ? darkTheme.shadow : lightTheme.shadow}`,
+            }}
+          >
+            {recommendedProducts.map((product: Product) => (
+              <RecommendedProducts key={product.id} product={product} />
+            ))}
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };
