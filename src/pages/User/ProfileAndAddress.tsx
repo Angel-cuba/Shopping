@@ -315,14 +315,7 @@ const ProfileAndAddress = ({
             </div>
           </>
         )}
-
-        {/* <button type="submit" className="profile__edit-form__container__button">
-          Confirm
-        </button> */}
       </form>
-      {/* <div className="profile__edit-form__container--cancel" onClick={cancellForm}>
-        Cancel
-      </div> */}
     </div>
   );
 };
