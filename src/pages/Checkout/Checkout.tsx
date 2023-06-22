@@ -24,8 +24,6 @@ import {
   notifyWarning,
 } from '../../utils/notify';
 import { ToastContainer } from 'react-toastify';
-import { fetchingAddresses } from '../../redux/actions/AddressAction';
-import { fetchingPayments } from '../../redux/actions/PaymentAction';
 import { isUserAuthenticated } from '../../utils/authentication';
 import './Checkout.scss';
 
@@ -56,18 +54,10 @@ const Checkout = () => {
   const { addresses } = useSelector((state: RootState) => state.addresses);
   const { payments } = useSelector((state: RootState) => state.payments);
 
-  const decodedUserId = JSON.parse(localStorage.getItem('user') || '{}').user_id;
-
   const { theme } = GlobalTheme();
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (decodedUserId) {
-      dispatch(fetchingAddresses(decodedUserId));
-      dispatch(fetchingPayments(decodedUserId));
-    }
-  }, [dispatch, decodedUserId]);
 
   useEffect(() => {
     setAllowToPay(false);
