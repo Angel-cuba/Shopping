@@ -8,3 +8,14 @@ export type PaymentType = {
   paymentType: string
   provider: string 
 }
+
+export type PaymentToSend = {
+  cardHolderName: string | undefined
+  cardNumber: string | undefined
+  expirationDate: string | undefined
+  paymentType: string | undefined 
+  provider: string | undefined
+  user: {
+    id: string | undefined
+  }
+}
