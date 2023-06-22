@@ -1,5 +1,5 @@
 import { AnyAction } from "redux";
-import { ERROR, FETCH_FAILURE, FETCH_PAYMENTS, FETCH_SUCCESS, LOADING, PaymentState, REQUEST, STOP_LOADING } from "../../interfaces/profile/payment/constants";
+import { ADD_PAYMENT, DELETE_PAYMENT, ERROR, FETCH_FAILURE, FETCH_PAYMENTS, FETCH_SUCCESS, LOADING, PaymentState, REQUEST, STOP_LOADING, UPDATE_PAYMENT } from "../../interfaces/profile/payment/constants";
 
 
 export const initialPaymentState: PaymentState = {
@@ -15,6 +15,28 @@ export default function paymentReducer(state = initialPaymentState, action: AnyA
       return {
         ...state,
         payments: action.payload,
+      };
+    case ADD_PAYMENT: 
+      return {
+        ...state,
+        payments: [action.payload, ...state.payments],
+      };
+    case UPDATE_PAYMENT:
+      const payments = state.payments.map((payment) => {
+        if (payment.id === action.payload.id) {
+          return action.payload;
+        }
+        return payment;
+      });
+      return {
+        ...state,
+        payments
+      };
+    case DELETE_PAYMENT:
+      const removedPayment = state.payments.filter((payment) => payment.id !== action.payload);
+      return {
+        ...state,
+        payments: removedPayment,
       };
     case LOADING:
       return {
