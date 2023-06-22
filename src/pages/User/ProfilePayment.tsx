@@ -1,15 +1,17 @@
-import React, { FormEvent } from 'react';
+import React, { FormEvent, useEffect } from 'react';
 import { UserPayment } from '../../interfaces/user/UserType';
 import { Input } from '../../components/Input/Input';
-import { api } from '../../utils/api';
-import { notifyError } from '../../utils/notify';
+import { AppDispatch } from '../../redux/store';
+import { useDispatch } from 'react-redux';
+import { addingPayment, updatingPayment } from '../../redux/actions/PaymentAction';
+import { notifySuccess } from '../../utils/notify';
 
 type ProfilePaymentProps = {
   userId: string | undefined;
-  editPayment: boolean;
-  setEditPayment: (editPayment: boolean) => void;
-  setPayments: (payments: UserPayment) => void;
-  payment: UserPayment | undefined;
+  openPaymentToEdit: boolean;
+  setOpenPaymentToEdit: (editPayment: boolean) => void;
+  selectedPayment: UserPayment | undefined;
+  setSelectedPayment: (payment: UserPayment | undefined) => void;
 };
 
 const initialUserPayment: UserPayment = {
@@ -21,20 +23,28 @@ const initialUserPayment: UserPayment = {
 };
 const ProfilePayment = ({
   userId,
-  editPayment,
-  setEditPayment,
-  setPayments,
-  payment,
+  openPaymentToEdit,
+  setOpenPaymentToEdit,
+  selectedPayment,
+  setSelectedPayment
 }: ProfilePaymentProps) => {
   const today = new Date();
   const currentMonth = (today.getMonth() + 1).toString().padStart(2, '0');
   const currentYear = today.getFullYear().toString();
-  const [userPaymentMethod, setUserPaymentMethod] = React.useState<UserPayment>(
-    !payment?.id ? initialUserPayment : payment
+  const [userPaymentMethod, setUserPaymentMethod] = React.useState<UserPayment | any>(
+    !selectedPayment?.id ? initialUserPayment : selectedPayment
   );
 
+  useEffect(() => {
+    if(selectedPayment) {
+      setUserPaymentMethod(selectedPayment);
+    }
+  }, [selectedPayment])
+
+  const dispatch = useDispatch<AppDispatch>();
+
   const cancellForm = () => {
-    setEditPayment(!editPayment);
+    setOpenPaymentToEdit(!openPaymentToEdit);
     setUserPaymentMethod(initialUserPayment);
   };
   const handlerSubmit = (e: FormEvent) => {
@@ -46,43 +56,36 @@ const ProfilePayment = ({
   };
 
   const sendPaymentData = async () => {
-    const paymentData = {
-      paymentType: userPaymentMethod?.paymentType,
-      provider: userPaymentMethod?.provider,
-      cardNumber: userPaymentMethod?.cardNumber,
-      expirationDate: userPaymentMethod?.expirationDate,
-      cardHolderName: userPaymentMethod?.cardHolderName,
-      user: {
-        id: userId,
-      },
-    };
-    const updatePaymentData = {
-      id: userPaymentMethod?.id,
-      paymentType: userPaymentMethod?.paymentType,
-      provider: userPaymentMethod?.provider,
-      cardNumber: userPaymentMethod?.cardNumber,
-      expirationDate: userPaymentMethod?.expirationDate,
-      cardHolderName: userPaymentMethod?.cardHolderName,
-      user: {
-        id: userId,
-      },
-    };
     if (!userPaymentMethod.id) {
-      const response = await api.post('/payments', paymentData);
-      setPayments(response.data);
-      if (response.status === 200) {
-        setEditPayment(false);
-      } else {
-        notifyError('Error');
-      }
+      const paymentData = {
+        paymentType: userPaymentMethod.paymentType,
+        provider: userPaymentMethod.provider,
+        cardNumber: userPaymentMethod.cardNumber,
+        expirationDate: userPaymentMethod.expirationDate,
+        cardHolderName: userPaymentMethod.cardHolderName,
+        user: {
+          id: userId,
+        },
+      };
+      dispatch(addingPayment(paymentData));
+      notifySuccess('Payment created')
+      setOpenPaymentToEdit(false);
     } else {
-      const response = await api.put('/payments', updatePaymentData);
-      setPayments(response.data);
-      if (response.status === 200) {
-        setEditPayment(false);
-      } else {
-        notifyError('Error');
-      }
+      const updatePaymentData = {
+        id: userPaymentMethod.id,
+        paymentType: userPaymentMethod.paymentType,
+        provider: userPaymentMethod.provider,
+        cardNumber: userPaymentMethod.cardNumber,
+        expirationDate: userPaymentMethod.expirationDate,
+        cardHolderName: userPaymentMethod.cardHolderName,
+        user: {
+          id: userId,
+        },
+      };
+      dispatch(updatingPayment(updatePaymentData));
+      setOpenPaymentToEdit(false);
+      notifySuccess('Payment updated')
+      setSelectedPayment(undefined)
     }
   };
 
@@ -102,10 +105,10 @@ const ProfilePayment = ({
         <Input
           type="text"
           name="cardHolderName"
-          value={userPaymentMethod?.cardHolderName ? userPaymentMethod.cardHolderName : ''}
+          value={userPaymentMethod.cardHolderName ? userPaymentMethod.cardHolderName : ''}
           onChange={handlePayment}
           placeholder={
-            userPaymentMethod?.cardHolderName ? userPaymentMethod.cardHolderName : 'Full card name'
+            userPaymentMethod.cardHolderName ? userPaymentMethod.cardHolderName : 'Full card name'
           }
           style={styles}
           admin
@@ -115,18 +118,18 @@ const ProfilePayment = ({
           <Input
             type="text"
             name="paymentType"
-            value={userPaymentMethod?.paymentType ? userPaymentMethod.paymentType : ''}
+            value={userPaymentMethod.paymentType ? userPaymentMethod.paymentType : ''}
             onChange={handlePayment}
-            placeholder={userPaymentMethod?.paymentType ? userPaymentMethod.paymentType : 'Type'}
+            placeholder={userPaymentMethod.paymentType ? userPaymentMethod.paymentType : 'Type'}
             style={styleSmall}
             small
           />
           <Input
             type="text"
             name="provider"
-            value={userPaymentMethod?.provider ? userPaymentMethod.provider : ''}
+            value={userPaymentMethod.provider ? userPaymentMethod.provider : ''}
             onChange={handlePayment}
-            placeholder={userPaymentMethod?.provider ? userPaymentMethod.provider : 'Provider'}
+            placeholder={userPaymentMethod.provider ? userPaymentMethod.provider : 'Provider'}
             style={styleSmall}
             small
           />
@@ -134,9 +137,9 @@ const ProfilePayment = ({
         <Input
           type="text"
           name="cardNumber"
-          value={userPaymentMethod?.cardNumber ? userPaymentMethod.cardNumber : ''}
+          value={userPaymentMethod.cardNumber ? userPaymentMethod.cardNumber : ''}
           onChange={handlePayment}
-          placeholder={userPaymentMethod?.cardNumber ? userPaymentMethod.cardNumber : 'Card number'}
+          placeholder={userPaymentMethod.cardNumber ? userPaymentMethod.cardNumber : 'Card number'}
           style={styles}
           admin
           profile
@@ -149,14 +152,14 @@ const ProfilePayment = ({
           max={`${currentYear + 10}-12`}
           onChange={handlePayment}
           placeholder={
-            userPaymentMethod?.expirationDate ? userPaymentMethod.expirationDate : 'Expiration date'
+            userPaymentMethod.expirationDate ? userPaymentMethod.expirationDate : 'Expiration date'
           }
           style={styles}
           admin
           profile
         />
         <button onClick={handlerSubmit} className="profile__edit-form__container__button">
-          {userPaymentMethod?.id ? 'Update' : 'Add'}
+          {userPaymentMethod.id ? 'Update' : 'Add'}
         </button>
       </form>
       <div className="profile__edit-form__container--cancel" onClick={cancellForm}>
