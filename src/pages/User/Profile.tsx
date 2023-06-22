@@ -26,27 +26,25 @@ import { darkTheme, lightTheme } from '../../styles/styles';
 import LoadingResponse from '../../components/Loading/LoadingResponse';
 import UserHistory from './History/UserHistory';
 import { fetchingAddresses } from '../../redux/actions/AddressAction';
-import { fetchingPayments } from '../../redux/actions/PaymentAction';
+import { deletingPayment, fetchingPayments } from '../../redux/actions/PaymentAction';
 import { api } from '../../utils/api';
 import { notifyDelete, notifyError } from '../../utils/notify';
 import './Profile.scss';
 
 const Profile = () => {
-  const { user, userFromToken } = useSelector((state: RootState) => state.userLogged);
+  const { user } = useSelector((state: RootState) => state.userLogged);
   const decodedUserId = JSON.parse(localStorage.getItem('decodedUser') || '{}').user_id;
 
   const [edit, setEdit] = React.useState(false);
-  const [editPayment, setEditPayment] = React.useState(false);
+  const [openPaymentToEdit, setOpenPaymentToEdit] = React.useState(false);
   const [openHistory, setOpenHistory] = React.useState(false);
   const [userEdited, setUserEdited] = React.useState<UserFromDB>();
-  const [userPaymentMethod, setUserPaymentMethod] = React.useState<UserPayment[]>();
   const [userAddress, setUserAddress] = React.useState<UserAddress[]>();
   const [address, setAddress] = React.useState<UserAddress>();
-  const [payments, setPayments] = React.useState<UserPayment>();
   const [selectedPayment, setSelectedPayment] = React.useState<UserPayment>();
   const [selectedAddress, setSelectedAddress] = React.useState<UserAddress>();
   const [principalAddress, setPrincipalAddress] = React.useState<UserAddress>();
-  const [loading, setLoading] = React.useState(false);
+  const [loadingProfile, setLoadingProfile] = React.useState(false);
   const [history, setHistory] = React.useState<[]>();
 
   const { theme } = GlobalTheme();
@@ -59,26 +57,21 @@ const Profile = () => {
     dispatch(fetchingPayments(decodedUserId));
   }, [dispatch, decodedUserId]);
 
-  useEffect(() => {
-    const userId = userFromToken?.user_id;
+  const { payments, error } = useSelector((state: RootState) => state.payments);
+  const lastPaymentMethod = payments?.[payments?.length - 1];
+
+  if (error) {
+    notifyError('Something went wrong, please try later');
+  }
+
+  useLayoutEffect(() => {
     const request = async () => {
-      const fetchUserData = await api.get(`/users/${userId}`);
+      const fetchUserData = await api.get(`/users/${decodedUserId}`);
 
       setUserEdited(fetchUserData.data);
     };
     request();
-  }, [userFromToken, token]);
-
-  useLayoutEffect(() => {
-    const request = async () => {
-      const fetchUserPaymentsMethods = await api.get(`/payments/user/${decodedUserId}`);
-      if (fetchUserPaymentsMethods.status !== 200) {
-        notifyError('Error to get user payments, try again later');
-      }
-      setUserPaymentMethod(fetchUserPaymentsMethods.data);
-    };
-    request();
-  }, [payments, token, decodedUserId]);
+  }, [decodedUserId]);
 
   useEffect(() => {
     const request = async () => {
@@ -91,20 +84,19 @@ const Profile = () => {
     };
     request();
   }, [token, address, decodedUserId]);
-  const lastPaymentMethod = userPaymentMethod?.[userPaymentMethod?.length - 1];
 
   useEffect(() => {
     if (userAddress?.length) {
       setPrincipalAddress(userAddress[0]);
     }
-  }, [userAddress, loading]);
+  }, [userAddress, loadingProfile]);
 
   const handleOpenProfile = () => {
     setEdit(!edit);
-    setEditPayment(false);
+    setOpenPaymentToEdit(false);
   };
   const handleOpenPayment = () => {
-    setEditPayment(!editPayment);
+    setOpenPaymentToEdit(!openPaymentToEdit);
     setEdit(false);
   };
 
@@ -122,7 +114,7 @@ const Profile = () => {
     }`,
   };
 
-  const userPayments = userPaymentMethod?.map((payment: UserPayment) => {
+  const userPayments = payments?.map((payment: UserPayment) => {
     const addingPayment = () => {
       if (selectedPayment?.id === payment.id) {
         setSelectedPayment(undefined);
@@ -146,7 +138,7 @@ const Profile = () => {
     );
   });
 
-  const userAddressList = userAddress?.map((address: UserAddress) => {
+  const userAddresses = userAddress?.map((address: UserAddress) => {
     const addingAddress = () => {
       if (selectedAddress?.id === address.id) {
         setSelectedAddress(undefined);
@@ -180,12 +172,12 @@ const Profile = () => {
   };
 
   const deleteAddress = (addressId: string) => {
-    setLoading(true);
+    setLoadingProfile(true);
     try {
       const request = async () => {
         const response = await api.delete(`/addresses/${addressId}`);
         if (response.status === 200) {
-         notifyDelete('Address deleted successfully')
+          notifyDelete('Address deleted successfully');
           const filteredAddresses = userAddress?.filter(
             (address: UserAddress) => address.id !== addressId
           );
@@ -194,31 +186,21 @@ const Profile = () => {
       };
       request();
     } catch (error) {
-      notifyError('Error to delete address, try again later')
+      notifyError('Error to delete address, try again later');
     }
     setUserAddress(undefined);
-    setLoading(false);
+    setLoadingProfile(false);
   };
 
   const deletePayment = (paymentId: string) => {
-    setLoading(true);
+    setLoadingProfile(true);
     try {
-      const request = async () => {
-        const response = await api.delete(`/payments/${paymentId}`);
-        if (response.status === 200) {
-          notifyDelete('Card deleted successfully')
-          const filteredPayments = userPaymentMethod?.filter(
-            (payment: UserPayment) => payment.id !== paymentId
-          );
-          setUserPaymentMethod(filteredPayments);
-        }
-      };
-      request();
+      dispatch(deletingPayment(paymentId));
     } catch (error) {
-      notifyError('Error to delete card, try again later')
+      notifyError('Error to delete card, try again later');
     }
     setSelectedPayment(undefined);
-    setLoading(false);
+    setLoadingProfile(false);
   };
 
   const handleOpenAddress = () => {
@@ -233,7 +215,7 @@ const Profile = () => {
 
   return (
     <div className="profile">
-      {loading && (
+      {loadingProfile && (
         <div className="profile__loading">
           <LoadingResponse />
         </div>
@@ -261,19 +243,19 @@ const Profile = () => {
             setUserEdited={setUserEdited}
             setEdit={setEdit}
             setAddresses={setAddress}
-            setLoading={setLoading}
+            setLoading={setLoadingProfile}
             userAddresses={userAddress}
           />
         </div>
       )}
-      {editPayment && (
+      {openPaymentToEdit && (
         <div className="profile__edit-form">
           <ProfilePayment
-            payment={selectedPayment}
+            selectedPayment={selectedPayment}
             userId={userEdited?.id}
-            setEditPayment={setEditPayment}
-            editPayment={editPayment}
-            setPayments={setPayments}
+            setOpenPaymentToEdit={setOpenPaymentToEdit}
+            openPaymentToEdit={openPaymentToEdit}
+            setSelectedPayment={setSelectedPayment}
           />
         </div>
       )}
@@ -309,7 +291,7 @@ const Profile = () => {
             </div>
             {userEdited?.phone}
           </div>
-          <div className="profile__data__payment-info__user-addresses">{userAddressList}</div>
+          <div className="profile__data__payment-info__user-addresses">{userAddresses}</div>
           <div className="profile__data__image-and-info__item" style={infoItemStyles}>
             <div className="profile__data__image-and-info__item--icon">
               <StreetviewTwoTone style={iconStyles} />
@@ -372,8 +354,8 @@ const Profile = () => {
         <div className="profile__data__payment-info">
           <div className="profile__data__payment-info__user-payments">{userPayments}</div>
           <div className="profile__data__payment-info__button" onClick={handleOpenPayment}>
-            {!editPayment ? (
-              !selectedPayment?.id && !editPayment ? (
+            {!openPaymentToEdit ? (
+              !selectedPayment?.id && !openPaymentToEdit ? (
                 <span className="profile__data__payment-info__button--add-payment">
                   <AddSharp style={{ transform: 'scale(1.5)', marginRight: '10px' }} /> Payment
                 </span>
