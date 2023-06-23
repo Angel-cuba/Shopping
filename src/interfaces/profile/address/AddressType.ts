@@ -7,3 +7,13 @@ export type AddressType = {
   createdAt: string
   updatedAt: string
   }
+
+  export type AddressToSend = {
+    address: string | undefined
+    city:  string | undefined
+    country: string | undefined
+    postalCode: string | undefined
+    user: {
+      id: string | undefined
+    }
+  }
