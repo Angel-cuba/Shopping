@@ -3,6 +3,9 @@ import { UserAddress, UserFromDB } from '../../interfaces/user/UserType';
 import { Input } from '../../components/Input/Input';
 import { api } from '../../utils/api';
 import { notifyError, notifySuccess } from '../../utils/notify';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '../../redux/store';
+import { addingAddress, updatingAddress } from '../../redux/actions/AddressAction';
 
 type Props = {
   userId: string | undefined;
@@ -10,9 +13,9 @@ type Props = {
   userEdited: UserFromDB;
   setUserEdited: (userEdited: UserFromDB) => void;
   setEdit: (edit: boolean) => void;
-  setAddresses: (addresses: UserAddress) => void;
   setLoading: (loading: boolean) => void;
-  userAddresses: UserAddress[] | undefined;
+  addresses: UserAddress[] | undefined;
+  setSelectedAddress: (address: UserAddress | undefined) => void;
 };
 
 const initialUserAddress: UserAddress = {
@@ -27,14 +30,16 @@ const ProfileAndAddress = ({
   userEdited,
   setUserEdited,
   setEdit,
-  setAddresses,
   address,
   setLoading,
-  userAddresses,
+  addresses,
+  setSelectedAddress,
 }: Props) => {
   const [openData, setOpenData] = React.useState(!address?.id ? true : false);
   const [confirmPassword, setConfirmPassword] = React.useState('');
   const [userAddress, setUserAddress] = React.useState(!address?.id ? initialUserAddress : address);
+
+  const dispatch = useDispatch<AppDispatch>();
 
   const cancelForm = () => {
     setEdit(false);
@@ -56,6 +61,15 @@ const ProfileAndAddress = ({
   const sendUserAddress = async () => {
     setLoading(true);
     if (!address?.id) {
+      if (
+        userAddress.address === '' ||
+        userAddress.city === '' ||
+        userAddress.postalCode === '' ||
+        userAddress.country === ''
+      ) {
+        setLoading(false)
+        return notifyError("Fields can't be empty");
+      }
       const addressData = {
         address: userAddress?.address,
         city: userAddress?.city,
@@ -65,18 +79,9 @@ const ProfileAndAddress = ({
           id: userId,
         },
       };
-      try {
-        const response = await api.post('/addresses', addressData);
-        setAddresses(response.data);
-        if (response.status === 200) {
-          notifySuccess('Address created');
-          setEdit(false);
-        } else {
-          notifyError('Error creating address, try again later');
-        }
-      } catch (error) {
-        notifyError('Error creating address, try again later');
-      }
+      dispatch(addingAddress(addressData));
+      notifySuccess('Address added');
+      setEdit(false);
     } else {
       const addressToUpdate = {
         id: address?.id,
@@ -88,21 +93,10 @@ const ProfileAndAddress = ({
           id: userId,
         },
       };
-      try {
-        const request = async () => {
-          const response = await api.put(`/addresses`, addressToUpdate);
-          setAddresses(response.data);
-          if (response.status === 200) {
-            notifySuccess('Address updated');
-            setEdit(false);
-          } else {
-            notifyError('Error updating address, try again later');
-          }
-        };
-        request();
-      } catch (error) {
-        notifyError('Error updating address, try again later');
-      }
+      dispatch(updatingAddress(addressToUpdate));
+      notifySuccess('Address updated');
+      setEdit(false);
+      setSelectedAddress(undefined);
     }
     setLoading(false);
   };
@@ -113,7 +107,7 @@ const ProfileAndAddress = ({
     }
     sendUserAddress();
   };
-  const userAddressInfoStreet = userAddresses?.map((address: UserAddress) => {
+  const userAddressInfoStreet = addresses?.map((address: UserAddress) => {
     return (
       <p key={address.id} className="profile__edit-form__container__user-address__addresses--item">
         {address.address}
@@ -141,7 +135,7 @@ const ProfileAndAddress = ({
         if (response.status === 200) {
           notifySuccess('User updated');
           setEdit(false);
-        } 
+        }
       };
       request();
     } catch (error) {
