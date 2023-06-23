@@ -25,7 +25,7 @@ import { GlobalTheme } from '../../context/ThemeProvider';
 import { darkTheme, lightTheme } from '../../styles/styles';
 import LoadingResponse from '../../components/Loading/LoadingResponse';
 import UserHistory from './History/UserHistory';
-import { fetchingAddresses } from '../../redux/actions/AddressAction';
+import { deletingAddress, fetchingAddresses } from '../../redux/actions/AddressAction';
 import { deletingPayment, fetchingPayments } from '../../redux/actions/PaymentAction';
 import { api } from '../../utils/api';
 import { notifyDelete, notifyError } from '../../utils/notify';
@@ -39,18 +39,13 @@ const Profile = () => {
   const [openPaymentToEdit, setOpenPaymentToEdit] = React.useState(false);
   const [openHistory, setOpenHistory] = React.useState(false);
   const [userEdited, setUserEdited] = React.useState<UserFromDB>();
-  const [userAddress, setUserAddress] = React.useState<UserAddress[]>();
-  const [address, setAddress] = React.useState<UserAddress>();
   const [selectedPayment, setSelectedPayment] = React.useState<UserPayment>();
   const [selectedAddress, setSelectedAddress] = React.useState<UserAddress>();
-  const [principalAddress, setPrincipalAddress] = React.useState<UserAddress>();
   const [loadingProfile, setLoadingProfile] = React.useState(false);
   const [history, setHistory] = React.useState<[]>();
 
   const { theme } = GlobalTheme();
   const dispatch = useDispatch<AppDispatch>();
-
-  const token = localStorage.getItem('token');
 
   useEffect(() => {
     dispatch(fetchingAddresses(decodedUserId));
@@ -58,7 +53,10 @@ const Profile = () => {
   }, [dispatch, decodedUserId]);
 
   const { payments, error } = useSelector((state: RootState) => state.payments);
-  const lastPaymentMethod = payments?.[payments?.length - 1];
+  const { addresses } = useSelector((state: RootState) => state.addresses)
+
+  const lastPaymentMethod = payments?.[payments.length - 1];
+  const lastAddress = addresses?.[addresses.length - 1]
 
   if (error) {
     notifyError('Something went wrong, please try later');
@@ -72,24 +70,6 @@ const Profile = () => {
     };
     request();
   }, [decodedUserId]);
-
-  useEffect(() => {
-    const request = async () => {
-      const fetchUserAddresses = await api.get(`/addresses/user/${decodedUserId}`);
-      if (fetchUserAddresses.status !== 200) {
-        notifyError('Error to get user addresses, try again later');
-      } else if (fetchUserAddresses.status === 200) {
-        setUserAddress(fetchUserAddresses.data);
-      }
-    };
-    request();
-  }, [token, address, decodedUserId]);
-
-  useEffect(() => {
-    if (userAddress?.length) {
-      setPrincipalAddress(userAddress[0]);
-    }
-  }, [userAddress, loadingProfile]);
 
   const handleOpenProfile = () => {
     setEdit(!edit);
@@ -138,7 +118,7 @@ const Profile = () => {
     );
   });
 
-  const userAddresses = userAddress?.map((address: UserAddress) => {
+  const userAddresses = addresses.map((address: UserAddress) => {
     const addingAddress = () => {
       if (selectedAddress?.id === address.id) {
         setSelectedAddress(undefined);
@@ -174,21 +154,12 @@ const Profile = () => {
   const deleteAddress = (addressId: string) => {
     setLoadingProfile(true);
     try {
-      const request = async () => {
-        const response = await api.delete(`/addresses/${addressId}`);
-        if (response.status === 200) {
-          notifyDelete('Address deleted successfully');
-          const filteredAddresses = userAddress?.filter(
-            (address: UserAddress) => address.id !== addressId
-          );
-          setUserAddress(filteredAddresses);
-        }
-      };
-      request();
+      dispatch(deletingAddress(addressId))
+      notifyDelete('Address deleted successfully')
     } catch (error) {
       notifyError('Error to delete address, try again later');
     }
-    setUserAddress(undefined);
+    setSelectedAddress(undefined)
     setLoadingProfile(false);
   };
 
@@ -196,6 +167,7 @@ const Profile = () => {
     setLoadingProfile(true);
     try {
       dispatch(deletingPayment(paymentId));
+      notifyDelete('Payment deleted')
     } catch (error) {
       notifyError('Error to delete card, try again later');
     }
@@ -242,9 +214,9 @@ const Profile = () => {
             userEdited={userEdited}
             setUserEdited={setUserEdited}
             setEdit={setEdit}
-            setAddresses={setAddress}
             setLoading={setLoadingProfile}
-            userAddresses={userAddress}
+            addresses={addresses}
+            setSelectedAddress={setSelectedAddress}
           />
         </div>
       )}
@@ -297,9 +269,9 @@ const Profile = () => {
               <StreetviewTwoTone style={iconStyles} />
             </div>
             {!selectedAddress?.address
-              ? !principalAddress?.address
+              ? !lastAddress?.address
                 ? 'Address'
-                : principalAddress.address
+                : lastAddress.address
               : selectedAddress.address}
           </div>
           <div className="profile__data__image-and-info__item" style={infoItemStyles}>
@@ -307,9 +279,9 @@ const Profile = () => {
               <Apartment style={iconStyles} />
             </div>
             {!selectedAddress?.city
-              ? !principalAddress?.city
+              ? !lastAddress?.city
                 ? 'City'
-                : principalAddress.city
+                : lastAddress.city
               : selectedAddress.city}
           </div>
           <div className="profile__data__image-and-info__item" style={infoItemStyles}>
@@ -317,9 +289,9 @@ const Profile = () => {
               <PostAdd style={iconStyles} />
             </div>
             {!selectedAddress?.postalCode
-              ? !principalAddress?.postalCode
+              ? !lastAddress?.postalCode
                 ? 'Postal Code'
-                : principalAddress.postalCode
+                : lastAddress.postalCode
               : selectedAddress.postalCode}
           </div>
           <div className="profile__data__image-and-info__item" style={infoItemStyles}>
@@ -327,9 +299,9 @@ const Profile = () => {
               <PublicRounded style={iconStyles} />
             </div>
             {!selectedAddress?.country
-              ? !principalAddress?.country
+              ? !lastAddress?.country
                 ? 'Country'
-                : principalAddress.country
+                : lastAddress.country
               : selectedAddress.country}
           </div>
           {selectedAddress?.id && (
