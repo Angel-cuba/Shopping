@@ -4,7 +4,7 @@ import { Input } from '../../components/Input/Input';
 import { AppDispatch } from '../../redux/store';
 import { useDispatch } from 'react-redux';
 import { addingPayment, updatingPayment } from '../../redux/actions/PaymentAction';
-import { notifySuccess } from '../../utils/notify';
+import { notifyError, notifySuccess } from '../../utils/notify';
 
 type ProfilePaymentProps = {
   userId: string | undefined;
@@ -26,7 +26,7 @@ const ProfilePayment = ({
   openPaymentToEdit,
   setOpenPaymentToEdit,
   selectedPayment,
-  setSelectedPayment
+  setSelectedPayment,
 }: ProfilePaymentProps) => {
   const today = new Date();
   const currentMonth = (today.getMonth() + 1).toString().padStart(2, '0');
@@ -36,10 +36,10 @@ const ProfilePayment = ({
   );
 
   useEffect(() => {
-    if(selectedPayment) {
+    if (selectedPayment) {
       setUserPaymentMethod(selectedPayment);
     }
-  }, [selectedPayment])
+  }, [selectedPayment]);
 
   const dispatch = useDispatch<AppDispatch>();
 
@@ -57,6 +57,15 @@ const ProfilePayment = ({
 
   const sendPaymentData = async () => {
     if (!userPaymentMethod.id) {
+      if (
+        userPaymentMethod.paymentType === '' ||
+        userPaymentMethod.provider === '' ||
+        userPaymentMethod.cardNumber === '' ||
+        userPaymentMethod.expirationDate === '' ||
+        userPaymentMethod.cardHolderName === ''
+      ) {
+        return notifyError("Fields can't be empty");
+      }
       const paymentData = {
         paymentType: userPaymentMethod.paymentType,
         provider: userPaymentMethod.provider,
@@ -68,7 +77,7 @@ const ProfilePayment = ({
         },
       };
       dispatch(addingPayment(paymentData));
-      notifySuccess('Payment created')
+      notifySuccess('Payment created');
       setOpenPaymentToEdit(false);
     } else {
       const updatePaymentData = {
@@ -84,8 +93,8 @@ const ProfilePayment = ({
       };
       dispatch(updatingPayment(updatePaymentData));
       setOpenPaymentToEdit(false);
-      notifySuccess('Payment updated')
-      setSelectedPayment(undefined)
+      notifySuccess('Payment updated');
+      setSelectedPayment(undefined);
     }
   };
 

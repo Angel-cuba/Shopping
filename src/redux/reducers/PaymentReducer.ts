@@ -1,12 +1,23 @@
-import { AnyAction } from "redux";
-import { ADD_PAYMENT, DELETE_PAYMENT, ERROR, FETCH_FAILURE, FETCH_PAYMENTS, FETCH_SUCCESS, LOADING, PaymentState, REQUEST, STOP_LOADING, UPDATE_PAYMENT } from "../../interfaces/profile/payment/constants";
-
+import { AnyAction } from 'redux';
+import {
+  ADD_PAYMENT,
+  DELETE_PAYMENT,
+  ERROR,
+  FETCH_FAILURE,
+  FETCH_PAYMENTS,
+  FETCH_SUCCESS,
+  LOADING,
+  PaymentState,
+  REQUEST,
+  STOP_LOADING,
+  UPDATE_PAYMENT,
+} from '../../interfaces/profile/payment/constants';
 
 export const initialPaymentState: PaymentState = {
   payments: [],
   loading: false,
   error: null,
-  success: false
+  success: false,
 };
 
 export default function paymentReducer(state = initialPaymentState, action: AnyAction) {
@@ -16,10 +27,10 @@ export default function paymentReducer(state = initialPaymentState, action: AnyA
         ...state,
         payments: action.payload,
       };
-    case ADD_PAYMENT: 
+    case ADD_PAYMENT:
       return {
         ...state,
-        payments: [action.payload, ...state.payments],
+        payments: [...state.payments, action.payload],
       };
     case UPDATE_PAYMENT:
       const payments = state.payments.map((payment) => {
@@ -30,7 +41,7 @@ export default function paymentReducer(state = initialPaymentState, action: AnyA
       });
       return {
         ...state,
-        payments
+        payments,
       };
     case DELETE_PAYMENT:
       const removedPayment = state.payments.filter((payment) => payment.id !== action.payload);

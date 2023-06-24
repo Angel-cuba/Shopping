@@ -41,12 +41,11 @@ export const deletePayment = (paymentId: string) => {
 
 export const fetchingPayments = (userId: string) => {
   return async (dispatch: Dispatch) => {
+    dispatch({ type: LOADING });
     try {
-      dispatch({ type: LOADING });
       const response = await api.get(`/payments/user/${userId}`);
       if (response.status !== 200) {
         dispatch({ type: ERROR, payload: response.data });
-        console.log(response.data);
       } else {
         dispatch(getPayments(response.data));
       }
@@ -59,21 +58,21 @@ export const fetchingPayments = (userId: string) => {
 
 export const addingPayment = (payment: PaymentToSend) => {
   return async (dispatch: Dispatch) => {
+    dispatch({ type: LOADING });
     try {
-      dispatch({ type: LOADING });
       const resquest = await api.post('/payments', payment);
       dispatch(addPayment(resquest.data));
-      dispatch({ type: STOP_LOADING });
     } catch (error) {
       dispatch({ type: ERROR, payload: error });
     }
+    dispatch({ type: STOP_LOADING });
   };
 };
 
 export const updatingPayment = (payment: PaymentToSend) => {
   return async (dispatch: Dispatch) => {
+    dispatch({ type: LOADING });
     try {
-      dispatch({ type: LOADING });
       const resquest = await api.put('/payments', payment);
       dispatch(updatePayment(resquest.data));
     } catch (error) {
@@ -85,8 +84,8 @@ export const updatingPayment = (payment: PaymentToSend) => {
 
 export const deletingPayment = (paymentId: string) => {
   return async (dispatch: Dispatch) => {
+    dispatch({ type: LOADING });
     try {
-      dispatch({ type: LOADING });
       await api.delete(`/payments/${paymentId}`);
       dispatch(deletePayment(paymentId));
     } catch (error) {
