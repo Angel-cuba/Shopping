@@ -2,6 +2,7 @@ import React, { Suspense, lazy } from 'react';
 import { Route, Routes } from 'react-router';
 import LoadingResponse from '../components/Loading/LoadingResponse';
 import { isAdmin, isUserAuthenticated } from '../utils/authentication';
+import UserHistory from '../pages/User/History/UserHistory';
 
 const Home = lazy(() => import('./Home'));
 const Profile = lazy(() => import('../pages/User/Profile'));
@@ -22,7 +23,10 @@ const Navigation = () => {
         <Route path="/checkout" element={<Checkout />} />
         <Route path="/checkout/product/:id" element={<ProductById />} />
 
-        {isUserAuthenticated() && <Route path="/profile" element={<Profile />} />}
+        {isUserAuthenticated() && <>
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/history" element={<UserHistory />} />
+        </>}
         {isAdmin() && isUserAuthenticated() ? (
           <>
             <Route path="/admin/products" element={<Home />} />
