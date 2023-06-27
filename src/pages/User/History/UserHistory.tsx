@@ -1,54 +1,41 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import moment from 'moment';
-import './UserHistory.scss';
 import { api } from '../../../utils/api';
+import { notifyError } from '../../../utils/notify';
+import {
+  History,
+  date,
+  orderDetails,
+  orderDetailsItem,
+} from '../../../interfaces/profile/order/orderType';
+import './UserHistory.scss';
 
-type Props = {
-  setOpenHistory: (opened: boolean) => void;
-  history: History[] | undefined;
-};
+const UserHistory = () => {
+  const [history, setHistory] = React.useState<[]>();
 
-type History = {
-  id: string;
-  paymentType: string;
-  shippingMethod: string;
-  shippingAddress: string;
-  shippingFee: number;
-  total: number;
-  createdAt: string;
-  orderDetails: string[];
-};
-type date = {
-  dateString: string;
-};
-type orderDetails = {
-  orderDetails: any;
-};
+  const decodedUserId = JSON.parse(localStorage.getItem('decodedUser') || '{}').user_id;
 
-const UserHistory = ({ setOpenHistory, history }: Props) => {
-  console.log('🚀 ~ file: UserHistory.tsx:10 ~ UserHistory ~ history:', history);
-
-  const closeHistory = () => {
-    setOpenHistory(false);
-  };
+  useEffect(() => {
+    const handleOpenHistory = async () => {
+      const requestHistory = await api.get(`/orders/${decodedUserId}`);
+      setHistory(requestHistory.data);
+    };
+    handleOpenHistory();
+  }, [decodedUserId]);
   return (
     <div className="history">
-      <button onClick={closeHistory} className="history__btn">
-        Close
-      </button>
       {history?.map((order: History) => (
-        <div key={order.id} className="history__item">
-          <div className="history__item--type">{order.paymentType}</div>
-          <div className="history__item--address">Delivered in: {order.shippingAddress}</div>
-          <div className="history__item--method">
+        <div key={order.id} className="history__items">
+          <div className="history__items--type">{order.paymentType}</div>
+          <div className="history__items--address">Delivered in: {order.shippingAddress}</div>
+          <div className="history__items--method">
             {order.shippingMethod === 'DOOR' ? 'Received at home' : 'Picked up from store'}
           </div>
-          <div className="history__item--total">Total spent ${order.total}</div>
-          <div className="history__item--date">
+          <div className="history__items--total">Total spent ${order.total}</div>
+          <div className="history__items--date">
             <Date dateString={order.createdAt} />
           </div>
-          <div className="history__item__details">
-            <h2>Details</h2>
+          <div className="history__items__details">
             <OrderDetails orderDetails={order.orderDetails} />
           </div>
         </div>
@@ -60,52 +47,51 @@ const UserHistory = ({ setOpenHistory, history }: Props) => {
 export default UserHistory;
 
 const OrderDetails = ({ orderDetails }: orderDetails) => {
-  console.log('🚀 ~ file: UserHistory.tsx:51 ~ OrderDetails ~ orderDetails:', orderDetails);
-  // const [details, setDetails] = React.useState<any>([])
-  // console.log("🚀 ~ file: UserHistory.tsx:51 ~ OrderDetails ~ details:", details)
-  // React.useEffect(() => {
-
+  const [items, setItems] = useState([]);
 
   useEffect(() => {
-    // const request = async () => {
-    //   const response = await api.get('/order-details/all-order-details', orderDetails)
-    //   console.log("🚀 ~ file: UserHistory.tsx:80 ~ request ~ response:", response)
-
-    // };
-    // request();
-      const enviarSolicitud = async () => {
+    const orderDetailsRequest = async () => {
       try {
         const params = new URLSearchParams();
         orderDetails.forEach((item: any) => params.append('orderDetailsIds', item));
 
-        const response = await api.get('/order-details/user-order-details', { params: params });
-        console.log(response.data);
+        const response = await api.get('/order-details/all-order-details', {
+          params: {
+            orderDetailsIds: orderDetails.join(','),
+          },
+        });
+        setItems(response.data);
       } catch (error) {
-        console.error(error);
+        notifyError('Something went wrong, try later');
       }
     };
-
-    enviarSolicitud();
+    orderDetailsRequest();
   }, [orderDetails]);
 
-  // setDetails(request.data)
-  //
-  //   fetchingData()
-  // }, [orderDetails])
   return (
-    <div>
-      {/* {orderDetails.map((item: any) => (
-        <div key={item.id}>
-          <div>{item.id}</div>
-          <div>{item.variant}</div>
-          <div>{item.image}</div>
-          <div>{item.size}</div>
-          <div>{item.price}</div>
-          <div>{item.quantity}</div>
-          <div>{item.user.id}</div>
+    <>
+      {items.map((item: orderDetailsItem) => (
+        <div key={item.id} className="history__items__details__item">
+          <div
+            style={{ backgroundColor: `${item.variant}`, boxShadow: `0 0 2px 0 ${item.variant}` }}
+            className="history__items__details__item--variant"
+          ></div>
+          <img
+            src={item.image}
+            alt={item.variant}
+            style={{
+              width: '100px',
+              height: '100px',
+            }}
+          />
+          <div className="history__items__details__item__info">
+            <p className="history__items__details__item__info--size">{item.size}</p>
+            <p className="history__items__details__item__info--price">{item.price}</p>
+            <p className="history__items__details__item__info--quantity">{item.quantity}</p>
+          </div>
         </div>
-      ))} */}
-    </div>
+      ))}
+    </>
   );
 };
 
