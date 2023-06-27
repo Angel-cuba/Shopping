@@ -24,11 +24,11 @@ import ProfilePayment from './ProfilePayment';
 import { GlobalTheme } from '../../context/ThemeProvider';
 import { darkTheme, lightTheme } from '../../styles/styles';
 import LoadingResponse from '../../components/Loading/LoadingResponse';
-import UserHistory from './History/UserHistory';
 import { deletingAddress, fetchingAddresses } from '../../redux/actions/AddressAction';
 import { deletingPayment, fetchingPayments } from '../../redux/actions/PaymentAction';
 import { api } from '../../utils/api';
 import { notifyDelete, notifyError } from '../../utils/notify';
+import { Link } from 'react-router-dom';
 import './Profile.scss';
 
 const Profile = () => {
@@ -37,12 +37,10 @@ const Profile = () => {
 
   const [edit, setEdit] = React.useState(false);
   const [openPaymentToEdit, setOpenPaymentToEdit] = React.useState(false);
-  const [openHistory, setOpenHistory] = React.useState(false);
   const [userEdited, setUserEdited] = React.useState<UserFromDB>();
   const [selectedPayment, setSelectedPayment] = React.useState<UserPayment>();
   const [selectedAddress, setSelectedAddress] = React.useState<UserAddress>();
   const [loadingProfile, setLoadingProfile] = React.useState(false);
-  const [history, setHistory] = React.useState<[]>();
 
   const { theme } = GlobalTheme();
   const dispatch = useDispatch<AppDispatch>();
@@ -53,10 +51,10 @@ const Profile = () => {
   }, [dispatch, decodedUserId]);
 
   const { payments, error } = useSelector((state: RootState) => state.payments);
-  const { addresses } = useSelector((state: RootState) => state.addresses)
+  const { addresses } = useSelector((state: RootState) => state.addresses);
 
   const lastPaymentMethod = payments?.[payments.length - 1];
-  const lastAddress = addresses?.[addresses.length - 1]
+  const lastAddress = addresses?.[addresses.length - 1];
 
   if (error) {
     notifyError('Something went wrong, please try later');
@@ -154,12 +152,12 @@ const Profile = () => {
   const deleteAddress = (addressId: string) => {
     setLoadingProfile(true);
     try {
-      dispatch(deletingAddress(addressId))
-      notifyDelete('Address deleted successfully')
+      dispatch(deletingAddress(addressId));
+      notifyDelete('Address deleted successfully');
     } catch (error) {
       notifyError('Error to delete address, try again later');
     }
-    setSelectedAddress(undefined)
+    setSelectedAddress(undefined);
     setLoadingProfile(false);
   };
 
@@ -167,7 +165,7 @@ const Profile = () => {
     setLoadingProfile(true);
     try {
       dispatch(deletingPayment(paymentId));
-      notifyDelete('Payment deleted')
+      notifyDelete('Payment deleted');
     } catch (error) {
       notifyError('Error to delete card, try again later');
     }
@@ -177,12 +175,6 @@ const Profile = () => {
 
   const handleOpenAddress = () => {
     setEdit(!edit);
-  };
-
-  const handleOpenHistory = async () => {
-    setOpenHistory(true);
-    const requestHistory = await api.get(`/orders/${decodedUserId}`);
-    setHistory(requestHistory.data);
   };
 
   return (
@@ -195,17 +187,9 @@ const Profile = () => {
       <div className="profile__edit-button" onClick={handleOpenProfile}>
         {edit ? 'Close editing view' : 'Edit profile'}
       </div>
-      <div
-        className={!edit ? 'profile__history-button' : 'profile__history-button-editing-open'}
-        onClick={handleOpenHistory}
-      >
+      <Link to="/history" className="profile__history-button-editing-open">
         History
-      </div>
-      {openHistory && (
-        <div className="profile__history">
-          <UserHistory setOpenHistory={setOpenHistory} history={history} />
-        </div>
-      )}
+      </Link>
       {edit && userEdited && (
         <div className="profile__edit-form">
           <ProfileAddress
