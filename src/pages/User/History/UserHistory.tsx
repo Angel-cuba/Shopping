@@ -11,7 +11,8 @@ import {
 import './UserHistory.scss';
 
 const UserHistory = () => {
-  const [history, setHistory] = React.useState<[]>();
+  const [history, setHistory] = useState<[]>();
+  console.log("🚀 ~ file: UserHistory.tsx:15 ~ UserHistory ~ history:", history)
 
   const decodedUserId = JSON.parse(localStorage.getItem('decodedUser') || '{}').user_id;
 
@@ -23,23 +24,31 @@ const UserHistory = () => {
     handleOpenHistory();
   }, [decodedUserId]);
   return (
-    <div className="history">
-      {history?.map((order: History) => (
-        <div key={order.id} className="history__items">
-          <div className="history__items--type">{order.paymentType}</div>
-          <div className="history__items--address">Delivered in: {order.shippingAddress}</div>
-          <div className="history__items--method">
-            {order.shippingMethod === 'DOOR' ? 'Received at home' : 'Picked up from store'}
+    <div className="container">
+      <div className="content">
+      </div>
+      <div className="history">
+        {history?.map((order: History) => (
+          <div key={order.id} className="history__items">
+            <div className="history__items__shipping">
+              <div className="history__items__shipping--type">{order.paymentType}</div>
+              <div className="history__items__shipping--address">
+                Delivered in: {order.shippingAddress}
+              </div>
+              <div className="history__items__shipping--method">
+                {order.shippingMethod === 'DOOR' ? 'Received at home' : 'Picked up from store'}
+              </div>
+              <div className="history__items--total">Total spent ${order.total}</div>
+            </div>
+            <div className="history__items--date">
+              <Date dateString={order.createdAt} />
+            </div>
+            <div className="history__items__details">
+              <OrderDetails orderDetails={order.orderDetails} />
+            </div>
           </div>
-          <div className="history__items--total">Total spent ${order.total}</div>
-          <div className="history__items--date">
-            <Date dateString={order.createdAt} />
-          </div>
-          <div className="history__items__details">
-            <OrderDetails orderDetails={order.orderDetails} />
-          </div>
-        </div>
-      ))}
+        ))}
+      </div>
     </div>
   );
 };
@@ -65,6 +74,7 @@ const OrderDetails = ({ orderDetails }: orderDetails) => {
         notifyError('Something went wrong, try later');
       }
     };
+
     orderDetailsRequest();
   }, [orderDetails]);
 
@@ -76,17 +86,19 @@ const OrderDetails = ({ orderDetails }: orderDetails) => {
             style={{ backgroundColor: `${item.variant}`, boxShadow: `0 0 2px 0 ${item.variant}` }}
             className="history__items__details__item--variant"
           ></div>
-          <img
-            src={item.image}
-            alt={item.variant}
-            style={{
-              width: '100px',
-              height: '100px',
-            }}
-          />
+          <div className="history__items__details__item--img">
+            <img
+              src={item.image}
+              alt={item.variant}
+              style={{
+                width: '100%',
+                height: '100%',
+              }}
+            />
+          </div>
           <div className="history__items__details__item__info">
             <p className="history__items__details__item__info--size">{item.size}</p>
-            <p className="history__items__details__item__info--price">{item.price}</p>
+            <p className="history__items__details__item__info--price">$ {item.price}</p>
             <p className="history__items__details__item__info--quantity">{item.quantity}</p>
           </div>
         </div>
