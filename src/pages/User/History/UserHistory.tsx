@@ -12,7 +12,6 @@ import './UserHistory.scss';
 
 const UserHistory = () => {
   const [history, setHistory] = useState<[]>();
-  console.log("🚀 ~ file: UserHistory.tsx:15 ~ UserHistory ~ history:", history)
 
   const decodedUserId = JSON.parse(localStorage.getItem('decodedUser') || '{}').user_id;
 
