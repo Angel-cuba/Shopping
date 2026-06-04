@@ -21,4 +21,8 @@ export function ThemeProvider({ children }: Props): JSX.Element {
   return <ThemeContext.Provider value={{ theme, setTheme }}>{children}</ThemeContext.Provider>
 }
 
-export const GlobalTheme = (): ThemeContextInterface => useContext(ThemeContext)
+export const GlobalTheme = (): ThemeContextInterface => {
+  const ctx = useContext(ThemeContext);
+  if (!ctx) throw new Error('GlobalTheme must be used inside <ThemeProvider>');
+  return ctx;
+}

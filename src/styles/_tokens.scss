@@ -1,0 +1,104 @@
+// ============================================================
+// STRIDE — Design Tokens (ported from Unit Mobile Design System)
+// Source: /tmp/stride_design/shopping-app/project/tokens.css
+// Font: DM Sans (Google Fonts)
+// ============================================================
+
+// ── CSS Custom Properties injected at :root ─────────────────
+// These are set via the tokens.css global import; this file
+// exposes them as SCSS variables for use in computed values.
+
+// Base Colors
+$color-bg-canvas:       #FAFAFA;
+$color-bg-surface:      #FFFFFF;
+$color-bg-subtle:       #F3F4F6;
+$color-bg-muted:        #E5E7EB;
+
+// Foreground
+$color-fg-primary:      #111827;
+$color-fg-secondary:    #374151;
+$color-fg-muted:        #6B7280;
+$color-fg-placeholder:  #9CA3AF;
+$color-fg-inverted:     #FFFFFF;
+
+// Borders
+$color-border-default:  #E5E7EB;
+$color-border-strong:   #D1D5DB;
+$color-border-focus:    #2563EB;
+
+// Blue accent (primary action)
+$color-blue-600:        #2563EB;
+$color-blue-700:        #1D4ED8;
+$color-action:          #2563EB;
+$color-action-hover:    #1D4ED8;
+
+// Dark surface
+$color-dark-bg:         #020617;
+$color-dark-card:       rgba(15, 23, 42, 0.98);
+
+// Semantic
+$color-success:         #16A34A;
+$color-error:           #DC2626;
+$color-warning:         #D97706;
+
+// Typography
+$font-sans:   'DM Sans', system-ui, -apple-system, sans-serif;
+$font-mono:   'Courier New', monospace;
+
+// Type scale
+$text-xs:    12px;
+$text-sm:    14px;
+$text-base:  16px;
+$text-md:    18px;
+$text-lg:    20px;
+$text-xl:    24px;
+$text-2xl:   28px;
+$text-3xl:   32px;
+
+// Font weights
+$weight-regular:   400;
+$weight-medium:    500;
+$weight-semibold:  600;
+$weight-bold:      700;
+$weight-extrabold: 800;
+
+// Spacing (base 4px)
+$space-1:   4px;
+$space-2:   8px;
+$space-3:   12px;
+$space-4:   16px;
+$space-5:   20px;
+$space-6:   24px;
+$space-8:   32px;
+$space-10:  40px;
+$space-12:  48px;
+$space-16:  64px;
+
+// Border Radius
+$radius-xs:   6px;
+$radius-sm:   8px;
+$radius-md:   12px;
+$radius-lg:   16px;
+$radius-xl:   20px;
+$radius-pill: 999px;
+
+// Shadows
+$shadow-subtle:  0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04);
+$shadow-card:    0 2px 8px rgba(0,0,0,0.07), 0 1px 3px rgba(0,0,0,0.05);
+$shadow-medium:  0 4px 16px rgba(0,0,0,0.10), 0 2px 6px rgba(0,0,0,0.06);
+$shadow-strong:  0 10px 30px rgba(0,0,0,0.14), 0 4px 10px rgba(0,0,0,0.08);
+$shadow-focus:   0 0 0 3px rgba(37, 99, 235, 0.25);
+
+// Dark mode overrides — applied by [data-theme="dark"]
+// These values mirror the app.jsx dark theme remap
+$dark-bg-canvas:         #0B0F1A;
+$dark-bg-surface:        #131A2A;
+$dark-bg-subtle:         #1B2438;
+$dark-bg-muted:          #283449;
+$dark-fg-primary:        #F8FAFC;
+$dark-fg-secondary:      #CBD5E1;
+$dark-fg-muted:          #94A3B8;
+$dark-border-default:    rgba(148, 163, 184, 0.16);
+$dark-border-strong:     rgba(148, 163, 184, 0.30);
+$dark-action:            #3B82F6;
+$dark-action-hover:      #60A5FA;

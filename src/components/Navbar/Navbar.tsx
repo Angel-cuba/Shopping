@@ -1,270 +1,261 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect, useRef } from 'react';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import MenuIcon from '@mui/icons-material/Menu';
-import CloseIcon from '@mui/icons-material/Close';
-import StoreMallDirectoryIcon from '@mui/icons-material/StoreMallDirectory';
-import LightModeIcon from '@mui/icons-material/LightMode';
-import Brightness4Icon from '@mui/icons-material/Brightness4';
-import Group from '@mui/icons-material/Group';
-
-import { NavbarIcon, WishListIcon } from '../Cart/Icons';
 import { AppDispatch, RootState } from '../../redux/store';
 import { logout } from '../../redux/actions/UserAction';
+import { clearCart } from '../../redux/actions/CartActions';
+import { clearWishList } from '../../redux/actions/WishesActions';
 import { GlobalTheme } from '../../context/ThemeProvider';
-import { darkTheme, lightTheme } from '../../styles/styles';
-import { notifyRedirect, notifyWarning } from '../../utils/notify';
-import { ToastContainer } from 'react-toastify';
 import { isAdmin, isUserAuthenticated } from '../../utils/authentication';
+import { notifyWarning } from '../../utils/notify';
+import { ToastContainer } from 'react-toastify';
 import Login from '../../router/Login';
-import './Navbar.scss';
 
 const Navbar = () => {
-  const [isOpen, setIsOpen] = React.useState(false);
-  const [isDark, setIsDark] = React.useState(false);
-  const { user, userFromToken } = useSelector((state: RootState) => state.userLogged);
+  const [scrolled, setScrolled]     = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [menuOpen, setMenuOpen]     = useState(false);
+  const [loginOpen, setLoginOpen]   = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
 
-  const dispatch = useDispatch<AppDispatch>();
+  const { user, userFromToken }     = useSelector((state: RootState) => state.userLogged);
+  const cartItems                   = useSelector((state: RootState) => state.cart.itemInCart);
+  const wishItems                   = useSelector((state: RootState) => state.wishes.itemInWishlist);
+
+  const dispatch   = useDispatch<AppDispatch>();
+  const navigate   = useNavigate();
+  const location   = useLocation();
   const { theme, setTheme } = GlobalTheme();
-  const [openLogin, setOpenLogin] = useState(false);
 
-  const navigation = useNavigate();
+  // Scroll shadow
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 10);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  // Close dropdown on outside click
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+        setMenuOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, []);
 
   const handleLogout = () => {
-    notifyRedirect();
-    setTimeout(() => {
-      goingToLogin();
-    }, 2800);
-  };
-
-  const handleLogin = () => {
-    setOpenLogin(!openLogin);
-  };
-
-  const profileWarning = () => {
-    return notifyWarning('Please, login first to see your profile');
-  };
-
-  const goingToLogin = () => {
-    navigation('/', { replace: true });
     dispatch(logout());
+    dispatch(clearCart());
+    dispatch(clearWishList(''));
     localStorage.removeItem('user');
     localStorage.removeItem('token');
     localStorage.removeItem('decodedUser');
-    window.location.reload();
+    setMenuOpen(false);
+    navigate('/', { replace: true });
   };
-  const handleDarkMode = () => {
-    if (theme === 'light') {
-      setTheme('dark');
-    } else {
-      setTheme('light');
-    }
-    setIsDark(!isDark);
-  };
+
+  const cartCount = cartItems?.length ?? 0;
+  const wishCount = wishItems?.length ?? 0;
+  const authed    = isUserAuthenticated();
+  const admin     = isAdmin();
+
+  const isActive = (path: string) =>
+    location.pathname === path || location.pathname.startsWith(path + '/');
+
+  // Avatar initials fallback
+  const initials = user?.given_name?.[0] ?? userFromToken?.username?.[0]?.toUpperCase() ?? '?';
+
   return (
-    <div
-      className="navbar"
-      style={{
-        backgroundColor: theme === 'light' ? lightTheme.bg : darkTheme.bg,
-        boxShadow: `0 0 12 0 ${
-          theme === 'light' ? lightTheme.shadow : darkTheme.shadow
-        }, inset 0 0 12px 0 ${theme === 'light' ? lightTheme.shadow : darkTheme.shadow}`,
-        color: theme === 'light' ? '#000' : '#fff',
-      }}
-    >
-      <div className="navbar__navbar-left">
-        {isUserAuthenticated() ? (
-          <>
-            <img
-              src={
-                user?.picture
-                  ? user?.picture
-                  : 'https://www.pngitem.com/pimgs/m/146-1468479_my-profile-icon-blank-profile-picture-circle-hd.png'
-              }
-              alt={user?.name}
-              style={{
-                width: '50px',
-                height: '50px',
-                marginRight: '10px',
-                borderRadius: '40%',
-              }}
-            />
-            <h1>{user?.name ? user.name : userFromToken?.username}</h1>
-          </>
-        ) : (
-          <StoreMallDirectoryIcon
+    <>
+      <nav className={`stride-navbar${scrolled ? ' is-scrolled' : ''}`}>
+        <div className="stride-navbar__inner">
+
+          {/* Hamburger (mobile) */}
+          <button
+            className="stride-navbar__iconbtn stride-navbar__burger"
+            onClick={() => setMobileOpen(true)}
+            aria-label="Open menu"
+          >
+            <i className="fa fa-bars" />
+          </button>
+
+          {/* Brand */}
+          <Link to="/home" className="stride-navbar__brand">STRIDE</Link>
+
+          {/* Nav links (desktop) */}
+          <div className="stride-navbar__links">
+            <Link to="/home"    className={isActive('/home') || location.pathname === '/' ? 'is-active' : ''}>Store</Link>
+            {admin && <Link to="/admin"   className={isActive('/admin') ? 'is-active' : ''}>Admin</Link>}
+          </div>
+
+          {/* Actions */}
+          <div className="stride-navbar__actions">
+
+            {/* Dark mode toggle */}
+            <button
+              className="stride-navbar__iconbtn"
+              onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+              title={theme === 'dark' ? 'Light mode' : 'Dark mode'}
+            >
+              <i className={`fa ${theme === 'dark' ? 'fa-sun-o' : 'fa-moon-o'}`} />
+            </button>
+
+            {/* Wishlist */}
+            {authed && (
+              <button
+                className="stride-navbar__iconbtn"
+                title="Wishlist"
+                onClick={() => notifyWarning('Wishlist coming soon')}
+              >
+                <i className="fa fa-heart-o" />
+                {wishCount > 0 && <span className="stride-navbar__badge">{wishCount}</span>}
+              </button>
+            )}
+
+            {/* Cart */}
+            <Link to="/checkout" className="stride-navbar__iconbtn" title="Cart">
+              <i className="fa fa-shopping-bag" />
+              {cartCount > 0 && <span className="stride-navbar__badge">{cartCount}</span>}
+            </Link>
+
+            {/* Profile / Login */}
+            {authed ? (
+              <div style={{ position: 'relative' }} ref={menuRef}>
+                <button
+                  className="stride-navbar__iconbtn"
+                  onClick={() => setMenuOpen((o) => !o)}
+                  style={{ padding: 0, width: 42, height: 42 }}
+                  aria-label="Account menu"
+                >
+                  {user?.picture ? (
+                    <img
+                      src={user.picture}
+                      alt={user.name}
+                      className={`stride-navbar__avatar${admin ? ' is-admin' : ''}`}
+                    />
+                  ) : (
+                    <span className={`stride-navbar__avatar${admin ? ' is-admin' : ''}`}>
+                      {initials}
+                    </span>
+                  )}
+                </button>
+
+                {menuOpen && (
+                  <div className="stride-navbar__menu">
+                    <div className="stride-navbar__menu-head">
+                      {user?.picture ? (
+                        <img src={user.picture} alt="" className="stride-navbar__avatar" />
+                      ) : (
+                        <span className="stride-navbar__avatar">{initials}</span>
+                      )}
+                      <div>
+                        <div style={{ fontWeight: 600, fontSize: 14 }}>
+                          {user?.given_name ?? userFromToken?.username}
+                        </div>
+                        {admin && (
+                          <span className="stride-badge stride-badge--soft" style={{ fontSize: 11, marginTop: 2 }}>
+                            ADMIN
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                    <hr className="stride-divider" style={{ margin: '4px 0' }} />
+                    <Link to="/profile" onClick={() => setMenuOpen(false)}>
+                      <i className="fa fa-user" />Profile
+                    </Link>
+                    <Link to="/history" onClick={() => setMenuOpen(false)}>
+                      <i className="fa fa-history" />Order History
+                    </Link>
+                    {admin && (
+                      <Link to="/admin" onClick={() => setMenuOpen(false)}>
+                        <i className="fa fa-cogs" />Admin Panel
+                      </Link>
+                    )}
+                    <hr className="stride-divider" style={{ margin: '4px 0' }} />
+                    <button onClick={handleLogout}>
+                      <i className="fa fa-sign-out" />Sign out
+                    </button>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <button
+                className="stride-btn stride-btn--outline stride-btn--sm"
+                onClick={() => setLoginOpen((o) => !o)}
+              >
+                {loginOpen ? 'Close' : 'Login'}
+              </button>
+            )}
+          </div>
+        </div>
+
+        {/* Login overlay */}
+        {loginOpen && !authed && (
+          <div
             style={{
-              width: '50px',
-              height: '50px',
-            }}
-            color="primary"
-          />
-        )}
-      </div>
-      <div className="navbar__navbar-right">
-        {isAdmin() && (
-          <Link
-            to="/admin"
-            className="navbar__navbar-right__links"
-            style={{
-              color: theme === 'light' ? darkTheme.textLink : lightTheme.textLink,
+              position: 'absolute',
+              top: '66px',
+              left: 0,
+              right: 0,
+              zIndex: 80,
+              background: 'var(--color-bg-surface)',
+              borderBottom: '1px solid var(--color-border-default)',
+              boxShadow: 'var(--shadow-medium)',
             }}
           >
-            Admin
-          </Link>
-        )}
-        <Link
-          to="/home"
-          className="navbar__navbar-right__links"
-          style={{
-            color: theme === 'light' ? darkTheme.textLink : lightTheme.textLink,
-          }}
-        >
-          Store
-        </Link>
-        {isDark ? (
-          <Brightness4Icon
-            onClick={handleDarkMode}
-            style={{
-              width: '35px',
-              height: '35px',
-              color: lightTheme.textLink,
-              cursor: 'pointer',
-            }}
-          />
-        ) : (
-          <LightModeIcon
-            onClick={handleDarkMode}
-            color="warning"
-            style={{
-              width: '35px',
-              height: '35px',
-              cursor: 'pointer',
-            }}
-          />
-        )}
-        {isUserAuthenticated() ? (
-          <>
-            <Link
-              to="/profile"
-              className="navbar__navbar-right__links"
-              style={{
-                color: theme === 'light' ? darkTheme.textLink : lightTheme.textLink,
-              }}
-            >
-              Profile
-            </Link>
-            <div
-              className="navbar__navbar-right__links--login"
-              onClick={handleLogout}
-              style={{
-                color: theme === 'light' ? darkTheme.textLink : lightTheme.textLink,
-              }}
-            >
-              Logout
-            </div>
-            <div className="navbar__navbar-right__links__cart">
-              <WishListIcon />
-              <NavbarIcon />
-            </div>
-          </>
-        ) : (
-          <>
-            <div
-              className="navbar__navbar-right__links"
-              style={{
-                color: theme === 'light' ? darkTheme.textLink : lightTheme.textLink,
-              }}
-              onClick={profileWarning}
-            >
-              <Group
-                style={{
-                  fontSize: '2rem',
-                }}
-              />
-            </div>
-            <div
-              className={
-                !openLogin ? 'navbar__navbar-right__links--login' : 'navbar__navbar-right__links--login-close'
-              }
-              onClick={handleLogin}
-              style={{
-                color: theme === 'light' ? darkTheme.textLink : lightTheme.textLink,
-              }}
-            >
-              {
-                openLogin ? 'Close' : 'Login'
-              }
-            </div>
-            <div className="navbar__navbar-right__links__cart">
-              <NavbarIcon />
-            </div>
-          </>
-        )}
-      </div>
-      {openLogin && (
-        <div className="navbar__open-login-register">
-          <Login />
-        </div>
-      )}
-      <div className="navbar__navbar_mobile">
-        {isOpen ? (
-          <CloseIcon
-            style={{
-              color: theme === 'light' ? darkTheme.textLink : lightTheme.textLink,
-            }}
-            onClick={() => setIsOpen(!isOpen)}
-          />
-        ) : (
-          <MenuIcon
-            style={{
-              color: '#000',
-            }}
-            onClick={() => setIsOpen(!isOpen)}
-          />
-        )}
-        {isOpen && (
-          <div className="navbar__navbar_mobile__view">
-            <div className="navbar__navbar_mobile__view__user">
-              <div
-                style={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  width: '100%',
-                }}
-              >
-                <div className="navbar__navbar_mobile__view__user--avatar">
-                  <img src={user.picture} alt="user" className="w-20 h-20" />
-                </div>
-                <p className="navbar__navbar_mobile__view__user--name">
-                  <span className="navbar__navbar_mobile__view__user--name--text">
-                    {user.given_name}
-                  </span>
-                </p>
-              </div>
-              <div className="email">
-                <p className="navbar__navbar_mobile__view__user--email">{user?.email}</p>
-              </div>
-              <div className="navbar__navbar_mobile__view__user--cart">{/* <NavbarIcon /> */}</div>
-            </div>
-            <div className="navbar__navbar_mobile__view__links">
-              <Link to="/home" className="navbar__navbar_mobile__view__links--item">
-                Home
-              </Link>
-              <Link to="/login" className="navbar__navbar_mobile__view__links--item">
-                Products
-              </Link>
-              <Link to="/" className="navbar__navbar_mobile__view__links--item--login">
-                Login
-              </Link>
-            </div>
+            <Login />
           </div>
         )}
+      </nav>
+
+      {/* Mobile full-screen menu */}
+      {mobileOpen && (
+        <>
+          <div
+            className="stride-overlay"
+            onClick={() => setMobileOpen(false)}
+          />
+          <div className="mobile-menu">
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
+              <span className="stride-navbar__brand">STRIDE</span>
+              <button
+                className="stride-navbar__iconbtn"
+                onClick={() => setMobileOpen(false)}
+              >
+                <i className="fa fa-close" />
+              </button>
+            </div>
+            <Link to="/home"    onClick={() => setMobileOpen(false)}>Store</Link>
+            {authed && <Link to="/profile"  onClick={() => setMobileOpen(false)}>Profile</Link>}
+            {authed && <Link to="/history"  onClick={() => setMobileOpen(false)}>Orders</Link>}
+            {admin   && <Link to="/admin"    onClick={() => setMobileOpen(false)}>Admin</Link>}
+            {!authed && (
+              <button
+                className="stride-btn stride-btn--primary stride-btn--block s-mt-6"
+                onClick={() => { setMobileOpen(false); setLoginOpen(true); }}
+              >
+                Login
+              </button>
+            )}
+            {authed && (
+              <button
+                className="stride-btn stride-btn--outline stride-btn--block s-mt-6"
+                onClick={handleLogout}
+              >
+                <i className="fa fa-sign-out" style={{ marginRight: 8 }} />Sign out
+              </button>
+            )}
+          </div>
+        </>
+      )}
+
+      {/* Toast container */}
+      <div className="stride-navbar__notification">
+        <ToastContainer position="bottom-right" />
       </div>
-      <div className="navbar__notification">
-        <ToastContainer />
-      </div>
-    </div>
+    </>
   );
 };
 

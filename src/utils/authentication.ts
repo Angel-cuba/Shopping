@@ -1,9 +1,11 @@
-const userToken = localStorage.getItem('token');
-const decodedUserRole = JSON.parse(localStorage.getItem('decodedUser') || '{}').role;
-
 export const isAdmin = () => {
-  return decodedUserRole === 'ADMIN' && userToken;
+  const role = JSON.parse(localStorage.getItem('decodedUser') || '{}').role;
+  const token = localStorage.getItem('token');
+  return role === 'ADMIN' && !!token;
 };
+
 export const isUserAuthenticated = () => {
-  return decodedUserRole && userToken;
+  const role = JSON.parse(localStorage.getItem('decodedUser') || '{}').role;
+  const token = localStorage.getItem('token');
+  return !!role && !!token;
 };

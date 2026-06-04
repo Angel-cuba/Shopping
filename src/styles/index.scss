@@ -1,5 +1,17 @@
+// STRIDE Store — master stylesheet entry point
+// Import order matters: tokens first, then components
+
+// 1. Design tokens + component library (Unit Design System)
+@import './stride';
+
+// 2. Legacy SCSS files (kept for gradual migration)
+// These will be removed phase by phase as components are rewritten
+// @import './colors';       // superseded by --color-* tokens
+// @import './mixins';       // superseded by stride.scss utilities
+
+// Base typography fix for DM Sans
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: 'DM Sans', system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
   font-synthesis: none;
@@ -8,16 +20,11 @@
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
 }
+
 body {
   margin: 0;
   padding: 0;
   min-width: 320px;
   min-height: 100vh;
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
+  // Background and color are set by stride.scss via CSS custom properties
 }

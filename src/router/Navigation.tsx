@@ -3,6 +3,7 @@ import { Route, Routes } from 'react-router';
 import LoadingResponse from '../components/Loading/LoadingResponse';
 import { isAdmin, isUserAuthenticated } from '../utils/authentication';
 import UserHistory from '../pages/User/History/UserHistory';
+import NotFound from '../pages/Error/NotFound';
 
 const Home = lazy(() => import('./Home'));
 const Profile = lazy(() => import('../pages/User/Profile'));
@@ -37,6 +38,7 @@ const Navigation = () => {
             <Route path="/admin/createandcheck/check" element={<CreateAndCheck />} />
           </>
         ) : null}
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </Suspense>
   );
