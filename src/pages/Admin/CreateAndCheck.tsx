@@ -93,27 +93,40 @@ const CreateAndCheck: React.FC = () => {
       return;
     }
     setSaving(true);
-    if (editingId) {
-      await dispatch(updateProductInStock({ ...form, id: editingId }));
-      toastSuccess('Product updated');
-    } else {
-      const { id: _id, ...payload } = form;
-      await dispatch(addProductToStock(payload));
-      toastSuccess('Product added');
+    try {
+      if (editingId) {
+        await dispatch(updateProductInStock({ ...form, id: editingId }));
+        toastSuccess('Product updated');
+      } else {
+        const { id: _id, ...payload } = form;
+        await dispatch(addProductToStock(payload));
+        toastSuccess('Product added');
+      }
+      resetForm();
+    } finally {
+      setSaving(false);
     }
-    setSaving(false);
-    resetForm();
   };
 
   /* ── delete ── */
   const handleDelete = async (id: string) => {
     setDeletingId(id);
-    await dispatch(deleteProductFromStock(id));
-    toastDelete('Product deleted');
-    setDeletingId(null);
+    try {
+      await dispatch(deleteProductFromStock(id));
+      toastDelete('Product deleted');
+    } finally {
+      setDeletingId(null);
+    }
   };
 
   /* ── styles ── */
+  const ROW_2COL: React.CSSProperties = {
+    display: 'grid',
+    gridTemplateColumns: '1fr 1fr',
+    gap: 'var(--space-4)',
+    marginBottom: 'var(--space-4)',
+  };
+
   const toggleBtn = (active: boolean): React.CSSProperties => ({
     padding: '4px 10px',
     borderRadius: 'var(--radius-sm)',
@@ -172,7 +185,7 @@ const CreateAndCheck: React.FC = () => {
 
           <form onSubmit={handleSubmit}>
             {/* Row 1: name + category */}
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--space-4)', marginBottom: 'var(--space-4)' }}>
+            <div style={ROW_2COL}>
               <div className="stride-field" style={{ margin: 0 }}>
                 <label className="stride-label">Name</label>
                 <input
@@ -192,7 +205,7 @@ const CreateAndCheck: React.FC = () => {
             </div>
 
             {/* Row 2: price + inStock */}
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--space-4)', marginBottom: 'var(--space-4)' }}>
+            <div style={ROW_2COL}>
               <div className="stride-field" style={{ margin: 0 }}>
                 <label className="stride-label">Price ($)</label>
                 <input
@@ -370,7 +383,7 @@ const CreateAndCheck: React.FC = () => {
                       </button>
                       <button
                         className="stride-btn stride-btn--ghost"
-                        style={{ padding: '4px 10px', fontSize: 'var(--text-xs)', color: 'var(--color-sale)' }}
+                        style={{ padding: '4px 10px', fontSize: 'var(--text-xs)', color: 'var(--color-error)' }}
                         disabled={deletingId === p.id}
                         onClick={() => handleDelete(p.id)}
                       >

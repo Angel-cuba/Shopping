@@ -5,6 +5,7 @@ import { AppDispatch, RootState } from '../../redux/store';
 import { fetchProducts } from '../../redux/actions/ProductActions';
 import { api } from '../../utils/api';
 import { AdminOrder, AdminUser } from '../../interfaces/admin/AdminTypes';
+import { toastError } from '../../utils/toasts';
 
 const AdminDashboard: React.FC = () => {
   const dispatch  = useDispatch<AppDispatch>();
@@ -16,18 +17,18 @@ const AdminDashboard: React.FC = () => {
   useEffect(() => { dispatch(fetchProducts()); }, [dispatch]);
 
   useEffect(() => {
-    api.get<AdminOrder[]>('/orders').then(r => setOrders(r.data)).catch(() => {});
-    api.get<AdminUser[]>('/users').then(r => setUsers(r.data)).catch(() => {});
+    api.get<AdminOrder[]>('/orders').then(r => setOrders(r.data)).catch(() => toastError('Failed to load orders'));
+    api.get<AdminUser[]>('/users').then(r => setUsers(r.data)).catch(() => toastError('Failed to load customers'));
   }, []);
 
   const revenue      = orders.reduce((sum, o) => sum + o.total, 0);
   const pendingCount = orders.filter(o => o.status === 'PENDING').length;
 
   const stats = [
-    { icon: 'fa-users',    label: 'Customers',    value: users.length,                    color: 'var(--color-action)' },
-    { icon: 'fa-tag',      label: 'Products',     value: products.length,                 color: '#22c55e' },
-    { icon: 'fa-list-alt', label: 'Total orders', value: orders.length,                   color: '#f59e0b' },
-    { icon: 'fa-dollar',   label: 'Revenue',      value: `$${revenue.toLocaleString()}`,  color: '#8b5cf6' },
+    { icon: 'fa-users',    label: 'Customers',    value: users.length,                    color: 'var(--color-action)'  },
+    { icon: 'fa-tag',      label: 'Products',     value: products.length,                 color: 'var(--color-success)' },
+    { icon: 'fa-list-alt', label: 'Total orders', value: orders.length,                   color: 'var(--color-warning)' },
+    { icon: 'fa-dollar',   label: 'Revenue',      value: `$${revenue.toLocaleString()}`,  color: 'var(--color-action)'  },
   ];
 
   const quickLinks = [

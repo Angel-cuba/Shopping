@@ -33,8 +33,7 @@ const Navigation = () => {
           <Route path="/admin"                  element={<AdminDashboard />} />
           <Route path="/admin/orders"           element={<AdminOrders />} />
           <Route path="/admin/customers"        element={<Customers />} />
-          <Route path="/admin/products"         element={<CreateAndCheck />} />
-          <Route path="/admin/createandcheck"   element={<CreateAndCheck />} />
+          <Route path="/admin/products"  element={<CreateAndCheck />} />
         </Route>
 
         <Route path="*" element={<NotFound />} />

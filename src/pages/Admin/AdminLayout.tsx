@@ -21,6 +21,9 @@ const AdminLayout: React.FC = () => {
     }
   }, [userFromToken, navigate]);
 
+  // Wait for token decode before rendering — avoids one-frame flash of admin UI
+  if (userFromToken === undefined) return null;
+
   return (
     <div className="stride-admin">
       <aside className="stride-admin-side">

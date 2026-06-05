@@ -3,16 +3,9 @@ import { api } from '../../utils/api';
 import { AdminOrder } from '../../interfaces/admin/AdminTypes';
 import { OrderStatus } from '../../interfaces/profile/order/orderType';
 import { toastSuccess, toastError } from '../../utils/toasts';
+import { OrderStatusBadge, formatOrderDate } from '../../components/shared/OrderStatusBadge';
 
 const STATUS_OPTIONS: OrderStatus[] = ['PENDING', 'CONFIRMED', 'SHIPPED', 'DELIVERED', 'CANCELLED'];
-
-const STATUS_CLASS: Record<OrderStatus, string> = {
-  PENDING:   'stride-badge--soft',
-  CONFIRMED: 'stride-badge--soft',
-  SHIPPED:   'stride-badge',
-  DELIVERED: 'stride-badge--green',
-  CANCELLED: 'stride-badge--sale',
-};
 
 const AdminOrders: React.FC = () => {
   const [orders,       setOrders]       = useState<AdminOrder[]>([]);
@@ -24,7 +17,7 @@ const AdminOrders: React.FC = () => {
   useEffect(() => {
     api.get<AdminOrder[]>('/orders')
       .then(r => setOrders(r.data))
-      .catch(() => {})
+      .catch(() => toastError('Failed to load orders'))
       .finally(() => setLoading(false));
   }, []);
 
@@ -47,9 +40,6 @@ const AdminOrders: React.FC = () => {
     const matchStatus  = statusFilter === '' || o.status === statusFilter;
     return matchSearch && matchStatus;
   });
-
-  const fmt = (iso: string) =>
-    new Date(iso).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
 
   return (
     <>
@@ -123,15 +113,11 @@ const AdminOrders: React.FC = () => {
                       {o.userEmail}
                     </div>
                   </td>
-                  <td style={{ whiteSpace: 'nowrap' }}>{fmt(o.createdAt)}</td>
+                  <td style={{ whiteSpace: 'nowrap' }}>{formatOrderDate(o.createdAt)}</td>
                   <td>{o.paymentType}</td>
                   <td>{o.shippingMethod === 'DOOR' ? 'Home' : 'Store'}</td>
                   <td style={{ fontWeight: 600 }}>${o.total.toFixed(2)}</td>
-                  <td>
-                    <span className={`stride-badge ${STATUS_CLASS[o.status]}`}>
-                      {o.status}
-                    </span>
-                  </td>
+                  <td><OrderStatusBadge status={o.status} /></td>
                   <td>
                     <select
                       className="stride-input"

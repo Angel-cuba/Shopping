@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { api } from '../../../utils/api';
 import { AdminUser } from '../../../interfaces/admin/AdminTypes';
+import { toastError } from '../../../utils/toasts';
 
 const Customers: React.FC = () => {
   const [users,   setUsers]   = useState<AdminUser[]>([]);
@@ -10,7 +11,7 @@ const Customers: React.FC = () => {
   useEffect(() => {
     api.get<AdminUser[]>('/users')
       .then(r => setUsers(r.data))
-      .catch(() => {})
+      .catch(() => toastError('Failed to load customers'))
       .finally(() => setLoading(false));
   }, []);
 

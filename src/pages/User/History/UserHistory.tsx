@@ -5,34 +5,10 @@ import { api } from '../../../utils/api';
 import { RootState } from '../../../redux/store';
 import {
   History,
-  OrderStatus,
   orderDetailsItem,
 } from '../../../interfaces/profile/order/orderType';
 import { VariantsColors } from '../../../interfaces/products/ProductType';
-
-// ── Status badge ──────────────────────────────────────────────
-const STATUS_LABEL: Record<OrderStatus, string> = {
-  PENDING:   'Pending',
-  CONFIRMED: 'Confirmed',
-  SHIPPED:   'Shipped',
-  DELIVERED: 'Delivered',
-  CANCELLED: 'Cancelled',
-};
-
-const STATUS_CLASS: Record<OrderStatus, string> = {
-  PENDING:   'stride-badge--soft',
-  CONFIRMED: 'stride-badge--soft',
-  SHIPPED:   'stride-badge',
-  DELIVERED: 'stride-badge--green',
-  CANCELLED: 'stride-badge--sale',
-};
-
-const StatusBadge: React.FC<{ status?: string }> = ({ status }) => {
-  const s = (status ?? 'PENDING') as OrderStatus;
-  const label = STATUS_LABEL[s] ?? s;
-  const cls   = STATUS_CLASS[s] ?? 'stride-badge--soft';
-  return <span className={`stride-badge ${cls}`}>{label}</span>;
-};
+import { OrderStatusBadge as StatusBadge } from '../../../components/shared/OrderStatusBadge';
 
 // ── Date formatter ────────────────────────────────────────────
 const formatDate = (iso: string): string => {
