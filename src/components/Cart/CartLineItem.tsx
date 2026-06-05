@@ -5,11 +5,14 @@ import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../redux/store';
 import { CartProduct } from '../../interfaces/cart/CartType';
 import { VariantsColors } from '../../interfaces/products/ProductType';
-import { addToCart, removeFromCart } from '../../redux/actions/CartActions';
+import { addToCart, removeFromCart, removeLineFromCart } from '../../redux/actions/CartActions';
 
 interface CartLineItemProps {
   item: CartProduct;
-  /** IDs of items that exceed available stock — shows a warning label */
+  /**
+   * Checkout-only: IDs of items exceeding available stock.
+   * Omit when rendering in the CartDrawer context.
+   */
   notEnoughStock?: string[];
 }
 
@@ -39,9 +42,9 @@ const CartLineItem: React.FC<CartLineItemProps> = ({ item, notEnoughStock }) => 
             {item.name}
           </Link>
           <button
-            aria-label={`Remove ${item.name}`}
+            aria-label={`Remove ${item.name} from cart`}
             style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--color-fg-muted)', flexShrink: 0, padding: 0 }}
-            onClick={() => dispatch(removeFromCart({ ...item, quantity: item.quantity }))}
+            onClick={() => dispatch(removeLineFromCart(item.id))}
           >
             <i className="fa fa-times" />
           </button>

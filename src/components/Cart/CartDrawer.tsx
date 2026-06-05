@@ -55,11 +55,11 @@ const CartDrawer: React.FC<CartDrawerProps> = ({ open, onClose }) => {
         className="stride-drawer"
         role="dialog"
         aria-modal="true"
-        aria-label="Shopping cart"
+        aria-labelledby="cart-drawer-title"
       >
         {/* Header */}
         <div className="stride-drawer__head">
-          <h3>
+          <h3 id="cart-drawer-title">
             Cart
             {itemCount > 0 && (
               <span style={{ fontSize: 'var(--text-sm)', fontWeight: 400, color: 'var(--color-fg-secondary)', marginLeft: 8 }}>

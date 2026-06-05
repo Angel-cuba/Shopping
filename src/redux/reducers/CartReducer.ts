@@ -1,5 +1,5 @@
 import { AnyAction } from 'redux'
-import { ADD_TO_CART, CLEAR_CART, CartState, REMOVE_FROM_CART } from '../../interfaces/cart/constants'
+import { ADD_TO_CART, CLEAR_CART, CartState, REMOVE_FROM_CART, REMOVE_LINE_FROM_CART } from '../../interfaces/cart/constants'
 
 export const initialCartState: CartState = {
   itemInCart: null
@@ -87,6 +87,14 @@ export default function cartReducer(state = initialCartState, action: AnyAction)
         }
       }
       return state
+    }
+    case REMOVE_LINE_FROM_CART: {
+      if (state.itemInCart === null) return state
+      const remaining = state.itemInCart.filter((item) => item.id !== action.payload.id)
+      return {
+        ...state,
+        itemInCart: remaining.length > 0 ? remaining : null,
+      }
     }
     case CLEAR_CART: {
       return {
