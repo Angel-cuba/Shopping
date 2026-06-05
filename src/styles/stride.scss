@@ -1728,6 +1728,32 @@ textarea.stride-input {
   > * { scroll-snap-align: start; }
 }
 
+// ── Mobile menu drawer ────────────────────────────────────────
+.mobile-menu {
+  position: fixed;
+  inset: 0;
+  z-index: 120;
+  background: var(--color-surface);
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-6);
+  overflow-y: auto;
+  animation: stride-fade .2s forwards;
+
+  a {
+    font-size: var(--text-lg);
+    font-weight: var(--weight-semibold);
+    padding: var(--space-4) 0;
+    border-bottom: 1px solid var(--color-border);
+    color: var(--color-fg-primary);
+    text-decoration: none;
+    display: block;
+    transition: var(--transition);
+
+    &:hover { color: var(--color-action); }
+  }
+}
+
 // ── Utilities ─────────────────────────────────────────────────
 .s-flex { display: flex; }
 .s-items-center { align-items: center; }

@@ -11,8 +11,6 @@ import SectionCard from '../../components/shared/SectionCard';
 import Address from './address/Address';
 import Payment from './payments/Payment';
 
-type DetailItem = { id: string };
-
 // cartItem.id = productUUID(36 chars) + timestamp — strip suffix to get the product UUID
 const getProductId = (cartItemId: string): string => cartItemId.slice(0, 36);
 
@@ -144,7 +142,7 @@ const Checkout: React.FC = () => {
     setChecking(false);
   };
 
-  // ── Place order ──
+  // ── Place order (single atomic transaction on the backend) ──
   const handlePlaceOrder = async () => {
     if (!userFromToken)         return toastError('Session expired — please log in again');
     if (!address || !payment)   return toastError('Select address and payment first');
@@ -152,50 +150,35 @@ const Checkout: React.FC = () => {
     if (!itemInCart?.length)    return toastError('Your cart is empty');
 
     setLoading(true);
-    // Track decremented items so we can attempt a rollback on failure.
-    // TODO: replace with a single transactional POST /orders/place endpoint on the backend.
-    const decremented: { id: string; quantity: number }[] = [];
-
     try {
-      // 1. Decrement stock
-      for (const item of itemInCart) {
-        const id = getProductId(item.id);
-        await api.put('/products/update/stock', { id, quantity: item.quantity });
-        decremented.push({ id, quantity: item.quantity });
-      }
-
-      // 2. Create order details
-      const detailsPayload = itemInCart.map(item => ({
-        productId: getProductId(item.id),
-        variant:   item.variant,
-        image:     item.image,
-        size:      item.sizes,
-        price:     item.price,
-        quantity:  item.quantity,
-        user:      { id: userFromToken.user_id },
-      }));
-      const detailsRes = await api.post('/order-details/create-order-details', detailsPayload);
-
-      // 3. Create order
-      await api.post('/orders', {
-        user:            { id: userFromToken.user_id },
-        orderDetails:    detailsRes.data.map((d: DetailItem) => d.id),
+      await api.post('/orders/place', {
+        userId: userFromToken.user_id,
+        items: itemInCart.map(item => ({
+          productId: getProductId(item.id),
+          variant:   item.variant,
+          image:     item.image,
+          size:      item.sizes,
+          price:     Math.round(item.price),
+          quantity:  item.quantity,
+        })),
         paymentType:     payment.provider,
         shippingAddress: address,
         shippingMethod:  doorDelivery ? 'DOOR' : 'PICKUP',
-        shippingFee,
-        total:           grandTotal,
+        shippingFee:     Math.round(shippingFee),
+        total:           Math.round(grandTotal),
       });
-
       dispatch(clearCart());
       toastSuccess("Order placed! We'll confirm shortly.");
       navigate('/history');
-    } catch {
-      // Best-effort rollback — re-increment stock for items already decremented
-      for (const d of decremented) {
-        await api.put('/products/update/stock', { id: d.id, quantity: -d.quantity }).catch(() => {});
+    } catch (err: unknown) {
+      const status = (err as { response?: { status?: number } })?.response?.status;
+      if (status === 409) {
+        toastError('Some items went out of stock — refresh and try again');
+      } else if (status === 404) {
+        toastError('A product was not found — please refresh your cart');
+      } else {
+        toastError('Something went wrong placing your order');
       }
-      toastError('Something went wrong placing your order');
     } finally {
       setLoading(false);
     }
@@ -232,7 +215,7 @@ const Checkout: React.FC = () => {
 
       <StepBar current={currentStep} />
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 360px', gap: 'var(--space-6)', alignItems: 'start' }}>
+      <div className="stride-checkout">
 
         {/* ── Left: steps ── */}
         <div>
