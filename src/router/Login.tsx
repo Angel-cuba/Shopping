@@ -1,301 +1,283 @@
-import React, { useEffect } from 'react';
-import { Input } from '../components/Input/Input';
-import { useNavigate } from 'react-router-dom';
-import { getTokenFromLocalStorage } from '../utils/token';
-import { Google, Visibility, VisibilityOff } from '@mui/icons-material';
-import LoadingLogin from '../components/Loading/LoadingLogin';
-import { Toaster } from 'react-hot-toast';
-import { handleToast } from '../utils/notifications';
-import { ToastContainer } from 'react-toastify';
-import { notifyEmptyFields, notifyError, notifyRedirectToHome, notifySuccess } from '../utils/notify';
+import React from 'react';
+import { useDispatch } from 'react-redux';
+import { toast } from 'react-hot-toast';
+
+import { AppDispatch } from '../redux/store';
+import { logged } from '../redux/actions/UserAction';
+import { getWishList } from '../redux/actions/WishesActions';
+import { fetchingAddresses } from '../redux/actions/AddressAction';
+import { fetchingPayments } from '../redux/actions/PaymentAction';
+import { isDecodedUser } from '../utils/type-guards';
 import { apiWithoutAuth } from '../utils/api';
-import './styles/Login.scss';
+import { getTokenFromLocalStorage } from '../utils/token';
 
-const Login = () => {
-  const [username, setUsername] = React.useState('');
-  const [password, setPassword] = React.useState('');
-  const [isLogin, setIsLogin] = React.useState(true);
-  const [newUser, setNewUser] = React.useState({
-    username: '',
-    firstname: '',
-    lastname: '',
-    email: '',
-    phone: '',
-    password: '',
-  });
+interface LoginProps {
+  /** Called after a successful login or signup — use to close the parent overlay */
+  onSuccess?: () => void;
+}
+
+type Tab = 'signin' | 'signup';
+
+const EMPTY_REGISTER = {
+  username: '',
+  firstname: '',
+  lastname: '',
+  email: '',
+  phone: '',
+  password: '',
+};
+
+// ── Inline toast helpers (intentional: handleToast utility lacks typed API) ──
+const toastError   = (msg: string) => toast.error(msg,  { position: 'top-center', duration: 2500 });
+const toastSuccess = (msg: string) => toast.success(msg, { position: 'top-center', duration: 2000, style: { background: '#111', color: '#fff' } });
+
+const Login: React.FC<LoginProps> = ({ onSuccess }) => {
+  const dispatch = useDispatch<AppDispatch>();
+
+  const [tab,             setTab]             = React.useState<Tab>('signin');
+  const [username,        setUsername]        = React.useState('');
+  const [password,        setPassword]        = React.useState('');
+  const [showPassword,    setShowPassword]    = React.useState(false);
+  const [newUser,         setNewUser]         = React.useState(EMPTY_REGISTER);
   const [confirmPassword, setConfirmPassword] = React.useState('');
-  const [showPassword, setShowPassword] = React.useState(false);
-  const [loading, setLoading] = React.useState(false);
+  const [loading,         setLoading]         = React.useState(false);
 
-  const userNameCapitalized = username.charAt(0).toUpperCase() + username.slice(1);
-
-  const navigate = useNavigate();
-
-  const userFromLocalStorage = JSON.parse(localStorage.getItem('user') || '{}');
-  const userToken = localStorage.getItem('token');
-
-  useEffect(() => {
-    localStorage.clear();
-  }, []);
-
-  const handleGoogleResponse = ( )=> {
-   notifyError('Google login is not available');
-   setTimeout(() => {
-    notifySuccess('Try using your username and password');
-    }, 2200);
-  };
-  const handlerChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.name === 'Username') {
-      setUsername(e.target.value);
-    } else {
-      setPassword(e.target.value);
-    }
-  };
-
-  const handleRegisterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.name === 'user Name') {
-      setNewUser({ ...newUser, username: e.target.value });
-    } else if (e.target.name === 'first Name') {
-      setNewUser({ ...newUser, firstname: e.target.value });
-    } else if (e.target.name === 'last Name') {
-      setNewUser({ ...newUser, lastname: e.target.value });
-    } else if (e.target.name === 'email') {
-      setNewUser({ ...newUser, email: e.target.value });
-    } else if (e.target.name === 'phone') {
-      setNewUser({ ...newUser, phone: e.target.value });
-    } else {
-      setNewUser({ ...newUser, password: e.target.value });
-    }
-  };
-
-  const handleConfirmPassword = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setConfirmPassword(e.target.value);
-  };
-
-  const handleLogin = async () => {
-    if (!username || !password) {
-      notifyEmptyFields('Please fill all the fields');
-      return;
-    }
-    const postData = {
-      username,
-      password,
-    };
-    try {
-      const request = await apiWithoutAuth.post('/users/signin', postData);
-      if (request.status === 200) {
-        setLoading(true);
-        localStorage.setItem('token', request.data);
-        getTokenFromLocalStorage();
-      }
-      notifyRedirectToHome(userNameCapitalized);
-      setTimeout(() => {
-        redirectToHome();
-      }, 2200);
-    } catch (error: any) {
-      if (error.response.status === 401) {
-        handleToast('Error 401', `${error.response.data}`);
-      }
-    }
-    setLoading(false);
-  };
-
-  const redirectToHome = () => {
-    navigate('/');
-    window.location.reload()
-  };
-  const openSignUp = () => {
-    setIsLogin(!isLogin);
-  };
-
-  const handleRegister = async () => {
-    if (
-      !newUser.username ||
-      !newUser.firstname ||
-      !newUser.lastname ||
-      !newUser.email ||
-      !newUser.phone ||
-      !newUser.password
-    ) {
-      handleToast('Empty fields', 'Please fill all the fields');
-      return;
-    }
-    if (newUser.password !== confirmPassword) {
-      notifyError('Passwords do not match');
-      return;
-    }
-    const postData = {
-      username: newUser.username,
-      firstname: newUser.firstname,
-      lastname: newUser.lastname,
-      email: newUser.email,
-      phone: newUser.phone,
-      password: newUser.password,
-    };
-    const request = await apiWithoutAuth.post('/users/signup', postData);
-    localStorage.setItem('token', request.data);
+  // ── Shared post-auth bootstrap ──────────────────────────────
+  const bootstrapSession = () => {
+    // getTokenFromLocalStorage decodes the JWT and saves decodedUser to localStorage
     getTokenFromLocalStorage();
-    navigate('/');
-    window.location.reload()
+    const raw = localStorage.getItem('decodedUser');
+    if (!raw) return;
+    const parsed: unknown = JSON.parse(raw);
+    if (!isDecodedUser(parsed)) return;
+    dispatch(logged(parsed));
+    dispatch(getWishList(parsed.user_id));
+    dispatch(fetchingAddresses(parsed.user_id));
+    dispatch(fetchingPayments(parsed.user_id));
+    onSuccess?.();
   };
 
-  const handleShowPassword = () => {
-    setShowPassword(!showPassword);
+  // ── Sign in ─────────────────────────────────────────────────
+  const handleLogin = async () => {
+    if (!username.trim() || !password) { toastError('Please fill in all fields'); return; }
+    setLoading(true);
+    try {
+      const res = await apiWithoutAuth.post('/users/signin', { username, password });
+      localStorage.setItem('token', res.data);
+      bootstrapSession();
+      toastSuccess(`Welcome back, ${username.charAt(0).toUpperCase() + username.slice(1)}!`);
+    } catch (err: unknown) {
+      const msg = (err as { response?: { data?: string } })?.response?.data;
+      toastError(msg || 'Invalid username or password');
+    } finally {
+      setLoading(false);
+    }
   };
 
-  if (loading) return <LoadingLogin />;
+  // ── Sign up ─────────────────────────────────────────────────
+  const handleRegister = async () => {
+    const { username: u, firstname, lastname, email, phone, password: p } = newUser;
+    if (!u || !firstname || !lastname || !email || !phone || !p) {
+      toastError('Please fill in all fields'); return;
+    }
+    if (p !== confirmPassword) { toastError('Passwords do not match'); return; }
+    setLoading(true);
+    try {
+      const res = await apiWithoutAuth.post('/users/signup', newUser);
+      localStorage.setItem('token', res.data);
+      bootstrapSession();
+      toastSuccess('Account created — welcome!');
+    } catch (err: unknown) {
+      const msg = (err as { response?: { data?: string } })?.response?.data;
+      toastError(msg || 'Registration failed, please try again');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') tab === 'signin' ? handleLogin() : handleRegister();
+  };
 
   return (
-    <>
-      {!userFromLocalStorage?.username && !userToken ? (
-        <div className="login-view">
-          <div className="login-view__container">
-            {isLogin ? (
-              <div className="login-view__container__login">
-                <Input
-                  name="Username"
-                  onChange={handlerChange}
-                  value={username}
-                  placeholder="Username"
-                  style={inputStyle}
-                />
-                <div className="login-view__container__login--input-password">
-                  <Input
-                    type={showPassword ? 'text' : 'password'}
-                    name="Password"
-                    onChange={handlerChange}
-                    value={password}
-                    placeholder="**********"
-                    style={inputStyle}
-                  />
-                  <div
-                    onClick={handleShowPassword}
-                    className="login-view__container__login--input-password__icon"
-                  >
-                    {!showPassword ? (
-                      <Visibility style={{ fontSize: '1.6rem' }} />
-                    ) : (
-                      <VisibilityOff style={{ fontSize: '1.6rem' }} />
-                    )}
-                  </div>
-                </div>
-                <button className="login-view__container__login__button" onClick={handleLogin}>
-                  Login
-                </button>
-              </div>
-            ) : null}
-            {!isLogin ? (
-              <div className="login-view__container__register">
-                <Input
-                  name="user Name"
-                  onChange={handleRegisterChange}
-                  value={newUser.username}
-                  placeholder="User Name"
-                  style={inputStyle}
-                />{' '}
-                <Input
-                  name="first Name"
-                  onChange={handleRegisterChange}
-                  value={newUser.firstname}
-                  placeholder="First Name"
-                  style={inputStyle}
-                />{' '}
-                <Input
-                  type="email"
-                  name="email"
-                  onChange={handleRegisterChange}
-                  value={newUser.email}
-                  placeholder="Email"
-                  style={inputStyle}
-                />{' '}
-                <Input
-                  name="last Name"
-                  onChange={handleRegisterChange}
-                  value={newUser.lastname}
-                  placeholder="Last Name"
-                  style={inputStyle}
-                />
-                <div className="login-view__container__register--show-password">
-                  <Input
-                    type={showPassword ? 'text' : 'password'}
-                    name="password"
-                    onChange={handleRegisterChange}
-                    value={newUser.password}
-                    placeholder="Password"
-                    style={inputStyle}
-                  />
-                  <div
-                    onClick={handleShowPassword}
-                    className="login-view__container__register--show-password__icon"
-                  >
-                    {!showPassword ? (
-                      <Visibility style={{ fontSize: '1.6rem' }} />
-                    ) : (
-                      <VisibilityOff style={{ fontSize: '1.6rem' }} />
-                    )}
-                  </div>
-                </div>
-                <Input
-                  name="phone"
-                  onChange={handleRegisterChange}
-                  value={newUser.phone}
-                  placeholder="Phone Number"
-                  style={inputStyle}
-                />
-                <div className="login-view__container__register--show-password">
-                  <Input
-                    type={showPassword ? 'text' : 'password'}
-                    name="Confirm Password"
-                    onChange={handleConfirmPassword}
-                    value={confirmPassword}
-                    placeholder="Confirm Password"
-                    style={inputStyle}
-                  />
-                </div>
-                <button
-                  className="login-view__container__register__button"
-                  onClick={handleRegister}
-                >
-                  Register
-                </button>
-              </div>
-            ) : null}
-            <p className="login-view__container__text">  
-                {isLogin ? 'Don’t have an account? ' : 'Already have an account? '}
-                <span className="login-view__container__text--span" onClick={openSignUp}>
-                  {!isLogin ? 'Login' : 'Sign up'}
-                </span>
-            </p>
-            <div className="login-view__container__separator"></div>
-            <div className="login-view__container__login-with-google" onClick={handleGoogleResponse}>
-              {' '}
-              <Google
-                style={{
-                  fontSize: '1.6rem',
-                  marginRight: '3px',
-                  color: '#4285F4',
-                }}
-              />{' '}
-              Iniciar sesión con Google
+    <div style={{ padding: 'var(--space-6) var(--space-8)', maxWidth: 420, margin: '0 auto' }} onKeyDown={handleKeyDown}>
+
+      {/* Tabs */}
+      <div className="stride-tabs" style={{ marginBottom: 'var(--space-6)' }}>
+        <button
+          className={`stride-tab${tab === 'signin' ? ' is-active' : ''}`}
+          onClick={() => setTab('signin')}
+        >
+          Sign in
+        </button>
+        <button
+          className={`stride-tab${tab === 'signup' ? ' is-active' : ''}`}
+          onClick={() => setTab('signup')}
+        >
+          Create account
+        </button>
+      </div>
+
+      {/* ── Sign in form ─────────────────────────────────────── */}
+      {tab === 'signin' && (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-4)' }}>
+          <div className="stride-field">
+            <label htmlFor="login-username">Username</label>
+            <input
+              id="login-username"
+              className="stride-input"
+              placeholder="Enter your username"
+              autoComplete="username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+            />
+          </div>
+          <div className="stride-field">
+            <label htmlFor="login-password">Password</label>
+            <div style={{ position: 'relative' }}>
+              <input
+                id="login-password"
+                className="stride-input"
+                type={showPassword ? 'text' : 'password'}
+                placeholder="••••••••"
+                autoComplete="current-password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                style={{ paddingRight: 44 }}
+              />
+              <button
+                type="button"
+                aria-label={showPassword ? 'Hide password' : 'Show password'}
+                onClick={() => setShowPassword((s) => !s)}
+                style={{ position: 'absolute', right: 12, top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', color: 'var(--color-fg-muted)' }}
+              >
+                <i className={`fa ${showPassword ? 'fa-eye-slash' : 'fa-eye'}`} />
+              </button>
             </div>
           </div>
+          <button
+            className="stride-btn stride-btn--primary"
+            style={{ width: '100%', marginTop: 'var(--space-2)' }}
+            disabled={loading}
+            onClick={handleLogin}
+          >
+            {loading ? 'Signing in…' : 'Sign in'}
+          </button>
         </div>
-      ) : null}
-      <Toaster />
-      <ToastContainer />
-    </>
+      )}
+
+      {/* ── Sign up form ─────────────────────────────────────── */}
+      {tab === 'signup' && (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-4)' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--space-3)' }}>
+            <div className="stride-field">
+              <label htmlFor="reg-firstname">First name</label>
+              <input
+                id="reg-firstname"
+                className="stride-input"
+                placeholder="First name"
+                value={newUser.firstname}
+                onChange={(e) => setNewUser({ ...newUser, firstname: e.target.value })}
+              />
+            </div>
+            <div className="stride-field">
+              <label htmlFor="reg-lastname">Last name</label>
+              <input
+                id="reg-lastname"
+                className="stride-input"
+                placeholder="Last name"
+                value={newUser.lastname}
+                onChange={(e) => setNewUser({ ...newUser, lastname: e.target.value })}
+              />
+            </div>
+          </div>
+          <div className="stride-field">
+            <label htmlFor="reg-username">Username</label>
+            <input
+              id="reg-username"
+              className="stride-input"
+              placeholder="Choose a username"
+              autoComplete="username"
+              value={newUser.username}
+              onChange={(e) => setNewUser({ ...newUser, username: e.target.value })}
+            />
+          </div>
+          <div className="stride-field">
+            <label htmlFor="reg-email">Email</label>
+            <input
+              id="reg-email"
+              className="stride-input"
+              type="email"
+              placeholder="you@example.com"
+              autoComplete="email"
+              value={newUser.email}
+              onChange={(e) => setNewUser({ ...newUser, email: e.target.value })}
+            />
+          </div>
+          <div className="stride-field">
+            <label htmlFor="reg-phone">Phone</label>
+            <input
+              id="reg-phone"
+              className="stride-input"
+              type="tel"
+              placeholder="+1 555 000 0000"
+              autoComplete="tel"
+              value={newUser.phone}
+              onChange={(e) => setNewUser({ ...newUser, phone: e.target.value })}
+            />
+          </div>
+          <div className="stride-field">
+            <label htmlFor="reg-password">Password</label>
+            <div style={{ position: 'relative' }}>
+              <input
+                id="reg-password"
+                className="stride-input"
+                type={showPassword ? 'text' : 'password'}
+                placeholder="••••••••"
+                autoComplete="new-password"
+                value={newUser.password}
+                onChange={(e) => setNewUser({ ...newUser, password: e.target.value })}
+                style={{ paddingRight: 44 }}
+              />
+              <button
+                type="button"
+                aria-label={showPassword ? 'Hide password' : 'Show password'}
+                onClick={() => setShowPassword((s) => !s)}
+                style={{ position: 'absolute', right: 12, top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', color: 'var(--color-fg-muted)' }}
+              >
+                <i className={`fa ${showPassword ? 'fa-eye-slash' : 'fa-eye'}`} />
+              </button>
+            </div>
+          </div>
+          <div className="stride-field">
+            <label htmlFor="reg-confirm">Confirm password</label>
+            <input
+              id="reg-confirm"
+              className="stride-input"
+              type={showPassword ? 'text' : 'password'}
+              placeholder="••••••••"
+              autoComplete="new-password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+            />
+          </div>
+          <button
+            className="stride-btn stride-btn--primary"
+            style={{ width: '100%', marginTop: 'var(--space-2)' }}
+            disabled={loading}
+            onClick={handleRegister}
+          >
+            {loading ? 'Creating account…' : 'Create account'}
+          </button>
+        </div>
+      )}
+
+      {/* Footer note */}
+      <p style={{ marginTop: 'var(--space-5)', fontSize: 'var(--text-xs)', color: 'var(--color-fg-muted)', textAlign: 'center' }}>
+        Google sign-in is not available yet.
+      </p>
+    </div>
   );
 };
 
 export default Login;
-
-const inputStyle = {
-  width: '230px',
-  height: '30px',
-  fontSize: '20px',
-  padding: '10px',
-  borderRadius: '5px',
-  border: 'none',
-  marginBottom: '10px',
-  boxShadow: '0px 0px 5px 0px rgba(0,0,0,0.15)',
-};

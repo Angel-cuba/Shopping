@@ -213,7 +213,7 @@ const Navbar = () => {
               boxShadow: 'var(--shadow-medium)',
             }}
           >
-            <Login />
+            <Login onSuccess={() => setLoginOpen(false)} />
           </div>
         )}
       </nav>

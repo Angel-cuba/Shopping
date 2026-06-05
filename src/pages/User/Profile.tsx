@@ -1,385 +1,378 @@
 import React, { useEffect, useLayoutEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { Link, useLocation } from 'react-router-dom';
+import { toast } from 'react-hot-toast';
+
 import { AppDispatch, RootState } from '../../redux/store';
 import { UserAddress, UserFromDB, UserPayment } from '../../interfaces/user/UserType';
-import {
-  AddSharp,
-  Apartment,
-  CardMembershipTwoTone,
-  CardTravelTwoTone,
-  DateRange,
-  DeleteForever,
-  Edit,
-  Email,
-  Numbers,
-  PasswordSharp,
-  Person,
-  Phone,
-  PostAdd,
-  PublicRounded,
-  StreetviewTwoTone,
-} from '@mui/icons-material';
-import ProfileAddress from './ProfileAndAddress';
+import ProfileAndAddress from './ProfileAndAddress';
 import ProfilePayment from './ProfilePayment';
-import { GlobalTheme } from '../../context/ThemeProvider';
-import { darkTheme, lightTheme } from '../../styles/styles';
-import LoadingResponse from '../../components/Loading/LoadingResponse';
 import { deletingAddress, fetchingAddresses } from '../../redux/actions/AddressAction';
 import { deletingPayment, fetchingPayments } from '../../redux/actions/PaymentAction';
 import { api } from '../../utils/api';
-import { notifyDelete, notifyError } from '../../utils/notify';
-import { Link } from 'react-router-dom';
-import './Profile.scss';
 
-const Profile = () => {
-  const { user } = useSelector((state: RootState) => state.userLogged);
-  const decodedUserId = JSON.parse(localStorage.getItem('decodedUser') || '{}').user_id;
+type Section = 'info' | 'addresses' | 'payments';
 
-  const [edit, setEdit] = React.useState(false);
-  const [openPaymentToEdit, setOpenPaymentToEdit] = React.useState(false);
-  const [userEdited, setUserEdited] = React.useState<UserFromDB>();
-  const [selectedPayment, setSelectedPayment] = React.useState<UserPayment>();
-  const [selectedAddress, setSelectedAddress] = React.useState<UserAddress>();
-  const [loadingProfile, setLoadingProfile] = React.useState(false);
+const toastDel = (msg: string) =>
+  toast(msg, { icon: '🗑', position: 'top-center', duration: 1800 });
+const toastErr = (msg: string) =>
+  toast.error(msg, { position: 'top-center', duration: 2200 });
 
-  const { theme } = GlobalTheme();
-  const dispatch = useDispatch<AppDispatch>();
+const Profile: React.FC = () => {
+  const dispatch      = useDispatch<AppDispatch>();
+  const location      = useLocation();
 
+  const { user, userFromToken } = useSelector((s: RootState) => s.userLogged);
+  const { payments }            = useSelector((s: RootState) => s.payments);
+  const { addresses }           = useSelector((s: RootState) => s.addresses);
+
+  const decodedUserId: string =
+    (JSON.parse(localStorage.getItem('decodedUser') || '{}') as { user_id?: string }).user_id ?? '';
+
+  const [section,            setSection]           = React.useState<Section>('info');
+  const [userEdited,         setUserEdited]         = React.useState<UserFromDB>();
+  const [selectedAddress,    setSelectedAddress]    = React.useState<UserAddress>();
+  const [selectedPayment,    setSelectedPayment]    = React.useState<UserPayment>();
+  const [editAddress,        setEditAddress]        = React.useState(false);
+  const [editPayment,        setEditPayment]        = React.useState(false);
+  const [loading,            setLoading]            = React.useState(false);
+
+  // Fetch user profile data
+  useLayoutEffect(() => {
+    if (!decodedUserId) return;
+    api.get<UserFromDB>(`/users/${decodedUserId}`).then((r) => setUserEdited(r.data));
+  }, [decodedUserId]);
+
+  // Sync addresses + payments
   useEffect(() => {
+    if (!decodedUserId) return;
     dispatch(fetchingAddresses(decodedUserId));
     dispatch(fetchingPayments(decodedUserId));
   }, [dispatch, decodedUserId]);
 
-  const { payments, error } = useSelector((state: RootState) => state.payments);
-  const { addresses } = useSelector((state: RootState) => state.addresses);
+  // Detect incoming section from URL hash (e.g. /profile#payments)
+  useEffect(() => {
+    const hash = location.hash.replace('#', '') as Section;
+    if (['info', 'addresses', 'payments'].includes(hash)) setSection(hash);
+  }, [location.hash]);
 
-  const lastPaymentMethod = payments?.[payments.length - 1];
-  const lastAddress = addresses?.[addresses.length - 1];
+  // ── Derived ─────────────────────────────────────────────────
+  const initials =
+    userEdited?.firstname?.[0]?.toUpperCase() ??
+    userFromToken?.username?.[0]?.toUpperCase() ??
+    user?.given_name?.[0]?.toUpperCase() ??
+    '?';
 
-  if (error) {
-    notifyError('Something went wrong, please try later');
-  }
+  const displayName =
+    userEdited ? `${userEdited.firstname} ${userEdited.lastname}` :
+    userFromToken?.username ?? user?.given_name ?? 'Account';
 
-  useLayoutEffect(() => {
-    const request = async () => {
-      const fetchUserData = await api.get(`/users/${decodedUserId}`);
-
-      setUserEdited(fetchUserData.data);
-    };
-    request();
-  }, [decodedUserId]);
-
-  const handleOpenProfile = () => {
-    setEdit(!edit);
-    setOpenPaymentToEdit(false);
-  };
-  const handleOpenPayment = () => {
-    setOpenPaymentToEdit(!openPaymentToEdit);
-    setEdit(false);
-  };
-
-  const iconStyles = {
-    width: '60%',
-    height: '100%',
-    color: theme === 'dark' ? lightTheme.greyLight : darkTheme.greyDark,
-  };
-
-  const infoItemStyles = {
-    color: theme === 'dark' ? lightTheme.greyLight : darkTheme.greyDark,
-    fontWeight: 'bolder',
-    boxShadow: `0px 0px 5px 0px ${
-      theme === 'dark' ? lightTheme.shadowMedium : darkTheme.shadowMedium
-    }`,
-  };
-
-  const userPayments = payments?.map((payment: UserPayment) => {
-    const addingPayment = () => {
-      if (selectedPayment?.id === payment.id) {
-        setSelectedPayment(undefined);
-      } else {
-        setSelectedPayment(payment);
-      }
-    };
-    return (
-      <div key={payment.id} onClick={addingPayment}>
-        <p
-          className="profile__data__payment-info__user-payments__item"
-          style={{
-            backgroundColor: payment.id === selectedPayment?.id ? '#111010' : '',
-            color: payment.id === selectedPayment?.id ? '#ffffff' : '',
-            border: `1.4px solid ${theme === 'light' ? darkTheme.bg : lightTheme.shadow}`,
-          }}
-        >
-          {payment.provider}
-        </p>
-      </div>
-    );
-  });
-
-  const userAddresses = addresses.map((address: UserAddress) => {
-    const addingAddress = () => {
-      if (selectedAddress?.id === address.id) {
-        setSelectedAddress(undefined);
-      } else {
-        setSelectedAddress(address);
-      }
-    };
-
-    return (
-      <p
-        key={address.id}
-        className="profile__data__payment-info__user-addresses__item"
-        style={{
-          backgroundColor: address.id === selectedAddress?.id ? '#111010' : '',
-          color: address.id === selectedAddress?.id ? '#ffffff' : '',
-          border: `1.4px solid ${theme === 'light' ? darkTheme.bg : lightTheme.shadow}`,
-        }}
-        onClick={addingAddress}
-      >
-        {address.city}
-      </p>
-    );
-  });
-
-  const updateAddress = () => {
-    if (!selectedAddress) {
-      return;
-    } else {
-      setEdit(!edit);
-    }
-  };
-
-  const deleteAddress = (addressId: string) => {
-    setLoadingProfile(true);
+  // ── Handlers ────────────────────────────────────────────────
+  const handleDeleteAddress = (id: string) => {
+    setLoading(true);
     try {
-      dispatch(deletingAddress(addressId));
-      notifyDelete('Address deleted successfully');
-    } catch (error) {
-      notifyError('Error to delete address, try again later');
-    }
-    setSelectedAddress(undefined);
-    setLoadingProfile(false);
+      dispatch(deletingAddress(id));
+      toastDel('Address removed');
+      setSelectedAddress(undefined);
+      setEditAddress(false);
+    } catch { toastErr('Failed to delete address'); }
+    finally { setLoading(false); }
   };
 
-  const deletePayment = (paymentId: string) => {
-    setLoadingProfile(true);
+  const handleDeletePayment = (id: string) => {
+    setLoading(true);
     try {
-      dispatch(deletingPayment(paymentId));
-      notifyDelete('Payment deleted');
-    } catch (error) {
-      notifyError('Error to delete card, try again later');
-    }
-    setSelectedPayment(undefined);
-    setLoadingProfile(false);
+      dispatch(deletingPayment(id));
+      toastDel('Payment method removed');
+      setSelectedPayment(undefined);
+      setEditPayment(false);
+    } catch { toastErr('Failed to delete payment'); }
+    finally { setLoading(false); }
   };
 
-  const handleOpenAddress = () => {
-    setEdit(!edit);
-  };
+  const navLink = (s: Section, icon: string, label: string) => (
+    <a
+      href={`#${s}`}
+      className={section === s ? 'is-active' : ''}
+      onClick={(e) => { e.preventDefault(); setSection(s); }}
+    >
+      <i className={`fa ${icon}`} />
+      {label}
+    </a>
+  );
 
+  // ── Render ───────────────────────────────────────────────────
   return (
-    <div className="profile">
-      {loadingProfile && (
-        <div className="profile__loading">
-          <LoadingResponse />
+    <div className="stride-container" style={{ paddingTop: 'var(--space-10)', paddingBottom: 'var(--space-16)' }}>
+      {loading && (
+        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,.2)', zIndex: 50, display: 'grid', placeItems: 'center' }}>
+          <div className="stride-sk" style={{ width: 48, height: 48, borderRadius: '50%' }} />
         </div>
       )}
-      <div className="profile__edit-button" onClick={handleOpenProfile}>
-        {edit ? 'Close editing view' : 'Edit profile'}
-      </div>
-      <Link to="/history" className="profile__history-button-editing-open">
-        History
-      </Link>
-      {edit && userEdited && (
-        <div className="profile__edit-form">
-          <ProfileAddress
-            address={selectedAddress}
-            userId={userEdited?.id}
-            userEdited={userEdited}
-            setUserEdited={setUserEdited}
-            setEdit={setEdit}
-            setLoading={setLoadingProfile}
-            addresses={addresses}
-            setSelectedAddress={setSelectedAddress}
-          />
-        </div>
-      )}
-      {openPaymentToEdit && (
-        <div className="profile__edit-form">
-          <ProfilePayment
-            selectedPayment={selectedPayment}
-            userId={userEdited?.id}
-            setOpenPaymentToEdit={setOpenPaymentToEdit}
-            openPaymentToEdit={openPaymentToEdit}
-            setSelectedPayment={setSelectedPayment}
-          />
-        </div>
-      )}
-      <h1>Welcome {userEdited ? `${userEdited.firstname}` : ``}</h1>
-      <div className="profile__data">
-        <div className="profile__data__image-and-info">
-          <img
-            src={user?.picture ? user.picture : 'https://i.imgur.com/HeIi0wU.png'}
-            alt={user?.name}
-            className="profile__data__image-and-info__image"
-          />
-          <div className="profile__data__image-and-info__item" style={infoItemStyles}>
-            <div className="profile__data__image-and-info__item--icon">
-              <Person style={iconStyles} />
+
+      <div className="stride-profile">
+        {/* ── Sidebar ─────────────────────────────────────────── */}
+        <aside className="stride-profile-nav">
+          <div className="stride-profile-nav__head">
+            <div className="stride-profile-nav__avatar-lg">
+              {user?.picture
+                ? <img src={user.picture} alt={displayName} />
+                : initials
+              }
             </div>
-            {userEdited?.username}
+            <div>
+              <div style={{ fontWeight: 700, fontSize: 'var(--text-base)' }}>{displayName}</div>
+              {userEdited?.email && (
+                <div style={{ fontSize: 'var(--text-xs)', color: 'var(--color-fg-muted)', marginTop: 2 }}>
+                  {userEdited.email}
+                </div>
+              )}
+            </div>
           </div>
-          <div className="profile__data__image-and-info__item" style={infoItemStyles}>
-            <div className="profile__data__image-and-info__item--icon">
-              <Email style={iconStyles} />
-            </div>
-            {userEdited?.email}
-          </div>
-          <div className="profile__data__image-and-info__item" style={infoItemStyles}>
-            <div className="profile__data__image-and-info__item--icon">
-              <PasswordSharp style={iconStyles} />
-            </div>
-            ********
-          </div>
-          <div className="profile__data__image-and-info__item" style={infoItemStyles}>
-            <div className="profile__data__image-and-info__item--icon">
-              <Phone style={iconStyles} />
-            </div>
-            {userEdited?.phone}
-          </div>
-          <div className="profile__data__payment-info__user-addresses">{userAddresses}</div>
-          <div className="profile__data__image-and-info__item" style={infoItemStyles}>
-            <div className="profile__data__image-and-info__item--icon">
-              <StreetviewTwoTone style={iconStyles} />
-            </div>
-            {!selectedAddress?.address
-              ? !lastAddress?.address
-                ? 'Address'
-                : lastAddress.address
-              : selectedAddress.address}
-          </div>
-          <div className="profile__data__image-and-info__item" style={infoItemStyles}>
-            <div className="profile__data__image-and-info__item--icon">
-              <Apartment style={iconStyles} />
-            </div>
-            {!selectedAddress?.city
-              ? !lastAddress?.city
-                ? 'City'
-                : lastAddress.city
-              : selectedAddress.city}
-          </div>
-          <div className="profile__data__image-and-info__item" style={infoItemStyles}>
-            <div className="profile__data__image-and-info__item--icon">
-              <PostAdd style={iconStyles} />
-            </div>
-            {!selectedAddress?.postalCode
-              ? !lastAddress?.postalCode
-                ? 'Postal Code'
-                : lastAddress.postalCode
-              : selectedAddress.postalCode}
-          </div>
-          <div className="profile__data__image-and-info__item" style={infoItemStyles}>
-            <div className="profile__data__image-and-info__item--icon">
-              <PublicRounded style={iconStyles} />
-            </div>
-            {!selectedAddress?.country
-              ? !lastAddress?.country
-                ? 'Country'
-                : lastAddress.country
-              : selectedAddress.country}
-          </div>
-          {selectedAddress?.id && (
-            <div
-              className="profile__data__image-and-info__button-delete"
-              onClick={() => deleteAddress(selectedAddress?.id as string)}
-            >
-              <DeleteForever />
-            </div>
-          )}
-          {selectedAddress?.id && (
-            <div className="profile__data__image-and-info__button-edit" onClick={updateAddress}>
-              <Edit />
-            </div>
-          )}
-          {!selectedAddress?.id && (
-            <div className="profile__data__image-and-info__button-add" onClick={handleOpenAddress}>
-              <AddSharp style={{ transform: 'scale(1.5)', marginRight: '10px' }} /> Address
-            </div>
-          )}
-        </div>
-        <div className="profile__data__payment-info">
-          <div className="profile__data__payment-info__user-payments">{userPayments}</div>
-          <div className="profile__data__payment-info__button" onClick={handleOpenPayment}>
-            {!openPaymentToEdit ? (
-              !selectedPayment?.id && !openPaymentToEdit ? (
-                <span className="profile__data__payment-info__button--add-payment">
-                  <AddSharp style={{ transform: 'scale(1.5)', marginRight: '10px' }} /> Payment
-                </span>
+
+          {navLink('info',      'fa-user',       'Personal info')}
+          {navLink('addresses', 'fa-map-marker', 'Addresses')}
+          {navLink('payments',  'fa-credit-card','Payments')}
+
+          <hr className="stride-divider" style={{ margin: 'var(--space-3) 0' }} />
+          <Link to="/history" style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-3)', padding: '11px 14px', fontSize: 'var(--text-sm)', color: 'var(--color-fg-secondary)', borderRadius: 'var(--radius-sm)', textDecoration: 'none' }}>
+            <i className="fa fa-history" style={{ width: 18, textAlign: 'center', color: 'var(--color-fg-muted)' }} />
+            Order history
+          </Link>
+        </aside>
+
+        {/* ── Main content ────────────────────────────────────── */}
+        <div style={{ minWidth: 0 }}>
+
+          {/* ── Personal info ─────────────────────────────────── */}
+          {section === 'info' && (
+            <div>
+              <div className="stride-section-head" style={{ marginBottom: 'var(--space-6)' }}>
+                <div>
+                  <span className="stride-eyebrow">Profile</span>
+                  <h2>Personal info</h2>
+                </div>
+                {!editAddress && (
+                  <button
+                    className="stride-btn stride-btn--secondary"
+                    onClick={() => setEditAddress((e) => !e)}
+                  >
+                    <i className="fa fa-pencil" style={{ marginRight: 6 }} />
+                    Edit profile
+                  </button>
+                )}
+              </div>
+
+              {editAddress && userEdited ? (
+                <div className="stride-card stride-card__pad" style={{ marginBottom: 'var(--space-6)' }}>
+                  <ProfileAndAddress
+                    address={selectedAddress}
+                    userId={userEdited.id}
+                    userEdited={userEdited}
+                    setUserEdited={setUserEdited}
+                    setEdit={setEditAddress}
+                    setLoading={setLoading}
+                    addresses={addresses}
+                    setSelectedAddress={setSelectedAddress}
+                  />
+                </div>
               ) : (
-                <Edit />
-              )
-            ) : (
-              'Close view'
-            )}
-          </div>
-          {selectedPayment?.id && (
-            <div
-              className="profile__data__payment-info__button-delete"
-              onClick={() => deletePayment(selectedPayment?.id as string)}
-            >
-              <DeleteForever />
+                <div className="stride-card">
+                  <div className="stride-card__pad" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--space-6)' }}>
+                    {[
+                      { icon: 'fa-user',     label: 'Username',   value: userEdited?.username },
+                      { icon: 'fa-envelope', label: 'Email',      value: userEdited?.email },
+                      { icon: 'fa-phone',    label: 'Phone',      value: userEdited?.phone },
+                      { icon: 'fa-lock',     label: 'Password',   value: '••••••••' },
+                    ].map(({ icon, label, value }) => (
+                      <div key={label}>
+                        <p style={{ fontSize: 'var(--text-xs)', color: 'var(--color-fg-muted)', textTransform: 'uppercase', letterSpacing: '.06em', marginBottom: 4 }}>
+                          <i className={`fa ${icon}`} style={{ marginRight: 6 }} />{label}
+                        </p>
+                        <p style={{ fontWeight: 600, fontSize: 'var(--text-sm)' }}>
+                          {value || <span style={{ color: 'var(--color-fg-placeholder)' }}>—</span>}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
           )}
-          <div className="profile__data__payment-info__item" style={infoItemStyles}>
-            <div className="profile__data__payment-info__item--icon">
-              <Person style={iconStyles} />
+
+          {/* ── Addresses ────────────────────────────────────── */}
+          {section === 'addresses' && (
+            <div>
+              <div className="stride-section-head" style={{ marginBottom: 'var(--space-6)' }}>
+                <div>
+                  <span className="stride-eyebrow">Shipping</span>
+                  <h2>Addresses</h2>
+                </div>
+                <button
+                  className="stride-btn stride-btn--secondary"
+                  onClick={() => { setSelectedAddress(undefined); setEditAddress(true); }}
+                >
+                  <i className="fa fa-plus" style={{ marginRight: 6 }} />Add address
+                </button>
+              </div>
+
+              {/* Add / edit form */}
+              {editAddress && userEdited && (
+                <div className="stride-card stride-card__pad" style={{ marginBottom: 'var(--space-6)' }}>
+                  <ProfileAndAddress
+                    address={selectedAddress}
+                    userId={userEdited.id}
+                    userEdited={userEdited}
+                    setUserEdited={setUserEdited}
+                    setEdit={setEditAddress}
+                    setLoading={setLoading}
+                    addresses={addresses}
+                    setSelectedAddress={setSelectedAddress}
+                  />
+                </div>
+              )}
+
+              {/* Address cards */}
+              {addresses.length === 0 && !editAddress ? (
+                <div className="stride-empty">
+                  <i className="fa fa-map-marker" />
+                  <h3>No addresses saved</h3>
+                  <button className="stride-btn stride-btn--secondary" onClick={() => setEditAddress(true)}>
+                    Add your first address
+                  </button>
+                </div>
+              ) : (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-3)' }}>
+                  {addresses.map((addr: UserAddress) => {
+                    const isSelected = selectedAddress?.id === addr.id;
+                    return (
+                      <div
+                        key={addr.id}
+                        className="stride-card"
+                        style={{ cursor: 'pointer', outline: isSelected ? '2px solid var(--color-action)' : 'none' }}
+                        onClick={() => setSelectedAddress(isSelected ? undefined : addr)}
+                      >
+                        <div className="stride-card__pad" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                          <div style={{ fontSize: 'var(--text-sm)' }}>
+                            <p style={{ fontWeight: 600 }}>{addr.address}</p>
+                            <p style={{ color: 'var(--color-fg-secondary)', marginTop: 2 }}>
+                              {addr.city}, {addr.postalCode}, {addr.country}
+                            </p>
+                          </div>
+                          {isSelected && (
+                            <div style={{ display: 'flex', gap: 'var(--space-2)', flexShrink: 0 }}>
+                              <button
+                                className="stride-btn stride-btn--ghost"
+                                style={{ padding: '6px 12px', fontSize: 'var(--text-xs)' }}
+                                onClick={(e) => { e.stopPropagation(); setEditAddress(true); }}
+                              >
+                                <i className="fa fa-pencil" />
+                              </button>
+                              <button
+                                className="stride-btn stride-btn--ghost"
+                                style={{ padding: '6px 12px', fontSize: 'var(--text-xs)', color: 'var(--color-error)' }}
+                                onClick={(e) => { e.stopPropagation(); handleDeleteAddress(addr.id!); }}
+                              >
+                                <i className="fa fa-trash" />
+                              </button>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
             </div>
-            {!selectedPayment?.cardHolderName
-              ? !lastPaymentMethod?.cardHolderName
-                ? 'Card Holder Name'
-                : lastPaymentMethod.cardHolderName
-              : selectedPayment.cardHolderName}
-          </div>
-          <div className="profile__data__payment-info__item" style={infoItemStyles}>
-            <div className="profile__data__payment-info__item--icon">
-              <CardTravelTwoTone style={iconStyles} />
+          )}
+
+          {/* ── Payments ─────────────────────────────────────── */}
+          {section === 'payments' && (
+            <div>
+              <div className="stride-section-head" style={{ marginBottom: 'var(--space-6)' }}>
+                <div>
+                  <span className="stride-eyebrow">Billing</span>
+                  <h2>Payment methods</h2>
+                </div>
+                <button
+                  className="stride-btn stride-btn--secondary"
+                  onClick={() => { setSelectedPayment(undefined); setEditPayment(true); }}
+                >
+                  <i className="fa fa-plus" style={{ marginRight: 6 }} />Add card
+                </button>
+              </div>
+
+              {/* Add / edit form */}
+              {editPayment && userEdited && (
+                <div className="stride-card stride-card__pad" style={{ marginBottom: 'var(--space-6)' }}>
+                  <ProfilePayment
+                    userId={userEdited.id}
+                    openPaymentToEdit={editPayment}
+                    setOpenPaymentToEdit={setEditPayment}
+                    selectedPayment={selectedPayment}
+                    setSelectedPayment={setSelectedPayment}
+                  />
+                </div>
+              )}
+
+              {payments.length === 0 && !editPayment ? (
+                <div className="stride-empty">
+                  <i className="fa fa-credit-card" />
+                  <h3>No payment methods</h3>
+                  <button className="stride-btn stride-btn--secondary" onClick={() => setEditPayment(true)}>
+                    Add a card
+                  </button>
+                </div>
+              ) : (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-3)' }}>
+                  {payments.map((pay: UserPayment) => {
+                    const isSelected = selectedPayment?.id === pay.id;
+                    const masked = pay.cardNumber
+                      ? `•••• •••• •••• ${pay.cardNumber.slice(-4)}`
+                      : '••••';
+                    return (
+                      <div
+                        key={pay.id}
+                        className="stride-card"
+                        style={{ cursor: 'pointer', outline: isSelected ? '2px solid var(--color-action)' : 'none' }}
+                        onClick={() => setSelectedPayment(isSelected ? undefined : pay)}
+                      >
+                        <div className="stride-card__pad" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                          <div style={{ display: 'flex', gap: 'var(--space-4)', alignItems: 'center' }}>
+                            <i className="fa fa-credit-card" style={{ fontSize: 20, color: 'var(--color-fg-muted)' }} />
+                            <div style={{ fontSize: 'var(--text-sm)' }}>
+                              <p style={{ fontWeight: 600 }}>{pay.cardHolderName}</p>
+                              <p style={{ color: 'var(--color-fg-secondary)', marginTop: 2 }}>
+                                {pay.provider} · {masked} · exp {pay.expirationDate}
+                              </p>
+                            </div>
+                          </div>
+                          {isSelected && (
+                            <div style={{ display: 'flex', gap: 'var(--space-2)', flexShrink: 0 }}>
+                              <button
+                                className="stride-btn stride-btn--ghost"
+                                style={{ padding: '6px 12px', fontSize: 'var(--text-xs)' }}
+                                onClick={(e) => { e.stopPropagation(); setEditPayment(true); }}
+                              >
+                                <i className="fa fa-pencil" />
+                              </button>
+                              <button
+                                className="stride-btn stride-btn--ghost"
+                                style={{ padding: '6px 12px', fontSize: 'var(--text-xs)', color: 'var(--color-error)' }}
+                                onClick={(e) => { e.stopPropagation(); handleDeletePayment(pay.id!); }}
+                              >
+                                <i className="fa fa-trash" />
+                              </button>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
             </div>
-            {!selectedPayment?.paymentType
-              ? !lastPaymentMethod?.paymentType
-                ? 'Payment Type'
-                : lastPaymentMethod.paymentType
-              : selectedPayment.paymentType}
-          </div>
-          <div className="profile__data__payment-info__item" style={infoItemStyles}>
-            <div className="profile__data__payment-info__item--icon">
-              <CardMembershipTwoTone style={iconStyles} />
-            </div>
-            {!selectedPayment?.provider
-              ? !lastPaymentMethod?.provider
-                ? 'Provider'
-                : lastPaymentMethod.provider
-              : selectedPayment.provider}
-          </div>
-          <div className="profile__data__payment-info__item" style={infoItemStyles}>
-            <div className="profile__data__payment-info__item--icon">
-              <Numbers style={iconStyles} />
-            </div>
-            {!selectedPayment?.cardNumber
-              ? !lastPaymentMethod?.cardNumber
-                ? 'Card Number'
-                : lastPaymentMethod.cardNumber
-              : selectedPayment.cardNumber}
-          </div>
-          <div className="profile__data__payment-info__item" style={infoItemStyles}>
-            <div className="profile__data__payment-info__item--icon">
-              <DateRange style={iconStyles} />
-            </div>
-            {!selectedPayment?.expirationDate
-              ? !lastPaymentMethod?.expirationDate
-                ? 'Expiration Date'
-                : lastPaymentMethod.expirationDate
-              : selectedPayment.expirationDate}
-          </div>
+          )}
         </div>
       </div>
     </div>
