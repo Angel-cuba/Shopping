@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { Toaster } from 'react-hot-toast';
 import Navbar from './components/Navbar/Navbar';
 import Navigation from './router/Navigation';
 import { GlobalTheme } from './context/ThemeProvider';
@@ -13,6 +14,7 @@ function App() {
 
   return (
     <div style={{ minHeight: '100vh', background: 'var(--app-bg)', color: 'var(--color-fg-primary)', transition: 'background-color 220ms' }}>
+      <Toaster />
       <Navbar />
       <Navigation />
     </div>

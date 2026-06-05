@@ -8,7 +8,6 @@ import { clearWishList } from '../../redux/actions/WishesActions';
 import { GlobalTheme } from '../../context/ThemeProvider';
 import { isAdmin, isUserAuthenticated } from '../../utils/authentication';
 import { toastInfo } from '../../utils/toasts';
-import { ToastContainer } from 'react-toastify';
 import Login from '../../router/Login';
 import CartDrawer from '../Cart/CartDrawer';
 
@@ -258,11 +257,6 @@ const Navbar = () => {
           </div>
         </>
       )}
-
-      {/* Toast container */}
-      <div className="stride-navbar__notification">
-        <ToastContainer position="bottom-right" />
-      </div>
 
       {/* Cart drawer */}
       <CartDrawer open={cartOpen} onClose={() => setCartOpen(false)} />

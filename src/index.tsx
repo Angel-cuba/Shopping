@@ -9,7 +9,6 @@ import App from './App';
 import { store } from './redux/store';
 import { ThemeProvider, GlobalTheme } from './context/ThemeProvider';
 import { lightThemeStride, darkThemeStride } from './theme/theme';
-import 'react-toastify/dist/ReactToastify.css';
 import './styles/index.scss';
 
 // MUI ThemeProvider bridge: reads the stride theme from ThemeContext
