@@ -7,13 +7,19 @@ import { AppDispatch, RootState } from '../../redux/store';
 import { Product, Sizes, VariantsColors } from '../../interfaces/products/ProductType';
 import { CartProduct } from '../../interfaces/cart/CartType';
 import { addToCart } from '../../redux/actions/CartActions';
-import { addingToWishList, removingFromWishList } from '../../redux/actions/WishesActions';
+import { addingToWishList, createWishList, removingFromWishList } from '../../redux/actions/WishesActions';
 import { apiWithoutAuth } from '../../utils/api';
 import ProductCard from './ProductCard/ProductCard';
 import PdpSkeleton from './PdpSkeleton';
-import './ProductById.scss';
+// Note: ProductById.scss (legacy .productId__* BEM classes) has been removed.
+// All styles come from the STRIDE design-system classes in src/styles/stride.scss.
 
 // ── Toast helpers ─────────────────────────────────────────────────────────────
+// Intentional deviation: the legacy handleToast() in src/utils/notifications.ts
+// is a string-dispatch table with hardcoded messages and no typed API.  Rather
+// than force PDP-specific messages through magic strings, we call react-hot-toast
+// directly here.  The shared utility will be refactored to a typed helper
+// (showToast(type, message, options?)) at which point these can be merged back.
 
 const toastAdded = (name: string) =>
   toast.success(`${name} added to cart`, {
@@ -116,7 +122,13 @@ const ProductById: React.FC = () => {
       dispatch(removingFromWishList(product.id, userFromToken.user_id));
       toastWishRemoved();
     } else {
-      dispatch(addingToWishList(product.id, userFromToken.user_id));
+      // wishlist.length === 0 means the user has no list yet — must create one first.
+      // addingToWishList assumes data[0] exists and will crash on an empty response.
+      if (wishlist.length === 0) {
+        dispatch(createWishList(product.id, userFromToken.user_id));
+      } else {
+        dispatch(addingToWishList(product.id, userFromToken.user_id));
+      }
       toastWishAdded();
     }
   };
