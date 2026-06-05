@@ -1,3 +1,10 @@
+export type OrderStatus =
+  | 'PENDING'
+  | 'CONFIRMED'
+  | 'SHIPPED'
+  | 'DELIVERED'
+  | 'CANCELLED';
+
 export type History = {
   id: string;
   paymentType: string;
@@ -7,6 +14,8 @@ export type History = {
   total: number;
   createdAt: string;
   orderDetails: string[];
+  /** Populated by the backend once OrderStatus is returned in the API response */
+  status?: OrderStatus;
 };
 export type date = {
   dateString: string;

@@ -4,6 +4,7 @@ import { useParams, Link } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
 
 import { AppDispatch, RootState } from '../../redux/store';
+import { toastError } from '../../utils/toasts';
 import { Product, Sizes, VariantsColors } from '../../interfaces/products/ProductType';
 import { CartProduct } from '../../interfaces/cart/CartType';
 import { addToCart } from '../../redux/actions/CartActions';
@@ -14,12 +15,7 @@ import PdpSkeleton from './PdpSkeleton';
 // Note: ProductById.scss (legacy .productId__* BEM classes) has been removed.
 // All styles come from the STRIDE design-system classes in src/styles/stride.scss.
 
-// ── Toast helpers ─────────────────────────────────────────────────────────────
-// Intentional deviation: the legacy handleToast() in src/utils/notifications.ts
-// is a string-dispatch table with hardcoded messages and no typed API.  Rather
-// than force PDP-specific messages through magic strings, we call react-hot-toast
-// directly here.  The shared utility will be refactored to a typed helper
-// (showToast(type, message, options?)) at which point these can be merged back.
+// ── PDP-specific toast helpers (custom icons — kept inline) ───────────────────
 
 const toastAdded = (name: string) =>
   toast.success(`${name} added to cart`, {
@@ -43,12 +39,6 @@ const toastWishRemoved = () =>
     duration: 1800,
     style: { background: '#333', color: '#ddd' },
     icon: '♡',
-  });
-
-const toastPickSize = () =>
-  toast.error('Please select a size first', {
-    position: 'top-center',
-    duration: 1800,
   });
 
 // ── Component ─────────────────────────────────────────────────────────────────
@@ -98,7 +88,7 @@ const ProductById: React.FC = () => {
 
   const handleAddToCart = () => {
     if (!product) return;
-    if (!size) { toastPickSize(); return; }
+    if (!size) { toastError('Please select a size first'); return; }
 
     const item: CartProduct = {
       id:          product.id,

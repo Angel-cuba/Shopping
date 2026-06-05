@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { api } from '../../../utils/api';
+import { RootState } from '../../../redux/store';
 import {
   History,
+  OrderStatus,
   orderDetailsItem,
 } from '../../../interfaces/profile/order/orderType';
 import { VariantsColors } from '../../../interfaces/products/ProductType';
 
 // ── Status badge ──────────────────────────────────────────────
-type OrderStatus = 'PENDING' | 'CONFIRMED' | 'SHIPPED' | 'DELIVERED' | 'CANCELLED';
-
 const STATUS_LABEL: Record<OrderStatus, string> = {
   PENDING:   'Pending',
   CONFIRMED: 'Confirmed',
@@ -127,7 +128,7 @@ const UserHistory: React.FC = () => {
   const [loading, setLoading]  = useState(true);
 
   const decodedUserId: string =
-    (JSON.parse(localStorage.getItem('decodedUser') || '{}') as { user_id?: string }).user_id ?? '';
+    useSelector((s: RootState) => s.userLogged.userFromToken?.user_id) ?? '';
 
   useEffect(() => {
     if (!decodedUserId) { setLoading(false); return; }
@@ -188,7 +189,7 @@ const UserHistory: React.FC = () => {
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 'var(--space-3)' }}>
                   <div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-3)', marginBottom: 'var(--space-1)' }}>
-                      <StatusBadge status={(order as History & { status?: string }).status} />
+                      <StatusBadge status={order.status} />
                       <span style={{ fontSize: 'var(--text-xs)', color: 'var(--color-fg-muted)' }}>
                         {formatDate(order.createdAt)}
                       </span>

@@ -1,7 +1,5 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { toast } from 'react-hot-toast';
-
 import { AppDispatch } from '../redux/store';
 import { logged } from '../redux/actions/UserAction';
 import { getWishList } from '../redux/actions/WishesActions';
@@ -10,6 +8,7 @@ import { fetchingPayments } from '../redux/actions/PaymentAction';
 import { isDecodedUser } from '../utils/type-guards';
 import { apiWithoutAuth } from '../utils/api';
 import { getTokenFromLocalStorage } from '../utils/token';
+import { toastSuccess, toastError } from '../utils/toasts';
 
 interface LoginProps {
   /** Called after a successful login or signup — use to close the parent overlay */
@@ -26,10 +25,6 @@ const EMPTY_REGISTER = {
   phone: '',
   password: '',
 };
-
-// ── Inline toast helpers (intentional: handleToast utility lacks typed API) ──
-const toastError   = (msg: string) => toast.error(msg,  { position: 'top-center', duration: 2500 });
-const toastSuccess = (msg: string) => toast.success(msg, { position: 'top-center', duration: 2000, style: { background: '#111', color: '#fff' } });
 
 const Login: React.FC<LoginProps> = ({ onSuccess }) => {
   const dispatch = useDispatch<AppDispatch>();

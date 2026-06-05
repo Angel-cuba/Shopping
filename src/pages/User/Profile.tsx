@@ -1,7 +1,6 @@
 import React, { useEffect, useLayoutEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useLocation } from 'react-router-dom';
-import { toast } from 'react-hot-toast';
 
 import { AppDispatch, RootState } from '../../redux/store';
 import { UserAddress, UserFromDB, UserPayment } from '../../interfaces/user/UserType';
@@ -10,13 +9,9 @@ import ProfilePayment from './ProfilePayment';
 import { deletingAddress, fetchingAddresses } from '../../redux/actions/AddressAction';
 import { deletingPayment, fetchingPayments } from '../../redux/actions/PaymentAction';
 import { api } from '../../utils/api';
+import { toastDelete, toastError } from '../../utils/toasts';
 
 type Section = 'info' | 'addresses' | 'payments';
-
-const toastDel = (msg: string) =>
-  toast(msg, { icon: '🗑', position: 'top-center', duration: 1800 });
-const toastErr = (msg: string) =>
-  toast.error(msg, { position: 'top-center', duration: 2200 });
 
 const Profile: React.FC = () => {
   const dispatch      = useDispatch<AppDispatch>();
@@ -26,8 +21,7 @@ const Profile: React.FC = () => {
   const { payments }            = useSelector((s: RootState) => s.payments);
   const { addresses }           = useSelector((s: RootState) => s.addresses);
 
-  const decodedUserId: string =
-    (JSON.parse(localStorage.getItem('decodedUser') || '{}') as { user_id?: string }).user_id ?? '';
+  const decodedUserId: string = userFromToken?.user_id ?? '';
 
   const [section,            setSection]           = React.useState<Section>('info');
   const [userEdited,         setUserEdited]         = React.useState<UserFromDB>();
@@ -68,26 +62,22 @@ const Profile: React.FC = () => {
     userFromToken?.username ?? user?.given_name ?? 'Account';
 
   // ── Handlers ────────────────────────────────────────────────
-  const handleDeleteAddress = (id: string) => {
+  const handleDeleteAddress = async (id: string) => {
     setLoading(true);
-    try {
-      dispatch(deletingAddress(id));
-      toastDel('Address removed');
-      setSelectedAddress(undefined);
-      setEditAddress(false);
-    } catch { toastErr('Failed to delete address'); }
-    finally { setLoading(false); }
+    await dispatch(deletingAddress(id));
+    toastDelete('Address removed');
+    setSelectedAddress(undefined);
+    setEditAddress(false);
+    setLoading(false);
   };
 
-  const handleDeletePayment = (id: string) => {
+  const handleDeletePayment = async (id: string) => {
     setLoading(true);
-    try {
-      dispatch(deletingPayment(id));
-      toastDel('Payment method removed');
-      setSelectedPayment(undefined);
-      setEditPayment(false);
-    } catch { toastErr('Failed to delete payment'); }
-    finally { setLoading(false); }
+    await dispatch(deletingPayment(id));
+    toastDelete('Payment method removed');
+    setSelectedPayment(undefined);
+    setEditPayment(false);
+    setLoading(false);
   };
 
   const navLink = (s: Section, icon: string, label: string) => (
