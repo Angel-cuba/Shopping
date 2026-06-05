@@ -1,453 +1,408 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  AddHomeOutlined,
-  CreditCard,
-  LocalShipping,
-  LocationCityTwoTone,
-  StorefrontOutlined,
-} from '@mui/icons-material';
+import { Link, useNavigate } from 'react-router-dom';
 import { AppDispatch, RootState } from '../../redux/store';
-
-import CartLineItem from '../../components/Cart/CartLineItem';
-import { darkTheme, lightTheme } from '../../styles/styles';
-import { GlobalTheme } from '../../context/ThemeProvider';
 import { clearCart } from '../../redux/actions/CartActions';
+import { api } from '../../utils/api';
+import { toastError, toastSuccess, toastInfo } from '../../utils/toasts';
+import CartLineItem from '../../components/Cart/CartLineItem';
 import Address from './address/Address';
 import Payment from './payments/Payment';
-import { api } from '../../utils/api';
-import { useNavigate } from 'react-router-dom';
-import {
-  notifyError,
-  notifyRedirectToProfile,
-  notifySuccess,
-  notifyWarning,
-} from '../../utils/notify';
-import { ToastContainer } from 'react-toastify';
-import { isUserAuthenticated } from '../../utils/authentication';
-import './Checkout.scss';
 
-type Item = {
-  productId: string;
-  quantity: number;
-};
+type OrderItem  = { productId: string; quantity: number };
+type DetailItem = { id: string };
 
-type ItemProps = {
-  id: string;
-};
+// ── Step indicator ────────────────────────────────────────────
+const STEPS = ['Address', 'Payment', 'Shipping', 'Confirm'];
 
-const Checkout = () => {
-  const [loading, setLoading] = React.useState<boolean>(false);
-  const [checked, setChecked] = React.useState<boolean>(true);
-  const [openAddress, setOpenAddress] = React.useState<boolean>(false);
-  const [address, setAddress] = React.useState<string>('');
-  const [openPayments, setOpenPayments] = React.useState<boolean>(false);
-  const [payment, setPayment] = React.useState<string>('');
-  const [totalToPay, setTotalToPay] = React.useState<number>(0);
-  const [allowToPay, setAllowToPay] = React.useState<boolean>(false);
-  const [notEnoughStock, setNotEnoughStock] = React.useState<string[] | undefined>([]);
-  const [activeAddAddress, setActiveAddAddress] = React.useState<boolean>(false);
-  const [activeAddPayment, setActiveAddPayment] = React.useState<boolean>(false);
+const StepBar: React.FC<{ current: number }> = ({ current }) => (
+  <div style={{ display: 'flex', alignItems: 'center', marginBottom: 'var(--space-8)' }}>
+    {STEPS.map((label, i) => {
+      const done    = i < current;
+      const active  = i === current;
+      return (
+        <React.Fragment key={label}>
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', flex: i < STEPS.length - 1 ? 'none' : 1 }}>
+            <div style={{
+              width: 28, height: 28, borderRadius: '50%',
+              display: 'grid', placeItems: 'center',
+              fontSize: 'var(--text-xs)', fontWeight: 700,
+              background: done || active ? 'var(--color-action)' : 'var(--color-border)',
+              color:       done || active ? '#fff'               : 'var(--color-fg-muted)',
+              transition: 'all .2s',
+            }}>
+              {done ? <i className="fa fa-check" /> : i + 1}
+            </div>
+            <span style={{ fontSize: 'var(--text-xs)', marginTop: 4, fontWeight: active ? 700 : 400, color: active ? 'var(--color-fg-primary)' : 'var(--color-fg-muted)' }}>
+              {label}
+            </span>
+          </div>
+          {i < STEPS.length - 1 && (
+            <div style={{ flex: 1, height: 2, background: done ? 'var(--color-action)' : 'var(--color-border)', margin: '0 var(--space-2)', marginBottom: 'var(--space-5)', transition: 'background .2s' }} />
+          )}
+        </React.Fragment>
+      );
+    })}
+  </div>
+);
 
-  const { userFromToken } = useSelector((state: RootState) => state.userLogged);
-  const { itemInCart } = useSelector((state: RootState) => state.cart);
-  const { addresses } = useSelector((state: RootState) => state.addresses);
-  const { payments } = useSelector((state: RootState) => state.payments);
+// ── Section card ──────────────────────────────────────────────
+const SectionCard: React.FC<{
+  step: number;
+  icon: string;
+  title: string;
+  value?: string;
+  done: boolean;
+  onEdit: () => void;
+  open: boolean;
+  children?: React.ReactNode;
+}> = ({ icon, title, value, done, onEdit, open, children }) => (
+  <div className="stride-card stride-card__pad" style={{ marginBottom: 'var(--space-4)' }}>
+    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-3)' }}>
+        <div style={{
+          width: 36, height: 36, borderRadius: 'var(--radius-sm)',
+          background: done ? 'var(--color-success-bg)' : 'var(--color-action-subtle)',
+          color:       done ? 'var(--color-success)'   : 'var(--color-action)',
+          display: 'grid', placeItems: 'center',
+        }}>
+          <i className={`fa ${done ? 'fa-check' : icon}`} />
+        </div>
+        <div>
+          <div style={{ fontWeight: 600, fontSize: 'var(--text-sm)', color: 'var(--color-fg-primary)' }}>{title}</div>
+          {value && !open && (
+            <div style={{ fontSize: 'var(--text-xs)', color: 'var(--color-fg-muted)', marginTop: 2 }}>{value}</div>
+          )}
+        </div>
+      </div>
+      <button className="stride-btn stride-btn--ghost" style={{ fontSize: 'var(--text-xs)', padding: '4px 12px' }} onClick={onEdit}>
+        {open ? 'Cancel' : done ? 'Change' : 'Select'}
+      </button>
+    </div>
+    {open && <div style={{ marginTop: 'var(--space-3)' }}>{children}</div>}
+  </div>
+);
 
-  const { theme } = GlobalTheme();
-  const dispatch = useDispatch<AppDispatch>();
-  const navigate = useNavigate();
+// ── Main component ────────────────────────────────────────────
+const Checkout: React.FC = () => {
+  const dispatch   = useDispatch<AppDispatch>();
+  const navigate   = useNavigate();
 
+  const { userFromToken } = useSelector((s: RootState) => s.userLogged);
+  const { itemInCart }    = useSelector((s: RootState) => s.cart);
+  const { addresses }     = useSelector((s: RootState) => s.addresses);
+  const { payments }      = useSelector((s: RootState) => s.payments);
+
+  // ── State ──
+  const [address,       setAddress]       = useState('');
+  const [payment,       setPayment]       = useState('');
+  const [doorDelivery,  setDoorDelivery]  = useState(true);
+  const [openAddress,   setOpenAddress]   = useState(false);
+  const [openPayments,  setOpenPayments]  = useState(false);
+  const [allowToPay,    setAllowToPay]    = useState(false);
+  const [notEnoughStock, setNotEnoughStock] = useState<string[]>([]);
+  const [checking,      setChecking]      = useState(false);
+  const [loading,       setLoading]       = useState(false);
+
+  // ── Derived ──
+  const totalToPay = (itemInCart ?? []).reduce((sum, i) => sum + i.price * i.quantity, 0);
+  const shippingFee = doorDelivery ? 2.99 : 0;
+  const grandTotal  = totalToPay + shippingFee;
+
+  // Current step: 0=address, 1=payment, 2=shipping, 3=confirm
+  const currentStep = !address ? 0 : !payment ? 1 : 2;
 
   useEffect(() => {
-    setAllowToPay(false);
-    if (notEnoughStock && notEnoughStock.length === 0) {
-      setAllowToPay(true);
-    }
+    setAllowToPay(notEnoughStock.length === 0 && notEnoughStock !== undefined);
   }, [notEnoughStock]);
 
-  useEffect(() => {
-    const toPay = () => {
-      let total = 0;
-      itemInCart?.forEach((item) => {
-        total += item.price * item.quantity;
-      });
-      setTotalToPay(total);
-    };
-    toPay();
-  }, [itemInCart]);
-
-  const handleStock = async () => {
-    if (itemInCart?.length === 0) {
-      setTimeout(() => {
-        notifyError('Please add products to your cart');
-      }, 1500);
+  // ── Handlers ──
+  const handleOpenAddress = () => {
+    if (!userFromToken) return toastError('Please log in first');
+    if (addresses.length === 0) {
+      toastError('Add an address in your profile first');
+      return;
     }
-    if (itemInCart?.length === 0) return notifyError('You have no products in your cart');
-    if (!address || !payment) return notifyError('Select address and payment first');
+    setOpenPayments(false);
+    setOpenAddress(prev => !prev);
+  };
+
+  const handleOpenPayments = () => {
+    if (!userFromToken) return toastError('Please log in first');
+    if (payments.length === 0) {
+      toastError('Add a payment method in your profile first');
+      return;
+    }
+    setOpenAddress(false);
+    setOpenPayments(prev => !prev);
+  };
+
+  const handleCheckStock = async () => {
+    if (!itemInCart?.length)    return toastError('Your cart is empty');
+    if (!address || !payment)   return toastError('Select address and payment first');
+
+    setChecking(true);
     setNotEnoughStock([]);
-    const newArray = itemInCart?.map((item) => {
-      const { id, quantity } = item;
-      const productId = id;
-      return {
-        productId,
-        quantity,
-      };
-    });
+    const outOfStock: string[] = [];
+
     try {
-      newArray?.forEach(async (item: Item) => {
-        const id = item.productId.slice(0,36)
-        const gettingProductToCheck = await api.get(`/products/${id}`);
-        if (gettingProductToCheck.data.inStock < item.quantity) {
-          setNotEnoughStock((prev: string[] | undefined) => [...(prev ?? []), gettingProductToCheck.data.id]);
-          return notifyError(`${gettingProductToCheck.data.name} has not enough stock`);
-        }
-        if (gettingProductToCheck.data.inStock === 0) {
-          return notifyError(`${gettingProductToCheck.data.name} are not available`);
+      for (const item of itemInCart) {
+        const id  = item.id.slice(0, 36);
+        const res = await api.get(`/products/${id}`);
+        const p   = res.data;
+        if (p.inStock === 0) {
+          outOfStock.push(p.id);
+          toastError(`${p.name} is out of stock`);
+        } else if (p.inStock < item.quantity) {
+          outOfStock.push(p.id);
+          toastError(`${p.name}: only ${p.inStock} left`);
         } else {
-          notifySuccess(`${gettingProductToCheck.data.name} are available`);
+          toastSuccess(`${p.name} ✓`);
         }
-      });
-    } catch (error) {
-      notifyError('Something went wrong');
+      }
+    } catch {
+      toastError('Stock check failed, please try again');
     }
-    if (notEnoughStock && notEnoughStock?.length > 0) {
-      return notifyError(`${notEnoughStock?.length} products has not enough stock`);
-    } else {
-      setAllowToPay(true);
-    }
-  };
-  const updateStock = async () => {
-    if (itemInCart?.length === 0) return notifyError('You have no products in your cart');
-    const newArray = itemInCart?.map((item) => {
-      const { id, quantity } = item;
-      const productId = id;
-      return {
-        productId,
-        quantity,
-      };
-    });
-    newArray?.forEach(async (item: Item) => {
-      const productToUpdate = {
-        id: item.productId.slice(0,36),
-        quantity: item.quantity,
-      };
-      await api.put('/products/update/stock', productToUpdate);
-    });
+
+    setNotEnoughStock(outOfStock);
+    setAllowToPay(outOfStock.length === 0);
+    setChecking(false);
   };
 
-  const handleCheckout = async () => {
-    if (!address || !payment) return notifyError('Select address and payment first');
-    if (!allowToPay) return notifyError('Check your products stock');
-    if (itemInCart?.length === 0) return notifyError('You have no products in your cart');
+  const handlePlaceOrder = async () => {
+    if (!address || !payment)  return toastError('Select address and payment first');
+    if (!allowToPay)           return toastError('Check stock availability first');
+    if (!itemInCart?.length)   return toastError('Your cart is empty');
+
     setLoading(true);
-    updateStock();
-    const newArray = itemInCart?.map((item) => {
-      const { id, variant, image, sizes, price, quantity } = item;
-      const productId = id.slice(0,36);
-      const size = sizes;
-      return {
-        productId,
-        variant,
-        image,
-        size,
-        price,
-        quantity,
-        user: {
-          id: userFromToken?.user_id,
-        },
-      };
-    });
-    const response = await api.post('/order-details/create-order-details', newArray);
-    if (response.status === 200) {
-      notifySuccess('Wait a moment, your order is being created');
-      const idsToCreateOrder = response.data.map((item: ItemProps) => item.id);
+    try {
+      // 1. Decrement stock
+      for (const item of itemInCart) {
+        await api.put('/products/update/stock', { id: item.id.slice(0, 36), quantity: item.quantity });
+      }
 
-      const orderToCreate = {
-        user: {
-          id: userFromToken?.user_id,
-        },
-        orderDetails: idsToCreateOrder,
-        paymentType: payment,
-        shippingAddress: address,
-        shippingMethod: checked ? 'DOOR' : 'PICKUP',
-        shippingFee: checked ? 2.99 : 0,
-        total: totalToPay,
-      };
-      await api.post('/orders', orderToCreate);
-      dispatch(clearCart());
+      // 2. Create order details
+      const orderDetailsPayload = itemInCart.map(item => ({
+        productId: item.id.slice(0, 36),
+        variant:   item.variant,
+        image:     item.image,
+        size:      item.sizes,
+        price:     item.price,
+        quantity:  item.quantity,
+        user:      { id: userFromToken?.user_id },
+      }));
+      const detailsRes = await api.post('/order-details/create-order-details', orderDetailsPayload);
+
+      if (detailsRes.status === 200) {
+        // 3. Create order
+        const orderPayload = {
+          user:            { id: userFromToken?.user_id },
+          orderDetails:    detailsRes.data.map((d: DetailItem) => d.id),
+          paymentType:     payment,
+          shippingAddress: address,
+          shippingMethod:  doorDelivery ? 'DOOR' : 'PICKUP',
+          shippingFee:     shippingFee,
+          total:           grandTotal,
+        };
+        await api.post('/orders', orderPayload);
+        dispatch(clearCart());
+        toastSuccess('Order placed! We\'ll confirm shortly.');
+        navigate('/history');
+      }
+    } catch {
+      toastError('Something went wrong placing your order');
+    } finally {
+      setLoading(false);
     }
-    setAddress('');
-    setPayment('');
-    setLoading(false);
-    setAllowToPay(false);
-    setNotEnoughStock([]);
-    navigate('/home');
   };
 
-  const checkAndPay = () => {
+  // ── Empty cart ──
+  if (!itemInCart?.length && !loading) {
     return (
-      <div className="checkout__payment">
-        <h2>Steps</h2>
-        <button
-          className={!address ? 'checkout__payment__steps' : 'checkout__payment__step-disabled'}
-        >
-          Address
-        </button>
-        <button
-          className={!payment ? 'checkout__payment__steps' : 'checkout__payment__step-disabled'}
-        >
-          Payment
-        </button>
-        <button
-          className={
-            !address || !payment ? 'checkout__payment__steps' : 'checkout__payment__step-disabled'
-          }
-          onClick={handleStock}
-          style={{
-            backgroundColor: address && payment ? 'green' : '',
-          }}
-        >
-          {!address || !payment ? 'Checkout' : 'Continue'}
-        </button>
-        {notEnoughStock?.length === 0 && (
-          <button
-            className="checkout__payment__steps"
-            onClick={handleCheckout}
-            disabled={!address || !payment || !allowToPay}
-          >
-            Pay
-          </button>
-        )}
+      <div style={{ maxWidth: 480, margin: '80px auto', textAlign: 'center', padding: 'var(--space-6)' }}>
+        <div className="stride-empty">
+          <i className="fa fa-shopping-cart" />
+          <h3>Your cart is empty</h3>
+          <p>Add some shoes first.</p>
+        </div>
+        <Link to="/home" className="stride-btn" style={{ display: 'inline-block', marginTop: 'var(--space-5)', textDecoration: 'none' }}>
+          Browse products
+        </Link>
       </div>
     );
-  };
-
-  const handleChecked = () => {
-    setChecked(!checked);
-  };
-
-  const handleOpenAddress = () => {
-    if (!isUserAuthenticated()) return notifyWarning('Please login to provide us with your address information');
-    setOpenPayments(false);
-    if (addresses.length === 0) {
-      setActiveAddAddress(true);
-      return notifyError('Please add an address');
-    }
-    setOpenAddress(!openAddress);
-  };
-
-  const handleOpenCards = () => {
-    if (!isUserAuthenticated()) return notifyWarning('Please login to provide us with your payment information');
-    setOpenAddress(false);
-    if (payments.length === 0) {
-      setActiveAddPayment(true);
-      return notifyError('Please add a payment method');
-    }
-    setOpenPayments(!openPayments);
-  };
-
-  const navigateToProfile = () => {
-    notifyRedirectToProfile();
-    setTimeout(() => {
-      navigate('/profile');
-    }, 2500);
-  };
+  }
 
   return (
-    <div className="checkout">
-      {checkAndPay()}
-      {loading && (
-        <div className="checkout__loading">
-          <div className="checkout__loading--spinner"></div>
-        </div>
-      )}
-      <div className="checkout__checkout-view">
-        <div className="checkout__checkout-view__cart">
-          {itemInCart?.map((item) => (
-            <CartLineItem item={item} key={item.id} notEnoughStock={notEnoughStock} />
-          ))}
-          <div
-            className="checkout__checkout-view__cart__total"
-            style={{
-              color: theme === 'dark' ? lightTheme.textLink : darkTheme.textLink,
-              backgroundColor: theme === 'dark' ? darkTheme.shadow : lightTheme.shadow,
-              boxShadow: `-1px 0 5px -1px ${
-                theme === 'dark' ? darkTheme.shadowMedium : lightTheme.shadowMedium
-              }`,
-            }}
+    <div style={{ maxWidth: 1100, margin: '0 auto', padding: 'var(--space-8) var(--space-6)' }}>
+      {/* ── Page header ── */}
+      <div style={{ marginBottom: 'var(--space-6)' }}>
+        <span className="stride-eyebrow">Store</span>
+        <h2 style={{ fontSize: 'var(--text-2xl)', fontWeight: 700 }}>Checkout</h2>
+      </div>
+
+      <StepBar current={currentStep} />
+
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 360px', gap: 'var(--space-6)', alignItems: 'start' }}>
+
+        {/* ── Left: steps ── */}
+        <div>
+          {/* Step 1: Address */}
+          <SectionCard
+            step={0}
+            icon="fa-map-marker"
+            title="Delivery address"
+            value={address}
+            done={!!address}
+            open={openAddress}
+            onEdit={handleOpenAddress}
           >
-            <p className="checkout__checkout-view__cart__total--label">Total to pay</p>
-            <p className="checkout__checkout-view__cart__total--price">$ {totalToPay}</p>
+            <Address addresses={addresses} setOpenAddress={setOpenAddress} setAddress={setAddress} />
+            {addresses.length === 0 && (
+              <p style={{ fontSize: 'var(--text-xs)', color: 'var(--color-fg-muted)', marginTop: 'var(--space-2)' }}>
+                No addresses saved.{' '}
+                <Link to="/profile" style={{ color: 'var(--color-action)' }}>Add one in your profile →</Link>
+              </p>
+            )}
+          </SectionCard>
+
+          {/* Step 2: Payment */}
+          <SectionCard
+            step={1}
+            icon="fa-credit-card"
+            title="Payment method"
+            value={payment}
+            done={!!payment}
+            open={openPayments}
+            onEdit={handleOpenPayments}
+          >
+            <Payment payments={payments} setOpenPayments={setOpenPayments} setPayment={setPayment} />
+            {payments.length === 0 && (
+              <p style={{ fontSize: 'var(--text-xs)', color: 'var(--color-fg-muted)', marginTop: 'var(--space-2)' }}>
+                No payment methods saved.{' '}
+                <Link to="/profile" style={{ color: 'var(--color-action)' }}>Add one in your profile →</Link>
+              </p>
+            )}
+          </SectionCard>
+
+          {/* Step 3: Shipping method */}
+          <div className="stride-card stride-card__pad" style={{ marginBottom: 'var(--space-4)' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-3)', marginBottom: 'var(--space-4)' }}>
+              <div style={{ width: 36, height: 36, borderRadius: 'var(--radius-sm)', background: 'var(--color-action-subtle)', color: 'var(--color-action)', display: 'grid', placeItems: 'center' }}>
+                <i className="fa fa-truck" />
+              </div>
+              <span style={{ fontWeight: 600, fontSize: 'var(--text-sm)', color: 'var(--color-fg-primary)' }}>Shipping method</span>
+            </div>
+            <div style={{ display: 'flex', gap: 'var(--space-3)' }}>
+              {[
+                { key: true,  icon: 'fa-home',       label: 'Home delivery', sub: '+$2.99' },
+                { key: false, icon: 'fa-building',   label: 'Store pickup',  sub: 'Free'   },
+              ].map(opt => (
+                <button
+                  key={String(opt.key)}
+                  onClick={() => setDoorDelivery(opt.key)}
+                  style={{
+                    flex: 1,
+                    padding: 'var(--space-4)',
+                    borderRadius: 'var(--radius-md)',
+                    border: doorDelivery === opt.key ? '2px solid var(--color-action)' : '2px solid var(--color-border)',
+                    background: doorDelivery === opt.key ? 'var(--color-action-subtle)' : 'transparent',
+                    cursor: 'pointer',
+                    textAlign: 'left',
+                    transition: 'all .15s',
+                  }}
+                >
+                  <i className={`fa ${opt.icon}`} style={{ color: doorDelivery === opt.key ? 'var(--color-action)' : 'var(--color-fg-muted)', marginBottom: 6, display: 'block', fontSize: 18 }} />
+                  <div style={{ fontWeight: 600, fontSize: 'var(--text-sm)', color: 'var(--color-fg-primary)' }}>{opt.label}</div>
+                  <div style={{ fontSize: 'var(--text-xs)', color: doorDelivery === opt.key ? 'var(--color-action)' : 'var(--color-fg-muted)', marginTop: 2 }}>{opt.sub}</div>
+                </button>
+              ))}
+            </div>
           </div>
         </div>
-        <div
-          className="checkout__checkout-view__payment-method"
-          style={{
-            color: theme === 'dark' ? lightTheme.textLink : darkTheme.textLink,
-          }}
-        >
-          <div className="checkout__checkout-view__payment-method__info">
-            <div className="checkout__checkout-view__payment-method__info--item">
-              {openAddress && (
-                <div className="checkout__checkout-view__payment-method__info--item__address-view">
-                  <Address
-                    addresses={addresses}
-                    setOpenAddress={setOpenAddress}
-                    setAddress={setAddress}
-                  />
-                </div>
-              )}
-              <h3 className="checkout__checkout-view__payment-method__info--item__text">
-                <LocationCityTwoTone
-                  style={{
-                    fontSize: '2rem',
-                    color: theme === 'dark' ? lightTheme.textLink : darkTheme.textLink,
-                  }}
+
+        {/* ── Right: order summary ── */}
+        <div>
+          <div className="stride-card stride-card__pad" style={{ marginBottom: 'var(--space-4)' }}>
+            <h3 style={{ fontSize: 'var(--text-sm)', fontWeight: 700, marginBottom: 'var(--space-4)' }}>
+              Order summary
+            </h3>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-3)', marginBottom: 'var(--space-4)' }}>
+              {(itemInCart ?? []).map(item => (
+                <CartLineItem
+                  key={item.id}
+                  item={item}
+                  notEnoughStock={notEnoughStock}
                 />
-              </h3>
-              <p className="checkout__checkout-view__payment-method__info--item__text--small">
-                {!address ? (
-                  activeAddAddress ? (
-                    <>
-                      <span className="checkout__checkout-view__payment-method__info--item__text--small__text">
-                        No address provided yet{' '}
-                        <button
-                          className="checkout__checkout-view__payment-method__info--item__text--small__text--link"
-                          onClick={navigateToProfile}
-                        >
-                          Add it first
-                        </button>
-                      </span>
-                    </>
-                  ) : (
-                    'Click to add an address'
-                  )
-                ) : (
-                  address
-                )}
-              </p>
-              <button
-                className="checkout__checkout-view__payment-method__info--item__text--btn"
-                onClick={handleOpenAddress}
-              >
-                Give an address
-              </button>
+              ))}
             </div>
-            <div className="checkout__checkout-view__payment-method__info--item">
-              {openPayments && (
-                <div className="checkout__checkout-view__payment-method__info--item__payments-view">
-                  <Payment
-                    payments={payments}
-                    setOpenPayments={setOpenPayments}
-                    setPayment={setPayment}
-                  />
-                </div>
-              )}
-              <h3 className="checkout__checkout-view__payment-method__info--item__text">
-                <CreditCard
-                  style={{
-                    fontSize: '2rem',
-                    color: theme === 'dark' ? lightTheme.textLink : darkTheme.textLink,
-                  }}
-                />
-              </h3>
-              <p className="checkout__checkout-view__payment-method__info--item__text--small">
-                {!payment ? (
-                  activeAddPayment ? (
-                    <>
-                      <span className="checkout__checkout-view__payment-method__info--item__text--small__text">
-                        No payment method provided yet{' '}
-                        <button
-                          className="checkout__checkout-view__payment-method__info--item__text--small__text--link"
-                          onClick={navigateToProfile}
-                        >
-                          Add it first
-                        </button>
-                      </span>
-                    </>
-                  ) : (
-                    'Click to add a payment method'
-                  )
-                ) : (
-                  payment
-                )}
-              </p>
-              <button
-                className="checkout__checkout-view__payment-method__info--item__text--btn"
-                onClick={handleOpenCards}
-              >
-                Provide a card
-              </button>
-            </div>
-            <div className="checkout__checkout-view__payment-method__info--item">
-              <h3 className="checkout__checkout-view__payment-method__info--item__text">
-                Shipping method
-                <LocalShipping
-                  style={{
-                    fontSize: '2rem',
-                    marginLeft: '1rem',
-                    color: theme === 'dark' ? lightTheme.textLink : darkTheme.textLink,
-                  }}
-                />
-              </h3>
-              <p
-                className="checkout__checkout-view__payment-method__info--item__text--small"
-                style={{
-                  color: '#001e29',
-                }}
-              >
-                {checked ? <AddHomeOutlined /> : <StorefrontOutlined />}
-                <span className="checkout__checkout-view__payment-method__info--item__text--small--label">
-                  {checked ? 'At home' : 'Posti'}
-                </span>
-              </p>
-              <div className="checkout__checkout-view__payment-method__info--item__checkboxs">
-                <div className="checkout__checkout-view__payment-method__info--item__checkboxs__item">
-                  <input
-                    type="checkbox"
-                    name="door"
-                    id="door"
-                    checked={checked}
-                    onChange={handleChecked}
-                  />
-                  <label
-                    htmlFor="door"
-                    style={{
-                      color: theme === 'dark' ? lightTheme.textLink : darkTheme.textLink,
-                      transform: checked ? 'scale(1.1)' : 'scale(1)',
-                      fontWeight: checked ? 'bold' : 'normal',
-                      marginLeft: checked ? '5px' : '0',
-                    }}
-                  >
-                    Bring it to my door
-                  </label>
-                </div>
-                <div className="checkout__checkout-view__payment-method__info--item__checkboxs__item">
-                  <input
-                    type="checkbox"
-                    name="pickup"
-                    id="pickup"
-                    checked={!checked}
-                    onChange={handleChecked}
-                  />
-                  <label
-                    htmlFor="pickup"
-                    style={{
-                      color: theme === 'dark' ? lightTheme.textLink : darkTheme.textLink,
-                      transform: !checked ? 'scale(1.1)' : 'scale(1)',
-                      fontWeight: !checked ? 'bold' : 'normal',
-                    }}
-                  >
-                    Pick up
-                  </label>
-                </div>
+
+            {/* Totals */}
+            <div style={{ borderTop: '1px solid var(--color-border)', paddingTop: 'var(--space-3)', display: 'flex', flexDirection: 'column', gap: 'var(--space-2)' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 'var(--text-sm)', color: 'var(--color-fg-muted)' }}>
+                <span>Subtotal</span>
+                <span>${totalToPay.toFixed(2)}</span>
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 'var(--text-sm)', color: 'var(--color-fg-muted)' }}>
+                <span>Shipping</span>
+                <span>{doorDelivery ? '$2.99' : 'Free'}</span>
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 'var(--text-base)', fontWeight: 700, color: 'var(--color-fg-primary)', marginTop: 'var(--space-2)' }}>
+                <span>Total</span>
+                <span>${grandTotal.toFixed(2)}</span>
               </div>
             </div>
           </div>
+
+          {/* Stock check + Place order */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-3)' }}>
+            {!allowToPay && (
+              <button
+                className="stride-btn stride-btn--ghost"
+                style={{ width: '100%' }}
+                disabled={checking || !address || !payment}
+                onClick={handleCheckStock}
+              >
+                {checking
+                  ? <><i className="fa fa-spinner fa-spin" style={{ marginRight: 6 }} />Checking…</>
+                  : <><i className="fa fa-search" style={{ marginRight: 6 }} />Check stock availability</>}
+              </button>
+            )}
+
+            {allowToPay && (
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 'var(--text-xs)', color: 'var(--color-success)', marginBottom: 'var(--space-1)' }}>
+                <i className="fa fa-check-circle" />
+                All items in stock
+              </div>
+            )}
+
+            <button
+              className="stride-btn"
+              style={{ width: '100%', padding: 'var(--space-4)', fontSize: 'var(--text-base)', fontWeight: 700 }}
+              disabled={!address || !payment || !allowToPay || loading}
+              onClick={handlePlaceOrder}
+            >
+              {loading
+                ? <><i className="fa fa-spinner fa-spin" style={{ marginRight: 6 }} />Placing order…</>
+                : 'Place order'}
+            </button>
+
+            {(!address || !payment) && (
+              <p style={{ fontSize: 'var(--text-xs)', color: 'var(--color-fg-muted)', textAlign: 'center' }}>
+                {!address ? 'Select a delivery address to continue' : 'Select a payment method to continue'}
+              </p>
+            )}
+          </div>
         </div>
       </div>
-      <ToastContainer />
+
+      {loading && (
+        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,.4)', display: 'grid', placeItems: 'center', zIndex: 9999 }}>
+          <div style={{ background: 'var(--color-surface)', borderRadius: 'var(--radius-lg)', padding: 'var(--space-8)', textAlign: 'center', minWidth: 240 }}>
+            <i className="fa fa-spinner fa-spin" style={{ fontSize: 32, color: 'var(--color-action)', marginBottom: 'var(--space-4)', display: 'block' }} />
+            <p style={{ fontWeight: 600 }}>Placing your order…</p>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
