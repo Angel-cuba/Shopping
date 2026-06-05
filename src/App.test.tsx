@@ -25,13 +25,14 @@ function renderApp() {
 
 test('renders the STRIDE navbar brand', () => {
   renderApp();
-  // The new Navbar renders the brand name "STRIDE"
-  const brand = screen.getByText(/stride/i);
+  // Target the brand link specifically by role + exact name
+  const brand = screen.getByRole('link', { name: 'STRIDE' });
   expect(brand).toBeInTheDocument();
 });
 
 test('renders the Store navigation link', () => {
   renderApp();
-  const storeLink = screen.getByText(/store/i);
+  // Use exact text match — avoids matching "STRIDE Store © 2026" in the Footer
+  const storeLink = screen.getByText('Store', { exact: true });
   expect(storeLink).toBeInTheDocument();
 });
