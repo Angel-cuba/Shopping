@@ -14,13 +14,26 @@ import './Products.scss';
 
 const EMPTY_FILTERS: FilterState = { category: '', size: '', variant: '', search: '' };
 
-const Products = ({ products }: { products: Product[] }) => {
+interface ProductsProps {
+  products: Product[];
+  /** Category set externally (e.g. clicking a SeasonCard) — syncs into the internal filter */
+  externalCategory?: string;
+}
+
+const Products = ({ products, externalCategory }: ProductsProps) => {
   const [filters, setFilters]               = React.useState<FilterState>(EMPTY_FILTERS);
   const [openCreateAndEdit, setOpenCreateAndEdit] = React.useState(false);
 
   const { id }   = useParams();
   const location = useLocation();
   const { loading, success } = useSelector((state: RootState) => state.products);
+
+  // Sync external category override (e.g. from SeasonCards click)
+  React.useEffect(() => {
+    if (externalCategory !== undefined) {
+      setFilters((prev) => ({ ...prev, category: externalCategory }));
+    }
+  }, [externalCategory]);
 
   const handleFilterChange = React.useCallback((key: keyof FilterState, value: string) => {
     setFilters((prev) => ({ ...prev, [key]: value }));

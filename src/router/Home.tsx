@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useRef } from 'react';
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchProducts } from '../redux/actions/ProductActions';
 import { AppDispatch, RootState } from '../redux/store';
@@ -16,35 +16,38 @@ import Products from '../pages/Products/Products';
 import SkeletonGrid from '../components/Product/ProductCard/SkeletonGrid';
 
 const Home = () => {
-  const dispatch   = useDispatch<AppDispatch>();
+  const dispatch = useDispatch<AppDispatch>();
   const { products, loading } = useSelector((state: RootState) => state.products);
-  const user = localStorage.getItem('decodedUser');
 
-  // Ref for "Shop now" scroll-to-catalog
+  // Category set by clicking a season card — forwarded to the catalog as a filter override
+  const [heroCategory, setHeroCategory] = useState('');
+
   const catalogRef = useRef<HTMLElement>(null);
 
+  // Fetch products once on mount
   useEffect(() => {
     dispatch(fetchProducts());
   }, [dispatch]);
 
+  // Bootstrap user session — runs once on mount, consolidated from two separate effects
   useLayoutEffect(() => {
-    if (user) {
-      dispatch(logged(JSON.parse(user)));
-      const { user_id } = JSON.parse(user) as decodedUser;
-      dispatch(getWishList(user_id));
-    }
-  }, [dispatch, user]);
+    const raw = localStorage.getItem('decodedUser');
+    if (!raw) return;
 
-  useEffect(() => {
-    if (user) {
-      const { user_id } = JSON.parse(user) as decodedUser;
-      dispatch(fetchingAddresses(user_id));
-      dispatch(fetchingPayments(user_id));
-    }
-  }, [dispatch, user]);
+    const parsed = JSON.parse(raw) as decodedUser; // single parse, reused below
+    dispatch(logged(parsed));
+    dispatch(getWishList(parsed.user_id));
+    dispatch(fetchingAddresses(parsed.user_id));
+    dispatch(fetchingPayments(parsed.user_id));
+  }, [dispatch]);
 
   const scrollToCatalog = () => {
     catalogRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
+  const handleSeasonClick = (season: string) => {
+    setHeroCategory(season);
+    scrollToCatalog();
   };
 
   return (
@@ -63,7 +66,7 @@ const Home = () => {
               <h2>Find your weather</h2>
             </div>
           </div>
-          <SeasonCards />
+          <SeasonCards onSeasonClick={handleSeasonClick} />
         </div>
       </section>
 
@@ -81,7 +84,10 @@ const Home = () => {
               <h2>All products</h2>
             </div>
           </div>
-          {loading ? <SkeletonGrid n={8} /> : <Products products={products} />}
+          {loading
+            ? <SkeletonGrid n={8} />
+            : <Products products={products} externalCategory={heroCategory} />
+          }
         </div>
       </section>
 
