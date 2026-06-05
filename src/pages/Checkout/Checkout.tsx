@@ -5,24 +5,28 @@ import { AppDispatch, RootState } from '../../redux/store';
 import { clearCart } from '../../redux/actions/CartActions';
 import { api } from '../../utils/api';
 import { toastError, toastSuccess, toastInfo } from '../../utils/toasts';
+import { PaymentType } from '../../interfaces/profile/payment/paymentType';
 import CartLineItem from '../../components/Cart/CartLineItem';
+import SectionCard from '../../components/shared/SectionCard';
 import Address from './address/Address';
 import Payment from './payments/Payment';
 
-type OrderItem  = { productId: string; quantity: number };
 type DetailItem = { id: string };
 
-// ── Step indicator ────────────────────────────────────────────
+// cartItem.id = productUUID(36 chars) + timestamp — strip suffix to get the product UUID
+const getProductId = (cartItemId: string): string => cartItemId.slice(0, 36);
+
+// ── Step progress bar ─────────────────────────────────────────
 const STEPS = ['Address', 'Payment', 'Shipping', 'Confirm'];
 
 const StepBar: React.FC<{ current: number }> = ({ current }) => (
   <div style={{ display: 'flex', alignItems: 'center', marginBottom: 'var(--space-8)' }}>
     {STEPS.map((label, i) => {
-      const done    = i < current;
-      const active  = i === current;
+      const done   = i < current;
+      const active = i === current;
       return (
         <React.Fragment key={label}>
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', flex: i < STEPS.length - 1 ? 'none' : 1 }}>
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
             <div style={{
               width: 28, height: 28, borderRadius: '50%',
               display: 'grid', placeItems: 'center',
@@ -33,12 +37,21 @@ const StepBar: React.FC<{ current: number }> = ({ current }) => (
             }}>
               {done ? <i className="fa fa-check" /> : i + 1}
             </div>
-            <span style={{ fontSize: 'var(--text-xs)', marginTop: 4, fontWeight: active ? 700 : 400, color: active ? 'var(--color-fg-primary)' : 'var(--color-fg-muted)' }}>
+            <span style={{
+              fontSize: 'var(--text-xs)', marginTop: 4,
+              fontWeight: active ? 700 : 400,
+              color: active ? 'var(--color-fg-primary)' : 'var(--color-fg-muted)',
+            }}>
               {label}
             </span>
           </div>
           {i < STEPS.length - 1 && (
-            <div style={{ flex: 1, height: 2, background: done ? 'var(--color-action)' : 'var(--color-border)', margin: '0 var(--space-2)', marginBottom: 'var(--space-5)', transition: 'background .2s' }} />
+            <div style={{
+              flex: 1, height: 2,
+              background: done ? 'var(--color-action)' : 'var(--color-border)',
+              margin: '0 var(--space-2)', marginBottom: 'var(--space-5)',
+              transition: 'background .2s',
+            }} />
           )}
         </React.Fragment>
       );
@@ -46,47 +59,10 @@ const StepBar: React.FC<{ current: number }> = ({ current }) => (
   </div>
 );
 
-// ── Section card ──────────────────────────────────────────────
-const SectionCard: React.FC<{
-  step: number;
-  icon: string;
-  title: string;
-  value?: string;
-  done: boolean;
-  onEdit: () => void;
-  open: boolean;
-  children?: React.ReactNode;
-}> = ({ icon, title, value, done, onEdit, open, children }) => (
-  <div className="stride-card stride-card__pad" style={{ marginBottom: 'var(--space-4)' }}>
-    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-3)' }}>
-        <div style={{
-          width: 36, height: 36, borderRadius: 'var(--radius-sm)',
-          background: done ? 'var(--color-success-bg)' : 'var(--color-action-subtle)',
-          color:       done ? 'var(--color-success)'   : 'var(--color-action)',
-          display: 'grid', placeItems: 'center',
-        }}>
-          <i className={`fa ${done ? 'fa-check' : icon}`} />
-        </div>
-        <div>
-          <div style={{ fontWeight: 600, fontSize: 'var(--text-sm)', color: 'var(--color-fg-primary)' }}>{title}</div>
-          {value && !open && (
-            <div style={{ fontSize: 'var(--text-xs)', color: 'var(--color-fg-muted)', marginTop: 2 }}>{value}</div>
-          )}
-        </div>
-      </div>
-      <button className="stride-btn stride-btn--ghost" style={{ fontSize: 'var(--text-xs)', padding: '4px 12px' }} onClick={onEdit}>
-        {open ? 'Cancel' : done ? 'Change' : 'Select'}
-      </button>
-    </div>
-    {open && <div style={{ marginTop: 'var(--space-3)' }}>{children}</div>}
-  </div>
-);
-
 // ── Main component ────────────────────────────────────────────
 const Checkout: React.FC = () => {
-  const dispatch   = useDispatch<AppDispatch>();
-  const navigate   = useNavigate();
+  const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
 
   const { userFromToken } = useSelector((s: RootState) => s.userLogged);
   const { itemInCart }    = useSelector((s: RootState) => s.cart);
@@ -94,52 +70,51 @@ const Checkout: React.FC = () => {
   const { payments }      = useSelector((s: RootState) => s.payments);
 
   // ── State ──
-  const [address,       setAddress]       = useState('');
-  const [payment,       setPayment]       = useState('');
-  const [doorDelivery,  setDoorDelivery]  = useState(true);
-  const [openAddress,   setOpenAddress]   = useState(false);
-  const [openPayments,  setOpenPayments]  = useState(false);
-  const [allowToPay,    setAllowToPay]    = useState(false);
-  const [notEnoughStock, setNotEnoughStock] = useState<string[]>([]);
-  const [checking,      setChecking]      = useState(false);
-  const [loading,       setLoading]       = useState(false);
+  const [address,         setAddress]         = useState('');
+  const [payment,         setPayment]         = useState<PaymentType | null>(null);
+  const [doorDelivery,    setDoorDelivery]    = useState(true);
+  const [openAddress,     setOpenAddress]     = useState(false);
+  const [openPayments,    setOpenPayments]    = useState(false);
+  const [allowToPay,      setAllowToPay]      = useState(false);
+  const [notEnoughStock,  setNotEnoughStock]  = useState<string[]>([]);
+  const [checking,        setChecking]        = useState(false);
+  const [loading,         setLoading]         = useState(false);
 
   // ── Derived ──
-  const totalToPay = (itemInCart ?? []).reduce((sum, i) => sum + i.price * i.quantity, 0);
+  const totalToPay  = (itemInCart ?? []).reduce((sum, i) => sum + i.price * i.quantity, 0);
   const shippingFee = doorDelivery ? 2.99 : 0;
   const grandTotal  = totalToPay + shippingFee;
 
-  // Current step: 0=address, 1=payment, 2=shipping, 3=confirm
-  const currentStep = !address ? 0 : !payment ? 1 : 2;
+  // Step 0=address, 1=payment, 2=shipping, 3=confirm (all ready)
+  const currentStep = !address ? 0 : !payment ? 1 : !allowToPay ? 2 : 3;
 
+  // Reset stock-check whenever the cart changes so stale approval can't persist
   useEffect(() => {
-    setAllowToPay(notEnoughStock.length === 0 && notEnoughStock !== undefined);
-  }, [notEnoughStock]);
+    setAllowToPay(false);
+    setNotEnoughStock([]);
+  }, [itemInCart]);
 
-  // ── Handlers ──
+  // ── Panel handlers — separate cancel path from open-with-guard path ──
   const handleOpenAddress = () => {
-    if (!userFromToken) return toastError('Please log in first');
-    if (addresses.length === 0) {
-      toastError('Add an address in your profile first');
-      return;
-    }
+    if (openAddress) { setOpenAddress(false); return; }
+    if (!userFromToken)         return toastError('Please log in first');
+    if (addresses.length === 0) return toastError('Add an address in your profile first');
     setOpenPayments(false);
-    setOpenAddress(prev => !prev);
+    setOpenAddress(true);
   };
 
   const handleOpenPayments = () => {
-    if (!userFromToken) return toastError('Please log in first');
-    if (payments.length === 0) {
-      toastError('Add a payment method in your profile first');
-      return;
-    }
+    if (openPayments) { setOpenPayments(false); return; }
+    if (!userFromToken)        return toastError('Please log in first');
+    if (payments.length === 0) return toastError('Add a payment method in your profile first');
     setOpenAddress(false);
-    setOpenPayments(prev => !prev);
+    setOpenPayments(true);
   };
 
+  // ── Stock check ──
   const handleCheckStock = async () => {
-    if (!itemInCart?.length)    return toastError('Your cart is empty');
-    if (!address || !payment)   return toastError('Select address and payment first');
+    if (!itemInCart?.length)   return toastError('Your cart is empty');
+    if (!address || !payment)  return toastError('Select address and payment first');
 
     setChecking(true);
     setNotEnoughStock([]);
@@ -147,8 +122,7 @@ const Checkout: React.FC = () => {
 
     try {
       for (const item of itemInCart) {
-        const id  = item.id.slice(0, 36);
-        const res = await api.get(`/products/${id}`);
+        const res = await api.get(`/products/${getProductId(item.id)}`);
         const p   = res.data;
         if (p.inStock === 0) {
           outOfStock.push(p.id);
@@ -156,65 +130,81 @@ const Checkout: React.FC = () => {
         } else if (p.inStock < item.quantity) {
           outOfStock.push(p.id);
           toastError(`${p.name}: only ${p.inStock} left`);
-        } else {
-          toastSuccess(`${p.name} ✓`);
         }
       }
     } catch {
-      toastError('Stock check failed, please try again');
+      toastError('Stock check failed — please try again');
     }
 
     setNotEnoughStock(outOfStock);
     setAllowToPay(outOfStock.length === 0);
+    if (outOfStock.length === 0) {
+      toastSuccess(`All ${itemInCart.length} item${itemInCart.length !== 1 ? 's' : ''} in stock`);
+    }
     setChecking(false);
   };
 
+  // ── Place order ──
   const handlePlaceOrder = async () => {
-    if (!address || !payment)  return toastError('Select address and payment first');
-    if (!allowToPay)           return toastError('Check stock availability first');
-    if (!itemInCart?.length)   return toastError('Your cart is empty');
+    if (!userFromToken)         return toastError('Session expired — please log in again');
+    if (!address || !payment)   return toastError('Select address and payment first');
+    if (!allowToPay)            return toastInfo('Run the stock check first');
+    if (!itemInCart?.length)    return toastError('Your cart is empty');
 
     setLoading(true);
+    // Track decremented items so we can attempt a rollback on failure.
+    // TODO: replace with a single transactional POST /orders/place endpoint on the backend.
+    const decremented: { id: string; quantity: number }[] = [];
+
     try {
       // 1. Decrement stock
       for (const item of itemInCart) {
-        await api.put('/products/update/stock', { id: item.id.slice(0, 36), quantity: item.quantity });
+        const id = getProductId(item.id);
+        await api.put('/products/update/stock', { id, quantity: item.quantity });
+        decremented.push({ id, quantity: item.quantity });
       }
 
       // 2. Create order details
-      const orderDetailsPayload = itemInCart.map(item => ({
-        productId: item.id.slice(0, 36),
+      const detailsPayload = itemInCart.map(item => ({
+        productId: getProductId(item.id),
         variant:   item.variant,
         image:     item.image,
         size:      item.sizes,
         price:     item.price,
         quantity:  item.quantity,
-        user:      { id: userFromToken?.user_id },
+        user:      { id: userFromToken.user_id },
       }));
-      const detailsRes = await api.post('/order-details/create-order-details', orderDetailsPayload);
+      const detailsRes = await api.post('/order-details/create-order-details', detailsPayload);
 
-      if (detailsRes.status === 200) {
-        // 3. Create order
-        const orderPayload = {
-          user:            { id: userFromToken?.user_id },
-          orderDetails:    detailsRes.data.map((d: DetailItem) => d.id),
-          paymentType:     payment,
-          shippingAddress: address,
-          shippingMethod:  doorDelivery ? 'DOOR' : 'PICKUP',
-          shippingFee:     shippingFee,
-          total:           grandTotal,
-        };
-        await api.post('/orders', orderPayload);
-        dispatch(clearCart());
-        toastSuccess('Order placed! We\'ll confirm shortly.');
-        navigate('/history');
-      }
+      // 3. Create order
+      await api.post('/orders', {
+        user:            { id: userFromToken.user_id },
+        orderDetails:    detailsRes.data.map((d: DetailItem) => d.id),
+        paymentType:     payment.provider,
+        shippingAddress: address,
+        shippingMethod:  doorDelivery ? 'DOOR' : 'PICKUP',
+        shippingFee,
+        total:           grandTotal,
+      });
+
+      dispatch(clearCart());
+      toastSuccess("Order placed! We'll confirm shortly.");
+      navigate('/history');
     } catch {
+      // Best-effort rollback — re-increment stock for items already decremented
+      for (const d of decremented) {
+        await api.put('/products/update/stock', { id: d.id, quantity: -d.quantity }).catch(() => {});
+      }
       toastError('Something went wrong placing your order');
     } finally {
       setLoading(false);
     }
   };
+
+  // ── Payment display label ──
+  const paymentLabel = payment
+    ? `${payment.provider} •••• ${payment.cardNumber?.slice(-4)}`
+    : undefined;
 
   // ── Empty cart ──
   if (!itemInCart?.length && !loading) {
@@ -234,7 +224,7 @@ const Checkout: React.FC = () => {
 
   return (
     <div style={{ maxWidth: 1100, margin: '0 auto', padding: 'var(--space-8) var(--space-6)' }}>
-      {/* ── Page header ── */}
+      {/* Header */}
       <div style={{ marginBottom: 'var(--space-6)' }}>
         <span className="stride-eyebrow">Store</span>
         <h2 style={{ fontSize: 'var(--text-2xl)', fontWeight: 700 }}>Checkout</h2>
@@ -246,69 +236,67 @@ const Checkout: React.FC = () => {
 
         {/* ── Left: steps ── */}
         <div>
+
           {/* Step 1: Address */}
           <SectionCard
-            step={0}
             icon="fa-map-marker"
             title="Delivery address"
-            value={address}
+            value={address || undefined}
             done={!!address}
             open={openAddress}
             onEdit={handleOpenAddress}
           >
             <Address addresses={addresses} setOpenAddress={setOpenAddress} setAddress={setAddress} />
-            {addresses.length === 0 && (
-              <p style={{ fontSize: 'var(--text-xs)', color: 'var(--color-fg-muted)', marginTop: 'var(--space-2)' }}>
-                No addresses saved.{' '}
-                <Link to="/profile" style={{ color: 'var(--color-action)' }}>Add one in your profile →</Link>
-              </p>
-            )}
           </SectionCard>
+          {!openAddress && !address && addresses.length === 0 && (
+            <p style={{ fontSize: 'var(--text-xs)', color: 'var(--color-fg-muted)', marginTop: 'calc(var(--space-2) * -1)', marginBottom: 'var(--space-4)' }}>
+              No addresses saved.{' '}
+              <Link to="/profile" style={{ color: 'var(--color-action)' }}>Add one in your profile →</Link>
+            </p>
+          )}
 
           {/* Step 2: Payment */}
           <SectionCard
-            step={1}
             icon="fa-credit-card"
             title="Payment method"
-            value={payment}
+            value={paymentLabel}
             done={!!payment}
             open={openPayments}
             onEdit={handleOpenPayments}
           >
             <Payment payments={payments} setOpenPayments={setOpenPayments} setPayment={setPayment} />
-            {payments.length === 0 && (
-              <p style={{ fontSize: 'var(--text-xs)', color: 'var(--color-fg-muted)', marginTop: 'var(--space-2)' }}>
-                No payment methods saved.{' '}
-                <Link to="/profile" style={{ color: 'var(--color-action)' }}>Add one in your profile →</Link>
-              </p>
-            )}
           </SectionCard>
+          {!openPayments && !payment && payments.length === 0 && (
+            <p style={{ fontSize: 'var(--text-xs)', color: 'var(--color-fg-muted)', marginTop: 'calc(var(--space-2) * -1)', marginBottom: 'var(--space-4)' }}>
+              No payment methods saved.{' '}
+              <Link to="/profile" style={{ color: 'var(--color-action)' }}>Add one in your profile →</Link>
+            </p>
+          )}
 
-          {/* Step 3: Shipping method */}
+          {/* Step 3: Shipping */}
           <div className="stride-card stride-card__pad" style={{ marginBottom: 'var(--space-4)' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-3)', marginBottom: 'var(--space-4)' }}>
               <div style={{ width: 36, height: 36, borderRadius: 'var(--radius-sm)', background: 'var(--color-action-subtle)', color: 'var(--color-action)', display: 'grid', placeItems: 'center' }}>
                 <i className="fa fa-truck" />
               </div>
-              <span style={{ fontWeight: 600, fontSize: 'var(--text-sm)', color: 'var(--color-fg-primary)' }}>Shipping method</span>
+              <span style={{ fontWeight: 600, fontSize: 'var(--text-sm)', color: 'var(--color-fg-primary)' }}>
+                Shipping method
+              </span>
             </div>
             <div style={{ display: 'flex', gap: 'var(--space-3)' }}>
               {[
-                { key: true,  icon: 'fa-home',       label: 'Home delivery', sub: '+$2.99' },
-                { key: false, icon: 'fa-building',   label: 'Store pickup',  sub: 'Free'   },
+                { key: true,  icon: 'fa-home',     label: 'Home delivery', sub: '+$2.99' },
+                { key: false, icon: 'fa-building', label: 'Store pickup',  sub: 'Free'   },
               ].map(opt => (
                 <button
                   key={String(opt.key)}
                   onClick={() => setDoorDelivery(opt.key)}
                   style={{
-                    flex: 1,
-                    padding: 'var(--space-4)',
+                    flex: 1, padding: 'var(--space-4)',
                     borderRadius: 'var(--radius-md)',
-                    border: doorDelivery === opt.key ? '2px solid var(--color-action)' : '2px solid var(--color-border)',
-                    background: doorDelivery === opt.key ? 'var(--color-action-subtle)' : 'transparent',
-                    cursor: 'pointer',
-                    textAlign: 'left',
-                    transition: 'all .15s',
+                    border:      doorDelivery === opt.key ? '2px solid var(--color-action)' : '2px solid var(--color-border)',
+                    background:  doorDelivery === opt.key ? 'var(--color-action-subtle)'    : 'transparent',
+                    cursor: 'pointer', textAlign: 'left', transition: 'all .15s',
                   }}
                 >
                   <i className={`fa ${opt.icon}`} style={{ color: doorDelivery === opt.key ? 'var(--color-action)' : 'var(--color-fg-muted)', marginBottom: 6, display: 'block', fontSize: 18 }} />
@@ -328,11 +316,7 @@ const Checkout: React.FC = () => {
             </h3>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-3)', marginBottom: 'var(--space-4)' }}>
               {(itemInCart ?? []).map(item => (
-                <CartLineItem
-                  key={item.id}
-                  item={item}
-                  notEnoughStock={notEnoughStock}
-                />
+                <CartLineItem key={item.id} item={item} notEnoughStock={notEnoughStock} />
               ))}
             </div>
 
@@ -353,7 +337,7 @@ const Checkout: React.FC = () => {
             </div>
           </div>
 
-          {/* Stock check + Place order */}
+          {/* Actions */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-3)' }}>
             {!allowToPay && (
               <button
@@ -369,7 +353,7 @@ const Checkout: React.FC = () => {
             )}
 
             {allowToPay && (
-              <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 'var(--text-xs)', color: 'var(--color-success)', marginBottom: 'var(--space-1)' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 'var(--text-xs)', color: 'var(--color-success)' }}>
                 <i className="fa fa-check-circle" />
                 All items in stock
               </div>
@@ -395,6 +379,7 @@ const Checkout: React.FC = () => {
         </div>
       </div>
 
+      {/* Full-screen loading overlay during order submission */}
       {loading && (
         <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,.4)', display: 'grid', placeItems: 'center', zIndex: 9999 }}>
           <div style={{ background: 'var(--color-surface)', borderRadius: 'var(--radius-lg)', padding: 'var(--space-8)', textAlign: 'center', minWidth: 240 }}>

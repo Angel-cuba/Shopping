@@ -4,12 +4,12 @@ import { PaymentType } from '../../../interfaces/profile/payment/paymentType';
 type Props = {
   payments: PaymentType[];
   setOpenPayments: (open: boolean) => void;
-  setPayment: (payment: string) => void;
+  setPayment: (payment: PaymentType) => void;
 };
 
 const Payment: React.FC<Props> = ({ payments, setOpenPayments, setPayment }) => {
-  const pick = (payment: PaymentType) => {
-    setPayment(payment.provider);
+  const pick = (p: PaymentType) => {
+    setPayment(p);
     setOpenPayments(false);
   };
 
@@ -45,9 +45,14 @@ const Payment: React.FC<Props> = ({ payments, setOpenPayments, setPayment }) => 
             onMouseLeave={e => (e.currentTarget.style.background = 'none')}
           >
             <i className="fa fa-credit-card" style={{ color: 'var(--color-action)', fontSize: 16 }} />
-            <span style={{ fontWeight: 600, fontSize: 'var(--text-sm)', color: 'var(--color-fg-primary)' }}>
-              {p.provider}
-            </span>
+            <div>
+              <div style={{ fontWeight: 600, fontSize: 'var(--text-sm)', color: 'var(--color-fg-primary)' }}>
+                {p.provider}
+              </div>
+              <div style={{ fontSize: 'var(--text-xs)', color: 'var(--color-fg-muted)', marginTop: 1 }}>
+                •••• {p.cardNumber?.slice(-4)} · {p.cardHolderName}
+              </div>
+            </div>
           </button>
         ))}
       </div>
