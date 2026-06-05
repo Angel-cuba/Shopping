@@ -79,6 +79,8 @@ const Checkout: React.FC = () => {
   const [loading,         setLoading]         = useState(false);
 
   // ── Derived ──
+  // Prices are stored as whole dollars (Integer) on the backend.
+  // shippingFee stays as a float for display; Math.round() converts it to Integer when POSTing.
   const totalToPay  = (itemInCart ?? []).reduce((sum, i) => sum + i.price * i.quantity, 0);
   const shippingFee = doorDelivery ? 2.99 : 0;
   const grandTotal  = totalToPay + shippingFee;
@@ -173,6 +175,7 @@ const Checkout: React.FC = () => {
     } catch (err: unknown) {
       const status = (err as { response?: { status?: number } })?.response?.status;
       if (status === 409) {
+        setAllowToPay(false); // force a fresh stock check before the next attempt
         toastError('Some items went out of stock — refresh and try again');
       } else if (status === 404) {
         toastError('A product was not found — please refresh your cart');

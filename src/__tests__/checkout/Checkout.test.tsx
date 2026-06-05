@@ -284,17 +284,24 @@ describe('Checkout', () => {
 
     userEvent.click(screen.getByText('Place order'));
 
+    // cart: 2 × $99 = $198 subtotal; shippingFee = Math.round(2.99) = 3; total = Math.round(200.99) = 201
     await waitFor(() => {
-      expect(api.post).toHaveBeenCalledWith('/orders/place', expect.objectContaining({
+      expect(api.post).toHaveBeenCalledWith('/orders/place', {
         userId:          'user-uuid-1',
         paymentType:     'Visa',
         shippingAddress: '123 Main St, New York',
         shippingMethod:  'DOOR',
-        items: [expect.objectContaining({
+        shippingFee:     3,
+        total:           201,
+        items: [{
           productId: PRODUCT_UUID,
+          variant:   'Red',
+          image:     'img.png',
+          size:      '9',
+          price:     99,
           quantity:  2,
-        })],
-      }));
+        }],
+      });
       expect(mockNavigate).toHaveBeenCalledWith('/history');
     });
   });
