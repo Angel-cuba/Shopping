@@ -1,67 +1,89 @@
-import React, { useEffect } from 'react';
-import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
+import React, { useEffect, useState } from 'react';
+import { api } from '../../../utils/api';
+import { AdminUser } from '../../../interfaces/admin/AdminTypes';
 
-import { CustomerType } from '../../../interfaces/customer/Customer';
-import { users } from '../../../data/users';
-import Customer from './Customer/Customer';
-import { Controls } from '../Controls/Controls';
-import './Customers.scss';
-
-const Customers = (): JSX.Element => {
-  const [filteredUsers, setFilteredUsers] = React.useState(users);
-  const [search, setSearch] = React.useState('');
+const Customers: React.FC = () => {
+  const [users,   setUsers]   = useState<AdminUser[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [search,  setSearch]  = useState('');
 
   useEffect(() => {
-    const handleSearch = () => {
-      const filtered = users.filter((user) => {
-        return user.name.toLowerCase().includes(search.toLowerCase());
-      });
-      setFilteredUsers(filtered);
-    };
-    handleSearch();
-  }, [search]);
+    api.get<AdminUser[]>('/users')
+      .then(r => setUsers(r.data))
+      .catch(() => {})
+      .finally(() => setLoading(false));
+  }, []);
+
+  const filtered = users.filter(u =>
+    search === '' ||
+    `${u.firstname} ${u.lastname} ${u.username} ${u.email}`
+      .toLowerCase().includes(search.toLowerCase())
+  );
+
   return (
     <>
-      <Controls search={search} setSearch={setSearch} />
-      <table className="customers">
-        <thead className="customers__header">
-          <tr className="customers__header--item">
-            <th
-              className="customers__header--item"
-              style={{
-                paddingLeft: '10px',
-              }}
-            >
-              Customer
-            </th>
-            <th
-              className="customers__header--item"
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-              }}
-            >
-              Last seen <ArrowDownwardIcon />
-            </th>
-            <th className="customers__header--item">Orders</th>
-            <th className="customers__header--item">Total spent</th>
-            <th className="customers__header--item">Latest purchase</th>
-            <th className="customers__header--item">News</th>
-            <th className="customers__header--item">Segments</th>
-          </tr>
-        </thead>
-        <tbody>
-          {!filteredUsers.length ? (
-            <tr>
-              <td colSpan={7}>No customers found</td>
-            </tr>
-          ) : (
-            filteredUsers.map((customer: CustomerType) => (
-              <Customer key={customer.id} customer={customer} />
-            ))
-          )}
-        </tbody>
-      </table>
+      <div className="stride-section-head" style={{ marginBottom: 'var(--space-6)' }}>
+        <div>
+          <span className="stride-eyebrow">Admin</span>
+          <h2>Customers</h2>
+        </div>
+        <span style={{ fontSize: 'var(--text-sm)', color: 'var(--color-fg-muted)' }}>
+          {filtered.length} user{filtered.length !== 1 ? 's' : ''}
+        </span>
+      </div>
+
+      <div className="stride-field" style={{ marginBottom: 'var(--space-5)', maxWidth: 320 }}>
+        <input
+          className="stride-input"
+          placeholder="Search customers…"
+          value={search}
+          onChange={e => setSearch(e.target.value)}
+        />
+      </div>
+
+      {loading ? (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+          {[0, 1, 2, 3].map(i => (
+            <div key={i} className="stride-sk" style={{ height: 44, borderRadius: 'var(--radius-sm)' }} />
+          ))}
+        </div>
+      ) : filtered.length === 0 ? (
+        <div className="stride-empty">
+          <i className="fa fa-users" />
+          <h3>No customers found</h3>
+        </div>
+      ) : (
+        <div className="stride-card">
+          <table className="stride-table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Role</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filtered.map(u => (
+                <tr key={u.id}>
+                  <td style={{ fontWeight: 600, color: 'var(--color-fg-primary)' }}>
+                    {u.firstname} {u.lastname}
+                  </td>
+                  <td>{u.username}</td>
+                  <td>{u.email}</td>
+                  <td>{u.phone}</td>
+                  <td>
+                    <span className={`stride-badge ${u.role === 'ADMIN' ? '' : 'stride-badge--soft'}`}>
+                      {u.role}
+                    </span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
     </>
   );
 };

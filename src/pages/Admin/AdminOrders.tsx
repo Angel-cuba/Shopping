@@ -1,176 +1,155 @@
-import React, { ChangeEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { ORDERS, OrderType, PAYMENT_DETAILS } from '../../data/orders';
-import { users } from '../../data/users';
-import './styles/AdminOrders.scss';
+import React, { useEffect, useState } from 'react';
+import { api } from '../../utils/api';
+import { AdminOrder } from '../../interfaces/admin/AdminTypes';
+import { OrderStatus } from '../../interfaces/profile/order/orderType';
+import { toastSuccess, toastError } from '../../utils/toasts';
 
-const AdminOrders = () => {
-  const [orders, setOrders] = useState(ORDERS);
-  const [providers, setProviders] = useState<string[] | any>();
-  const [provider, setProvider] = useState<string | null>('');
-  const [deleteFilters, setDeleteFilters] = useState(false);
+const STATUS_OPTIONS: OrderStatus[] = ['PENDING', 'CONFIRMED', 'SHIPPED', 'DELIVERED', 'CANCELLED'];
 
-  const maxValue = useMemo(() => Math.max(...ORDERS.map((order) => order.totalInvoice)), []);
-  const minValue = useMemo(() => Math.min(...ORDERS.map((order) => order.totalInvoice)), []);
-  const [inputValue, setInputValue] = useState<number>(maxValue);
+const STATUS_CLASS: Record<OrderStatus, string> = {
+  PENDING:   'stride-badge--soft',
+  CONFIRMED: 'stride-badge--soft',
+  SHIPPED:   'stride-badge',
+  DELIVERED: 'stride-badge--green',
+  CANCELLED: 'stride-badge--sale',
+};
 
-  const handleInputChange = useCallback(
-    (event: ChangeEvent<HTMLInputElement>) => {
-      setInputValue(Number(event.target.value));
-    },
-    [setInputValue]
-  );
-  const ordersRef = useRef(orders);
+const AdminOrders: React.FC = () => {
+  const [orders,       setOrders]       = useState<AdminOrder[]>([]);
+  const [loading,      setLoading]      = useState(true);
+  const [search,       setSearch]       = useState('');
+  const [statusFilter, setStatusFilter] = useState<OrderStatus | ''>('');
+  const [updating,     setUpdating]     = useState<string | null>(null);
 
   useEffect(() => {
-    const filtersByPaymentProvider = () => {
-      const payments = ordersRef.current.map((order) => {
-        const payment = PAYMENT_DETAILS.find((payment) => payment.id === order.paymentId);
-        return payment?.provider;
-      });
-
-      const providers = payments.flat().filter((provider, index, self) => {
-        return self.indexOf(provider) === index;
-      });
-      setProviders(providers);
-    };
-    filtersByPaymentProvider();
+    api.get<AdminOrder[]>('/orders')
+      .then(r => setOrders(r.data))
+      .catch(() => {})
+      .finally(() => setLoading(false));
   }, []);
 
-  useEffect(() => {
-    const handleFilter = () => {
-      const filtered = ORDERS.filter((order) => {
-        const payment = PAYMENT_DETAILS.find((payment) => payment.id === order.paymentId);
-        return payment?.provider === provider;
-      });
-      setOrders(filtered);
-    };
-    handleFilter();
-  }, [provider]);
-
-  useEffect(() => {
-    const handleFilterByTotalInvoice = () => {
-      const filtered = ordersRef.current.filter((order: OrderType) => {
-        const payment = PAYMENT_DETAILS.find((payment) => payment.id === order.paymentId);
-        return payment?.provider === provider && order.totalInvoice <= Number(inputValue);
-      });
-      setOrders(filtered);
-    };
-    if (inputValue !== undefined && inputValue > minValue && inputValue < maxValue) {
-      handleFilterByTotalInvoice();
+  const handleStatusUpdate = async (orderId: string, newStatus: OrderStatus) => {
+    setUpdating(orderId);
+    try {
+      const r = await api.put<AdminOrder>(`/orders/${orderId}/status`, { status: newStatus });
+      setOrders(prev => prev.map(o => o.id === orderId ? r.data : o));
+      toastSuccess('Status updated');
+    } catch {
+      toastError('Failed to update status');
+    } finally {
+      setUpdating(null);
     }
-  }, [inputValue, provider, minValue, maxValue]);
+  };
 
-  useEffect(() => {
-    const filterAllByTotalInvoice = () => {
-      const filtered = ORDERS.filter((order: OrderType) => {
-        return order.totalInvoice <= Number(inputValue);
-      });
-      setOrders(filtered);
-    };
-    if (!provider) {
-      filterAllByTotalInvoice();
-    }
-  }, [inputValue, minValue, provider, maxValue]);
+  const filtered = orders.filter(o => {
+    const matchSearch  = search === '' ||
+      `${o.userFirstname} ${o.userLastname} ${o.userEmail}`.toLowerCase().includes(search.toLowerCase());
+    const matchStatus  = statusFilter === '' || o.status === statusFilter;
+    return matchSearch && matchStatus;
+  });
 
-  const cleanFilters = () => {
-    setDeleteFilters(false);
-    setProvider(null);
-  };
-  const providersButtons = () => {
-    return providers?.map((providerString: string) => (
-      <button
-        key={providerString}
-        className="admin-orders__filters--buttons"
-        onClick={() => addProvider(providerString)}
-        style={{
-          backgroundColor: provider === providerString ? '#000000eb' : '#ffffff',
-          color: provider === providerString ? '#ffffff' : '#000000',
-          border: '1px solid #343434',
-        }}
-      >
-        {providerString}
-      </button>
-    ));
-  };
-  const addProvider = (providerString: string) => {
-    setDeleteFilters(true);
-    setProvider(providerString);
-  };
-  const filterByTotalInvoice = () => {
-    return (
-      <div className="admin-orders__filters--buttons">
-        <input
-          type="range"
-          value={inputValue}
-          onChange={handleInputChange}
-          min={minValue}
-          max={maxValue}
-        />
-      </div>
-    );
-  };
-  const userInfo = (userId: number) => {
-    const user = users.find((user) => user.id === userId);
-    return (
-      <div key={user?.id} className="admin-orders__container--order--user-info">
-        <img
-          src={user?.picture}
-          alt={user?.name}
-          style={{
-            width: '50px',
-            height: '50px',
-            borderRadius: '50%',
-          }}
-        />
-
-        <p className="admin-orders__container--order--user-info--name">{user?.name}</p>
-      </div>
-    );
-  };
-  const renderUserPayments = (paymentId: number) => {
-    const payment = PAYMENT_DETAILS.find((payment) => payment.id === paymentId);
-    return (
-      <div key={payment?.provider} className="admin-orders__container--order--payment-methods">
-        <p>{payment?.provider}</p>
-      </div>
-    );
-  };
+  const fmt = (iso: string) =>
+    new Date(iso).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
 
   return (
-    <div className="admin-orders">
-      {deleteFilters && (
-        <div className="admin-orders__close-filters">
-          <p className="admin-orders__close-filters--text" onClick={cleanFilters}>
-            Clean filters
-          </p>
+    <>
+      <div className="stride-section-head" style={{ marginBottom: 'var(--space-6)' }}>
+        <div>
+          <span className="stride-eyebrow">Admin</span>
+          <h2>Orders</h2>
+        </div>
+        <span style={{ fontSize: 'var(--text-sm)', color: 'var(--color-fg-muted)' }}>
+          {filtered.length} order{filtered.length !== 1 ? 's' : ''}
+        </span>
+      </div>
+
+      {/* Filters */}
+      <div style={{ display: 'flex', gap: 'var(--space-3)', marginBottom: 'var(--space-6)', flexWrap: 'wrap' }}>
+        <div className="stride-field" style={{ margin: 0, flex: '1 1 200px' }}>
+          <input
+            className="stride-input"
+            placeholder="Search by name or email…"
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+          />
+        </div>
+        <div className="stride-field" style={{ margin: 0 }}>
+          <select
+            className="stride-input"
+            value={statusFilter}
+            onChange={e => setStatusFilter(e.target.value as OrderStatus | '')}
+          >
+            <option value="">All statuses</option>
+            {STATUS_OPTIONS.map(s => <option key={s} value={s}>{s}</option>)}
+          </select>
+        </div>
+      </div>
+
+      {loading ? (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-3)' }}>
+          {[0, 1, 2].map(i => (
+            <div key={i} className="stride-card stride-card__pad">
+              <div className="stride-sk" style={{ height: 14, width: '40%' }} />
+            </div>
+          ))}
+        </div>
+      ) : filtered.length === 0 ? (
+        <div className="stride-empty">
+          <i className="fa fa-list-alt" />
+          <h3>No orders found</h3>
+        </div>
+      ) : (
+        <div className="stride-card">
+          <table className="stride-table">
+            <thead>
+              <tr>
+                <th>Customer</th>
+                <th>Date</th>
+                <th>Payment</th>
+                <th>Shipping</th>
+                <th>Total</th>
+                <th>Status</th>
+                <th>Update</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filtered.map(o => (
+                <tr key={o.id}>
+                  <td>
+                    <div style={{ fontWeight: 600, color: 'var(--color-fg-primary)' }}>
+                      {o.userFirstname} {o.userLastname}
+                    </div>
+                    <div style={{ fontSize: 'var(--text-xs)', color: 'var(--color-fg-muted)' }}>
+                      {o.userEmail}
+                    </div>
+                  </td>
+                  <td style={{ whiteSpace: 'nowrap' }}>{fmt(o.createdAt)}</td>
+                  <td>{o.paymentType}</td>
+                  <td>{o.shippingMethod === 'DOOR' ? 'Home' : 'Store'}</td>
+                  <td style={{ fontWeight: 600 }}>${o.total.toFixed(2)}</td>
+                  <td>
+                    <span className={`stride-badge ${STATUS_CLASS[o.status]}`}>
+                      {o.status}
+                    </span>
+                  </td>
+                  <td>
+                    <select
+                      className="stride-input"
+                      style={{ fontSize: 'var(--text-xs)', padding: '4px 8px', width: 'auto' }}
+                      value={o.status}
+                      disabled={updating === o.id}
+                      onChange={e => handleStatusUpdate(o.id, e.target.value as OrderStatus)}
+                    >
+                      {STATUS_OPTIONS.map(s => <option key={s} value={s}>{s}</option>)}
+                    </select>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       )}
-      <div className="admin-orders__filters">{providersButtons()}</div>
-      <div className="admin-orders__filters">{filterByTotalInvoice()}</div>
-
-      <div className="admin-orders__container">
-        {orders.map((order: OrderType) => (
-          <div key={order.orderId} className="admin-orders__container--order">
-            {userInfo(order.userId)}
-            <p className="admin-orders__container--order--information">
-              Total spent:
-              <span className="admin-orders__container--order--information--number">
-                {order.totalInvoice} €
-              </span>
-            </p>
-            <p className="admin-orders__container--order--information">
-              Amount of products:
-              <span className="admin-orders__container--order--information--number">
-                {order.items?.length}
-              </span>
-            </p>
-            <p className="admin-orders__container--order--date">{order.orderDate}</p>
-            {renderUserPayments(order.paymentId)}
-          </div>
-        ))}
-        {!orders.length && <p>No orders less {inputValue}€ spent</p>}
-      </div>
-    </div>
+    </>
   );
 };
 
