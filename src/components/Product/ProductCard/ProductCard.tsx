@@ -7,7 +7,7 @@ import { addToWishList } from '../../../redux/actions/WishesActions';
 import { Product, VariantsColors } from '../../../interfaces/products/ProductType';
 import { CartProduct } from '../../../interfaces/cart/CartType';
 import { isAdmin } from '../../../utils/authentication';
-import { notifySuccess } from '../../../utils/notify';
+import { toastSuccess } from '../../../utils/toasts';
 import CreateAndEdit from '../../Admin/CreateAndEdit/CreateAndEdit';
 import { deleteProductFromStock } from '../../../redux/actions/ProductActions';
 
@@ -74,7 +74,7 @@ const ProductCard: React.FC<Props> = ({ product: p }) => {
       stock:       p.inStock,
     };
     dispatch(addToCart(item));
-    notifySuccess(`${p.name} added to cart`);
+    toastSuccess(`${p.name} added to cart`);
   };
 
   const handleWishlist = (e: React.MouseEvent) => {
@@ -87,7 +87,7 @@ const ProductCard: React.FC<Props> = ({ product: p }) => {
     e.preventDefault();
     e.stopPropagation();
     dispatch(deleteProductFromStock(p.id));
-    notifySuccess('Product deleted');
+    toastSuccess('Product deleted');
   };
 
   return (

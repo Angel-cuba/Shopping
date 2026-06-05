@@ -10,7 +10,7 @@ import {
   Sizes,
   Variants,
 } from '../../../interfaces/products/ProductType';
-import { notifyError, notifySuccess } from '../../../utils/notify';
+import { toastError, toastSuccess } from '../../../utils/toasts';
 import '../../../pages/Admin/styles/CreateAndCheck.scss';
 
 type Props = {
@@ -161,15 +161,15 @@ const CreateAndEdit = ({ productId, setOpenCreateAndEdit }: Props) => {
       newProduct.variants.length === 0 ||
       newProduct.categories === ''
     ) {
-      notifyError('Please fill all fields');
+      toastError('Please fill all fields');
       return;
     }
     if(newProduct.inStock < 1){
-      notifyError('Give a');
+      toastError('Give a');
       return;
     }
       if(newProduct.price < 1){
-      notifyError('Too low price for this product');
+      toastError('Too low price for this product');
       return;
     }
     if (!productId) {
@@ -184,14 +184,14 @@ const CreateAndEdit = ({ productId, setOpenCreateAndEdit }: Props) => {
         categories: newProduct.categories,
       };
       dispatch(addProductToStock(productToStorage));
-      notifySuccess('Product added');
+      toastSuccess('Product added');
     } else {
       setNewProduct((prev) => ({
         ...prev,
         id: productId,
       }));
       dispatch(updateProductInStock(newProduct));
-      notifySuccess('Product updated');
+      toastSuccess('Product updated');
     }
     setOpenCreateAndEdit(false);
   };

@@ -2,7 +2,7 @@ import React, { FormEvent } from 'react';
 import { UserAddress, UserFromDB } from '../../interfaces/user/UserType';
 import { Input } from '../../components/Input/Input';
 import { api } from '../../utils/api';
-import { notifyError, notifySuccess } from '../../utils/notify';
+import { toastError, toastSuccess } from '../../utils/toasts';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../redux/store';
 import { addingAddress, updatingAddress } from '../../redux/actions/AddressAction';
@@ -68,7 +68,7 @@ const ProfileAndAddress = ({
         userAddress.country === ''
       ) {
         setLoading(false)
-        return notifyError("Fields can't be empty");
+        return toastError("Fields can't be empty");
       }
       const addressData = {
         address: userAddress?.address,
@@ -80,7 +80,7 @@ const ProfileAndAddress = ({
         },
       };
       dispatch(addingAddress(addressData));
-      notifySuccess('Address added');
+      toastSuccess('Address added');
       setEdit(false);
     } else {
       const addressToUpdate = {
@@ -94,7 +94,7 @@ const ProfileAndAddress = ({
         },
       };
       dispatch(updatingAddress(addressToUpdate));
-      notifySuccess('Address updated');
+      toastSuccess('Address updated');
       setEdit(false);
       setSelectedAddress(undefined);
     }
@@ -117,7 +117,7 @@ const ProfileAndAddress = ({
 
   const updateUserInformation = async () => {
     if (userEdited.password !== confirmPassword) {
-      return notifyError('Password does not match');
+      return toastError('Password does not match');
     }
     setLoading(true);
     const userToUpdate = {
@@ -133,13 +133,13 @@ const ProfileAndAddress = ({
       const request = async () => {
         const response = await api.put(`/users`, userToUpdate);
         if (response.status === 200) {
-          notifySuccess('User updated');
+          toastSuccess('User updated');
           setEdit(false);
         }
       };
       request();
     } catch (error) {
-      notifyError('Error updating user, try again later');
+      toastError('Error updating user, try again later');
     }
     setLoading(false);
   };

@@ -7,7 +7,7 @@ import { clearCart } from '../../redux/actions/CartActions';
 import { clearWishList } from '../../redux/actions/WishesActions';
 import { GlobalTheme } from '../../context/ThemeProvider';
 import { isAdmin, isUserAuthenticated } from '../../utils/authentication';
-import { notifyWarning } from '../../utils/notify';
+import { toastInfo } from '../../utils/toasts';
 import { ToastContainer } from 'react-toastify';
 import Login from '../../router/Login';
 import CartDrawer from '../Cart/CartDrawer';
@@ -109,7 +109,7 @@ const Navbar = () => {
               <button
                 className="stride-navbar__iconbtn"
                 title="Wishlist"
-                onClick={() => notifyWarning('Wishlist coming soon')}
+                onClick={() => toastInfo('Wishlist coming soon')}
               >
                 <i className="fa fa-heart-o" />
                 {wishCount > 0 && <span className="stride-navbar__badge">{wishCount}</span>}

@@ -4,7 +4,7 @@ import { Input } from '../../components/Input/Input';
 import { AppDispatch } from '../../redux/store';
 import { useDispatch } from 'react-redux';
 import { addingPayment, updatingPayment } from '../../redux/actions/PaymentAction';
-import { notifyError, notifySuccess } from '../../utils/notify';
+import { toastError, toastSuccess } from '../../utils/toasts';
 
 type ProfilePaymentProps = {
   userId: string | undefined;
@@ -64,7 +64,7 @@ const ProfilePayment = ({
         userPaymentMethod.expirationDate === '' ||
         userPaymentMethod.cardHolderName === ''
       ) {
-        return notifyError("Fields can't be empty");
+        return toastError("Fields can't be empty");
       }
       const paymentData = {
         paymentType: userPaymentMethod.paymentType,
@@ -77,7 +77,7 @@ const ProfilePayment = ({
         },
       };
       dispatch(addingPayment(paymentData));
-      notifySuccess('Payment created');
+      toastSuccess('Payment created');
       setOpenPaymentToEdit(false);
     } else {
       const updatePaymentData = {
@@ -93,7 +93,7 @@ const ProfilePayment = ({
       };
       dispatch(updatingPayment(updatePaymentData));
       setOpenPaymentToEdit(false);
-      notifySuccess('Payment updated');
+      toastSuccess('Payment updated');
       setSelectedPayment(undefined);
     }
   };
