@@ -9,7 +9,7 @@ import {
 } from '@mui/icons-material';
 import { AppDispatch, RootState } from '../../redux/store';
 
-import SingleProduct from '../../components/Cart/Product/SingleProduct';
+import CartLineItem from '../../components/Cart/CartLineItem';
 import { darkTheme, lightTheme } from '../../styles/styles';
 import { GlobalTheme } from '../../context/ThemeProvider';
 import { clearCart } from '../../redux/actions/CartActions';
@@ -99,7 +99,7 @@ const Checkout = () => {
         const id = item.productId.slice(0,36)
         const gettingProductToCheck = await api.get(`/products/${id}`);
         if (gettingProductToCheck.data.inStock < item.quantity) {
-          setNotEnoughStock((prev: any) => [...prev, gettingProductToCheck.data.id]);
+          setNotEnoughStock((prev: string[] | undefined) => [...(prev ?? []), gettingProductToCheck.data.id]);
           return notifyError(`${gettingProductToCheck.data.name} has not enough stock`);
         }
         if (gettingProductToCheck.data.inStock === 0) {
@@ -265,7 +265,7 @@ const Checkout = () => {
       <div className="checkout__checkout-view">
         <div className="checkout__checkout-view__cart">
           {itemInCart?.map((item) => (
-            <SingleProduct item={item} key={item.id} notEnoughStock={notEnoughStock} />
+            <CartLineItem item={item} key={item.id} notEnoughStock={notEnoughStock} />
           ))}
           <div
             className="checkout__checkout-view__cart__total"

@@ -10,12 +10,14 @@ import { isAdmin, isUserAuthenticated } from '../../utils/authentication';
 import { notifyWarning } from '../../utils/notify';
 import { ToastContainer } from 'react-toastify';
 import Login from '../../router/Login';
+import CartDrawer from '../Cart/CartDrawer';
 
 const Navbar = () => {
   const [scrolled, setScrolled]     = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [menuOpen, setMenuOpen]     = useState(false);
   const [loginOpen, setLoginOpen]   = useState(false);
+  const [cartOpen,  setCartOpen]    = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
   const { user, userFromToken }     = useSelector((state: RootState) => state.userLogged);
@@ -115,10 +117,16 @@ const Navbar = () => {
             )}
 
             {/* Cart */}
-            <Link to="/checkout" className="stride-navbar__iconbtn" title="Cart">
+            <button
+              className="stride-navbar__iconbtn"
+              title="Cart"
+              aria-label={`Cart, ${cartCount} items`}
+              onClick={() => setCartOpen(true)}
+              style={{ position: 'relative' }}
+            >
               <i className="fa fa-shopping-bag" />
               {cartCount > 0 && <span className="stride-navbar__badge">{cartCount}</span>}
-            </Link>
+            </button>
 
             {/* Profile / Login */}
             {authed ? (
@@ -255,6 +263,9 @@ const Navbar = () => {
       <div className="stride-navbar__notification">
         <ToastContainer position="bottom-right" />
       </div>
+
+      {/* Cart drawer */}
+      <CartDrawer open={cartOpen} onClose={() => setCartOpen(false)} />
     </>
   );
 };
