@@ -5,7 +5,7 @@ import { toast } from 'react-hot-toast';
 
 import { AppDispatch, RootState } from '../../redux/store';
 import { toastError } from '../../utils/toasts';
-import { Product, Sizes, VariantsColors } from '../../interfaces/products/ProductType';
+import { Product, Sizes, resolveColor, resolveImageUrl, onImgError, getGalleryImages } from '../../interfaces/products/ProductType';
 import { CartProduct } from '../../interfaces/cart/CartType';
 import { addToCart } from '../../redux/actions/CartActions';
 import { addingToWishList, createWishList, removingFromWishList } from '../../redux/actions/WishesActions';
@@ -81,8 +81,10 @@ const ProductById: React.FC = () => {
         .slice(0, 4)
     : [];
 
-  // Gallery — product has one image; repeat it to fill all 4 thumbs
-  const galleryImages = product ? [product.image, product.image, product.image, product.image] : [];
+  // Gallery — 4 distinct images; changes when a colour variant is selected
+  const galleryImages = product
+    ? getGalleryImages(product.image, product.name, variant || undefined)
+    : [];
 
   // ── Handlers ───────────────────────────────────────────────────────────────
 
@@ -149,7 +151,11 @@ const ProductById: React.FC = () => {
         {/* Gallery */}
         <div className="stride-pdp__gallery">
           <div className="stride-pdp__main">
-            <img src={galleryImages[thumb]} alt={product.name} />
+            <img
+              src={galleryImages[thumb]}
+              alt={product.name}
+              onError={onImgError(product.name, product.categories)}
+            />
           </div>
           <div className="stride-pdp__thumbs">
             {galleryImages.map((src, i) => (
@@ -160,6 +166,7 @@ const ProductById: React.FC = () => {
                 className={thumb === i ? 'is-active' : ''}
                 style={{ outline: thumb === i ? '2px solid var(--color-fg-primary)' : 'none' }}
                 onClick={() => setThumb(i)}
+                onError={onImgError(product.name, product.categories)}
               />
             ))}
           </div>
@@ -197,11 +204,11 @@ const ProductById: React.FC = () => {
                   <button
                     key={v}
                     className={`stride-swatch stride-swatch--lg${variant === v ? ' is-active' : ''}`}
-                    style={{ background: VariantsColors[v] ?? v }}
+                    style={{ background: resolveColor(v) }}
                     aria-label={v}
                     aria-pressed={variant === v}
                     title={v}
-                    onClick={() => setVariant(variant === v ? '' : v)}
+                    onClick={() => { setVariant(variant === v ? '' : v); setThumb(0); }}
                   />
                 ))}
               </div>
@@ -211,7 +218,7 @@ const ProductById: React.FC = () => {
           {/* Size selector */}
           <div style={{ marginBottom: 'var(--space-6)' }}>
             <div className="stride-pdp__label-row">
-              <span className="lbl">Size (US)</span>
+              <span className="lbl">Size (EU)</span>
               <span
                 className="link"
                 style={{ cursor: 'pointer' }}
@@ -320,7 +327,7 @@ const ProductById: React.FC = () => {
             {product.name}
           </p>
           <p style={{ margin: 0, fontSize: 'var(--text-sm)', color: 'var(--color-fg-secondary)' }}>
-            ${product.price.toFixed(2)}{size ? ` · US ${size}` : ''}
+            ${product.price.toFixed(2)}{size ? ` · EU ${size}` : ''}
           </p>
         </div>
         <button

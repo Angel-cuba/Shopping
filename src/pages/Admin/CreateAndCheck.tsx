@@ -12,7 +12,7 @@ import {
   Product,
   Sizes,
   Variants,
-  VariantsColors,
+  resolveColor,
 } from '../../interfaces/products/ProductType';
 import { toastSuccess, toastError, toastDelete } from '../../utils/toasts';
 
@@ -145,9 +145,9 @@ const CreateAndCheck: React.FC = () => {
     fontSize: 'var(--text-xs)',
     fontWeight: 600,
     cursor: 'pointer',
-    border: active ? `1.5px solid ${VariantsColors[v]}` : '1.5px solid var(--color-border)',
-    background: active ? `${VariantsColors[v]}22` : 'transparent',
-    color: active ? VariantsColors[v] : 'var(--color-fg-secondary)',
+    border: active ? `1.5px solid ${resolveColor(v)}` : '1.5px solid var(--color-border)',
+    background: active ? `${resolveColor(v)}22` : 'transparent',
+    color: active ? resolveColor(v) : 'var(--color-fg-secondary)',
     transition: 'all .15s',
   });
 
@@ -365,7 +365,7 @@ const CreateAndCheck: React.FC = () => {
                             width: 14,
                             height: 14,
                             borderRadius: '50%',
-                            background: VariantsColors[v] ?? '#ccc',
+                            background: resolveColor(v),
                             border: '1px solid var(--color-border)',
                           }}
                         />

@@ -2,19 +2,21 @@ import React from 'react';
 import { OrderStatus } from '../../interfaces/profile/order/orderType';
 
 export const STATUS_LABEL: Record<OrderStatus, string> = {
-  PENDING:   'Pending',
-  CONFIRMED: 'Confirmed',
-  SHIPPED:   'Shipped',
-  DELIVERED: 'Delivered',
-  CANCELLED: 'Cancelled',
+  PENDING:    'Pending',
+  CONFIRMED:  'Confirmed',
+  PROCESSING: 'Processing',
+  SHIPPED:    'Shipped',
+  DELIVERED:  'Delivered',
+  CANCELLED:  'Cancelled',
 };
 
 export const STATUS_CLASS: Record<OrderStatus, string> = {
-  PENDING:   'stride-badge--soft',
-  CONFIRMED: 'stride-badge--soft',
-  SHIPPED:   'stride-badge',
-  DELIVERED: 'stride-badge--green',
-  CANCELLED: 'stride-badge--sale',
+  PENDING:    'stride-badge--soft',
+  CONFIRMED:  'stride-badge--soft',
+  PROCESSING: 'stride-badge--soft',
+  SHIPPED:    'stride-badge',
+  DELIVERED:  'stride-badge--green',
+  CANCELLED:  'stride-badge--sale',
 };
 
 export const OrderStatusBadge: React.FC<{ status?: string }> = ({ status }) => {

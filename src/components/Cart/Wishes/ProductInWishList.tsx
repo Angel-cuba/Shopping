@@ -3,7 +3,7 @@ import { AddShoppingCart } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
 import HeartBrokenIcon from '@mui/icons-material/HeartBroken';
 
-import { Product } from '../../../interfaces/products/ProductType';
+import { Product, resolveImageUrl, onImgError } from '../../../interfaces/products/ProductType';
 import { AppDispatch, RootState } from '../../../redux/store';
 import { useDispatch, useSelector } from 'react-redux';
 import { deleteWishList, removingFromWishList } from '../../../redux/actions/WishesActions';
@@ -72,7 +72,11 @@ export const ProductInWishList = ({ setOpenWishList }: Props) => {
                 className="view__products__item"
               >
                 <div className="view__products__item--image">
-                  <img src={item.image} alt={item.name} />
+                  <img
+                    src={resolveImageUrl(item.image, item.name, item.categories)}
+                    alt={item.name}
+                    onError={onImgError(item.name, item.categories)}
+                  />
                 </div>
                 <div className="view__products__item--buttons">
                   <Link to={`/product/${item.id}`} onClick={closeWishList}>

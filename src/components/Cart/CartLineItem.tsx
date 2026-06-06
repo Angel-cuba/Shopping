@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 
 import { AppDispatch } from '../../redux/store';
 import { CartProduct } from '../../interfaces/cart/CartType';
-import { VariantsColors } from '../../interfaces/products/ProductType';
+import { resolveColor, resolveImageUrl, onImgError } from '../../interfaces/products/ProductType';
 import { addToCart, removeFromCart, removeLineFromCart } from '../../redux/actions/CartActions';
 
 interface CartLineItemProps {
@@ -27,7 +27,11 @@ const CartLineItem: React.FC<CartLineItemProps> = ({ item, notEnoughStock }) => 
       {/* Thumbnail */}
       <div className="cart-line__img">
         <Link to={`/product/${item.id}`} tabIndex={-1} aria-hidden="true">
-          <img src={item.image} alt={item.name} />
+          <img
+            src={resolveImageUrl(item.image, item.name, item.categories)}
+            alt={item.name}
+            onError={onImgError(item.name, item.categories)}
+          />
         </Link>
       </div>
 
@@ -54,17 +58,17 @@ const CartLineItem: React.FC<CartLineItemProps> = ({ item, notEnoughStock }) => 
         <div style={{ display: 'flex', gap: 'var(--space-2)', alignItems: 'center', flexWrap: 'wrap' }}>
           {item.sizes && (
             <span style={{ fontSize: 'var(--text-xs)', color: 'var(--color-fg-muted)' }}>
-              US {item.sizes}
+              EU {item.sizes}
             </span>
           )}
-          {item.variant && VariantsColors[item.variant] && (
+          {item.variant && (
             <span
               style={{
                 display: 'inline-block',
                 width: 14,
                 height: 14,
                 borderRadius: '50%',
-                background: VariantsColors[item.variant],
+                background: resolveColor(item.variant),
                 border: '1px solid var(--color-border-default)',
                 flexShrink: 0,
               }}
