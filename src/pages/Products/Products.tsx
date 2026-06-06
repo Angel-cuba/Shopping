@@ -41,6 +41,18 @@ const Products = ({ products, externalCategory }: ProductsProps) => {
 
   const handleClear = React.useCallback(() => setFilters(EMPTY_FILTERS), []);
 
+  const availableSizes = React.useMemo(() => {
+    const all = new Set<string>();
+    products.forEach((p: Product) => p.sizes.forEach((s) => all.add(s)));
+    return Array.from(all).sort((a, b) => parseFloat(a) - parseFloat(b));
+  }, [products]);
+
+  const availableVariants = React.useMemo(() => {
+    const all = new Set<string>();
+    products.forEach((p: Product) => p.variants.forEach((v) => all.add(v)));
+    return Array.from(all);
+  }, [products]);
+
   const filtered = React.useMemo(() => {
     return products.filter((p: Product) => {
       const nameOk    = !filters.search   || p.name.toLowerCase().includes(filters.search.toLowerCase());
@@ -90,6 +102,8 @@ const Products = ({ products, externalCategory }: ProductsProps) => {
             filters={filters}
             onFilterChange={handleFilterChange}
             onClear={handleClear}
+            availableSizes={availableSizes}
+            availableVariants={availableVariants}
           />
 
           {/* Main content */}

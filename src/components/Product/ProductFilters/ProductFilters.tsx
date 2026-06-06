@@ -1,5 +1,5 @@
 import React from 'react';
-import { Sizes, Variants, VariantsColors } from '../../../interfaces/products/ProductType';
+import { Sizes, Variants, resolveColor } from '../../../interfaces/products/ProductType';
 
 export interface FilterState {
   category: string;
@@ -12,12 +12,18 @@ interface ProductFiltersProps {
   filters: FilterState;
   onFilterChange: (key: keyof FilterState, value: string) => void;
   onClear: () => void;
+  availableSizes?: string[];
+  availableVariants?: string[];
 }
 
 const SEASONS = ['Summer', 'Autumn', 'Winter', 'Spring'];
 
-const ProductFilters: React.FC<ProductFiltersProps> = ({ filters, onFilterChange, onClear }) => {
+const ProductFilters: React.FC<ProductFiltersProps> = ({
+  filters, onFilterChange, onClear, availableSizes, availableVariants,
+}) => {
   const activeCount = [filters.category, filters.size, filters.variant, filters.search].filter(Boolean).length;
+  const sizesToShow    = availableSizes    ?? Sizes;
+  const variantsToShow = (availableVariants ?? Variants).slice(0, 12);
 
   return (
     <aside className="stride-filters" aria-label="Product filters">
@@ -51,11 +57,11 @@ const ProductFilters: React.FC<ProductFiltersProps> = ({ filters, onFilterChange
       <div className="stride-filter-group">
         <h4>Color</h4>
         <div className="stride-swatch-row">
-          {Variants.map((v) => (
+          {variantsToShow.map((v) => (
             <button
               key={v}
               className={`stride-swatch${filters.variant === v ? ' is-active' : ''}`}
-              style={{ background: VariantsColors[v] }}
+              style={{ background: resolveColor(v) }}
               title={v}
               aria-label={`Filter by color ${v}`}
               aria-pressed={filters.variant === v}
@@ -67,9 +73,9 @@ const ProductFilters: React.FC<ProductFiltersProps> = ({ filters, onFilterChange
 
       {/* Size */}
       <div className="stride-filter-group">
-        <h4>Size (US)</h4>
+        <h4>Size</h4>
         <div className="stride-size-grid">
-          {Sizes.map((s) => (
+          {sizesToShow.map((s) => (
             <button
               key={s}
               className={`stride-size-chip${filters.size === s ? ' is-active' : ''}`}
