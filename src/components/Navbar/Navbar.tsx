@@ -7,7 +7,6 @@ import { clearCart } from '../../redux/actions/CartActions';
 import { clearWishList } from '../../redux/actions/WishesActions';
 import { GlobalTheme } from '../../context/ThemeProvider';
 import { isAdmin, isUserAuthenticated } from '../../utils/authentication';
-import { toastInfo } from '../../utils/toasts';
 import Login from '../../router/Login';
 import CartDrawer from '../Cart/CartDrawer';
 
@@ -35,12 +34,10 @@ const Navbar = () => {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  // Close dropdown on outside click
+  // Close account dropdown on outside click
   useEffect(() => {
     const handler = (e: MouseEvent) => {
-      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
-        setMenuOpen(false);
-      }
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) setMenuOpen(false);
     };
     document.addEventListener('mousedown', handler);
     return () => document.removeEventListener('mousedown', handler);
@@ -87,8 +84,13 @@ const Navbar = () => {
 
           {/* Nav links (desktop) */}
           <div className="stride-navbar__links">
-            <Link to="/home"    className={isActive('/home') || location.pathname === '/' ? 'is-active' : ''}>Store</Link>
-            {admin && <Link to="/admin"   className={isActive('/admin') ? 'is-active' : ''}>Admin</Link>}
+            <Link to="/home" className={isActive('/home') || location.pathname === '/' ? 'is-active' : ''}>Store</Link>
+            {admin && <Link to="/admin" className={isActive('/admin') ? 'is-active' : ''}>Admin</Link>}
+
+            <Link to="/faq"        className={isActive('/faq')        ? 'is-active' : ''}>FAQ</Link>
+            <Link to="/shipping"   className={isActive('/shipping')   ? 'is-active' : ''}>Shipping</Link>
+            <Link to="/size-guide" className={isActive('/size-guide') ? 'is-active' : ''}>Size Guide</Link>
+            <Link to="/contact"    className={isActive('/contact')    ? 'is-active' : ''}>Contact</Link>
           </div>
 
           {/* Actions */}
@@ -108,7 +110,7 @@ const Navbar = () => {
               <button
                 className="stride-navbar__iconbtn"
                 title="Wishlist"
-                onClick={() => toastInfo('Wishlist coming soon')}
+                onClick={() => navigate('/wishlist')}
               >
                 <i className="fa fa-heart-o" />
                 {wishCount > 0 && <span className="stride-navbar__badge">{wishCount}</span>}
@@ -198,23 +200,6 @@ const Navbar = () => {
           </div>
         </div>
 
-        {/* Login overlay */}
-        {loginOpen && !authed && (
-          <div
-            style={{
-              position: 'absolute',
-              top: '66px',
-              left: 0,
-              right: 0,
-              zIndex: 80,
-              background: 'var(--color-bg-surface)',
-              borderBottom: '1px solid var(--color-border-default)',
-              boxShadow: 'var(--shadow-medium)',
-            }}
-          >
-            <Login onSuccess={() => setLoginOpen(false)} />
-          </div>
-        )}
       </nav>
 
       {/* Mobile full-screen menu */}
@@ -225,35 +210,101 @@ const Navbar = () => {
             onClick={() => setMobileOpen(false)}
           />
           <div className="mobile-menu">
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
+            {/* Header */}
+            <div className="mobile-menu__header">
               <span className="stride-navbar__brand">STRIDE</span>
-              <button
-                className="stride-navbar__iconbtn"
-                onClick={() => setMobileOpen(false)}
-              >
-                <i className="fa fa-close" />
+              <button className="stride-navbar__iconbtn" onClick={() => setMobileOpen(false)} aria-label="Close menu">
+                <i className="fa fa-times" />
               </button>
             </div>
-            <Link to="/home"    onClick={() => setMobileOpen(false)}>Store</Link>
-            {authed && <Link to="/profile"  onClick={() => setMobileOpen(false)}>Profile</Link>}
-            {authed && <Link to="/history"  onClick={() => setMobileOpen(false)}>Orders</Link>}
-            {admin   && <Link to="/admin"    onClick={() => setMobileOpen(false)}>Admin</Link>}
-            {!authed && (
-              <button
-                className="stride-btn stride-btn--primary stride-btn--block s-mt-6"
-                onClick={() => { setMobileOpen(false); setLoginOpen(true); }}
-              >
-                Login
-              </button>
-            )}
-            {authed && (
-              <button
-                className="stride-btn stride-btn--outline stride-btn--block s-mt-6"
-                onClick={handleLogout}
-              >
-                <i className="fa fa-sign-out" style={{ marginRight: 8 }} />Sign out
-              </button>
-            )}
+
+            {/* Nav section */}
+            <nav className="mobile-menu__section">
+              <span className="mobile-menu__label">Navigate</span>
+              <Link to="/home" className="mobile-menu__link" onClick={() => setMobileOpen(false)}>
+                <i className="fa fa-home" /><span>Store</span>
+              </Link>
+              {authed && (
+                <Link to="/profile" className="mobile-menu__link" onClick={() => setMobileOpen(false)}>
+                  <i className="fa fa-user-o" /><span>Profile</span>
+                </Link>
+              )}
+              {authed && (
+                <Link to="/history" className="mobile-menu__link" onClick={() => setMobileOpen(false)}>
+                  <i className="fa fa-history" /><span>Orders</span>
+                </Link>
+              )}
+              {authed && (
+                <Link to="/wishlist" className="mobile-menu__link" onClick={() => setMobileOpen(false)}>
+                  <i className="fa fa-heart-o" /><span>Wishlist</span>
+                </Link>
+              )}
+              {admin && (
+                <Link to="/admin" className="mobile-menu__link" onClick={() => setMobileOpen(false)}>
+                  <i className="fa fa-cogs" /><span>Admin</span>
+                </Link>
+              )}
+            </nav>
+
+            {/* Help section */}
+            <nav className="mobile-menu__section">
+              <span className="mobile-menu__label">Help</span>
+              <Link to="/faq"        className="mobile-menu__link" onClick={() => setMobileOpen(false)}>
+                <i className="fa fa-question-circle-o" /><span>FAQ</span>
+              </Link>
+              <Link to="/shipping"   className="mobile-menu__link" onClick={() => setMobileOpen(false)}>
+                <i className="fa fa-truck" /><span>Shipping</span>
+              </Link>
+              <Link to="/size-guide" className="mobile-menu__link" onClick={() => setMobileOpen(false)}>
+                <i className="fa fa-arrows-h" /><span>Size Guide</span>
+              </Link>
+              <Link to="/contact"    className="mobile-menu__link" onClick={() => setMobileOpen(false)}>
+                <i className="fa fa-envelope-o" /><span>Contact</span>
+              </Link>
+            </nav>
+
+            {/* Footer */}
+            <div className="mobile-menu__footer">
+              {!authed ? (
+                <button
+                  className="stride-btn stride-btn--primary stride-btn--block"
+                  onClick={() => { setMobileOpen(false); setLoginOpen(true); }}
+                >
+                  Sign in
+                </button>
+              ) : (
+                <button className="mobile-menu__signout" onClick={handleLogout}>
+                  <i className="fa fa-sign-out" />Sign out
+                </button>
+              )}
+            </div>
+          </div>
+        </>
+      )}
+
+      {/* Login modal */}
+      {loginOpen && !authed && (
+        <>
+          <div className="stride-overlay" onClick={() => setLoginOpen(false)} />
+          <div className="stride-modal-wrap">
+            <div className="stride-modal" style={{ width: 480 }}>
+              <div className="stride-modal__head">
+                <span style={{ fontWeight: 800, fontSize: 'var(--text-lg)', letterSpacing: '.1em', textTransform: 'uppercase' }}>
+                  STRIDE
+                </span>
+                <button
+                  className="stride-navbar__iconbtn"
+                  style={{ width: 36, height: 36 }}
+                  onClick={() => setLoginOpen(false)}
+                  aria-label="Close"
+                >
+                  <i className="fa fa-times" />
+                </button>
+              </div>
+              <div className="stride-modal__body">
+                <Login onSuccess={() => setLoginOpen(false)} />
+              </div>
+            </div>
           </div>
         </>
       )}
