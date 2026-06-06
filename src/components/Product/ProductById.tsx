@@ -8,7 +8,7 @@ import { toastError } from '../../utils/toasts';
 import { Product, Sizes, resolveColor, resolveImageUrl, onImgError, getGalleryImages } from '../../interfaces/products/ProductType';
 import { CartProduct } from '../../interfaces/cart/CartType';
 import { addToCart } from '../../redux/actions/CartActions';
-import { addingToWishList, createWishList, removingFromWishList } from '../../redux/actions/WishesActions';
+import { addingToWishList, removingFromWishList } from '../../redux/actions/WishesActions';
 import { apiWithoutAuth } from '../../utils/api';
 import ProductCard from './ProductCard/ProductCard';
 import PdpSkeleton from './PdpSkeleton';
@@ -114,13 +114,7 @@ const ProductById: React.FC = () => {
       dispatch(removingFromWishList(product.id, userFromToken.user_id));
       toastWishRemoved();
     } else {
-      // wishlist.length === 0 means the user has no list yet — must create one first.
-      // addingToWishList assumes data[0] exists and will crash on an empty response.
-      if (wishlist.length === 0) {
-        dispatch(createWishList(product.id, userFromToken.user_id));
-      } else {
-        dispatch(addingToWishList(product.id, userFromToken.user_id));
-      }
+      dispatch(addingToWishList(product.id, userFromToken.user_id));
       toastWishAdded();
     }
   };
