@@ -1,13 +1,14 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from '../../../redux/store';
 import { addToCart } from '../../../redux/actions/CartActions';
-import { addToWishList } from '../../../redux/actions/WishesActions';
-import { Product, VariantsColors } from '../../../interfaces/products/ProductType';
+import { addingToWishList, removingFromWishList } from '../../../redux/actions/WishesActions';
+import { Product, resolveColor, resolveImageUrl, onImgError } from '../../../interfaces/products/ProductType';
 import { CartProduct } from '../../../interfaces/cart/CartType';
 import { isAdmin } from '../../../utils/authentication';
-import { toastSuccess } from '../../../utils/toasts';
+import { toastSuccess, toastInfo } from '../../../utils/toasts';
+import { RootState } from '../../../redux/store';
 import CreateAndEdit from '../../Admin/CreateAndEdit/CreateAndEdit';
 import { deleteProductFromStock } from '../../../redux/actions/ProductActions';
 
@@ -28,7 +29,7 @@ function SwatchDots({ variants, max = 4 }: { variants: string[]; max?: number })
         <span
           key={v}
           className="dot"
-          style={{ background: VariantsColors[v] ?? '#ccc' }}
+          style={{ background: resolveColor(v) }}
           title={v}
         />
       ))}
@@ -47,12 +48,15 @@ interface Props {
 }
 
 const ProductCard: React.FC<Props> = ({ product: p }) => {
-  const dispatch   = useDispatch<AppDispatch>();
-  const location   = useLocation();
+  const dispatch       = useDispatch<AppDispatch>();
+  const location       = useLocation();
   const [editing, setEditing] = React.useState(false);
 
-  const adminUser = React.useMemo(() => isAdmin(), []);
-  const inAdminArea = location.pathname.includes('admin');
+  const adminUser      = React.useMemo(() => isAdmin(), []);
+  const inAdminArea    = location.pathname.includes('admin');
+  const userFromToken  = useSelector((s: RootState) => s.userLogged.userFromToken);
+  const wishlist       = useSelector((s: RootState) => s.wishes.itemInWishlist) ?? [];
+  const isWished       = wishlist.includes(p.id);
 
   const out    = p.inStock === 0;
   const badge  = stockBadge(p.inStock);
@@ -80,7 +84,15 @@ const ProductCard: React.FC<Props> = ({ product: p }) => {
   const handleWishlist = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    dispatch(addToWishList(p.id));
+    if (!userFromToken) {
+      toastInfo('Login to save items to your wishlist');
+      return;
+    }
+    if (isWished) {
+      dispatch(removingFromWishList(p.id, userFromToken.user_id));
+    } else {
+      dispatch(addingToWishList(p.id, userFromToken.user_id));
+    }
   };
 
   const handleDelete = (e: React.MouseEvent) => {
@@ -133,40 +145,26 @@ const ProductCard: React.FC<Props> = ({ product: p }) => {
           {/* Wishlist button (hover reveal) */}
           {!adminUser && (
             <button
-              className="pcard__wish"
-              title="Add to wishlist"
+              className={`pcard__wish${isWished ? ' is-active' : ''}`}
+              title={isWished ? 'Remove from wishlist' : 'Add to wishlist'}
               onClick={handleWishlist}
+              aria-pressed={isWished}
             >
-              <i className="fa fa-heart-o" />
+              <i className="fa fa-heart" style={{ color: isWished ? 'var(--color-error)' : undefined }} />
             </button>
           )}
 
-          {/* Product image — NO rotation! */}
+          {/* Product image */}
           <Link
             to={`/product/${p.id}`}
             style={{ display: 'block', width: '100%', height: '100%' }}
           >
-            {p.image ? (
-              <img
-                src={p.image}
-                alt={p.name}
-                style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
-              />
-            ) : (
-              <div
-                style={{
-                  width: '100%',
-                  height: '100%',
-                  background: 'var(--color-bg-muted)',
-                  display: 'grid',
-                  placeItems: 'center',
-                  color: 'var(--color-fg-placeholder)',
-                  fontSize: 13,
-                }}
-              >
-                {p.name}
-              </div>
-            )}
+            <img
+              src={resolveImageUrl(p.image, p.name, p.categories)}
+              alt={p.name}
+              style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+              onError={onImgError(p.name, p.categories)}
+            />
           </Link>
 
           {/* Quick add (hover reveal) */}

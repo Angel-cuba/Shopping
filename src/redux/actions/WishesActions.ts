@@ -54,14 +54,12 @@ export const createWishList = (id: string, userId: string) => {
     const data = {
       userWishes: [id],
       totalOfItems: 1,
-      user: {
-        id: userId,
-      },
+      user: { id: userId },
     };
     dispatch({ type: LOADING_WISHES });
     try {
       const response = await api.post('/wishes', data);
-      dispatch(addToWishList(response.data));
+      dispatch({ type: ADD_TO_WISHLIST, payload: response.data });
     } catch (error) {
       dispatch({ type: ERROR_WISHES, payload: error });
     }
@@ -74,17 +72,24 @@ export const addingToWishList = (id: string, userId: string) => {
     dispatch({ type: LOADING_WISHES });
     try {
       const checkIfExist = await api.get(`/wishes/user/${userId}`);
-      const wishesList = [...checkIfExist.data[0].userWishes, id];
-      const dataToUpdate = {
-        id: checkIfExist.data[0].id,
-        userWishes: wishesList,
-        totalOfItems: checkIfExist.data[0].totalOfItems + 1,
-        user: {
-          id: userId,
-        },
-      };
-      const response = await api.put('/wishes', dataToUpdate);
-      dispatch(addToWishList(response.data));
+      const existing = checkIfExist.data?.[0];
+
+      if (!existing) {
+        // No wishlist record yet — create one
+        const data = { userWishes: [id], totalOfItems: 1, user: { id: userId } };
+        const response = await api.post('/wishes', data);
+        dispatch({ type: ADD_TO_WISHLIST, payload: response.data });
+      } else {
+        const wishesList = [...existing.userWishes, id];
+        const dataToUpdate = {
+          id: existing.id,
+          userWishes: wishesList,
+          totalOfItems: existing.totalOfItems + 1,
+          user: { id: userId },
+        };
+        const response = await api.put('/wishes', dataToUpdate);
+        dispatch({ type: ADD_TO_WISHLIST, payload: response.data });
+      }
     } catch (error) {
       dispatch({ type: ERROR_WISHES, payload: error });
     }
@@ -107,7 +112,7 @@ export const removingFromWishList = (id: string, userId: string) => {
         },
       };
       const response = await api.put('/wishes', dataToUpdate);
-      dispatch(removeFromWishList(response.data));
+      dispatch({ type: REMOVE_FROM_WISHLIST, payload: response.data });
     } catch (error) {
       dispatch({ type: ERROR_WISHES, payload: error });
     }

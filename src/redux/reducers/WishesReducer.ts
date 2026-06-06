@@ -21,56 +21,47 @@ export const initialWishState: WishListState = {
 export default function wishReducer(state = initialWishState, action: AnyAction) {
   switch (action.type) {
     case LOADING_WISHES:
-      return {
-        ...state,
-        loading: true,
-      };
+      return { ...state, loadingWishes: true };
     case STOP_LOADING_WISHES:
-      return {
-        ...state,
-        loading: false,
-      };
+      return { ...state, loadingWishes: false };
     case REQUEST_WISHES:
-      return {
-        ...state,
-        success: true,
-      };
+      return { ...state, successWishes: true };
     case SUCCESSFUL_WISHES:
-      return {
-        ...state,
-        success: false,
-      };
+      return { ...state, successWishes: false };
     case GET_WISHLIST:
       return {
         ...state,
         itemInWishlist: action.payload,
       };
     case ADD_TO_WISHLIST: {
-      if (state.itemInWishlist === null) {
+      const current = state.itemInWishlist ?? [];
+      // API response shape: { userWishes: string[] }
+      if (action.payload && typeof action.payload === 'object' && action.payload.userWishes) {
+        return { ...state, itemInWishlist: action.payload.userWishes };
+      }
+      // Local optimistic: payload is just a product ID string
+      if (typeof action.payload === 'string') {
         return {
           ...state,
-          itemInWishlist: [action.payload],
+          itemInWishlist: current.includes(action.payload) ? current : [...current, action.payload],
         };
       }
-      return {
-        ...state,
-        itemInWishlist: action.payload.userWishes,
-      };
+      return state;
     }
     case REMOVE_FROM_WISHLIST: {
-      if (state.itemInWishlist === null) {
-        return state;
+      if (state.itemInWishlist === null) return state;
+      // API response shape: { userWishes: string[] }
+      if (action.payload && typeof action.payload === 'object' && action.payload.userWishes) {
+        return { ...state, itemInWishlist: action.payload.userWishes };
       }
-      return {
-        ...state,
-        itemInWishlist: action.payload.userWishes,
-      };
+      // Local optimistic: payload is just a product ID string
+      if (typeof action.payload === 'string') {
+        return { ...state, itemInWishlist: state.itemInWishlist.filter((id) => id !== action.payload) };
+      }
+      return state;
     }
     case CLEAR_WISHLIST:
-      return {
-        ...state,
-        itemInWishlist: action.payload,
-      };
+      return { ...state, itemInWishlist: [] };
     default:
       return state;
   }
