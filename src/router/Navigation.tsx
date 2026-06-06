@@ -8,6 +8,14 @@ const Home          = lazy(() => import('./Home'));
 const Profile       = lazy(() => import('../pages/User/Profile'));
 const Checkout      = lazy(() => import('../pages/Checkout/Checkout'));
 const ProductById   = lazy(() => import('../components/Product/ProductById'));
+const Wishlist      = lazy(() => import('../pages/Wishlist/Wishlist'));
+
+const Privacy    = lazy(() => import('../pages/Info/Privacy'));
+const Terms      = lazy(() => import('../pages/Info/Terms'));
+const Contact    = lazy(() => import('../pages/Info/Contact'));
+const FAQ        = lazy(() => import('../pages/Info/FAQ'));
+const Shipping   = lazy(() => import('../pages/Info/Shipping'));
+const SizeGuide  = lazy(() => import('../pages/Info/SizeGuide'));
 
 const AdminLayout      = lazy(() => import('../pages/Admin/AdminLayout'));
 const AdminDashboard   = lazy(() => import('../pages/Admin/AdminDashboard'));
@@ -27,6 +35,13 @@ const Navigation = () => {
         <Route path="/checkout/product/:id"  element={<ProductById />} />
         <Route path="/profile"              element={<Profile />} />
         <Route path="/history"              element={<UserHistory />} />
+        <Route path="/wishlist"             element={<Wishlist />} />
+        <Route path="/privacy"             element={<Privacy />} />
+        <Route path="/terms"               element={<Terms />} />
+        <Route path="/contact"             element={<Contact />} />
+        <Route path="/faq"                 element={<FAQ />} />
+        <Route path="/shipping"            element={<Shipping />} />
+        <Route path="/size-guide"          element={<SizeGuide />} />
 
         {/* ── Admin (guard lives inside AdminLayout) ── */}
         <Route element={<AdminLayout />}>

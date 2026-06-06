@@ -3,8 +3,8 @@ import { Link } from 'react-router-dom';
 
 const cols = [
   { h: 'Shop',       items: [{ label: 'New arrivals', to: '/home' }, { label: 'Summer', to: '/home' }, { label: 'Winter', to: '/home' }, { label: 'Sale', to: '/home' }] },
-  { h: 'My account', items: [{ label: 'Profile', to: '/profile' }, { label: 'Order history', to: '/history' }, { label: 'Wishlist', to: '/home' }, { label: 'Returns', to: '/home' }] },
-  { h: 'Help',       items: [{ label: 'Shipping', to: '/home' }, { label: 'Size guide', to: '/home' }, { label: 'Contact', to: '/home' }, { label: 'FAQ', to: '/home' }] },
+  { h: 'My account', items: [{ label: 'Profile', to: '/profile' }, { label: 'Order history', to: '/history' }, { label: 'Wishlist', to: '/wishlist' }, { label: 'Returns', to: '/shipping' }] },
+  { h: 'Help',       items: [{ label: 'Shipping', to: '/shipping' }, { label: 'Size guide', to: '/size-guide' }, { label: 'Contact', to: '/contact' }, { label: 'FAQ', to: '/faq' }] },
 ];
 
 const Footer: React.FC = () => (
@@ -102,8 +102,9 @@ const Footer: React.FC = () => (
     >
       <span>STRIDE Store © 2026</span>
       <span style={{ display: 'flex', gap: 'var(--space-4)' }}>
-        <Link to="/home" style={{ color: 'var(--color-fg-muted)', textDecoration: 'none' }}>Privacy</Link>
-        <Link to="/home" style={{ color: 'var(--color-fg-muted)', textDecoration: 'none' }}>Terms</Link>
+        <Link to="/privacy"  style={{ color: 'var(--color-fg-muted)', textDecoration: 'none' }}>Privacy</Link>
+        <Link to="/terms"    style={{ color: 'var(--color-fg-muted)', textDecoration: 'none' }}>Terms</Link>
+        <Link to="/contact"  style={{ color: 'var(--color-fg-muted)', textDecoration: 'none' }}>Contact</Link>
       </span>
     </div>
   </footer>
