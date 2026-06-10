@@ -92,7 +92,7 @@ npm run build
 
 **Environment**: no `.env` file required for dev — API base URL switches automatically:
 - `development` → `http://localhost:8080/api/v1`
-- `production`  → `https://shopping-bhjf.onrender.com/api/v1`
+- `production`  → ``
 
 ---
 
