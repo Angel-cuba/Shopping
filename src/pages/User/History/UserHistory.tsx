@@ -84,6 +84,10 @@ const OrderItemsList: React.FC<{ orderDetailIds: string[] }> = ({ orderDetailIds
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    if (orderDetailIds.length === 0) {
+      setLoading(false);
+      return;
+    }
     let cancelled = false;
     const fetch = async () => {
       try {
@@ -178,7 +182,7 @@ const UserHistory: React.FC = () => {
         const data = Array.isArray(r.data) && r.data.length > 0 ? r.data : MOCK_ORDERS;
         setHistory(data);
       })
-      .catch(() => setHistory(MOCK_ORDERS))
+      .catch(() => setHistory(process.env.NODE_ENV === 'development' ? MOCK_ORDERS : []))
       .finally(() => setLoading(false));
   }, [decodedUserId]);
 

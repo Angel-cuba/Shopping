@@ -1,5 +1,4 @@
 import { Dispatch } from 'redux';
-import { Wishes } from '../../interfaces/wishes/WishesType';
 import {
   ADD_TO_WISHLIST,
   CLEAR_WISHLIST,
@@ -11,7 +10,7 @@ import {
 } from '../../interfaces/wishes/constants';
 import { api } from '../../utils/api';
 
-export const getWishes = (wishesList: Wishes) => {
+export const getWishes = (wishesList: string[]) => {
   return {
     type: GET_WISHLIST,
     payload: wishesList,
@@ -42,7 +41,7 @@ export const getWishList = (id: string) => {
   return async (dispatch: Dispatch) => {
     try {
       const response = await api.get(`/wishes/user/${id}`);
-      dispatch(getWishes(response.data[0]?.userWishes));
+      dispatch(getWishes(response.data[0]?.userWishes ?? []));
     } catch (error) {
       dispatch({ type: ERROR_WISHES, payload: error });
     }
@@ -102,14 +101,17 @@ export const removingFromWishList = (id: string, userId: string) => {
     dispatch({ type: LOADING_WISHES });
     try {
       const checkIfExist = await api.get(`/wishes/user/${userId}`);
-      const wishesList = checkIfExist.data[0].userWishes.filter((wish: string) => wish !== id);
+      const existing = checkIfExist.data?.[0];
+      if (!existing) {
+        dispatch({ type: STOP_LOADING_WISHES });
+        return;
+      }
+      const wishesList = (existing.userWishes ?? []).filter((wish: string) => wish !== id);
       const dataToUpdate = {
-        id: checkIfExist.data[0].id,
+        id: existing.id,
         userWishes: wishesList,
-        totalOfItems: checkIfExist.data[0].totalOfItems - 1,
-        user: {
-          id: userId,
-        },
+        totalOfItems: Math.max(0, (existing.totalOfItems ?? 1) - 1),
+        user: { id: userId },
       };
       const response = await api.put('/wishes', dataToUpdate);
       dispatch({ type: REMOVE_FROM_WISHLIST, payload: response.data });
@@ -125,9 +127,10 @@ export const deleteWishList = (userId: string) => {
     dispatch({ type: LOADING_WISHES });
     try {
       const checkIfExist = await api.get(`/wishes/user/${userId}`);
-      if (checkIfExist.status === 200) {
-        const response = await api.delete(`/wishes/${checkIfExist.data[0].id}`);
-        dispatch(clearWishList(response.data));
+      const existing = checkIfExist.data?.[0];
+      if (existing?.id) {
+        await api.delete(`/wishes/${existing.id}`);
+        dispatch(clearWishList(''));
       }
     } catch (error) {
       dispatch({ type: ERROR_WISHES, payload: error });
