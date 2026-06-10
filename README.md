@@ -2,8 +2,8 @@
 
 A full-stack e-commerce application for footwear, built with React 18 and Spring Boot 3.
 
-**Frontend:** https://starlit-bienenstitch-282c7d.netlify.app/  
-**Backend:** https://shopping-bhjf.onrender.com/api/v1
+**Frontend:** Coming soon!  
+**Backend:** Coming soon!
 
 ---
 
