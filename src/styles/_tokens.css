@@ -1,0 +1,176 @@
+/* ============================================================
+   UNIT MOBILE — Design Tokens
+   Source: Alam-2024/unit-mobile (Expo / React Native)
+   Redesign direction: minimalist, professional, light-first
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,400&display=swap');
+
+:root {
+
+  /* ── Base Colors ───────────────────────────────────────── */
+  --color-bg-canvas:        #FAFAFA;
+  --color-bg-surface:       #FFFFFF;
+  --color-bg-subtle:        #F3F4F6;
+  --color-bg-muted:         #E5E7EB;
+
+  /* Foreground */
+  --color-fg-primary:       #111827;
+  --color-fg-secondary:     #374151;
+  --color-fg-muted:         #6B7280;
+  --color-fg-placeholder:   #9CA3AF;
+  --color-fg-inverted:      #FFFFFF;
+
+  /* Border */
+  --color-border-default:   #E5E7EB;
+  --color-border-strong:    #D1D5DB;
+  --color-border-focus:     #2563EB;
+
+  /* ── Accent: Blue (primary action) ───────────────────── */
+  --color-blue-50:          #EFF6FF;
+  --color-blue-100:         #DBEAFE;
+  --color-blue-200:         #BFDBFE;
+  --color-blue-500:         #3B82F6;
+  --color-blue-600:         #2563EB;   /* primary CTA */
+  --color-blue-700:         #1D4ED8;   /* hover */
+  --color-blue-900:         #1E3A8A;
+
+  /* Blue semantic aliases */
+  --color-action:           var(--color-blue-600);
+  --color-action-hover:     var(--color-blue-700);
+  --color-action-subtle:    rgba(37, 99, 235, 0.10);
+  --color-action-text:      var(--color-blue-600);
+  --color-link:             #60A5FA;   /* on dark surfaces */
+
+  /* ── Accent: Green (success, active) ─────────────────── */
+  --color-green-400:        #4ADE80;
+  --color-green-500:        #22C55E;
+  --color-green-600:        #16A34A;
+  --color-green-subtle:     rgba(22, 163, 74, 0.12);
+
+  /* ── Accent: Red (error, danger, banned) ─────────────── */
+  --color-red-400:          #F87171;
+  --color-red-500:          #EF4444;
+  --color-red-600:          #DC2626;
+  --color-red-subtle:       rgba(220, 38, 38, 0.10);
+
+  /* ── Accent: Amber (warning) ─────────────────────────── */
+  --color-amber-500:        #F59E0B;
+  --color-amber-600:        #D97706;
+  --color-amber-subtle:     rgba(217, 119, 6, 0.10);
+
+  /* ── Special / Legacy ────────────────────────────────── */
+  --color-fab:              #FF6347;   /* center FAB tomato */
+  --color-fab-glow:         rgba(255, 99, 71, 0.45);
+  --color-tab-bg:           #E5E5E5;   /* tab bar background */
+  --color-tab-active:       #000000;   /* active tab fill */
+
+  /* ── Dark Surface (auth, profile cards) ──────────────── */
+  --color-dark-bg:          #020617;   /* slate-950 */
+  --color-dark-card:        rgba(15, 23, 42, 0.98); /* slate-900 */
+  --color-dark-border:      rgba(51, 65, 85, 0.70); /* slate-700 */
+  --color-dark-fg:          #F9FAFB;
+  --color-dark-fg-muted:    #9CA3AF;
+  --color-dark-fg-subtle:   #6B7280;
+
+  /* ── Semantic aliases ────────────────────────────────── */
+  --color-success:          var(--color-green-600);
+  --color-success-bg:       var(--color-green-subtle);
+  --color-error:            var(--color-red-600);
+  --color-error-bg:         var(--color-red-subtle);
+  --color-warning:          var(--color-amber-600);
+  --color-warning-bg:       var(--color-amber-subtle);
+
+  /* ── Typography ──────────────────────────────────────── */
+  --font-sans:    'DM Sans', system-ui, -apple-system, sans-serif;
+  --font-mono:    'SpaceMono', 'Courier New', monospace;
+
+  /* Type scale */
+  --text-xs:     12px;
+  --text-sm:     14px;
+  --text-base:   16px;
+  --text-md:     18px;
+  --text-lg:     20px;
+  --text-xl:     24px;
+  --text-2xl:    28px;
+  --text-3xl:    32px;
+
+  /* Line heights */
+  --leading-tight:   1.2;
+  --leading-snug:    1.35;
+  --leading-normal:  1.5;
+  --leading-relaxed: 1.65;
+
+  /* Font weights */
+  --weight-regular:  400;
+  --weight-medium:   500;
+  --weight-semibold: 600;
+  --weight-bold:     700;
+  --weight-extrabold:800;
+
+  /* ── Semantic type roles ─────────────────────────────── */
+  --type-display:    var(--weight-extrabold) var(--text-3xl)/var(--leading-tight) var(--font-sans);
+  --type-h1:         var(--weight-bold) var(--text-2xl)/var(--leading-tight) var(--font-sans);
+  --type-h2:         var(--weight-bold) var(--text-xl)/var(--leading-snug) var(--font-sans);
+  --type-h3:         var(--weight-semibold) var(--text-lg)/var(--leading-snug) var(--font-sans);
+  --type-h4:         var(--weight-semibold) var(--text-base)/var(--leading-snug) var(--font-sans);
+  --type-body:       var(--weight-regular) var(--text-base)/var(--leading-normal) var(--font-sans);
+  --type-body-sm:    var(--weight-regular) var(--text-sm)/var(--leading-normal) var(--font-sans);
+  --type-label:      var(--weight-medium) var(--text-sm)/var(--leading-snug) var(--font-sans);
+  --type-caption:    var(--weight-regular) var(--text-xs)/var(--leading-normal) var(--font-sans);
+  --type-mono:       var(--weight-regular) var(--text-sm)/var(--leading-normal) var(--font-mono);
+
+  /* ── Spacing ─────────────────────────────────────────── */
+  --space-1:   4px;
+  --space-2:   8px;
+  --space-3:   12px;
+  --space-4:   16px;
+  --space-5:   20px;
+  --space-6:   24px;
+  --space-8:   32px;
+  --space-10:  40px;
+  --space-12:  48px;
+  --space-16:  64px;
+
+  /* Screen padding */
+  --screen-px: var(--space-5);
+
+  /* ── Border Radius ───────────────────────────────────── */
+  --radius-xs:   6px;
+  --radius-sm:   8px;
+  --radius-md:   12px;
+  --radius-lg:   16px;
+  --radius-xl:   20px;
+  --radius-pill: 999px;
+  --radius-tab:  35px;
+
+  /* ── Shadows ─────────────────────────────────────────── */
+  --shadow-subtle:  0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-card:    0 2px 8px rgba(0,0,0,0.07), 0 1px 3px rgba(0,0,0,0.05);
+  --shadow-medium:  0 4px 16px rgba(0,0,0,0.10), 0 2px 6px rgba(0,0,0,0.06);
+  --shadow-strong:  0 10px 30px rgba(0,0,0,0.14), 0 4px 10px rgba(0,0,0,0.08);
+  --shadow-fab:     0 6px 20px var(--color-fab-glow);
+  --shadow-focus:   0 0 0 3px rgba(37, 99, 235, 0.25);
+}
+
+/* ── Utility classes ──────────────────────────────────── */
+body {
+  font: var(--type-body);
+  font-family: var(--font-sans);
+  color: var(--color-fg-primary);
+  background: var(--color-bg-canvas);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1 { font: var(--type-h1); color: var(--color-fg-primary); margin: 0; }
+h2 { font: var(--type-h2); color: var(--color-fg-primary); margin: 0; }
+h3 { font: var(--type-h3); color: var(--color-fg-primary); margin: 0; }
+h4 { font: var(--type-h4); color: var(--color-fg-primary); margin: 0; }
+p  { font: var(--type-body); color: var(--color-fg-secondary); margin: 0; }
+
+.text-muted    { color: var(--color-fg-muted); }
+.text-action   { color: var(--color-action); }
+.text-success  { color: var(--color-success); }
+.text-error    { color: var(--color-error); }
+.font-mono     { font-family: var(--font-mono); }
