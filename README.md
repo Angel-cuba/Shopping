@@ -1,9 +1,9 @@
-# STRIDE Shoe Store
+# STRIDE Shoe Store — Frontend
 
-A full-stack e-commerce application for footwear, built with React 18 and Spring Boot 3.
+React 18 + TypeScript e-commerce for footwear. Nike-style design built on the STRIDE custom design system.
 
-**Frontend:** Coming soon!  
-**Backend:** Coming soon!
+**Production:** https://starlit-bienenstitch-282c7d.netlify.app  
+**Backend API:** https://shopping-bhjf.onrender.com/api/v1
 
 ---
 
@@ -11,39 +11,60 @@ A full-stack e-commerce application for footwear, built with React 18 and Spring
 
 | Layer | Tech |
 |-------|------|
-| UI framework | React 18 + TypeScript |
-| State | Redux Toolkit (plain thunks) |
+| UI | React 18 + TypeScript |
+| State | Redux Toolkit (plain thunks — no createAsyncThunk) |
 | Design system | STRIDE — custom SCSS (`src/styles/stride.scss`) with CSS custom properties |
-| Routing | React Router v6 (lazy + nested routes) |
-| HTTP | Axios (`src/utils/api.ts`) with JWT interceptor |
+| Routing | React Router v6 (lazy + Suspense, nested admin routes) |
+| HTTP | Axios (`src/utils/api.ts`) — JWT interceptor auto-injects `Authorization` header |
 | Toasts | react-hot-toast (`src/utils/toasts.ts`) |
 | Icons | Font Awesome 4 |
 | Auth | JWT decoded client-side via `jwt-decode` |
+| Tests | React Testing Library + Jest (27 E2E + unit tests) |
+
+---
+
+## Routes
+
+| Path | Access | Description |
+|------|--------|-------------|
+| `/` `/home` | Public | Hero, season categories, trending, filter sidebar |
+| `/product/:id` | Public | Size/variant picker, wishlist toggle, add to cart |
+| `/checkout` | Auth | Address + payment picker, shipping toggle, order submit |
+| `/profile` | Auth | Addresses (CRUD), payment methods (CRUD) |
+| `/history` | Auth | Order list with status badge and line-item detail |
+| `/wishlist` | Auth | Saved products, remove per item |
+| `/admin` | ADMIN | Dashboard — live stats (customers, products, orders, revenue) |
+| `/admin/orders` | ADMIN | Order table, search, status filter, inline status update |
+| `/admin/customers` | ADMIN | User table with role badge |
+| `/admin/products` | ADMIN | Full product CRUD with size/variant toggles |
 
 ---
 
 ## Features
 
 ### Storefront
-- **Home** — hero section, season category cards, trending products, product filter sidebar (category, price, color, size)
-- **Product detail** — size/variant picker, wishlist toggle, add to cart with quantity
-- **Cart drawer** — quantity stepper, line-item remove, order total, checkout link
+- Product filter sidebar — category, price range, color, size
+- Size buttons use EU scale (35–47) — `aria-label="EU {size}"`
+- Variant color buttons with EU color name resolver (`resolveColor()`)
+- Product images via Unsplash CDN with per-product fallback (`resolveImageUrl()`, `onImgError()`)
 
-### User
-- **Auth** — login / register with JWT; Redux stores decoded token (`user_id`, `role`)
-- **Profile** — address management (add / edit / delete), payment method management
-- **Order history** — per-order item breakdown with status badge and date
+### Cart
+- Redux-managed cart drawer (qty stepper, remove, running total)
+- Composite cart item IDs: `productUUID(36) + timestamp` — `item.id.slice(0,36)` recovers product UUID
 
-### Checkout
-- Address picker (from saved addresses), payment picker (from saved cards)
-- Shipping method toggle — home delivery vs store pickup
-- Stock check before confirming; order creation via API
+### Checkout — single atomic request
+- All three previous API calls (stock decrement + order details + order) merged into `POST /orders/place`
+- `shippingFee` stored as float display (`2.99`) → `Math.round()` before sending (backend expects `Integer`)
+- 409 Conflict from stock check resets `allowToPay = false` with user-facing toast
 
-### Admin (`/admin` — ADMIN role only)
-- **Dashboard** — live stat cards: customers, products, orders, revenue + quick-action links
-- **Orders** — full order list, search by name/email, status filter, inline status update
-- **Customers** — user table with search and role badge
-- **Products** — full CRUD: create/edit form with size & variant toggles, product table with image thumbnails, edit/delete
+### Auth
+- Login modal — `position: fixed` with backdrop overlay (replaced navbar dropdown)
+- Token decoded client-side: `{ user_id, role, username, sub, iat, exp }`
+- `role` field used for admin guard inside `AdminLayout`
+
+### Wishlist
+- Toggle from product card or PDP
+- IDOR-safe: backend validates ownership on every mutation
 
 ---
 
@@ -52,47 +73,62 @@ A full-stack e-commerce application for footwear, built with React 18 and Spring
 ```
 src/
 ├── components/
-│   ├── Admin/          # Admin sub-components
+│   ├── Admin/          # Customers table, order table cells
 │   ├── Cart/           # CartDrawer, CartLineItem
 │   ├── Product/        # ProductCard, ProductById (PDP), ProductFilters
-│   ├── shared/         # OrderStatusBadge, formatOrderDate
-│   └── ...
-├── interfaces/         # TypeScript types (products, orders, user, cart…)
+│   └── shared/         # OrderStatusBadge, formatOrderDate
+├── interfaces/         # TypeScript types (products, orders, user, cart, wishes…)
 ├── pages/
-│   ├── Admin/          # AdminLayout, AdminDashboard, AdminOrders, CreateAndCheck
-│   ├── Checkout/       # Checkout + sub-pages (address, payment)
-│   ├── User/           # Profile, History
-│   └── ...
+│   ├── Admin/          # AdminLayout (guard), Dashboard, Orders, CreateAndCheck
+│   ├── Checkout/       # Checkout.tsx + address/payment sub-steps
+│   ├── User/           # Profile, UserHistory, ProfileAndAddress
+│   ├── Wishlist/       # Wishlist.tsx
+│   └── Info/           # Privacy, Terms, Contact, FAQ, Shipping, SizeGuide
 ├── redux/
-│   ├── actions/        # Plain thunks (ProductActions, CartActions…)
-│   └── reducers/
-├── router/             # Navigation.tsx — nested routes
-├── styles/             # stride.scss (design system), tokens
-├── test-helpers/       # Shared test utilities (makeStore, renderWithStore)
+│   ├── actions/        # Plain thunks (Products, Cart, Wishes, User…)
+│   └── reducers/       # cartSlice, productSlice, userSlice, wishesSlice
+├── router/             # Navigation.tsx — all routes
+├── styles/             # stride.scss (design system tokens + components)
+├── test-helpers/       # makeStore, renderWithStore, renderWithRouter
 └── utils/              # api.ts, toasts.ts, authentication.ts, token.ts
 ```
 
 ---
 
-## Getting Started
+## Getting Started (Local Dev)
+
+**Requirements:** Node 18+, backend running on `:8080`
 
 ```bash
 # Install
 npm install
 
-# Development (requires backend on :8080)
+# Start (proxies to http://localhost:8080/api/v1)
 npm start
 
 # Tests
-CI=true npm test -- --watchAll=false
+CI=true npm test -- --watchAll=false --no-coverage
 
 # Production build
 npm run build
 ```
 
-**Environment**: no `.env` file required for dev — API base URL switches automatically:
-- `development` → `http://localhost:8080/api/v1`
-- `production`  → ``
+> API base URL is set automatically in `src/utils/api.ts`:
+> - `development` → `http://localhost:8080/api/v1`
+> - `production` → `https://shopping-bhjf.onrender.com/api/v1`
+
+---
+
+## Key Patterns
+
+| Pattern | Detail |
+|---------|--------|
+| Redux thunks | Plain async thunks — errors swallowed inside thunk; use `try/finally` for loading state cleanup |
+| Auth check | `s.userLogged.userFromToken?.role === 'ADMIN'` for admin guard |
+| Image fallback | `resolveImageUrl(url, name)` → `onImgError(name)` → deterministic Unsplash seed |
+| Color names | `resolveColor(variant)` parses compound EU names (`"Night Maroon/Black"`) |
+| Prices | Integers in dollars (`99` = $99). Display only — no float arithmetic |
+| Test runner | `CI=true npm test` from `Shopping/` — never `npx jest` (CRA needs react-scripts) |
 
 ---
 
@@ -101,8 +137,9 @@ npm run build
 | Entity | Key fields |
 |--------|-----------|
 | Product | name, description, image, price, inStock, categories (season), variants (colors), sizes |
-| User | username, email, role (ADMIN \| USER) |
-| Order | orderDetails[], paymentType, shippingAddress, shippingMethod, shippingFee, total, status |
-| OrderDetail | productId, variant, size, price, quantity |
-| Address | street, city, country, zipCode |
+| User | username, email, role (`ADMIN` \| `USER`) |
+| Order | orderDetails `text[]`, paymentType, shippingAddress, shippingMethod, shippingFee, total, status |
+| OrderDetail | productId, variant, image, size, price, quantity, order FK |
+| Address | address, city, postalCode, country, state (optional) |
 | PaymentMethod | cardNumber, cardHolder, expirationDate |
+| Wishlist | userWishes `text[]` (product IDs) |
