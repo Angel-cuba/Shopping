@@ -292,6 +292,17 @@ const ProfileAndAddress = ({
                 admin
                 profile
               />
+              <Input
+                type="text"
+                name="state"
+                value={userAddress.state ?? ''}
+                onChange={(e) => setUserAddress({ ...userAddress, state: e.target.value })}
+                className="profile__edit-form__container__input"
+                placeholder="State / Province (optional)"
+                style={styles}
+                admin
+                profile
+              />
               <div className="profile__edit-form__container__user-address__buttons">
                 <div
                   className="profile__edit-form__container__user-address__buttons--confirm"

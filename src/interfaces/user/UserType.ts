@@ -51,6 +51,7 @@ export type UserAddress = {
   city: string
   postalCode: string
   country: string
+  state?: string
   updatedAt?: string
   createdAt?: string
 }
