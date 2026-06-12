@@ -75,6 +75,7 @@ const ProfileAndAddress = ({
         city: userAddress?.city,
         country: userAddress?.country,
         postalCode: userAddress?.postalCode,
+        state: userAddress?.state,
         user: {
           id: userId,
         },
@@ -89,6 +90,7 @@ const ProfileAndAddress = ({
         city: userAddress.city,
         postalCode: userAddress.postalCode,
         country: userAddress.country,
+        state: userAddress.state,
         user: {
           id: userId,
         },
