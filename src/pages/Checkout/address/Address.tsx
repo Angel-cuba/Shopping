@@ -9,7 +9,8 @@ type Props = {
 
 const Address: React.FC<Props> = ({ addresses, setOpenAddress, setAddress }) => {
   const pick = (addr: AddressType) => {
-    setAddress(`${addr.address}, ${addr.city}, ${addr.country}`);
+    const parts = [addr.address, addr.city, addr.state, addr.country].filter(Boolean);
+    setAddress(parts.join(', '));
     setOpenAddress(false);
   };
 
@@ -45,7 +46,7 @@ const Address: React.FC<Props> = ({ addresses, setOpenAddress, setAddress }) => 
               {addr.address}
             </div>
             <div style={{ fontSize: 'var(--text-xs)', color: 'var(--color-fg-muted)', marginTop: 2 }}>
-              {addr.city}, {addr.country} · {addr.postalCode}
+              {addr.city}{addr.state ? `, ${addr.state}` : ''}, {addr.country} · {addr.postalCode}
             </div>
           </button>
         ))}
