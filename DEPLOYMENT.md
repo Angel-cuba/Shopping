@@ -75,7 +75,73 @@ El API URL cambia automáticamente según `NODE_ENV` (`src/utils/api.ts`):
 
 ---
 
-## 3. Verificación Local — Checklist
+## 3. Local Development — Mobile App (Expo)
+
+La app nativa vive en `Shopping/mobile/` dentro del mismo repo.
+
+### Requisitos
+- Node 18+ (`node -v`)
+- Expo CLI incluido via `npx` — no requiere instalación global
+- **Para probar en dispositivo físico**: app [Expo Go](https://expo.dev/go) en iOS o Android
+- **Para probar en simulador**: Xcode instalado (iOS) o Android Studio (Android)
+- Backend corriendo en `:8080` (ver §1)
+
+### Pasos
+
+```bash
+# 1. Entrar a la carpeta mobile
+cd Shopping/mobile
+
+# 2. Instalar dependencias
+npm install --legacy-peer-deps
+
+# 3. Arrancar el servidor Expo
+npx expo start
+
+# Opciones en el menú interactivo:
+#   i → iOS Simulator
+#   a → Android Emulator
+#   w → Web (limitado, solo para debug)
+#   Escanear QR con Expo Go en el teléfono (misma WiFi que el Mac)
+```
+
+> **Nota:** `--legacy-peer-deps` es necesario porque Expo 56 incluye react-dom@19 que tiene un
+> peer conflict con algunas dependencias. No afecta al runtime de React Native.
+
+### Configuración de API
+
+El archivo `mobile/services/api.ts` cambia la URL automáticamente:
+- `__DEV__ = true` (Expo dev server) → `http://localhost:8080/api/v1`
+- `__DEV__ = false` (EAS Build prod) → `https://shopping-bhjf.onrender.com/api/v1`
+
+En **dispositivo físico** con Expo Go, `localhost` del teléfono ≠ `localhost` del Mac.
+Reemplazar temporalmente en `services/api.ts`:
+
+```ts
+// Cambiar por tu IP local (obtener con: ipconfig getifaddr en0)
+const baseURL = __DEV__ ? 'http://192.168.1.X:8080/api/v1' : 'https://shopping-bhjf.onrender.com/api/v1';
+```
+
+### Verificación Mobile — Checklist
+
+```
+[ ] App arranca sin errores en consola
+[ ] Home tab: grid de productos carga con imágenes
+[ ] Tap en producto → pantalla de detalle con tallas y variantes
+[ ] Add to bag → badge en tab Cart se actualiza
+[ ] Profile tab → "Sign in" visible si no autenticado
+[ ] Sign in con maria.lopez@gmail.com / User2026! → sesión carga
+[ ] Wishlist tab aparece (solo visible cuando autenticado)
+[ ] Toggle wishlist desde PDP → corazón cambia, badge se actualiza
+[ ] Cart → stepper funciona, total correcto, "Checkout" navega
+[ ] Checkout → seleccionar dirección, pago, check stock → Place order
+[ ] History → pedido aparece con status PENDING
+[ ] Profile → logout → tabs vuelven a estado no autenticado
+```
+
+---
+
+## 4. Verificación Local — Checklist
 
 Recorrer este flujo antes de considerar local "listo":
 

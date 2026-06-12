@@ -32,6 +32,14 @@ Estado actual: **MVP completo — código, tests y docs listos para demo**.
 | PDP gallery color tinting al cambiar variante | 10 | — |
 | Profile / Address / Payment redesign con STRIDE components | 10 | — |
 | Dead code removal (WishesActions unused exports) | 10 | — |
+| **Native mobile app — Expo 56 + Expo Router + React Native** | **11** | **monorepo `mobile/`** |
+| Redux store + theme tokens (colors, spacing, typography) + API service (axios + SecureStore) | 11 | — |
+| `useBootstrap` hook — session rehydration from SecureStore (mirrors App.tsx pattern) | 11 | — |
+| 4 tabs: Store (product grid), Wishlist, Cart (stepper), Profile (logout + admin badge) | 11 | — |
+| Auth screens: Login (JWT decode + SecureStore), Register | 11 | — |
+| Product detail: size/variant picker, wishlist toggle, add to bag | 11 | — |
+| Checkout: address/payment picker modals, stock check loop, `POST /orders/place` | 11 | — |
+| Order history: `GET /orders/:id` + lazy-loaded order items per order | 11 | — |
 
 ---
 
@@ -56,7 +64,7 @@ El sandbox protege archivos `.env*` — no se puede crear automáticamente. Crea
 | Paginación en lista de productos | Media | Evita cargar 20+ productos de golpe |
 | Image upload para admin (vs URL input) | Alta | Admin más realista |
 | PWA manifest + service worker | Baja | App instalable desde el browser |
-| **App móvil nativa (React Native + Expo)** | **Alta** | **Experiencia nativa iOS/Android** |
+| ~~App móvil nativa (React Native + Expo)~~ | ~~Alta~~ | ✅ Completado en Sprint 11 — ver `mobile/` |
 
 > Empty state en filtros: ✅ ya existe (`ProductNotFound` component en `Products.tsx:168`)  
 > Wishlist en navbar: ✅ ya existe (icono de corazón con badge + en mobile menu)

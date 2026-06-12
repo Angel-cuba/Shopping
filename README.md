@@ -68,10 +68,27 @@ React 18 + TypeScript e-commerce for footwear. Nike-style design built on the ST
 - Session loaded once in `App.tsx` to prevent stale GET overwriting optimistic state
 - IDOR-safe: backend validates ownership on every mutation
 
-### Mobile
+### Mobile Web (Responsive)
 - Hamburger opens a 320px left-side drawer (not full-screen) with slide-in animation
 - Overlay backdrop closes drawer on click
 - STRIDE breakpoints: ≤768px tablet/mobile, ≤480px mobile-only
+
+### Native Mobile App (React Native + Expo)
+Live in `mobile/` — full iOS/Android app sharing Redux store, actions, reducers and types with the web.
+
+| Screen | Route |
+|--------|-------|
+| Product catalog (2-col grid) | `/(tabs)/` |
+| Wishlist | `/(tabs)/wishlist` |
+| Shopping bag | `/(tabs)/cart` |
+| Profile + logout | `/(tabs)/profile` |
+| Sign in (JWT + SecureStore) | `/auth/login` |
+| Register | `/auth/register` |
+| Product detail (size/variant picker) | `/product/[id]` |
+| Checkout (stock check + order) | `/checkout` |
+| Order history (lazy-loaded items) | `/history` |
+
+Run locally: `cd mobile && npm install --legacy-peer-deps && npx expo start`
 
 ---
 
@@ -170,3 +187,4 @@ npm run build
 | 8 | Atomic order endpoint (`POST /orders/place`), responsive CSS, 10 checkout tests |
 | 9 | Bug fixes: `resolveImageUrl`, `resolveColor`, EU sizes, `/wishlist` page, login modal |
 | 10 | Bug fixes: wishlist race condition (bootstrap moved to App.tsx), mobile drawer, color gallery tinting, Profile/Address/Payment redesign with STRIDE components |
+| 11 | Native mobile app — Expo 56 + Expo Router + React Native. Phases 0-2 complete: Redux store, theme tokens, API service, useBootstrap hook, all 4 tabs, auth screens, PDP, checkout, history. Integrated as `mobile/` via git subtree. |
