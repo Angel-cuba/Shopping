@@ -1,12 +1,7 @@
-import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchProducts } from '../redux/actions/ProductActions';
 import { AppDispatch, RootState } from '../redux/store';
-import { logged } from '../redux/actions/UserAction';
-import { getWishList } from '../redux/actions/WishesActions';
-import { decodedUser } from '../interfaces/user/UserType';
-import { fetchingAddresses } from '../redux/actions/AddressAction';
-import { fetchingPayments } from '../redux/actions/PaymentAction';
 
 import HeroSection from '../components/home/HeroSection';
 import SeasonCards from '../components/home/SeasonCards';
@@ -27,18 +22,6 @@ const Home = () => {
   // Fetch products once on mount
   useEffect(() => {
     dispatch(fetchProducts());
-  }, [dispatch]);
-
-  // Bootstrap user session — runs once on mount, consolidated from two separate effects
-  useLayoutEffect(() => {
-    const raw = localStorage.getItem('decodedUser');
-    if (!raw) return;
-
-    const parsed = JSON.parse(raw) as decodedUser; // single parse, reused below
-    dispatch(logged(parsed));
-    dispatch(getWishList(parsed.user_id));
-    dispatch(fetchingAddresses(parsed.user_id));
-    dispatch(fetchingPayments(parsed.user_id));
   }, [dispatch]);
 
   const scrollToCatalog = () => {
