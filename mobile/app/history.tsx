@@ -13,7 +13,7 @@ import { colors } from '../theme/colors';
 import { spacing } from '../theme/spacing';
 import { fontSize, fontWeight } from '../theme/typography';
 
-// ── Status badge ──────────────────────────────────────────────
+// ── Status badgeStyles ──────────────────────────────────────────────
 const STATUS_COLOR: Record<OrderStatus, string> = {
   PENDING:    '#F59E0B',
   CONFIRMED:  '#3B82F6',
@@ -26,13 +26,13 @@ const STATUS_COLOR: Record<OrderStatus, string> = {
 function StatusBadge({ status }: { status?: OrderStatus }) {
   const color = status ? STATUS_COLOR[status] : colors.fgMuted;
   return (
-    <View style={[badge.wrap, { backgroundColor: `${color}20`, borderColor: `${color}40` }]}>
-      <View style={[badge.dot, { backgroundColor: color }]} />
-      <Text style={[badge.text, { color }]}>{status ?? 'UNKNOWN'}</Text>
+    <View style={[badgeStyles.wrap, { backgroundColor: `${color}20`, borderColor: `${color}40` }]}>
+      <View style={[badgeStyles.dot, { backgroundColor: color }]} />
+      <Text style={[badgeStyles.text, { color }]}>{status ?? 'UNKNOWN'}</Text>
     </View>
   );
 }
-const badge = StyleSheet.create({
+const badgeStyles = StyleSheet.create({
   wrap: { flexDirection: 'row', alignItems: 'center', gap: 4, paddingHorizontal: 8, paddingVertical: 3, borderRadius: 20, borderWidth: 1, alignSelf: 'flex-start' },
   dot:  { width: 6, height: 6, borderRadius: 3 },
   text: { fontSize: fontSize.xs, fontWeight: fontWeight.semibold, textTransform: 'uppercase', letterSpacing: 0.5 },
@@ -64,8 +64,8 @@ function OrderItems({ detailIds }: { detailIds: string[] }) {
 
   if (loading) {
     return (
-      <View style={items_.row}>
-        {[0, 1, 2].map((i) => <View key={i} style={items_.skeleton} />)}
+      <View style={itemStyles.row}>
+        {[0, 1, 2].map((i) => <View key={i} style={itemStyles.skeleton} />)}
       </View>
     );
   }
@@ -73,22 +73,22 @@ function OrderItems({ detailIds }: { detailIds: string[] }) {
   if (!items.length) return null;
 
   return (
-    <View style={items_.row}>
+    <View style={itemStyles.row}>
       {items.map((item) => (
-        <View key={item.id} style={items_.thumb}>
+        <View key={item.id} style={itemStyles.thumb}>
           {item.image
-            ? <Image source={{ uri: item.image }} style={items_.img} resizeMode="cover" />
-            : <View style={items_.imgPlaceholder} />
+            ? <Image source={{ uri: item.image }} style={itemStyles.img} resizeMode="cover" />
+            : <View style={itemStyles.imgPlaceholder} />
           }
-          <Text style={items_.size}>EU {item.size}</Text>
-          <Text style={items_.price}>${item.price}</Text>
-          {item.quantity > 1 && <Text style={items_.qty}>×{item.quantity}</Text>}
+          <Text style={itemStyles.size}>EU {item.size}</Text>
+          <Text style={itemStyles.price}>${item.price}</Text>
+          {item.quantity > 1 && <Text style={itemStyles.qty}>×{item.quantity}</Text>}
         </View>
       ))}
     </View>
   );
 }
-const items_ = StyleSheet.create({
+const itemStyles = StyleSheet.create({
   row:         { flexDirection: 'row', flexWrap: 'wrap', gap: spacing[2], marginTop: spacing[3] },
   skeleton:    { width: 64, height: 64, borderRadius: 8, backgroundColor: colors.bgSecondary },
   thumb:       { alignItems: 'center', gap: 2 },
