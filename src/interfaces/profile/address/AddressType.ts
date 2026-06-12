@@ -1,19 +1,21 @@
 export type AddressType = {
-  id?: string 
+  id?: string
   address: string
   city: string
   country: string
   postalCode: string
+  state?: string
   createdAt: string
   updatedAt: string
-  }
+}
 
-  export type AddressToSend = {
-    address: string | undefined
-    city:  string | undefined
-    country: string | undefined
-    postalCode: string | undefined
-    user: {
-      id: string | undefined
-    }
+export type AddressToSend = {
+  address: string | undefined
+  city: string | undefined
+  country: string | undefined
+  postalCode: string | undefined
+  state?: string
+  user: {
+    id: string | undefined
   }
+}
