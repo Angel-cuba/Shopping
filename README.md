@@ -19,7 +19,7 @@ React 18 + TypeScript e-commerce for footwear. Nike-style design built on the ST
 | Toasts | react-hot-toast (`src/utils/toasts.ts`) |
 | Icons | Font Awesome 4 |
 | Auth | JWT decoded client-side via `jwt-decode` |
-| Tests | React Testing Library + Jest (27 E2E + unit tests) |
+| Tests | React Testing Library + Jest (27 E2E + unit tests + 10 checkout tests) |
 
 ---
 
@@ -45,7 +45,7 @@ React 18 + TypeScript e-commerce for footwear. Nike-style design built on the ST
 ### Storefront
 - Product filter sidebar — category, price range, color, size
 - Size buttons use EU scale (35–47) — `aria-label="EU {size}"`
-- Variant color buttons with EU color name resolver (`resolveColor()`)
+- Variant color swatches — clicking a color applies a gradient tint to the PDP gallery (`resolveColor()`)
 - Product images via Unsplash CDN with per-product fallback (`resolveImageUrl()`, `onImgError()`)
 
 ### Cart
@@ -61,10 +61,17 @@ React 18 + TypeScript e-commerce for footwear. Nike-style design built on the ST
 - Login modal — `position: fixed` with backdrop overlay (replaced navbar dropdown)
 - Token decoded client-side: `{ user_id, role, username, sub, iat, exp }`
 - `role` field used for admin guard inside `AdminLayout`
+- Session bootstrap in `App.tsx` (single mount, never remounts) — eliminates wishlist race condition
 
 ### Wishlist
-- Toggle from product card or PDP
+- Toggle from product card or PDP — optimistic update with revert-on-error
+- Session loaded once in `App.tsx` to prevent stale GET overwriting optimistic state
 - IDOR-safe: backend validates ownership on every mutation
+
+### Mobile
+- Hamburger opens a 320px left-side drawer (not full-screen) with slide-in animation
+- Overlay backdrop closes drawer on click
+- STRIDE breakpoints: ≤768px tablet/mobile, ≤480px mobile-only
 
 ---
 
@@ -75,19 +82,20 @@ src/
 ├── components/
 │   ├── Admin/          # Customers table, order table cells
 │   ├── Cart/           # CartDrawer, CartLineItem
-│   ├── Product/        # ProductCard, ProductById (PDP), ProductFilters
+│   ├── Navbar/         # Navbar with mobile drawer
+│   ├── Product/        # ProductCard, ProductById (PDP), ProductFilters, PdpSkeleton
 │   └── shared/         # OrderStatusBadge, formatOrderDate
 ├── interfaces/         # TypeScript types (products, orders, user, cart, wishes…)
 ├── pages/
 │   ├── Admin/          # AdminLayout (guard), Dashboard, Orders, CreateAndCheck
 │   ├── Checkout/       # Checkout.tsx + address/payment sub-steps
-│   ├── User/           # Profile, UserHistory, ProfileAndAddress
+│   ├── User/           # Profile, UserHistory, ProfileAndAddress, ProfilePayment
 │   ├── Wishlist/       # Wishlist.tsx
 │   └── Info/           # Privacy, Terms, Contact, FAQ, Shipping, SizeGuide
 ├── redux/
-│   ├── actions/        # Plain thunks (Products, Cart, Wishes, User…)
+│   ├── actions/        # Plain thunks (Products, Cart, Wishes, User, Address, Payment)
 │   └── reducers/       # cartSlice, productSlice, userSlice, wishesSlice
-├── router/             # Navigation.tsx — all routes
+├── router/             # Navigation.tsx — all routes; Home.tsx, Login.tsx
 ├── styles/             # stride.scss (design system tokens + components)
 ├── test-helpers/       # makeStore, renderWithStore, renderWithRouter
 └── utils/              # api.ts, toasts.ts, authentication.ts, token.ts
@@ -123,10 +131,12 @@ npm run build
 
 | Pattern | Detail |
 |---------|--------|
+| Session bootstrap | `App.tsx` `useLayoutEffect` — runs once for the entire app lifetime. **Never** put `getWishList` in route components; they unmount/remount and create race conditions |
+| Optimistic updates | Dispatch the state change before the API call; revert in `catch`. Both `addingToWishList` and `removingFromWishList` follow this pattern |
 | Redux thunks | Plain async thunks — errors swallowed inside thunk; use `try/finally` for loading state cleanup |
 | Auth check | `s.userLogged.userFromToken?.role === 'ADMIN'` for admin guard |
 | Image fallback | `resolveImageUrl(url, name)` → `onImgError(name)` → deterministic Unsplash seed |
-| Color names | `resolveColor(variant)` parses compound EU names (`"Night Maroon/Black"`) |
+| Color names | `resolveColor(variant)` parses compound EU names (`"Night Maroon/Black"`) → CSS color string |
 | Prices | Integers in dollars (`99` = $99). Display only — no float arithmetic |
 | Test runner | `CI=true npm test` from `Shopping/` — never `npx jest` (CRA needs react-scripts) |
 
@@ -141,5 +151,22 @@ npm run build
 | Order | orderDetails `text[]`, paymentType, shippingAddress, shippingMethod, shippingFee, total, status |
 | OrderDetail | productId, variant, image, size, price, quantity, order FK |
 | Address | address, city, postalCode, country, state (optional) |
-| PaymentMethod | cardNumber, cardHolder, expirationDate |
+| PaymentMethod | cardNumber, cardHolderName, expirationDate (`MM/YY`), provider, paymentType |
 | Wishlist | userWishes `text[]` (product IDs) |
+
+---
+
+## Sprint History
+
+| Sprint | Description |
+|--------|-------------|
+| 1 | STRIDE design system, Navbar, ProductCard, auth fixes |
+| 2 | Footer, HeroSection, SeasonCards, ProductFilters sidebar, TrendingSection |
+| 3 | PDP with STRIDE, wishlist toggle |
+| 4 | CartDrawer with qty stepper, totals, CartLineItem |
+| 5 | Auth, Profile, Order History — full STRIDE redesign |
+| 6 | Admin panel — Dashboard, Orders, Customers, Products CRUD; AdminLayout guard |
+| 7 | Checkout — full STRIDE redesign, step bar, address/payment selection cards |
+| 8 | Atomic order endpoint (`POST /orders/place`), responsive CSS, 10 checkout tests |
+| 9 | Bug fixes: `resolveImageUrl`, `resolveColor`, EU sizes, `/wishlist` page, login modal |
+| 10 | Bug fixes: wishlist race condition (bootstrap moved to App.tsx), mobile drawer, color gallery tinting, Profile/Address/Payment redesign with STRIDE components |
