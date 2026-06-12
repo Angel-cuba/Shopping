@@ -63,6 +63,7 @@ const ProductById: React.FC = () => {
     setLoading(true);
     setSize('');
     setVariant('');
+    setThumb(0);
     apiWithoutAuth
       .get<Product>(`/products/${id}`)
       .then((r) => setProduct(r.data))
@@ -144,7 +145,13 @@ const ProductById: React.FC = () => {
 
         {/* Gallery */}
         <div className="stride-pdp__gallery">
-          <div className="stride-pdp__main">
+          <div
+            className="stride-pdp__main"
+            style={variant ? {
+              background: `linear-gradient(145deg, ${resolveColor(variant)}20 0%, ${resolveColor(variant)}0a 100%)`,
+              transition: 'background 0.4s ease',
+            } : undefined}
+          >
             <img
               src={galleryImages[thumb]}
               alt={product.name}
@@ -216,7 +223,7 @@ const ProductById: React.FC = () => {
               <span
                 className="link"
                 style={{ cursor: 'pointer' }}
-                onClick={() => {/* size guide modal future */}}
+                onClick={() => {}}
               >
                 Size guide
               </span>
