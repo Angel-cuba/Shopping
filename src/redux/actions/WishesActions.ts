@@ -10,32 +10,12 @@ import {
 } from '../../interfaces/wishes/constants';
 import { api } from '../../utils/api';
 
-export const getWishes = (wishesList: string[]) => {
-  return {
-    type: GET_WISHLIST,
-    payload: wishesList,
-  } as const;
-};
+const getWishes = (wishesList: string[]) => ({
+  type: GET_WISHLIST,
+  payload: wishesList,
+} as const);
 
-export const addToWishList = (productId: string) => {
-  return {
-    type: ADD_TO_WISHLIST,
-    payload: productId,
-  } as const;
-};
-
-export const removeFromWishList = (productId: string) => {
-  return {
-    type: REMOVE_FROM_WISHLIST,
-    payload: productId,
-  } as const;
-};
-
-export const clearWishList = (emptyList: string) => {
-  return {
-    type: CLEAR_WISHLIST,
-  } as const;
-};
+export const clearWishList = () => ({ type: CLEAR_WISHLIST } as const);
 
 export const getWishList = (id: string) => {
   return async (dispatch: Dispatch) => {
@@ -48,77 +28,63 @@ export const getWishList = (id: string) => {
   };
 };
 
-export const createWishList = (id: string, userId: string) => {
-  return async (dispatch: Dispatch) => {
-    const data = {
-      userWishes: [id],
-      totalOfItems: 1,
-      user: { id: userId },
-    };
-    dispatch({ type: LOADING_WISHES });
-    try {
-      const response = await api.post('/wishes', data);
-      dispatch({ type: ADD_TO_WISHLIST, payload: response.data });
-    } catch (error) {
-      dispatch({ type: ERROR_WISHES, payload: error });
-    }
-    dispatch({ type: STOP_LOADING_WISHES });
-  };
-};
-
 export const addingToWishList = (id: string, userId: string) => {
   return async (dispatch: Dispatch) => {
+    // Optimistic update — UI responds immediately regardless of API response shape
+    dispatch({ type: ADD_TO_WISHLIST, payload: id });
     dispatch({ type: LOADING_WISHES });
     try {
       const checkIfExist = await api.get(`/wishes/user/${userId}`);
       const existing = checkIfExist.data?.[0];
 
       if (!existing) {
-        // No wishlist record yet — create one
         const data = { userWishes: [id], totalOfItems: 1, user: { id: userId } };
-        const response = await api.post('/wishes', data);
-        dispatch({ type: ADD_TO_WISHLIST, payload: response.data });
+        await api.post('/wishes', data);
       } else {
-        const wishesList = [...existing.userWishes, id];
+        const currentWishes: string[] = existing.userWishes ?? [];
+        const wishesList = currentWishes.includes(id) ? currentWishes : [...currentWishes, id];
         const dataToUpdate = {
           id: existing.id,
           userWishes: wishesList,
-          totalOfItems: existing.totalOfItems + 1,
+          totalOfItems: wishesList.length,
           user: { id: userId },
         };
-        const response = await api.put('/wishes', dataToUpdate);
-        dispatch({ type: ADD_TO_WISHLIST, payload: response.data });
+        await api.put('/wishes', dataToUpdate);
       }
     } catch (error) {
+      // Revert optimistic update on failure
+      dispatch({ type: REMOVE_FROM_WISHLIST, payload: id });
       dispatch({ type: ERROR_WISHES, payload: error });
+    } finally {
+      dispatch({ type: STOP_LOADING_WISHES });
     }
-    dispatch({ type: STOP_LOADING_WISHES });
   };
 };
 
 export const removingFromWishList = (id: string, userId: string) => {
   return async (dispatch: Dispatch) => {
+    // Optimistic update — UI responds immediately
+    dispatch({ type: REMOVE_FROM_WISHLIST, payload: id });
     dispatch({ type: LOADING_WISHES });
     try {
       const checkIfExist = await api.get(`/wishes/user/${userId}`);
       const existing = checkIfExist.data?.[0];
-      if (!existing) {
-        dispatch({ type: STOP_LOADING_WISHES });
-        return;
-      }
+      if (!existing) return;
       const wishesList = (existing.userWishes ?? []).filter((wish: string) => wish !== id);
       const dataToUpdate = {
         id: existing.id,
         userWishes: wishesList,
-        totalOfItems: Math.max(0, (existing.totalOfItems ?? 1) - 1),
+        totalOfItems: wishesList.length,
         user: { id: userId },
       };
-      const response = await api.put('/wishes', dataToUpdate);
-      dispatch({ type: REMOVE_FROM_WISHLIST, payload: response.data });
+      await api.put('/wishes', dataToUpdate);
     } catch (error) {
+      // Revert optimistic update on failure
+      dispatch({ type: ADD_TO_WISHLIST, payload: id });
       dispatch({ type: ERROR_WISHES, payload: error });
+    } finally {
+      dispatch({ type: STOP_LOADING_WISHES });
     }
-    dispatch({ type: STOP_LOADING_WISHES });
   };
 };
 
@@ -130,7 +96,7 @@ export const deleteWishList = (userId: string) => {
       const existing = checkIfExist.data?.[0];
       if (existing?.id) {
         await api.delete(`/wishes/${existing.id}`);
-        dispatch(clearWishList(''));
+        dispatch(clearWishList());
       }
     } catch (error) {
       dispatch({ type: ERROR_WISHES, payload: error });

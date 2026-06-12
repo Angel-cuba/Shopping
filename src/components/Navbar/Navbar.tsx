@@ -46,7 +46,7 @@ const Navbar = () => {
   const handleLogout = () => {
     dispatch(logout());
     dispatch(clearCart());
-    dispatch(clearWishList(''));
+    dispatch(clearWishList());
     localStorage.removeItem('user');
     localStorage.removeItem('token');
     localStorage.removeItem('decodedUser');
@@ -202,7 +202,7 @@ const Navbar = () => {
 
       </nav>
 
-      {/* Mobile full-screen menu */}
+      {/* Mobile menu drawer */}
       {mobileOpen && (
         <>
           <div
