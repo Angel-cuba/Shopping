@@ -9,7 +9,7 @@ import ProfilePayment from './ProfilePayment';
 import { deletingAddress, fetchingAddresses } from '../../redux/actions/AddressAction';
 import { deletingPayment, fetchingPayments } from '../../redux/actions/PaymentAction';
 import { api } from '../../utils/api';
-import { toastDelete, toastError } from '../../utils/toasts';
+import { toastDelete } from '../../utils/toasts';
 
 type Section = 'info' | 'addresses' | 'payments';
 
@@ -80,11 +80,17 @@ const Profile: React.FC = () => {
     setLoading(false);
   };
 
+  const handleSectionChange = (s: Section) => {
+    setSection(s);
+    setEditAddress(false);
+    setEditPayment(false);
+  };
+
   const navLink = (s: Section, icon: string, label: string) => (
     <a
       href={`#${s}`}
       className={section === s ? 'is-active' : ''}
-      onClick={(e) => { e.preventDefault(); setSection(s); }}
+      onClick={(e) => { e.preventDefault(); handleSectionChange(s); }}
     >
       <i className={`fa ${icon}`} />
       {label}
@@ -162,7 +168,6 @@ const Profile: React.FC = () => {
                     setUserEdited={setUserEdited}
                     setEdit={setEditAddress}
                     setLoading={setLoading}
-                    addresses={addresses}
                     setSelectedAddress={setSelectedAddress}
                   />
                 </div>
@@ -216,8 +221,8 @@ const Profile: React.FC = () => {
                     setUserEdited={setUserEdited}
                     setEdit={setEditAddress}
                     setLoading={setLoading}
-                    addresses={addresses}
                     setSelectedAddress={setSelectedAddress}
+                    defaultTab="address"
                   />
                 </div>
               )}
@@ -297,7 +302,6 @@ const Profile: React.FC = () => {
                 <div className="stride-card stride-card__pad" style={{ marginBottom: 'var(--space-6)' }}>
                   <ProfilePayment
                     userId={userEdited.id}
-                    openPaymentToEdit={editPayment}
                     setOpenPaymentToEdit={setEditPayment}
                     selectedPayment={selectedPayment}
                     setSelectedPayment={setSelectedPayment}

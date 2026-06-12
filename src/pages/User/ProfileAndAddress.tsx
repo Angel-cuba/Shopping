@@ -1,6 +1,5 @@
 import React, { FormEvent } from 'react';
 import { UserAddress, UserFromDB } from '../../interfaces/user/UserType';
-import { Input } from '../../components/Input/Input';
 import { api } from '../../utils/api';
 import { toastError, toastSuccess } from '../../utils/toasts';
 import { useDispatch } from 'react-redux';
@@ -14,8 +13,8 @@ type Props = {
   setUserEdited: (userEdited: UserFromDB) => void;
   setEdit: (edit: boolean) => void;
   setLoading: (loading: boolean) => void;
-  addresses: UserAddress[] | undefined;
   setSelectedAddress: (address: UserAddress | undefined) => void;
+  defaultTab?: 'user' | 'address';
 };
 
 const initialUserAddress: UserAddress = {
@@ -32,10 +31,11 @@ const ProfileAndAddress = ({
   setEdit,
   address,
   setLoading,
-  addresses,
   setSelectedAddress,
+  defaultTab,
 }: Props) => {
-  const [openData, setOpenData] = React.useState(!address?.id ? true : false);
+  const initialOpenData = defaultTab === 'address' ? false : true;
+  const [openData, setOpenData] = React.useState(initialOpenData);
   const [confirmPassword, setConfirmPassword] = React.useState('');
   const [userAddress, setUserAddress] = React.useState(!address?.id ? initialUserAddress : address);
 
@@ -43,57 +43,41 @@ const ProfileAndAddress = ({
 
   const cancelForm = () => {
     setEdit(false);
-    setUserEdited({
-      ...userEdited,
-      username: '',
-      password: '',
-      phone: '',
-    });
+    setUserEdited({ ...userEdited, username: '', password: '', phone: '' });
   };
+
   const cancelAddress = () => {
     setEdit(false);
     setUserAddress(initialUserAddress);
-  };
-  const handleToggle = () => {
-    setOpenData(!openData);
   };
 
   const sendUserAddress = async () => {
     setLoading(true);
     if (!address?.id) {
-      if (
-        userAddress.address === '' ||
-        userAddress.city === '' ||
-        userAddress.postalCode === '' ||
-        userAddress.country === ''
-      ) {
-        setLoading(false)
+      if (!userAddress.address || !userAddress.city || !userAddress.postalCode || !userAddress.country) {
+        setLoading(false);
         return toastError("Fields can't be empty");
       }
       const addressData = {
-        address: userAddress?.address,
-        city: userAddress?.city,
-        country: userAddress?.country,
-        postalCode: userAddress?.postalCode,
-        state: userAddress?.state,
-        user: {
-          id: userId,
-        },
+        address: userAddress.address,
+        city: userAddress.city,
+        country: userAddress.country,
+        postalCode: userAddress.postalCode,
+        state: userAddress.state,
+        user: { id: userId },
       };
       dispatch(addingAddress(addressData));
       toastSuccess('Address added');
       setEdit(false);
     } else {
       const addressToUpdate = {
-        id: address?.id,
+        id: address.id,
         address: userAddress.address,
         city: userAddress.city,
         postalCode: userAddress.postalCode,
         country: userAddress.country,
         state: userAddress.state,
-        user: {
-          id: userId,
-        },
+        user: { id: userId },
       };
       dispatch(updatingAddress(addressToUpdate));
       toastSuccess('Address updated');
@@ -102,20 +86,11 @@ const ProfileAndAddress = ({
     }
     setLoading(false);
   };
+
   const handlerSubmit = (e: FormEvent) => {
     e.preventDefault();
-    if (userAddress) {
-      setUserAddress(userAddress);
-    }
     sendUserAddress();
   };
-  const userAddressInfoStreet = addresses?.map((address: UserAddress) => {
-    return (
-      <p key={address.id} className="profile__edit-form__container__user-address__addresses--item">
-        {address.address}
-      </p>
-    );
-  });
 
   const updateUserInformation = async () => {
     if (userEdited.password !== confirmPassword) {
@@ -132,208 +107,189 @@ const ProfileAndAddress = ({
       phone: userEdited.phone,
     };
     try {
-      const request = async () => {
-        const response = await api.put(`/users`, userToUpdate);
-        if (response.status === 200) {
-          toastSuccess('User updated');
-          setEdit(false);
-        }
-      };
-      request();
-    } catch (error) {
+      const response = await api.put(`/users`, userToUpdate);
+      if (response.status === 200) {
+        toastSuccess('User updated');
+        setEdit(false);
+      }
+    } catch {
       toastError('Error updating user, try again later');
     }
     setLoading(false);
   };
 
   return (
-    <div className="profile__edit-form__container">
-      <div className="profile__edit-form__container__toggle">
-        <div
-          className={
-            openData
-              ? 'profile__edit-form__container__toggle--button'
-              : 'profile__edit-form__container__toggle--button--disable'
-          }
-          onClick={handleToggle}
+    <div>
+      {/* Tab toggle */}
+      <div className="stride-tabs" style={{ marginBottom: 'var(--space-5)' }}>
+        <button
+          className={`stride-tab${openData ? ' is-active' : ''}`}
+          onClick={() => setOpenData(true)}
+          type="button"
         >
-          Edit your data
-        </div>
-        <div
-          className={
-            openData
-              ? 'profile__edit-form__container__toggle--button--disable'
-              : 'profile__edit-form__container__toggle--button'
-          }
-          onClick={handleToggle}
+          Edit profile
+        </button>
+        <button
+          className={`stride-tab${!openData ? ' is-active' : ''}`}
+          onClick={() => setOpenData(false)}
+          type="button"
         >
-          Add address
-        </div>
+          {address?.id ? 'Edit address' : 'Add address'}
+        </button>
       </div>
-      <form>
-        {openData ? (
-          <>
-            <div className="profile__edit-form__container__user-data">
-              <Input
+
+      {/* ── Edit user data ── */}
+      {openData && (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-4)' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--space-4)' }}>
+            <div className="stride-field">
+              <label>Name</label>
+              <input
+                className="stride-input"
                 type="text"
-                name="name"
-                value={userEdited?.username}
+                value={userEdited?.username ?? ''}
                 onChange={(e) => setUserEdited({ ...userEdited, username: e.target.value })}
-                className="profile__edit-form__container__input"
-                placeholder={userEdited?.username}
-                style={styles}
-                admin
-                profile
+                placeholder="Username"
               />
-              <Input
-                name="email"
-                value={userEdited?.email}
-                className="profile__edit-form__container__input"
-                placeholder={userEdited.email}
-                style={styles}
-                admin
-                profile
-                readonly
+            </div>
+            <div className="stride-field">
+              <label>Email</label>
+              <input
+                className="stride-input"
+                type="email"
+                value={userEdited?.email ?? ''}
+                readOnly
+                style={{ opacity: 0.6, cursor: 'not-allowed' }}
               />
-              <Input
-                type="text"
-                name="password"
-                value={userEdited.password ? userEdited.password : ''}
+            </div>
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--space-4)' }}>
+            <div className="stride-field">
+              <label>New password</label>
+              <input
+                className="stride-input"
+                type="password"
+                value={userEdited.password ?? ''}
                 onChange={(e) => setUserEdited({ ...userEdited, password: e.target.value })}
-                className="profile__edit-form__container__input"
-                placeholder={userEdited.password ? userEdited.password : '***********'}
-                style={styles}
-                admin
-                profile
+                placeholder="Leave blank to keep current"
               />
-              <Input
-                type="text"
-                name="Confirm password"
+            </div>
+            <div className="stride-field">
+              <label>Confirm password</label>
+              <input
+                className="stride-input"
+                type="password"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
-                className="profile__edit-form__container__input"
-                placeholder={!confirmPassword ? 'Confirm password' : confirmPassword}
-                style={styles}
-                admin
-                profile
+                placeholder="Repeat new password"
               />
-              <Input
-                type="text"
-                name="phone"
-                value={userEdited.phone ? userEdited.phone : ''}
-                onChange={(e) => setUserEdited({ ...userEdited, phone: e.target.value })}
-                className="profile__edit-form__container__input"
-                placeholder={userEdited.phone ? userEdited.phone : '+123 45 67 89000'}
-                style={styles}
-                admin
-                profile
-              />
-              <div className="profile__edit-form__container__user-data__buttons">
-                <div
-                  className="profile__edit-form__container__user-data__buttons--confirm"
-                  onClick={updateUserInformation}
-                >
-                  Confirm
-                </div>
-                <div
-                  className="profile__edit-form__container__user-data__buttons--cancel"
-                  onClick={cancelForm}
-                >
-                  Cancel
-                </div>
-              </div>
             </div>
-          </>
-        ) : (
-          <>
-            <div className="profile__edit-form__container__user-address">
-              <div className="profile__edit-form__container__user-address__addresses">
-                {userAddressInfoStreet}
-              </div>
-              <Input
+          </div>
+          <div className="stride-field" style={{ maxWidth: 280 }}>
+            <label>Phone</label>
+            <input
+              className="stride-input"
+              type="tel"
+              value={userEdited.phone ?? ''}
+              onChange={(e) => setUserEdited({ ...userEdited, phone: e.target.value })}
+              placeholder="+1 555 000 0000"
+            />
+          </div>
+          <div style={{ display: 'flex', gap: 'var(--space-3)', marginTop: 'var(--space-2)' }}>
+            <button
+              className="stride-btn stride-btn--primary"
+              type="button"
+              onClick={updateUserInformation}
+            >
+              Save changes
+            </button>
+            <button
+              className="stride-btn stride-btn--ghost"
+              type="button"
+              onClick={cancelForm}
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* ── Add / edit address ── */}
+      {!openData && (
+        <form onSubmit={handlerSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-4)' }}>
+          <div className="stride-field">
+            <label>Street address</label>
+            <input
+              className="stride-input"
+              type="text"
+              value={userAddress.address}
+              onChange={(e) => setUserAddress({ ...userAddress, address: e.target.value })}
+              placeholder="123 Main St"
+            />
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--space-4)' }}>
+            <div className="stride-field">
+              <label>City</label>
+              <input
+                className="stride-input"
                 type="text"
-                name="address"
-                value={userAddress.address ? userAddress.address : ''}
-                onChange={(e) => setUserAddress({ ...userAddress, address: e.target.value })}
-                className="profile__edit-form__container__input"
-                placeholder={userAddress.address ? userAddress.address : 'Street 1'}
-                style={styles}
-                admin
-                profile
-              />
-              <Input
-                type="text"
-                name="city"
-                value={userAddress.city ? userAddress.city : ''}
+                value={userAddress.city}
                 onChange={(e) => setUserAddress({ ...userAddress, city: e.target.value })}
-                className="profile__edit-form__container__input"
-                placeholder={userAddress.city ? userAddress.city : 'City'}
-                style={styles}
-                admin
-                profile
+                placeholder="City"
               />
-              <Input
+            </div>
+            <div className="stride-field">
+              <label>Postal code</label>
+              <input
+                className="stride-input"
                 type="text"
-                name="country"
-                value={userAddress.country ? userAddress.country : ''}
-                onChange={(e) => setUserAddress({ ...userAddress, country: e.target.value })}
-                className="profile__edit-form__container__input"
-                placeholder={userAddress.country ? userAddress.country : 'Country'}
-                style={styles}
-                profile
-                admin
-              />
-              <Input
-                type="text"
-                name="postalCode"
-                value={userAddress.postalCode ? userAddress.postalCode : ''}
+                value={userAddress.postalCode}
                 onChange={(e) => setUserAddress({ ...userAddress, postalCode: e.target.value })}
-                className="profile__edit-form__container__input"
-                placeholder={userAddress.postalCode ? userAddress.postalCode : 'Postal Code'}
-                style={styles}
-                admin
-                profile
+                placeholder="00000"
               />
-              <Input
+            </div>
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--space-4)' }}>
+            <div className="stride-field">
+              <label>Country</label>
+              <input
+                className="stride-input"
                 type="text"
-                name="state"
+                value={userAddress.country}
+                onChange={(e) => setUserAddress({ ...userAddress, country: e.target.value })}
+                placeholder="Country"
+              />
+            </div>
+            <div className="stride-field">
+              <label>State / Province <span style={{ color: 'var(--color-fg-muted)', fontWeight: 400 }}>(optional)</span></label>
+              <input
+                className="stride-input"
+                type="text"
                 value={userAddress.state ?? ''}
                 onChange={(e) => setUserAddress({ ...userAddress, state: e.target.value })}
-                className="profile__edit-form__container__input"
-                placeholder="State / Province (optional)"
-                style={styles}
-                admin
-                profile
+                placeholder="State"
               />
-              <div className="profile__edit-form__container__user-address__buttons">
-                <div
-                  className="profile__edit-form__container__user-address__buttons--confirm"
-                  onClick={handlerSubmit}
-                >
-                  Confirm
-                </div>
-                <div
-                  className="profile__edit-form__container__user-address__buttons--cancel"
-                  onClick={cancelAddress}
-                >
-                  Cancel
-                </div>
-              </div>
             </div>
-          </>
-        )}
-      </form>
+          </div>
+          <div style={{ display: 'flex', gap: 'var(--space-3)', marginTop: 'var(--space-2)' }}>
+            <button
+              className="stride-btn stride-btn--primary"
+              type="submit"
+            >
+              {address?.id ? 'Update address' : 'Add address'}
+            </button>
+            <button
+              className="stride-btn stride-btn--ghost"
+              type="button"
+              onClick={cancelAddress}
+            >
+              Cancel
+            </button>
+          </div>
+        </form>
+      )}
     </div>
   );
 };
 
 export default ProfileAndAddress;
-
-const styles = {
-  width: '280px',
-  height: '40px',
-  fontSize: '18px',
-  border: 'none',
-  borderRadius: '5px',
-  paddingLeft: '15px',
-};
