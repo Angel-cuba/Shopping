@@ -2,8 +2,8 @@
 
 React 18 + TypeScript e-commerce for footwear. Nike-style design built on the STRIDE custom design system.
 
-**Production:** https://starlit-bienenstitch-282c7d.netlify.app  
-**Backend API:** https://shopping-bhjf.onrender.com/api/v1
+**Local dev:** http://localhost:3000  
+**Backend API (local):** http://localhost:8080/api/v1
 
 ---
 
@@ -74,7 +74,7 @@ React 18 + TypeScript e-commerce for footwear. Nike-style design built on the ST
 - STRIDE breakpoints: ≤768px tablet/mobile, ≤480px mobile-only
 
 ### Native Mobile App (React Native + Expo)
-Live in `mobile/` — full iOS/Android app sharing Redux store, actions, reducers and types with the web.
+Lives in `Shopping_Mobile/` — full iOS/Android app sharing Redux store, actions, reducers and types with the web.
 
 | Screen | Route |
 |--------|-------|
@@ -88,7 +88,7 @@ Live in `mobile/` — full iOS/Android app sharing Redux store, actions, reducer
 | Checkout (stock check + order) | `/checkout` |
 | Order history (lazy-loaded items) | `/history` |
 
-Run locally: `cd mobile && npm install --legacy-peer-deps && npx expo start`
+Run locally: `cd Shopping_Mobile && npm install --legacy-peer-deps && CI=1 npx expo start --clear`
 
 ---
 
@@ -138,9 +138,7 @@ CI=true npm test -- --watchAll=false --no-coverage
 npm run build
 ```
 
-> API base URL is set automatically in `src/utils/api.ts`:
-> - `development` → `http://localhost:8080/api/v1`
-> - `production` → `https://shopping-bhjf.onrender.com/api/v1`
+> API base URL is hardcoded to `http://localhost:8080/api/v1` in `src/utils/api.ts`.
 
 ---
 

@@ -1,9 +1,7 @@
 import axios from 'axios';
 import { getTokenFromLocalStorage } from './token';
 
-const baseURL = !process.env.NODE_ENV || process.env.NODE_ENV === 'development'
-  ? 'http://localhost:8080/api/v1'
-  : 'https://shopping-bhjf.onrender.com/api/v1';
+const baseURL = 'http://localhost:8080/api/v1';
 
 export const api = axios.create({ baseURL });
 

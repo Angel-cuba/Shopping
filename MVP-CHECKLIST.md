@@ -32,7 +32,7 @@ Estado actual: **MVP completo — código, tests y docs listos para demo**.
 | PDP gallery color tinting al cambiar variante | 10 | — |
 | Profile / Address / Payment redesign con STRIDE components | 10 | — |
 | Dead code removal (WishesActions unused exports) | 10 | — |
-| **Native mobile app — Expo 56 + Expo Router + React Native** | **11** | **monorepo `mobile/`** |
+| **Native mobile app — Expo 56 + Expo Router + React Native** | **11** | **`Shopping_Mobile/`** |
 | Redux store + theme tokens (colors, spacing, typography) + API service (axios + SecureStore) | 11 | — |
 | `useBootstrap` hook — session rehydration from SecureStore (mirrors App.tsx pattern) | 11 | — |
 | 4 tabs: Store (product grid), Wishlist, Cart (stepper), Profile (logout + admin badge) | 11 | — |
@@ -40,19 +40,14 @@ Estado actual: **MVP completo — código, tests y docs listos para demo**.
 | Product detail: size/variant picker, wishlist toggle, add to bag | 11 | — |
 | Checkout: address/payment picker modals, stock check loop, `POST /orders/place` | 11 | — |
 | Order history: `GET /orders/:id` + lazy-loaded order items per order | 11 | — |
+| **Sprint 12 — local-only setup, docs, mobile polish** | **12** | — |
+| Removed all Render.com / Netlify URLs from source code and docs | 12 | — |
+| `services/api.ts` (mobile) + `src/utils/api.ts` (web) hardcoded to `localhost:8080` | 12 | — |
+| `ProductType.ts` `API_ORIGIN` hardcoded to `localhost:8080` (mobile + web) | 12 | — |
+| `Shopping_Mobile/` verified running on iPhone 16 Simulator via Expo Go 56 | 12 | — |
+| Full local stack verified: PostgreSQL 5433 → Spring Boot 8080 → Metro 8081 → Expo Go | 12 | — |
 
 ---
-
-## Pendiente operacional
-
-### `.env.example` frontend
-El sandbox protege archivos `.env*` — no se puede crear automáticamente. Crear manualmente:
-```
-# Shopping/.env.example
-# No variables required for local dev — API URL switches automatically.
-# Optional: override production API URL
-# REACT_APP_API_URL=https://shopping-bhjf.onrender.com/api/v1
-```
 
 ---
 
@@ -64,7 +59,7 @@ El sandbox protege archivos `.env*` — no se puede crear automáticamente. Crea
 | Paginación en lista de productos | Media | Evita cargar 20+ productos de golpe |
 | Image upload para admin (vs URL input) | Alta | Admin más realista |
 | PWA manifest + service worker | Baja | App instalable desde el browser |
-| ~~App móvil nativa (React Native + Expo)~~ | ~~Alta~~ | ✅ Completado en Sprint 11 — ver `mobile/` |
+| ~~App móvil nativa (React Native + Expo)~~ | ~~Alta~~ | ✅ Completado en Sprint 11 — ver `Shopping_Mobile/` |
 
 > Empty state en filtros: ✅ ya existe (`ProductNotFound` component en `Products.tsx:168`)  
 > Wishlist en navbar: ✅ ya existe (icono de corazón con badge + en mobile menu)
@@ -107,4 +102,4 @@ El sandbox protege archivos `.env*` — no se puede crear automáticamente. Crea
 - Recuperación de contraseña
 - Social login (Google OAuth — deps instaladas, backend no conectado)
 - PWA / manifest para instalación móvil
-- **App nativa iOS/Android** (ver plan en `MOBILE-PLAN.md`)
+- **App nativa iOS/Android** (ver plan en `Shopping_Mobile/`) — Fases 3-6 pendientes

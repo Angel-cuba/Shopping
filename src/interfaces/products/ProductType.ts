@@ -235,10 +235,7 @@ const VARIANT_GALLERY: Record<string, string[]> = {
   ],
 };
 
-const API_ORIGIN =
-  !process.env.NODE_ENV || process.env.NODE_ENV === 'development'
-    ? 'http://localhost:8080'
-    : 'https://shopping-bhjf.onrender.com';
+const API_ORIGIN = 'http://localhost:8080';
 
 // Better hash: distributes product names more evenly across the fallback pool
 function nameSeed(name: string): number {
