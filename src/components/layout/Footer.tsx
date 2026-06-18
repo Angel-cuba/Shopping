@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 const cols = [
-  { h: 'Shop',       items: [{ label: 'New arrivals', to: '/home' }, { label: 'Summer', to: '/home' }, { label: 'Winter', to: '/home' }, { label: 'Sale', to: '/home' }] },
+  { h: 'Shop',       items: [{ label: 'New arrivals', to: '/home' }, { label: 'Women', to: '/home?category=Women' }, { label: 'Men', to: '/home?category=Men' }, { label: 'Accessories', to: '/home?category=Accessories' }] },
   { h: 'My account', items: [{ label: 'Profile', to: '/profile' }, { label: 'Order history', to: '/history' }, { label: 'Wishlist', to: '/wishlist' }, { label: 'Returns', to: '/shipping' }] },
   { h: 'Help',       items: [{ label: 'Shipping', to: '/shipping' }, { label: 'Size guide', to: '/size-guide' }, { label: 'Contact', to: '/contact' }, { label: 'FAQ', to: '/faq' }] },
 ];
@@ -34,7 +34,7 @@ const Footer: React.FC = () => (
             color: 'var(--color-fg-primary)',
           }}
         >
-          STRIDE
+          ZYRA LUXE
         </div>
         <p
           style={{
@@ -44,7 +44,7 @@ const Footer: React.FC = () => (
             marginTop: 'var(--space-3)',
           }}
         >
-          Footwear engineered to move you differently. Designed in Casablanca.
+          A fashion marketplace for sharp daily looks, expressive color, and confident checkout.
         </p>
         <div style={{ display: 'flex', gap: 'var(--space-2)', marginTop: 'var(--space-4)' }}>
           {(['instagram', 'twitter', 'facebook'] as const).map((s) => (
@@ -100,7 +100,7 @@ const Footer: React.FC = () => (
         color: 'var(--color-fg-muted)',
       }}
     >
-      <span>STRIDE Store © 2026</span>
+      <span>ZYRA LUXE © 2026</span>
       <span style={{ display: 'flex', gap: 'var(--space-4)' }}>
         <Link to="/privacy"  style={{ color: 'var(--color-fg-muted)', textDecoration: 'none' }}>Privacy</Link>
         <Link to="/terms"    style={{ color: 'var(--color-fg-muted)', textDecoration: 'none' }}>Terms</Link>

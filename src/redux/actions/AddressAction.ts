@@ -11,6 +11,13 @@ import {
 } from '../../interfaces/profile/address/constants';
 import { AddressToSend, AddressType } from '../../interfaces/profile/address/AddressType';
 
+const toErrorMessage = (error: unknown) => {
+  if (error && typeof error === 'object' && 'message' in error) {
+    return String((error as { message?: unknown }).message ?? 'Address request failed');
+  }
+  return 'Address request failed';
+};
+
 export const getAddresses = (addresses: AddressType) => {
   return {
     type: FETCH_ALL_ADDRESS,
@@ -50,7 +57,7 @@ export const fetchingAddresses = (userId: string) => {
         dispatch(getAddresses(response.data));
       }
     } catch (error) {
-      dispatch({ type: ERROR, payload: error });
+      dispatch({ type: ERROR, payload: toErrorMessage(error) });
     }
     dispatch({ type: STOP_LOADING });
   };
@@ -63,7 +70,7 @@ export const addingAddress = (address: AddressToSend) => {
       const request = await api.post('/addresses', address)
       dispatch(addAddress(request.data))
     } catch (error) {
-      dispatch({ type: ERROR, payload: error})
+      dispatch({ type: ERROR, payload: toErrorMessage(error)})
     }
     dispatch({ type: STOP_LOADING })
   }
@@ -76,7 +83,7 @@ export const updatingAddress = (address: AddressToSend) => {
       const request = await api.put(`/addresses`, address)
       dispatch(updateAddress(request.data))
     } catch (error) {
-      dispatch({ type: ERROR, payload: error})
+      dispatch({ type: ERROR, payload: toErrorMessage(error)})
     }
     dispatch({ type: STOP_LOADING })
   }
@@ -89,7 +96,7 @@ export const deletingAddress = (addressId: string) => {
       await api.delete(`/addresses/${addressId}`)
       dispatch(deleteAddress(addressId))
     } catch (error) {
-      dispatch({ type: ERROR, payload: error})
+      dispatch({ type: ERROR, payload: toErrorMessage(error)})
     }
     dispatch({ type: STOP_LOADING })
   }

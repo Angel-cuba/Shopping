@@ -22,3 +22,10 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# Local workspace tools
+.qodo/
+.cursor/
+.aider*
+.idea/
+.vscode/

@@ -30,6 +30,7 @@ const Navigation = () => {
         {/* ── Public ── */}
         <Route path="/"                      element={<Home />} />
         <Route path="/home"                  element={<Home />} />
+        <Route path="/products"              element={<Home />} />
         <Route path="/product/:id"           element={<ProductById />} />
         <Route path="/checkout"              element={<Checkout />} />
         <Route path="/checkout/product/:id"  element={<ProductById />} />

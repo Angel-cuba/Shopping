@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 
 import { AppDispatch } from '../../redux/store';
 import { CartProduct } from '../../interfaces/cart/CartType';
-import { resolveColor, resolveImageUrl, onImgError } from '../../interfaces/products/ProductType';
+import { getCartOptionSummary, resolveColor, resolveImageUrl, onImgError } from '../../interfaces/products/ProductType';
 import { addToCart, removeFromCart, removeLineFromCart } from '../../redux/actions/CartActions';
 
 interface CartLineItemProps {
@@ -56,9 +56,9 @@ const CartLineItem: React.FC<CartLineItemProps> = ({ item, notEnoughStock }) => 
 
         {/* Meta — size + colour swatch */}
         <div style={{ display: 'flex', gap: 'var(--space-2)', alignItems: 'center', flexWrap: 'wrap' }}>
-          {item.sizes && (
+          {getCartOptionSummary(item) && (
             <span style={{ fontSize: 'var(--text-xs)', color: 'var(--color-fg-muted)' }}>
-              EU {item.sizes}
+              {getCartOptionSummary(item)}
             </span>
           )}
           {item.variant && (

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Sizes, Variants, resolveColor } from '../../../interfaces/products/ProductType';
+import { COLLECTIONS, Sizes, Variants, resolveColor } from '../../../interfaces/products/ProductType';
 
 export interface FilterState {
   category: string;
@@ -15,8 +15,6 @@ interface ProductFiltersProps {
   availableSizes?: string[];
   availableVariants?: string[];
 }
-
-const SEASONS = ['Summer', 'Autumn', 'Winter', 'Spring'];
 
 const ProductFilters: React.FC<ProductFiltersProps> = ({
   filters, onFilterChange, onClear, availableSizes, availableVariants,
@@ -37,18 +35,18 @@ const ProductFilters: React.FC<ProductFiltersProps> = ({
         )}
       </div>
 
-      {/* Season */}
+      {/* Collection */}
       <div className="stride-filter-group">
-        <h4>Season</h4>
-        {SEASONS.map((s) => (
-          <label key={s} className="stride-check">
+        <h4>Collection</h4>
+        {COLLECTIONS.map((collection) => (
+          <label key={collection.value} className="stride-check">
             <input
               type="checkbox"
-              checked={filters.category === s}
-              onChange={() => onFilterChange('category', filters.category === s ? '' : s)}
-              aria-label={`Filter by ${s}`}
+              checked={filters.category === collection.value}
+              onChange={() => onFilterChange('category', filters.category === collection.value ? '' : collection.value)}
+              aria-label={`Filter by ${collection.label}`}
             />
-            {s}
+            {collection.label}
           </label>
         ))}
       </div>

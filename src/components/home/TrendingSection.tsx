@@ -17,7 +17,7 @@ const TrendingSection: React.FC<TrendingSectionProps> = ({ products }) => {
         <div className="stride-section-head">
           <div>
             <span className="stride-eyebrow">Trending now</span>
-            <h2>Most wanted</h2>
+            <h2>Most saved this week</h2>
           </div>
         </div>
         <div className="stride-scroller" role="list" aria-label="Trending products">

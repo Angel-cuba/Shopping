@@ -8,21 +8,24 @@ import {
   deleteProductFromStock,
 } from '../../redux/actions/ProductActions';
 import {
+  COLLECTIONS,
   NewProductToStock,
   Product,
   Sizes,
   Variants,
+  getCollectionLabel,
+  onImgError,
   resolveColor,
 } from '../../interfaces/products/ProductType';
 import { toastSuccess, toastError, toastDelete } from '../../utils/toasts';
 
-const CATEGORIES = ['Summer', 'Winter', 'Spring', 'Autumn'];
+const CATEGORIES = COLLECTIONS.map((collection) => collection.value);
 
 const BLANK: NewProductToStock = {
   name: '',
   description: '',
   image: '',
-  categories: '',
+  categories: 'Women',
   inStock: 0,
   sizes: [],
   variants: [],
@@ -190,7 +193,7 @@ const CreateAndCheck: React.FC = () => {
                 <label className="stride-label">Name</label>
                 <input
                   className="stride-input"
-                  placeholder="e.g. Air Max 90"
+                  placeholder="e.g. Colorblock zip-up jacket"
                   value={form.name}
                   onChange={set('name')}
                 />
@@ -198,8 +201,7 @@ const CreateAndCheck: React.FC = () => {
               <div className="stride-field" style={{ margin: 0 }}>
                 <label className="stride-label">Category</label>
                 <select className="stride-input" value={form.categories} onChange={set('categories')}>
-                  <option value="">Select category…</option>
-                  {CATEGORIES.map(c => <option key={c} value={c}>{c}</option>)}
+                  {CATEGORIES.map(c => <option key={c} value={c}>{getCollectionLabel(c)}</option>)}
                 </select>
               </div>
             </div>
@@ -337,13 +339,13 @@ const CreateAndCheck: React.FC = () => {
                         src={p.image}
                         alt={p.name}
                         style={{ width: 44, height: 44, objectFit: 'cover', borderRadius: 'var(--radius-sm)', flexShrink: 0 }}
-                        onError={e => { (e.target as HTMLImageElement).style.display = 'none'; }}
+                        onError={onImgError(p.name, p.categories)}
                       />
                       <span style={{ fontWeight: 600, color: 'var(--color-fg-primary)' }}>{p.name}</span>
                     </div>
                   </td>
                   <td>
-                    <span className="stride-badge stride-badge--soft">{p.categories as string}</span>
+                    <span className="stride-badge stride-badge--soft">{getCollectionLabel(p.categories)}</span>
                   </td>
                   <td style={{ fontWeight: 600 }}>${p.price.toFixed(2)}</td>
                   <td>

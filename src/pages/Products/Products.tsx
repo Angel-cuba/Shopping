@@ -2,7 +2,7 @@ import React from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { AddBoxSharp, CancelOutlined } from '@mui/icons-material';
-import { Product } from '../../interfaces/products/ProductType';
+import { Product, filterProducts, getCollectionLabel } from '../../interfaces/products/ProductType';
 import ProductCard from '../../components/Product/ProductCard/ProductCard';
 import SkeletonGrid from '../../components/Product/ProductCard/SkeletonGrid';
 import ProductNotFound from './ProductNotFound';
@@ -13,7 +13,6 @@ import LoadingResponse from '../../components/Loading/LoadingResponse';
 import './Products.scss';
 
 const EMPTY_FILTERS: FilterState = { category: '', size: '', variant: '', search: '' };
-
 interface ProductsProps {
   products: Product[];
   /** Category set externally (e.g. clicking a SeasonCard) — syncs into the internal filter */
@@ -43,24 +42,25 @@ const Products = ({ products, externalCategory }: ProductsProps) => {
 
   const availableSizes = React.useMemo(() => {
     const all = new Set<string>();
-    products.forEach((p: Product) => p.sizes.forEach((s) => all.add(s)));
-    return Array.from(all).sort((a, b) => parseFloat(a) - parseFloat(b));
-  }, [products]);
+    const pool = filters.category ? filterProducts(products, { category: filters.category }, 15) : products;
+    pool.forEach((p: Product) => p.sizes.forEach((s) => all.add(s)));
+    return Array.from(all).sort((a, b) => {
+      const aNum = Number.parseFloat(a);
+      const bNum = Number.parseFloat(b);
+      if (Number.isNaN(aNum) || Number.isNaN(bNum)) return a.localeCompare(b);
+      return aNum - bNum;
+    });
+  }, [filters.category, products]);
 
   const availableVariants = React.useMemo(() => {
     const all = new Set<string>();
-    products.forEach((p: Product) => p.variants.forEach((v) => all.add(v)));
+    const pool = filters.category ? filterProducts(products, { category: filters.category }, 15) : products;
+    pool.forEach((p: Product) => p.variants.forEach((v) => all.add(v)));
     return Array.from(all);
-  }, [products]);
+  }, [filters.category, products]);
 
   const filtered = React.useMemo(() => {
-    return products.filter((p: Product) => {
-      const nameOk    = !filters.search   || p.name.toLowerCase().includes(filters.search.toLowerCase());
-      const sizeOk    = !filters.size     || p.sizes.includes(filters.size as Product['sizes'][number]);
-      const catOk     = !filters.category || p.categories.toLowerCase() === filters.category.toLowerCase();
-      const variantOk = !filters.variant  || p.variants.includes(filters.variant as Product['variants'][number]);
-      return nameOk && sizeOk && catOk && variantOk;
-    });
+    return filterProducts(products, filters, 15);
   }, [products, filters]);
 
   const hasFilters = Object.values(filters).some(Boolean);
@@ -137,7 +137,7 @@ const Products = ({ products, externalCategory }: ProductsProps) => {
                       onClick={() => handleFilterChange('category', '')}
                       style={{ cursor: 'pointer' }}
                     >
-                      {filters.category}&nbsp;<i className="fa fa-times" aria-hidden="true" />
+                      {getCollectionLabel(filters.category)}&nbsp;<i className="fa fa-times" aria-hidden="true" />
                     </span>
                   )}
                   {filters.variant && (
@@ -155,7 +155,7 @@ const Products = ({ products, externalCategory }: ProductsProps) => {
                       onClick={() => handleFilterChange('size', '')}
                       style={{ cursor: 'pointer' }}
                     >
-                      US {filters.size}&nbsp;<i className="fa fa-times" aria-hidden="true" />
+                      {filters.size}&nbsp;<i className="fa fa-times" aria-hidden="true" />
                     </span>
                   )}
                 </div>

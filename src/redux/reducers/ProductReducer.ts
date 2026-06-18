@@ -20,69 +20,83 @@ export const initialProductState: ProductState = {
   success: false
 };
 
+const sanitizeError = (error: unknown): string | null => {
+  if (error === null || typeof error === 'string') return error;
+  if (error && typeof error === 'object' && 'message' in error) {
+    return String((error as { message?: unknown }).message ?? 'Request failed');
+  }
+  return 'Request failed';
+};
+
 export default function productReducer(state = initialProductState, action: AnyAction) {
+  const safeState = state.error === null || typeof state.error === 'string'
+    ? state
+    : { ...state, error: sanitizeError(state.error) };
+
   switch (action.type) {
     case GET_PRODUCTS:
       return {
-        ...state,
+        ...safeState,
         products: action.payload,
+        error: null,
       };
     case ADD_PRODUCT: {
       return {
-        ...state,
-        products: [action.payload, ...state.products],
+        ...safeState,
+        products: [action.payload, ...safeState.products],
       };
     }
     case UPDATE_PRODUCT: {
-      const products = state.products.map((product) => {
+      const products = safeState.products.map((product) => {
         if (product.id === action.payload.id) {
           return action.payload;
         }
         return product;
       });
       return {
-        ...state,
+        ...safeState,
         products
       };
     }
     case DELETE_PRODUCT: {
-      const removedProduct = state.products.filter((product) => product.id !== action.payload);
+      const removedProduct = safeState.products.filter((product) => product.id !== action.payload);
       return {
-        ...state,
+        ...safeState,
         products: removedProduct,
       };
     }
     case LOADING:
       return {
-        ...state,
+        ...safeState,
         loading: true,
+        error: null,
       };
     case STOP_LOADING:
       return {
-        ...state,
+        ...safeState,
         loading: false,
       };
     case REQUEST: 
       return {
-        ...state,
+        ...safeState,
         success: true
       }
     case SUCCESSFUL: 
       return {
-        ...state,
+        ...safeState,
         success: false
       }
     case FAILURE: 
       return {
-        ...state,
+        ...safeState,
         success: false
       }
     case ERROR:
       return {
-        ...state,
-        error: action.payload,
+        ...safeState,
+        error: sanitizeError(action.payload),
       };
     default:
-      return state;
+      return safeState;
   }
 }

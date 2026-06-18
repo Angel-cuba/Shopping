@@ -10,6 +10,13 @@ import {
 } from '../../interfaces/wishes/constants';
 import { api } from '../../utils/api';
 
+const toErrorMessage = (error: unknown) => {
+  if (error && typeof error === 'object' && 'message' in error) {
+    return String((error as { message?: unknown }).message ?? 'Wishlist request failed');
+  }
+  return 'Wishlist request failed';
+};
+
 const getWishes = (wishesList: string[]) => ({
   type: GET_WISHLIST,
   payload: wishesList,
@@ -23,7 +30,7 @@ export const getWishList = (id: string) => {
       const response = await api.get(`/wishes/user/${id}`);
       dispatch(getWishes(response.data[0]?.userWishes ?? []));
     } catch (error) {
-      dispatch({ type: ERROR_WISHES, payload: error });
+      dispatch({ type: ERROR_WISHES, payload: toErrorMessage(error) });
     }
   };
 };
@@ -54,7 +61,7 @@ export const addingToWishList = (id: string, userId: string) => {
     } catch (error) {
       // Revert optimistic update on failure
       dispatch({ type: REMOVE_FROM_WISHLIST, payload: id });
-      dispatch({ type: ERROR_WISHES, payload: error });
+      dispatch({ type: ERROR_WISHES, payload: toErrorMessage(error) });
     } finally {
       dispatch({ type: STOP_LOADING_WISHES });
     }
@@ -81,7 +88,7 @@ export const removingFromWishList = (id: string, userId: string) => {
     } catch (error) {
       // Revert optimistic update on failure
       dispatch({ type: ADD_TO_WISHLIST, payload: id });
-      dispatch({ type: ERROR_WISHES, payload: error });
+      dispatch({ type: ERROR_WISHES, payload: toErrorMessage(error) });
     } finally {
       dispatch({ type: STOP_LOADING_WISHES });
     }
@@ -99,7 +106,7 @@ export const deleteWishList = (userId: string) => {
         dispatch(clearWishList());
       }
     } catch (error) {
-      dispatch({ type: ERROR_WISHES, payload: error });
+      dispatch({ type: ERROR_WISHES, payload: toErrorMessage(error) });
     }
     dispatch({ type: STOP_LOADING_WISHES });
   };

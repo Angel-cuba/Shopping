@@ -6,7 +6,7 @@ interface HeroSectionProps {
 }
 
 const HERO_IMAGE =
-  'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=1600&q=80&auto=format&fit=crop';
+  'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=1600&q=80&auto=format&fit=crop';
 
 const HeroSection: React.FC<HeroSectionProps> = ({ onShopNow }) => {
   const navigate = useNavigate();
@@ -17,7 +17,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onShopNow }) => {
       <img
         className="stride-hero__bg"
         src={HERO_IMAGE}
-        alt="STRIDE hero — running shoe editorial"
+        alt="ZYRA LUXE editorial fashion campaign"
         loading="eager"
       />
 
@@ -26,14 +26,14 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onShopNow }) => {
 
       {/* Content */}
       <div className="stride-hero__content">
-        <span className="stride-eyebrow">New collection · Summer 2026</span>
+        <span className="stride-eyebrow">New arrivals · curated daily</span>
         <h1>
-          Move
+          ZYRA
           <br />
-          Differently.
+          LUXE
         </h1>
         <p>
-          Lightweight builds, responsive cushioning, and a silhouette made for the everyday stride.
+          Bold everyday pieces, polished silhouettes, and quick picks for women, men, and kids.
         </p>
         <div className="stride-hero__cta">
           <button
@@ -41,14 +41,14 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onShopNow }) => {
             onClick={onShopNow}
             aria-label="Shop now — scroll to catalog"
           >
-            Shop now
+            Shop collection
           </button>
           <button
             className="stride-btn stride-btn--xl stride-hero__btn-outline"
             onClick={() => navigate('/home')}
-            aria-label="View lookbook"
+            aria-label="View new arrivals"
           >
-            View lookbook
+            New arrivals
           </button>
         </div>
       </div>

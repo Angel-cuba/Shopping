@@ -295,8 +295,8 @@ describe('Product detail page (PDP)', () => {
       expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('Air Zoom Pegasus 40')
     );
 
-    // Size buttons have aria-label="US {size}" — size 42 is in product.sizes so it's enabled
-    const sizeBtn = screen.getByRole('button', { name: 'US 42' });
+    // Size buttons have aria-label="EU {size}" — size 42 is in product.sizes so it's enabled
+    const sizeBtn = screen.getByRole('button', { name: 'EU 42' });
     expect(sizeBtn).toBeInTheDocument();
     expect(sizeBtn).not.toBeDisabled();
   });
@@ -308,9 +308,9 @@ describe('Product detail page (PDP)', () => {
       expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('Air Zoom Pegasus 40')
     );
 
-    // Before selecting a size the main CTA reads "Select a size" — clicking it fires handleAddToCart
+    // Before selecting a size the main CTA reads "Pick a size" — clicking it fires handleAddToCart
     // which calls toastError('Please select a size first')
-    const selectSizeBtn = screen.getByText('Select a size');
+    const selectSizeBtn = screen.getAllByRole('button', { name: 'Pick a size' })[0];
     userEvent.click(selectSizeBtn);
 
     await waitFor(() => {
@@ -328,8 +328,8 @@ describe('Product detail page (PDP)', () => {
     // Select a variant via aria-label button
     userEvent.click(screen.getByRole('button', { name: 'White/Black' }));
 
-    // Select size 42 (aria-label="US 42", text content "42")
-    userEvent.click(screen.getByRole('button', { name: 'US 42' }));
+    // Select size 42 (aria-label="EU 42", text content "42")
+    userEvent.click(screen.getByRole('button', { name: 'EU 42' }));
 
     // After size selected the main CTA changes to "Add to cart" — wait for re-render
     await waitFor(() =>

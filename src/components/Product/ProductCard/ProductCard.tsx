@@ -4,9 +4,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from '../../../redux/store';
 import { addToCart } from '../../../redux/actions/CartActions';
 import { addingToWishList, removingFromWishList } from '../../../redux/actions/WishesActions';
-import { Product, resolveColor, resolveImageUrl, onImgError } from '../../../interfaces/products/ProductType';
+import { Product, getCollectionLabel, resolveColor, resolveImageUrl, onImgError } from '../../../interfaces/products/ProductType';
 import { CartProduct } from '../../../interfaces/cart/CartType';
 import { isAdmin } from '../../../utils/authentication';
+import { getTokenFromLocalStorage } from '../../../utils/token';
 import { toastSuccess, toastInfo } from '../../../utils/toasts';
 import { RootState } from '../../../redux/store';
 import CreateAndEdit from '../../Admin/CreateAndEdit/CreateAndEdit';
@@ -84,7 +85,8 @@ const ProductCard: React.FC<Props> = ({ product: p }) => {
   const handleWishlist = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    if (!userFromToken) {
+    const token = getTokenFromLocalStorage();
+    if (!userFromToken || !token) {
       toastInfo('Login to save items to your wishlist');
       return;
     }
@@ -184,7 +186,7 @@ const ProductCard: React.FC<Props> = ({ product: p }) => {
         <Link to={`/product/${p.id}`} className="pcard__body" style={{ textDecoration: 'none' }}>
           <SwatchDots variants={p.variants} />
           <span className="pcard__name">{p.name}</span>
-          <span className="pcard__cat">{p.categories} collection</span>
+          <span className="pcard__cat">{getCollectionLabel(p.categories, `${p.id}:${p.name}`)}</span>
           <span className="pcard__price">£{p.price.toFixed(2)}</span>
         </Link>
 

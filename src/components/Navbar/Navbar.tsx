@@ -80,7 +80,7 @@ const Navbar = () => {
           </button>
 
           {/* Brand */}
-          <Link to="/home" className="stride-navbar__brand">STRIDE</Link>
+          <Link to="/home" className="stride-navbar__brand">ZYRA LUXE</Link>
 
           {/* Nav links (desktop) */}
           <div className="stride-navbar__links">
@@ -98,9 +98,10 @@ const Navbar = () => {
 
             {/* Dark mode toggle */}
             <button
-              className="stride-navbar__iconbtn"
+              className="stride-navbar__iconbtn stride-navbar__theme"
               onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
               title={theme === 'dark' ? 'Light mode' : 'Dark mode'}
+              aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
             >
               <i className={`fa ${theme === 'dark' ? 'fa-sun-o' : 'fa-moon-o'}`} />
             </button>
@@ -212,7 +213,7 @@ const Navbar = () => {
           <div className="mobile-menu">
             {/* Header */}
             <div className="mobile-menu__header">
-              <span className="stride-navbar__brand">STRIDE</span>
+              <span className="stride-navbar__brand">ZYRA LUXE</span>
               <button className="stride-navbar__iconbtn" onClick={() => setMobileOpen(false)} aria-label="Close menu">
                 <i className="fa fa-times" />
               </button>
@@ -290,7 +291,7 @@ const Navbar = () => {
             <div className="stride-modal" style={{ width: 480 }}>
               <div className="stride-modal__head">
                 <span style={{ fontWeight: 800, fontSize: 'var(--text-lg)', letterSpacing: '.1em', textTransform: 'uppercase' }}>
-                  STRIDE
+                  ZYRA LUXE
                 </span>
                 <button
                   className="stride-navbar__iconbtn"

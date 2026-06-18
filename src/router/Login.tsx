@@ -95,7 +95,24 @@ const Login: React.FC<LoginProps> = ({ onSuccess }) => {
   };
 
   return (
-    <div style={{ padding: 'var(--space-6) var(--space-8)', maxWidth: 420, margin: '0 auto' }} onKeyDown={handleKeyDown}>
+    <div style={{ padding: 'var(--space-6) var(--space-8)', maxWidth: 460, margin: '0 auto' }} onKeyDown={handleKeyDown}>
+      <div
+        style={{
+          background: 'var(--color-fg-primary)',
+          color: 'var(--color-bg-surface)',
+          borderRadius: 'var(--radius-md)',
+          padding: 'var(--space-6)',
+          marginBottom: 'var(--space-6)',
+        }}
+      >
+        <span className="stride-eyebrow" style={{ color: 'var(--color-action)' }}>ZYRA LUXE</span>
+        <h2 style={{ margin: 'var(--space-2) 0', fontSize: 'var(--text-2xl)', letterSpacing: 0 }}>
+          {tab === 'signin' ? 'Welcome back' : 'Create your edit'}
+        </h2>
+        <p style={{ margin: 0, color: 'rgba(255,249,238,.78)', fontSize: 'var(--text-sm)', lineHeight: 1.6 }}>
+          Save wishlist picks, keep your bag synced, and checkout faster.
+        </p>
+      </div>
 
       {/* Tabs */}
       <div className="stride-tabs" style={{ marginBottom: 'var(--space-6)' }}>

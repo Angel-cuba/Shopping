@@ -4,19 +4,27 @@ import { useParams, Link } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
 
 import { AppDispatch, RootState } from '../../redux/store';
-import { toastError } from '../../utils/toasts';
-import { Product, Sizes, resolveColor, resolveImageUrl, onImgError, getGalleryImages } from '../../interfaces/products/ProductType';
+import { toastError, toastInfo } from '../../utils/toasts';
+import {
+  Product,
+  getProductOptionConfig,
+  getCollectionLabel,
+  getGalleryImages,
+  getRecommendedProducts,
+  onImgError,
+  resolveColor,
+} from '../../interfaces/products/ProductType';
 import { CartProduct } from '../../interfaces/cart/CartType';
 import { addToCart } from '../../redux/actions/CartActions';
 import { addingToWishList, removingFromWishList } from '../../redux/actions/WishesActions';
 import { apiWithoutAuth } from '../../utils/api';
+import { getTokenFromLocalStorage } from '../../utils/token';
 import ProductCard from './ProductCard/ProductCard';
 import PdpSkeleton from './PdpSkeleton';
 // Note: ProductById.scss (legacy .productId__* BEM classes) has been removed.
 // All styles come from the STRIDE design-system classes in src/styles/stride.scss.
 
 // ── PDP-specific toast helpers (custom icons — kept inline) ───────────────────
-
 const toastAdded = (name: string) =>
   toast.success(`${name} added to cart`, {
     position: 'top-center',
@@ -66,7 +74,10 @@ const ProductById: React.FC = () => {
     setThumb(0);
     apiWithoutAuth
       .get<Product>(`/products/${id}`)
-      .then((r) => setProduct(r.data))
+      .then((r) => {
+        setProduct(r.data);
+        setSize(r.data.sizes?.length === 1 ? r.data.sizes[0] : '');
+      })
       .catch(() => setProduct(null))
       .finally(() => setLoading(false));
   }, [id]);
@@ -75,23 +86,24 @@ const ProductById: React.FC = () => {
 
   const isWished = product ? wishlist?.includes(product.id) : false;
 
-  // "You may also like" — same first variant, excluding current product, cap at 4
   const related: Product[] = product
-    ? products
-        .filter((p: Product) => p.variants[0] === product.variants[0] && p.id !== product.id)
-        .slice(0, 4)
+    ? getRecommendedProducts(products, product, 4)
     : [];
 
-  // Gallery — 4 distinct images; changes when a colour variant is selected
   const galleryImages = product
-    ? getGalleryImages(product.image, product.name, variant || undefined)
+    ? getGalleryImages(product.image, product.name, variant || undefined, product.categories)
     : [];
+  const optionConfig = product ? getProductOptionConfig(product) : null;
+  const productSizes = product?.sizes ?? [];
 
   // ── Handlers ───────────────────────────────────────────────────────────────
 
   const handleAddToCart = () => {
     if (!product) return;
-    if (!size) { toastError('Please select a size first'); return; }
+    if (productSizes.length > 0 && !size) {
+      toastError(optionConfig?.requiredMessage ?? 'Please select an option first');
+      return;
+    }
 
     const item: CartProduct = {
       id:          product.id,
@@ -110,7 +122,12 @@ const ProductById: React.FC = () => {
   };
 
   const handleWishlist = () => {
-    if (!product || !userFromToken) return;
+    if (!product) return;
+    const token = getTokenFromLocalStorage();
+    if (!userFromToken || !token) {
+      toastInfo('Login to save items to your wishlist');
+      return;
+    }
     if (isWished) {
       dispatch(removingFromWishList(product.id, userFromToken.user_id));
       toastWishRemoved();
@@ -134,8 +151,6 @@ const ProductById: React.FC = () => {
       </div>
     );
   }
-
-  const availableSizes = new Set(product.sizes);
 
   return (
     <div className="stride-container" style={{ paddingTop: 'var(--space-8)', paddingBottom: 'var(--space-16)' }}>
@@ -176,7 +191,7 @@ const ProductById: React.FC = () => {
         {/* Info panel */}
         <div className="stride-pdp__info">
           {/* Eyebrow */}
-          <span className="stride-eyebrow">{product.categories}</span>
+          <span className="stride-eyebrow">{getCollectionLabel(product.categories, `${product.id}:${product.name}`)}</span>
 
           {/* Name */}
           <h1>{product.name}</h1>
@@ -216,27 +231,30 @@ const ProductById: React.FC = () => {
             </div>
           )}
 
-          {/* Size selector */}
+          {/* Size / option selector */}
+          {productSizes.length > 0 && optionConfig && (
           <div style={{ marginBottom: 'var(--space-6)' }}>
             <div className="stride-pdp__label-row">
-              <span className="lbl">Size (EU)</span>
-              <span
-                className="link"
-                style={{ cursor: 'pointer' }}
-                onClick={() => {}}
-              >
-                Size guide
-              </span>
+              <span className="lbl">{optionConfig.label}</span>
+              {optionConfig.showGuide && (
+                <span
+                  className="link"
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => {}}
+                >
+                  {optionConfig.guideLabel}
+                </span>
+              )}
             </div>
             <div className="stride-size-grid">
-              {Sizes.map((s) => {
-                const available = availableSizes.has(s as Product['sizes'][number]);
+              {productSizes.map((s) => {
+                const available = true;
                 return (
                   <button
                     key={s}
                     className={`stride-size-chip${size === s ? ' is-active' : ''}`}
                     disabled={!available}
-                    aria-label={`US ${s}${!available ? ', unavailable' : ''}`}
+                    aria-label={`${optionConfig.selectedPrefix} ${s}`}
                     aria-pressed={size === s}
                     onClick={() => available && setSize(size === s ? '' : s)}
                   >
@@ -246,6 +264,7 @@ const ProductById: React.FC = () => {
               })}
             </div>
           </div>
+          )}
 
           {/* Spec rows */}
           <div style={{ marginBottom: 'var(--space-6)', borderTop: '1px solid var(--color-border-default)' }}>
@@ -270,24 +289,22 @@ const ProductById: React.FC = () => {
               style={{ width: '100%', height: 52, fontSize: 'var(--text-base)', letterSpacing: '.06em' }}
               onClick={handleAddToCart}
             >
-              {size ? 'Add to cart' : 'Select a size'}
+              {size || productSizes.length === 0 ? 'Add to cart' : optionConfig?.ctaWhenMissing ?? 'Pick an option'}
             </button>
 
-            {userFromToken && (
-              <button
-                className="stride-btn stride-btn--secondary"
-                style={{ width: '100%', height: 52, fontSize: 'var(--text-base)' }}
-                onClick={handleWishlist}
-                aria-label={isWished ? 'Remove from wishlist' : 'Add to wishlist'}
-              >
-                <i
-                  className={isWished ? 'fa fa-heart' : 'fa fa-heart-o'}
-                  aria-hidden="true"
-                  style={{ marginRight: 8 }}
-                />
-                {isWished ? 'Wishlisted' : 'Add to wishlist'}
-              </button>
-            )}
+            <button
+              className="stride-btn stride-btn--secondary"
+              style={{ width: '100%', height: 52, fontSize: 'var(--text-base)' }}
+              onClick={handleWishlist}
+              aria-label={isWished ? 'Remove from wishlist' : 'Add to wishlist'}
+            >
+              <i
+                className={isWished ? 'fa fa-heart' : 'fa fa-heart-o'}
+                aria-hidden="true"
+                style={{ marginRight: 8 }}
+              />
+              {userFromToken ? (isWished ? 'Wishlisted' : 'Add to wishlist') : 'Login to wishlist'}
+            </button>
           </div>
 
           {/* Stock badge */}
@@ -328,7 +345,7 @@ const ProductById: React.FC = () => {
             {product.name}
           </p>
           <p style={{ margin: 0, fontSize: 'var(--text-sm)', color: 'var(--color-fg-secondary)' }}>
-            ${product.price.toFixed(2)}{size ? ` · EU ${size}` : ''}
+            ${product.price.toFixed(2)}{size && optionConfig ? ` · ${optionConfig.selectedPrefix} ${size}` : ''}
           </p>
         </div>
         <button
@@ -336,7 +353,7 @@ const ProductById: React.FC = () => {
           style={{ flexShrink: 0, height: 46, paddingInline: 'var(--space-6)' }}
           onClick={handleAddToCart}
         >
-          {size ? 'Add to cart' : 'Pick a size'}
+          {size || productSizes.length === 0 ? 'Add to cart' : optionConfig?.ctaWhenMissing ?? 'Pick an option'}
         </button>
       </div>
     </div>

@@ -23,10 +23,10 @@ function renderApp() {
   );
 }
 
-test('renders the STRIDE navbar brand', () => {
+test('renders the ZYRA LUXE navbar brand', () => {
   renderApp();
   // Target the brand link specifically by role + exact name
-  const brand = screen.getByRole('link', { name: 'STRIDE' });
+  const brand = screen.getByRole('link', { name: 'ZYRA LUXE' });
   expect(brand).toBeInTheDocument();
 });
 

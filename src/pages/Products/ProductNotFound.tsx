@@ -7,7 +7,7 @@ import { Product, resolveImageUrl, onImgError } from '../../interfaces/products/
 const TIPS = [
   'Check the spelling of your search term',
   'Try more general keywords',
-  'Use the season or size filters instead',
+  'Use the collection or size filters instead',
 ];
 
 const ProductNotFound = ({ valueNotFound }: { valueNotFound: string }) => {
